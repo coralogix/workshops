@@ -6,4 +6,4 @@ Coralogix documentation is located [here](https://coralogix.com/docs/)
 
 ## OpenTelemetry Tracing Instrumentation Workshops
 
-[.NET for Windows](docs/otel/dotnet-windows/index.md)
+[.NET for Windows](./docs/otel/dotnet-windows/index.md)

@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "dgSpecHash": "uFAw7zZ9Nvat+C4XNRE55gCwWEDESgiDXjOAiefCvLfrhTCWB7CHM+QiKU+Uzeb9qsTxQesiR/INRCzdZ7zEpg==",
+  "success": true,
+  "projectFilePath": "/home/ubuntu/tmp/dotnet/myApp.csproj",
+  "expectedPackageFiles": [
+    "/home/ubuntu/.nuget/packages/microsoft.extensions.configuration/3.1.0/microsoft.extensions.configuration.3.1.0.nupkg.sha512",
+    "/home/ubuntu/.nuget/packages/microsoft.extensions.configuration.abstractions/3.1.0/microsoft.extensions.configuration.abstractions.3.1.0.nupkg.sha512",
+    "/home/ubuntu/.nuget/packages/microsoft.extensions.configuration.binder/3.1.0/microsoft.extensions.configuration.binder.3.1.0.nupkg.sha512",
+    "/home/ubuntu/.nuget/packages/microsoft.extensions.dependencyinjection/7.0.0/microsoft.extensions.dependencyinjection.7.0.0.nupkg.sha512",
+    "/home/ubuntu/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/7.0.0/microsoft.extensions.dependencyinjection.abstractions.7.0.0.nupkg.sha512",
+    "/home/ubuntu/.nuget/packages/microsoft.extensions.logging/7.0.0/microsoft.extensions.logging.7.0.0.nupkg.sha512",
+    "/home/ubuntu/.nuget/packages/microsoft.extensions.logging.abstractions/7.0.0/microsoft.extensions.logging.abstractions.7.0.0.nupkg.sha512",
+    "/home/ubuntu/.nuget/packages/microsoft.extensions.logging.configuration/3.1.0/microsoft.extensions.logging.configuration.3.1.0.nupkg.sha512",
+    "/home/ubuntu/.nuget/packages/microsoft.extensions.options/7.0.0/microsoft.extensions.options.7.0.0.nupkg.sha512",
+    "/home/ubuntu/.nuget/packages/microsoft.extensions.options.configurationextensions/3.1.0/microsoft.extensions.options.configurationextensions.3.1.0.nupkg.sha512",
+    "/home/ubuntu/.nuget/packages/microsoft.extensions.primitives/7.0.0/microsoft.extensions.primitives.7.0.0.nupkg.sha512",
+    "/home/ubuntu/.nuget/packages/opentelemetry/1.4.0/opentelemetry.1.4.0.nupkg.sha512",
+    "/home/ubuntu/.nuget/packages/opentelemetry.api/1.4.0/opentelemetry.api.1.4.0.nupkg.sha512",
+    "/home/ubuntu/.nuget/packages/opentelemetry.api.providerbuilderextensions/1.4.0/opentelemetry.api.providerbuilderextensions.1.4.0.nupkg.sha512",
+    "/home/ubuntu/.nuget/packages/opentelemetry.exporter.console/1.4.0/opentelemetry.exporter.console.1.4.0.nupkg.sha512",
+    "/home/ubuntu/.nuget/packages/system.diagnostics.diagnosticsource/7.0.0/system.diagnostics.diagnosticsource.7.0.0.nupkg.sha512",
+    "/home/ubuntu/.nuget/packages/system.runtime.compilerservices.unsafe/6.0.0/system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
+    "/home/ubuntu/.nuget/packages/system.text.json/4.7.2/system.text.json.4.7.2.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -1,0 +1,6 @@
+site_name: Coralogix
+site_url: http://coralogix.github.io
+repo_url: http://github.com/coralogix/workshops
+nav:
+  - Home: index.md
+  - About: about.md

@@ -1,23 +1,27 @@
-# opentelemetry-dotnet-coralogix
+# OpenTelemetry for .NET / Coralogix
 
 ## Description
 
-OpenTelemetry on .net is comprised of only two major moving parts: the OpenTelemetry Collector and the OpenTelemetry .NET instrumentation. 
+OpenTelemetry on .net is comprised of only two major moving parts: the OpenTelemetry Collector and the OpenTelemetry .NET instrumentation. It supports .NET Framework and Core 3.5 and higher.
 
-This is a guide on how to set up 
-1. [OTEL Collector to send data to Coralogix](https://github.com/coralogix/opentelemetry-dotnet-coralogix#otel-collector-installation)
-2. [.NET OpenTelemetry Agent on Windows](https://github.com/coralogix/opentelemetry-dotnet-coralogix#net-instrumentation)
-3. [Example application for testing.](https://github.com/coralogix/opentelemetry-dotnet-coralogix#example-application)
+## .NET Instrumentation
 
-## OTEL Collector Installation
+You can find the complete instruction for .NET OpenTelemetry Agent Instrumentation is in [.NET OpenTelemetry GitHub Repository](https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation). 
+
+There are three steps to sending traces from a .NET application on Windows:  
+1. Install the OpenTelemetry collector  
+2. Install OpenTelemetry .NET instrumentation  
+3. Run a sample .NET application to test traces  
+
+## 1. OTEL Collector Installation
 You can download the collector from the [OpenTelemetry Collector releases page](https://github.com/open-telemetry/opentelemetry-collector/releases). Download the file for your platform (in this case, Windows) and version (e.g. v0.75.0). 
 
-You can use this [config](https://github.com/coralogix/OpenTelemetry-.NET/blob/master/Example/Collector/config.yaml) as a template for you OTEL collector config.
+You can use this [config](Example/Collector/config.yaml) as a template for you OTEL collector config.
 In the config.yaml, adjust the domains and your Coralogix private key shown in the snippet below. Also define your application & subsystem name tags.
 
-References:
-- [Coralogix Endpoints](https://coralogix.com/docs/coralogix-endpoints/)
-- [Coralogix Private Key](https://coralogix.com/docs/private-key/)
+References:  
+- [Coralogix Endpoints](https://coralogix.com/docs/coralogix-endpoints/)  
+- [Coralogix Private Key](https://coralogix.com/docs/private-key/)  
 - [Application & Subsystem Names](https://coralogix.com/docs/application-and-subsystem-names/)
 
 
@@ -53,13 +57,14 @@ Next: run the collector using the command
 otelcol-contrib.exe --config=config.yaml
 ```
 
-## .NET Instrumentation
+## 2. Install .NET Instrumentation
 
 You can find the complete instruction for .NET OpenTelemetry Agent Instrumentation is in [.NET OpenTelemetry GitHub Repository](https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation). 
 
 ### Quick start
 
-Please run the commands below in your PowerShell. Please update the `"MyServiceDisplayName"`
+Run the commands below in your PowerShell. Update the `"MyServiceDisplayName"` with the name of your application.  
+
 ```powershell
 # Download the module
 $module_url = "https://raw.githubusercontent.com/open-telemetry/opentelemetry-dotnet-instrumentation/v0.7.0/OpenTelemetry.DotNet.Auto.psm1"
@@ -93,6 +98,6 @@ dotnet run
 
 <small>Note: You'll see the tracing data in Coralogix if you have a OTEL collector forwarding data received at the specified endpoint to Coralogix. Please follow the instructions below for configuring the OTEL Collector for Coralogix.</small>
 
-## Example Application
+## 3. Example Application
 
-You can download & instrument the [example application](https://github.com/coralogix/OpenTelemetry-.NET/tree/master/Example/dotnet) provided in this repository for testing. The example sends traces of `http get` requests of a public URL.
+You can download & instrument the [example application](Example/dotnet) provided in this repository for testing. The example sends traces of `http get` requests of a public URL. You may want to open it first in Visual Studio 2022 or higher to ensure dependencies are installed first and then run from the Visual Studio 2022 console.

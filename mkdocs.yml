@@ -1,53 +1,36 @@
-site_name: Coralogix
+site_name: Workshops
 site_url: http://coralogix.github.io
 site_author: Coralogix Solution Architects
 site_description: Coralogix workshops for observability and integrations
 repo_url: http://github.com/coralogix/workshops
 copyright: Copyright Coralogix. All rights reserved.
+
 theme:
   name: material
-  custom_dir: overrides
+  # custom_dir: overrides
   palette:
     primary: green
   logo: ../images/horizontal.png
   favicon: ../images/favicon.png
   font:
       text: "Nunito Sans"
-  include_search_page: false
-  search_index_only: true
+      code: "Jetbrains mono"
+  # include_search_page: false
+  # search_index_only: true
   language: en
   features:
     - navigation.tabs
+    - navigation.tabs.sticky
     - navigation.instant
     - navigation.sections
     - navigation.expand
     - navigation.top
-  # - toc.integrate
+    - navigation.tracking
+    - toc.integrate
+    - toc.follow
 
-markdown_extensions:
-  - footnotes
-  - admonition
-  - attr_list
-  - pymdownx.tabbed
-  - pymdownx.superfences
-  - pymdownx.highlight
-  - pymdownx.inlinehilite
-  - pymdownx.mark
-  - pymdownx.critic
-  - pymdownx.keys
-  - meta
-  # - pymdownx.emoji:
-  #     emoji_index: !!python/name:materialx.emoji.twemoji
-  #     emoji_generator: !!python/name:materialx.emoji.to_svg
-  # - toc:
-  #     permalink: true
-
-# extra_css:
-#   - stylesheets/extra.css
-
-plugins:
-  - minify:
-      minify_html: false
+extra_css:
+  - stylesheets/extra.css
 
 nav:
   - Home: index.md

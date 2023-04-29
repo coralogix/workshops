@@ -1,2 +1,2 @@
 mkdocs build
-mkdocs gh-deploy --force
+mkdocs gh-deploy --force --strict

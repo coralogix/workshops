@@ -41,8 +41,8 @@
         
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Century+Gothic:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
-        <style>:root{--md-text-font:"Century Gothic";--md-code-font:"Roboto Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Nunito Sans";--md-code-font:"Roboto Mono"}</style>
       
     
     
@@ -71,7 +71,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#opentelemetry-dotnet-coralogix" class="md-skip">
+        <a href="#opentelemetry-for-net-coralogix" class="md-skip">
           Skip to content
         </a>
       
@@ -87,8 +87,7 @@
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href="../.." title="Coralogix" class="md-header__button md-logo" aria-label="Coralogix" data-md-component="logo">
       
-  
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+  <img src="../../images/horizontal.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -195,8 +194,7 @@
   <label class="md-nav__title" for="__drawer">
     <a href="../.." title="Coralogix" class="md-nav__button md-logo" aria-label="Coralogix" data-md-component="logo">
       
-  
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+  <img src="../../images/horizontal.png" alt="logo">
 
     </a>
     Coralogix
@@ -309,18 +307,25 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#otel-collector-installation" class="md-nav__link">
-    OTEL Collector Installation
+  <a href="#net-instrumentation" class="md-nav__link">
+    .NET Instrumentation
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#net-instrumentation" class="md-nav__link">
-    .NET Instrumentation
+  <a href="#1-otel-collector-installation" class="md-nav__link">
+    1. OTEL Collector Installation
   </a>
   
-    <nav class="md-nav" aria-label=".NET Instrumentation">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-install-net-instrumentation" class="md-nav__link">
+    2. Install .NET Instrumentation
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Install .NET Instrumentation">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -336,8 +341,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#example-application" class="md-nav__link">
-    Example Application
+  <a href="#3-example-application" class="md-nav__link">
+    3. Example Application
   </a>
   
 </li>
@@ -391,18 +396,25 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#otel-collector-installation" class="md-nav__link">
-    OTEL Collector Installation
+  <a href="#net-instrumentation" class="md-nav__link">
+    .NET Instrumentation
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#net-instrumentation" class="md-nav__link">
-    .NET Instrumentation
+  <a href="#1-otel-collector-installation" class="md-nav__link">
+    1. OTEL Collector Installation
   </a>
   
-    <nav class="md-nav" aria-label=".NET Instrumentation">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-install-net-instrumentation" class="md-nav__link">
+    2. Install .NET Instrumentation
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Install .NET Instrumentation">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -418,8 +430,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#example-application" class="md-nav__link">
-    Example Application
+  <a href="#3-example-application" class="md-nav__link">
+    3. Example Application
   </a>
   
 </li>
@@ -442,20 +454,22 @@
   
 
 
-<h1 id="opentelemetry-dotnet-coralogix">opentelemetry-dotnet-coralogix<a class="headerlink" href="#opentelemetry-dotnet-coralogix" title="Permanent link">&para;</a></h1>
+<h1 id="opentelemetry-for-net-coralogix">OpenTelemetry for .NET / Coralogix<a class="headerlink" href="#opentelemetry-for-net-coralogix" title="Permanent link">&para;</a></h1>
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
-<p>OpenTelemetry on .net is comprised of only two major moving parts: the OpenTelemetry Collector and the OpenTelemetry .NET instrumentation. </p>
-<p>This is a guide on how to set up 
-1. <a href="https://github.com/coralogix/opentelemetry-dotnet-coralogix#otel-collector-installation">OTEL Collector to send data to Coralogix</a>
-2. <a href="https://github.com/coralogix/opentelemetry-dotnet-coralogix#net-instrumentation">.NET OpenTelemetry Agent on Windows</a>
-3. <a href="https://github.com/coralogix/opentelemetry-dotnet-coralogix#example-application">Example application for testing.</a></p>
-<h2 id="otel-collector-installation">OTEL Collector Installation<a class="headerlink" href="#otel-collector-installation" title="Permanent link">&para;</a></h2>
+<p>OpenTelemetry on .net is comprised of only two major moving parts: the OpenTelemetry Collector and the OpenTelemetry .NET instrumentation. It supports .NET Framework and Core 3.5 and higher.</p>
+<h2 id="net-instrumentation">.NET Instrumentation<a class="headerlink" href="#net-instrumentation" title="Permanent link">&para;</a></h2>
+<p>You can find the complete instruction for .NET OpenTelemetry Agent Instrumentation is in <a href="https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation">.NET OpenTelemetry GitHub Repository</a>. </p>
+<p>There are three steps to sending traces from a .NET application on Windows:<br />
+1. Install the OpenTelemetry collector<br />
+2. Install OpenTelemetry .NET instrumentation<br />
+3. Run a sample .NET application to test traces  </p>
+<h2 id="1-otel-collector-installation">1. OTEL Collector Installation<a class="headerlink" href="#1-otel-collector-installation" title="Permanent link">&para;</a></h2>
 <p>You can download the collector from the <a href="https://github.com/open-telemetry/opentelemetry-collector/releases">OpenTelemetry Collector releases page</a>. Download the file for your platform (in this case, Windows) and version (e.g. v0.75.0). </p>
-<p>You can use this <a href="https://github.com/coralogix/OpenTelemetry-.NET/blob/master/Example/Collector/config.yaml">config</a> as a template for you OTEL collector config.
+<p>You can use this <a href="Example/Collector/config.yaml">config</a> as a template for you OTEL collector config.
 In the config.yaml, adjust the domains and your Coralogix private key shown in the snippet below. Also define your application &amp; subsystem name tags.</p>
-<p>References:
-- <a href="https://coralogix.com/docs/coralogix-endpoints/">Coralogix Endpoints</a>
-- <a href="https://coralogix.com/docs/private-key/">Coralogix Private Key</a>
+<p>References:<br />
+- <a href="https://coralogix.com/docs/coralogix-endpoints/">Coralogix Endpoints</a><br />
+- <a href="https://coralogix.com/docs/private-key/">Coralogix Private Key</a><br />
 - <a href="https://coralogix.com/docs/application-and-subsystem-names/">Application &amp; Subsystem Names</a></p>
 <div class="highlight"><pre><span></span><code><span class="c1">#config.yaml</span>
 
@@ -484,10 +498,10 @@ In the config.yaml, adjust the domains and your Coralogix private key shown in t
 <p>Next: run the collector using the command</p>
 <div class="highlight"><pre><span></span><code><span class="n">otelcol-contrib</span><span class="p">.</span><span class="n">exe</span> <span class="p">-</span><span class="n">-config</span><span class="p">=</span><span class="n">config</span><span class="p">.</span><span class="n">yaml</span>
 </code></pre></div>
-<h2 id="net-instrumentation">.NET Instrumentation<a class="headerlink" href="#net-instrumentation" title="Permanent link">&para;</a></h2>
+<h2 id="2-install-net-instrumentation">2. Install .NET Instrumentation<a class="headerlink" href="#2-install-net-instrumentation" title="Permanent link">&para;</a></h2>
 <p>You can find the complete instruction for .NET OpenTelemetry Agent Instrumentation is in <a href="https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation">.NET OpenTelemetry GitHub Repository</a>. </p>
 <h3 id="quick-start">Quick start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h3>
-<p>Please run the commands below in your PowerShell. Please update the <code>"MyServiceDisplayName"</code>
+<p>Run the commands below in your PowerShell. Update the <code>"MyServiceDisplayName"</code> with the name of your application.  </p>
 <div class="highlight"><pre><span></span><code><span class="c"># Download the module</span>
 <span class="nv">$module_url</span> <span class="p">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/open-telemetry/opentelemetry-dotnet-instrumentation/v0.7.0/OpenTelemetry.DotNet.Auto.psm1&quot;</span>
 <span class="nv">$download_path</span> <span class="p">=</span> <span class="nb">Join-Path</span> <span class="nv">$env:temp</span> <span class="s2">&quot;OpenTelemetry.DotNet.Auto.psm1&quot;</span>
@@ -501,7 +515,7 @@ In the config.yaml, adjust the domains and your Coralogix private key shown in t
 
 <span class="c"># Set up the instrumentation for the current PowerShell session</span>
 <span class="nb">Register-OpenTelemetryForCurrentSession</span> <span class="n">-OTelServiceName</span> <span class="s2">&quot;MyServiceDisplayName&quot;</span>
-</code></pre></div></p>
+</code></pre></div>
 <p>Next, configure the follwing Environment Variables</p>
 <div class="highlight"><pre><span></span><code><span class="nv">$env:OTEL_RESOURCE_ATTRIBUTES</span><span class="p">=</span><span class="s1">&#39;service.name=dotnetsvc,application.name=dotnetapp cx.application.name=dotnetappcx,cx.subsystem.name=dotnetsubcx&#39;</span>
 <span class="nv">$env:OTEL_EXPORTER_OTLP_TRACES_ENDPOINT</span><span class="p">=</span><span class="s1">&#39;localhost:4317&#39;</span>
@@ -511,8 +525,8 @@ In the config.yaml, adjust the domains and your Coralogix private key shown in t
 <div class="highlight"><pre><span></span><code><span class="n">dotnet</span> <span class="n">run</span>
 </code></pre></div>
 <p><small>Note: You'll see the tracing data in Coralogix if you have a OTEL collector forwarding data received at the specified endpoint to Coralogix. Please follow the instructions below for configuring the OTEL Collector for Coralogix.</small></p>
-<h2 id="example-application">Example Application<a class="headerlink" href="#example-application" title="Permanent link">&para;</a></h2>
-<p>You can download &amp; instrument the <a href="https://github.com/coralogix/OpenTelemetry-.NET/tree/master/Example/dotnet">example application</a> provided in this repository for testing. The example sends traces of <code>http get</code> requests of a public URL.</p>
+<h2 id="3-example-application">3. Example Application<a class="headerlink" href="#3-example-application" title="Permanent link">&para;</a></h2>
+<p>You can download &amp; instrument the <a href="Example/dotnet">example application</a> provided in this repository for testing. The example sends traces of <code>http get</code> requests of a public URL. You may want to open it first in Visual Studio 2022 or higher to ensure dependencies are installed first and then run from the Visual Studio 2022 console.</p>
 
 
 

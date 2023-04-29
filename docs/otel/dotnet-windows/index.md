@@ -16,8 +16,10 @@ There are three steps to sending traces from a .NET application on Windows:
 ## 1. OTEL Collector Installation
 You can download the collector from the [OpenTelemetry Collector releases page](https://github.com/open-telemetry/opentelemetry-collector/releases). Download the file for your platform (in this case, Windows) and version (e.g. v0.75.0). 
 
-You can use this [config](Example/Collector/config.yaml) as a template for you OTEL collector config.
-In the config.yaml, adjust the domains and your Coralogix private key shown in the snippet below. Also define your application & subsystem name tags.
+Use the following example from this repo a template for the OTEL collector config:  
+`~/workshops/workshops/otel/dotnet-windows/Collector/config.yaml`  
+
+In `config.yaml` adjust the domains and your Coralogix private key shown in the snippet below. Also define your application & subsystem name tags.
 
 References:  
 - [Coralogix Endpoints](https://coralogix.com/docs/coralogix-endpoints/)  
@@ -63,6 +65,7 @@ You can find the complete instruction for .NET OpenTelemetry Agent Instrumentati
 
 ### Quick start
 
+The official Otel instrumentation guide shows the following:  
 Run the commands below in your PowerShell. Update the `"MyServiceDisplayName"` with the name of your application.  
 
 ```powershell
@@ -100,4 +103,11 @@ dotnet run
 
 ## 3. Example Application
 
-You can download & instrument the [example application](Example/dotnet) provided in this repository for testing. The example sends traces of `http get` requests of a public URL. You may want to open it first in Visual Studio 2022 or higher to ensure dependencies are installed first and then run from the Visual Studio 2022 console.
+You can download & instrument the example application:  
+``~/workshops/workshops/otel/dotnet-windows/Collector/config.yaml`  
+provided in this repository for testing.  
+
+The example sends traces of `http get` requests of a public URL.   
+Simply use `dotnet run` to start the application.  
+
+You may want to open it first in Visual Studio 2022 or higher to ensure dependencies are installed first and then run from the Visual Studio 2022 console.

@@ -11,11 +11,10 @@ Use ```deploy.sh``` to deploy when you have completed your changes.
 cd workshops
 python3 -m venv venv
 source venv/bin/activate
-cd buildtools
-source mkddocs-setup.sh
+source ./buildtools/mkdocs-setup.sh
 ```
 
-## Each new session setup
+## If needed- for each new session setup
 ```
 cd workshops
 source venv/bin/activate
@@ -24,9 +23,11 @@ source venv/bin/activate
 ## To debug
 ```
 mkdocs serve
-```
+```  
+
+You can then view the site on `localhost:8000`  
 
 ## To deploy
 ```
-source mkdocs-deploy.sh
+source ./buildtools/mkdocs-deploy.sh
 ```

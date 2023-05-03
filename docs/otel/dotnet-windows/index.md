@@ -13,6 +13,11 @@ There are three steps to sending traces from a .NET application on Windows:
 2. Install OpenTelemetry .NET instrumentation  
 3. Run a sample .NET application to test traces  
 
+Before executing the steps, download the repo:  
+```
+git clone https://github.com/coralogix/workshops
+```  
+
 ## 1. OTEL Collector Installation
 You can download the collector from the [OpenTelemetry Collector releases page](https://github.com/open-telemetry/opentelemetry-collector/releases). Download the file for your platform (in this case, Windows) and version (e.g. v0.75.0). 
 

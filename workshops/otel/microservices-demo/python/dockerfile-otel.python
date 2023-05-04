@@ -5,6 +5,7 @@ COPY . /home/code/
 RUN apt-get update && \
     export PATH="$HOME/.local/bin:$PATH" && \
     apt install -y python3-pip && \
+    python -m pip install --upgrade pip && \
     python3 -m pip install -r requirements.txt && \
     python3 -m pip install opentelemetry-distro opentelemetry-instrumentation opentelemetry-exporter-otlp && \
     opentelemetry-bootstrap -a install && \

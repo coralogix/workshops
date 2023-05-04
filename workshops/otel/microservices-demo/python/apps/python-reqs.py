@@ -14,10 +14,10 @@ logger.addHandler(logging.StreamHandler(sys.stdout))
 
 if platform == "linux" or platform == "linux2":
     url = os.environ('PYTHON_TEST_URL') # Mac
-    isurlbad = os.environ('PYTHON_TEST_URLBAD')
+    isurlbad = int(os.environ('PYTHON_TEST_URLBAD'))
 elif platform == "darwin":
     url = os.getenv('PYTHON_TEST_URL') # Linux
-    isurlbad = os.getenv('PYTHON_TEST_URLBAD') # Mac
+    isurlbad = int(os.getenv('PYTHON_TEST_URLBAD')) # Mac
 
 seed(1)
 x=1
@@ -27,7 +27,7 @@ urlbad = url + "/bad"
 #loop requests with a 5% chance of generating a 404 by requesting /bad from the fastapi server
 
 while x:
-    if random() <= .05 and isurlbad :
+    if random() <= .05 and isurlbad==1 :
         response=requests.get(urlbad)
     else :
         response=requests.get(url)

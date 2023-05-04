@@ -3,3 +3,4 @@
 .github
 site
 venv
+*.rdb

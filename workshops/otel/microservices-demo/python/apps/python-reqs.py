@@ -17,10 +17,12 @@ if platform == "linux" or platform == "linux2":
 elif platform == "darwin":
     url = os.getenv('PYTHON_TEST_URL') # Mac
 
-    urlbad = url + "/bad"
+    urlbad = url + "/bad" #make a bad URL to be used to generate a 404
 
 seed(1)
 x=1
+
+#loop requests with a 5% chance of generating a 404 by requesting /bad from the fastapi server
 
 while x:
     if random() <= .05 :

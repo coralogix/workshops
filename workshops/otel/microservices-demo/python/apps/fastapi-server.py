@@ -10,7 +10,7 @@ logger.setLevel(logging.DEBUG)
 logger.addHandler(logging.StreamHandler(sys.stdout))
 
 
-@app.get('/app')
+@app.get('/')
 def home():
     logger.info("test log statement")
     logger.info("test log statement with extra props", extra={'props': {"extra_property": 'extra_value'}})

@@ -4,3 +4,4 @@
 site
 venv
 *.rdb
+target

@@ -1,11 +1,8 @@
-import requests
-import os
+import requests, os, sys
+from sys import platform
 from time import sleep
 from random import random, seed
-from sys import platform
-import logging
-import json_logging
-import sys
+import logging, json_logging, json
 
 json_logging.init_non_web(enable_json=True)
 logger = logging.getLogger("python-reqs")
@@ -24,13 +21,21 @@ x=1
 
 urlbad = url + "/bad" 
 
+def pythonreqs():
+    try: 
+        if random() <= .05 and isurlbad==1 :
+            response=requests.get(urlbad)
+        else :
+            response=requests.get(url)
+        logger.info(response)   
+    except requests.exceptions.RequestException as err:
+        log_dict = {'error': str(err),   
+            }
+        print(json.dumps(log_dict,indent=2,separators=(',', ':')))
+
 #loop requests with a 5% chance of generating a 404 by requesting /bad from the fastapi server
 
 while x:
-    if random() <= .05 and isurlbad==1 :
-        response=requests.get(urlbad)
-    else :
-        response=requests.get(url)
-    logger.info(response)
+    pythonreqs()
     y = random()
     sleep(round(y,1))

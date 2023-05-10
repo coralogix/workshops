@@ -4,3 +4,4 @@ logging
 json_logging
 fastapi
 uvicorn
+ipaddr

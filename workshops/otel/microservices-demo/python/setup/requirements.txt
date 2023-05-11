@@ -1,6 +1,5 @@
 requests
 redis
-logging
 json_logging
 fastapi
 uvicorn

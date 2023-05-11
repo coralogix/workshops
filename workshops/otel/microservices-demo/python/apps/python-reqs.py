@@ -2,7 +2,7 @@ import requests, os, sys
 from sys import platform
 from time import sleep
 from random import random, seed
-import logging, json_logging, json
+import json_logging, json
 
 # This simulator requres env variables PYTHON_TEST_URL which is the IP address of the server simulator port 5001
 # and PYTHON_TEST_URLBAD which is 0 or 1

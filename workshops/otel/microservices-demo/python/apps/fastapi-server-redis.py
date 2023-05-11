@@ -1,4 +1,4 @@
-import datetime, logging, sys, json_logging, fastapi, uvicorn, ipaddr, random
+import datetime, sys, json_logging, fastapi, uvicorn, ipaddr, random
 import redis
 import os, binascii
 

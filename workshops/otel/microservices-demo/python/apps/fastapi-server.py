@@ -13,12 +13,8 @@ network = ipaddr.IPv4Network('255.255.255.255/0')
 
 @app.get('/')
 def home():
-    correlation_id = json_logging.get_correlation_id()
-    random_ip = ipaddr.IPv4Address(random.randrange(int(network.network) + 1, int(network.broadcast) - 1))
+    random_ip = ipaddr.IPv4Address(random.randrange(int(network.network) + 1, int(network.broadcast) - 1)) # generate random IP address
     logger.info("Extra Log", extra={'props': {'user_IP': str(random_ip)}})
-    return "test return"
-
-    # return "Hello world : " + str(datetime.datetime.now())
 
 if __name__ == "__main__":
     uvicorn.run(app, host='0.0.0.0', port=5001)

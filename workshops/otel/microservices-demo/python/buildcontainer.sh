@@ -1,4 +1,4 @@
 # requires dockerhub login
-sudo docker build . -f dockerfile-otel.python -t otel-python && \
-sudo docker tag otel-python stevelernercx/otel-python && \
-sudo docker push stevelernercx/otel-python
+sudo docker build . -f dockerfile-microsvcsdemo.python -t microsvcsdemo-python && \
+sudo docker tag microsvcsdemo-python stevelerner/microsvcsdemo-python && \
+sudo docker push stevelerner/microsvcsdemo-python

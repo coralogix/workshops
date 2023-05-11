@@ -1,0 +1,38 @@
+---
+# Flask Server Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastapi-server
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      name: fastapi-server
+  template:
+    metadata:
+      labels:
+        name: fastapi-server
+    spec:
+      containers:
+      - name: fastapi-server
+        image: docker.io/stevelerner/microsvcsdemo-python
+        workingDir: /home/code/k8s
+        ports:
+          - name: http
+            containerPort: 5001
+        env:
+        - name: OTEL_SERVICE_NAME
+          value: fastapi-server
+        - name: OTEL_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: OTEL_TRACES_EXPORTER
+          value: otlp
+        - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
+          value: http://$(OTEL_IP):4317
+        command: ["/bin/sh"]
+        args: ["start-fastapi-otel.sh"]
+        # command: [ "/bin/bash", "-c", "--" ]
+        # args: [ "while true; do sleep 30; done;" ]

@@ -1,4 +1,4 @@
-import datetime, sys, json_logging, flask
+import datetime, sys, json_logging, logging, flask
 
 app = flask.Flask(__name__)
 json_logging.init_flask(enable_json=True)

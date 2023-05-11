@@ -1,4 +1,4 @@
-import datetime, sys, json_logging, fastapi, uvicorn, ipaddr, random
+import datetime, sys, json_logging, logging, fastapi, uvicorn, ipaddr, random
 
 app = fastapi.FastAPI()
 json_logging.init_fastapi(enable_json=True)

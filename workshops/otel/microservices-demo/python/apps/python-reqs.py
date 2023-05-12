@@ -1,5 +1,4 @@
 import requests, os, sys
-from sys import platform
 from time import sleep
 from random import random, seed
 import json_logging, json, logging
@@ -12,13 +11,8 @@ logger = logging.getLogger("python-reqs")
 logger.setLevel(logging.DEBUG)
 logger.addHandler(logging.StreamHandler(sys.stdout))
 
-# get the env variable PYTHON_TEST_URLBAD 0 or 1 to be used for simulating a bad deployment
-if platform == "linux" or platform == "linux2":
-    url = os.environ('PYTHON_TEST_URL') # Mac
-    isurlbad = int(os.environ('PYTHON_TEST_URLBAD'))
-elif platform == "darwin":
-    url = os.getenv('PYTHON_TEST_URL') # Linux
-    isurlbad = int(os.getenv('PYTHON_TEST_URLBAD')) # Mac
+url = os.environ.get('PYTHON_TEST_URL')
+isurlbad = int(os.environ.get('PYTHON_TEST_URLBAD'))
 
 seed(1)
 x=1

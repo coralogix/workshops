@@ -1,5 +1,18 @@
 ---
-# Flask Server Deployment
+### Fastapi server service
+apiVersion: v1
+kind: Service
+metadata:
+  name: fastapi-server
+spec:
+  selector:
+    name: fastapi-server
+  ports:
+  - protocol: TCP
+    port: 5001
+    targetPort: 5001
+---
+# Fastapi server
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -32,7 +45,85 @@ spec:
           value: otlp
         - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
           value: http://$(OTEL_IP):4317
+        - name: REDIS_SERVICE_HOST
+          value: redis
         command: ["/bin/sh"]
         args: ["start-fastapi-otel.sh"]
+        # test if needed
+        # command: [ "/bin/bash", "-c", "--" ]
+        # args: [ "while true; do sleep 30; done;" ]
+---
+# Redis Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  namespace: default
+spec:
+  selector:
+    name: redis
+  ports:
+  - protocol: TCP
+    port: 6379
+    targetPort: 6379
+---
+# Redis Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      name: redis
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: redis
+    spec:
+      containers:
+      - name: redis
+        image: docker.io/stevelerner/redis
+        ports:
+        - containerPort: 6379
+        command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+---
+# Python Requests Client
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-py-reqs
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      name: client-py-reqs
+  template:
+    metadata:
+      labels:
+        name: client-py-reqs
+    spec:
+      containers:
+      - name: client-py-reqs
+        image: docker.io/stevelerner/microsvcsdemo-python
+        workingDir: /home/code/k8s
+        env:
+        - name: OTEL_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: OTEL_SERVICE_NAME
+          value: client-py-reqs
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: http://$(OTEL_IP):4317
+        - name: PYTHON_TEST_URLBAD
+          value: "0"
+        - name: PYTHON_TEST_URL
+          value: http://fastapi-server:5001
+        command: ["/bin/sh"]
+        args: ["start-reqs-envurl-otel.sh"]
+        # test if needed
         # command: [ "/bin/bash", "-c", "--" ]
         # args: [ "while true; do sleep 30; done;" ]

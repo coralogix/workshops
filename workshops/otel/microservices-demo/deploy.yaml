@@ -119,7 +119,7 @@ spec:
         - name: OTEL_EXPORTER_OTLP_ENDPOINT
           value: http://$(OTEL_IP):4317
         - name: PYTHON_TEST_URLBAD
-          value: "0"
+          value: $PYTHON_TEST_URLBAD
         - name: PYTHON_TEST_URL
           value: http://fastapi-server:5001
         command: ["/bin/sh"]

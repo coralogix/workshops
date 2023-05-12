@@ -12,21 +12,21 @@ logger.setLevel(logging.DEBUG)
 logger.addHandler(logging.StreamHandler(sys.stdout))
 
 url = os.environ.get('PYTHON_TEST_URL')
-isurlbad = int(os.environ.get('PYTHON_TEST_URLBAD'))
+isurlgood = int(os.environ.get('PYTHON_TEST_URLGOOD'))
 
 seed(1)
 x=1
 
 # the bad url- adding /bad to the req
-urlbad = url + "/bad" 
+badurl = url + "/bad" 
 
-# if the ISURLBAD simulation is 1 then direct reqs at urlbad which adds /bad to the req to simulate a bad deployment
+# if the ISURLGOOD simulation is 0 then direct reqs at urlbad which adds /bad to the req to simulate a bad deployment
 # however only do this less than 5% of time so simulate an intermittent problem
 
 def pythonreqs():
     try: 
-        if random() <= .05 and isurlbad==1 :
-            response=requests.get(urlbad)
+        if random() <= .05 and isurlgood==0 :
+            response=requests.get(badurl)
         else :
             response=requests.get(url)
         logger.info(response)   

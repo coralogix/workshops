@@ -1,1 +1,1 @@
-python ../apps/fastapi-server.py
+opentelemetry-instrument python ../apps/fastapi-server.py

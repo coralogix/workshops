@@ -1,1 +1,1 @@
-python ../apps/python-reqs.py
+opentelemetry-instrument python ../apps/python-reqs.py

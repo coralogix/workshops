@@ -1,1 +1,1 @@
-python ../apps/fastapi-server-redis.py
+opentelemetry-instrument python ../apps/fastapi-server-redis.py

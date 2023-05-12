@@ -1,1 +1,1 @@
-python ../apps/fastapi-server.py
+python3 ../apps/fastapi-server.py

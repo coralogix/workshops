@@ -12,7 +12,7 @@ logger.setLevel(logging.DEBUG)
 logger.addHandler(logging.StreamHandler(sys.stdout))
 
 url = os.environ.get('PYTHON_TEST_URL')
-isurlgood = int(os.environ.get('PYTHON_TEST_URLGOOD'))
+isurlgood = os.environ.get('PYTHON_TEST_URLGOOD')
 
 seed(1)
 x=1
@@ -25,7 +25,7 @@ badurl = url + "/bad"
 
 def pythonreqs():
     try: 
-        if random() <= .05 and isurlgood==0 :
+        if random() <= .2 and isurlgood=="BAD" :
             response=requests.get(badurl)
         else :
             response=requests.get(url)

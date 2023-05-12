@@ -1,2 +1,2 @@
 export REDIS_SERVICE_HOST=localhost
-python ../apps/fastapi-server-redis.py
+python3 ../apps/fastapi-server-redis.py

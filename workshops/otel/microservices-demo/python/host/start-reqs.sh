@@ -1,1 +1,1 @@
-python ../apps/python-reqs.py
+python3 ../apps/python-reqs.py

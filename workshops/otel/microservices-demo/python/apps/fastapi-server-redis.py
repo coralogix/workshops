@@ -24,8 +24,9 @@ def redis_transact():  # simple redis example that will be picked up by auto-ins
     try:
         transaction = ( (binascii.b2a_hex(os.urandom(8)).decode())) # generate random transaction number
         r = redis.StrictRedis(host=redis_host, port=redis_port, password=redis_password, decode_responses=True)
-        r.set("transaction", transaction)
-        msg = "transaction:" + r.get("transaction")
+        r.set(transaction, "transaction success")
+        r.expire(transaction, 3600)
+        # msg = "transaction:" + r.get("transaction")
         return(transaction) # return transaction ID to be used for logging
     except Exception as e:
         print(e)

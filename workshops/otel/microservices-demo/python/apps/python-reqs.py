@@ -8,7 +8,7 @@ import json_logging, json, logging
 
 json_logging.init_non_web(enable_json=True)
 logger = logging.getLogger("python-reqs")
-logger.setLevel(logging.ERROR)
+logger.setLevel(logging.INFO)
 logger.addHandler(logging.StreamHandler(sys.stdout))
 
 isurlgood = os.environ.get('PYTHON_TEST_URLGOOD')
@@ -24,7 +24,7 @@ x=1
 def pythonreqs():
     try: 
         badchance = random()
-        if badchance <= .9 and isurlgood=="BAD":
+        if badchance <= .90 and isurlgood=="BAD":
             url = envurl + "/bad" 
         else:
             url = envurl + "/transact"

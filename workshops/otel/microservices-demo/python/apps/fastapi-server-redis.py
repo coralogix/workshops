@@ -11,8 +11,9 @@ redis_port = 6379
 redis_password = ""
 
 # json_logging.init_fastapi(enable_json=True)
+app = FastAPI()
+json_logging.init_fastapi(enable_json=True)
 # json_logging.init_request_instrument(app)
-json_logging.init_non_web(enable_json=True)
 
 logger = logging.getLogger("transaction-logger")
 logger.setLevel(logging.INFO)
@@ -30,27 +31,23 @@ def redis_transact():  # simple redis example that will be picked up by auto-ins
     except Exception as e:
         print(e)
 
-
-app = FastAPI()
-
 @app.get('/{path}')
 async def read_path(path:str):
-    if path == "transact":
-        random_ip = ipaddr.IPv4Address(random.randrange(int(network.network) + 1, int(network.broadcast) - 1)) # generate random IP address
-        transaction=(redis_transact())
-        logger.info("transactionlog", extra={'props': {'user_IP': str(random_ip),'transaction': transaction}})
-        return {
+    random_ip = ipaddr.IPv4Address(random.randrange(int(network.network) + 1, int(network.broadcast) - 1)) # generate random IP address
+    transaction=(redis_transact())
+    detail = {
                 "USER_IP": str(random_ip),
-                "transaction": transaction
-            }
+                "transaction": transaction,
+                "result": path
+        }
+    logger.info("transactionlog", extra={'props': detail})
+    if path == "transact":
+        return detail
     else:
         raise HTTPException(
             status_code=404, detail=
-            {
-            "USER_IP": "255.255.255.255",
-            "transaction": "invalidtransaction"
-            }
+            detail
         )
-    
+
 if __name__ == "__main__":
     uvicorn.run(app, host='0.0.0.0', port=5001)

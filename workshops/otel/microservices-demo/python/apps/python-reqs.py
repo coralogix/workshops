@@ -11,28 +11,32 @@ logger = logging.getLogger("python-reqs")
 logger.setLevel(logging.DEBUG)
 logger.addHandler(logging.StreamHandler(sys.stdout))
 
-url = os.environ.get('PYTHON_TEST_URL')
 isurlgood = os.environ.get('PYTHON_TEST_URLGOOD')
+envurl = os.environ.get('PYTHON_TEST_URL')
 
 seed(1)
 x=1
+
 
 # if the ISURLGOOD simulation is 0 then direct reqs at urlbad which adds /bad to the req to simulate a bad deployment
 # however only do this less than 5% of time so simulate an intermittent problem
 
 def pythonreqs():
     try: 
-        if random() <= .2 and isurlgood=="BAD":
-            badurl = url + "/bad" 
-            response=requests.get(badurl)
+        badchance = random()
+        if badchance <= .25 and isurlgood=="BAD":
+            url = envurl + "/bad" 
         else:
-            url = url +"/transact"
-            response=requests.get(url)
-
+            url = envurl + "/transact"
+        response = requests.get(url)
         jsonResponse=response.json()
-        # logger.info("transactionlog", extra={'props': {'user_IP': (jsonResponse["USER_IP"]),'transaction': (jsonResponse["transaction"])}})
-        print(jsonResponse)
- 
+        print(jsonResponse) 
+        if badchance <= .25 and isurlgood=="BAD":
+            # logger.info("transactionlog", extra={'props': {'user_IP': (jsonResponse["detail"]["USER_IP"]),'transaction': (jsonResponse["detail"]["transaction"])}})
+            logger.info("transactionlog", extra={'props': {'user_IP': "255.255.255.255",'transaction': "invalidtransaction"}})
+        else:
+            logger.info("transactionlog", extra={'props': {'user_IP': (jsonResponse["USER_IP"]),'transaction': (jsonResponse["transaction"]), 'result': (jsonResponse["result"])}})
+
     except requests.exceptions.RequestException as err:
         log_dict = {'error': str(err),   
             }

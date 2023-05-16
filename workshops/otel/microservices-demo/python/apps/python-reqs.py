@@ -24,7 +24,7 @@ x=1
 def pythonreqs():
     try: 
         badchance = random()
-        if badchance <= .25 and isurlgood=="BAD":
+        if badchance <= .9 and isurlgood=="BAD":
             url = envurl + "/bad" 
         else:
             url = envurl + "/transact"

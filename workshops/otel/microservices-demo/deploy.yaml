@@ -48,7 +48,7 @@ spec:
         - name: REDIS_SERVICE_HOST
           value: redis
         command: ["/bin/sh"]
-        args: ["start-fastapi-otel.sh"]
+        args: ["start-fastapi-redis-otel.sh"]
         # test if needed
         # command: [ "/bin/bash", "-c", "--" ]
         # args: [ "while true; do sleep 30; done;" ]
@@ -122,8 +122,8 @@ spec:
           value: $PYTHON_TEST_URLGOOD
         - name: PYTHON_TEST_URL
           value: http://fastapi-server:5001
-        command: ["/bin/sh"]
-        args: ["start-reqs-envurl-otel.sh"]
+        # command: ["/bin/sh"]
+        # args: ["start-reqs-envurl-otel.sh"]
         # test if needed
-        # command: [ "/bin/bash", "-c", "--" ]
-        # args: [ "while true; do sleep 30; done;" ]
+        command: [ "/bin/bash", "-c", "--" ]
+        args: [ "while true; do sleep 30; done;" ]

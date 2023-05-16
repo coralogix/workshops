@@ -1,1 +1,1 @@
-kubectl apply -f deploy-good.yaml
+kubectl apply -f yaml/deploy-good.yaml

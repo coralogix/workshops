@@ -1,1 +1,1 @@
-kubectl apply -f deploy-reqs-bad.yaml
+kubectl apply -f yaml/deploy-reqs-good.yaml

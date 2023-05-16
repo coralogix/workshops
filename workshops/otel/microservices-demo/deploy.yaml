@@ -123,7 +123,7 @@ spec:
         - name: PYTHON_TEST_URL
           value: http://fastapi-server:5001
         # command: ["/bin/sh"]
-        # args: ["start-reqs-envurl-otel.sh"]
-        # test if needed
-        command: [ "/bin/bash", "-c", "--" ]
-        args: [ "while true; do sleep 30; done;" ]
+        args: ["start-reqs-envurl-otel.sh"]
+        test if needed
+        # command: [ "/bin/bash", "-c", "--" ]
+        # args: [ "while true; do sleep 30; done;" ]

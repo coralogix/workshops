@@ -14,7 +14,7 @@ logger.addHandler(logging.StreamHandler(sys.stdout))
 isurlgood = os.environ.get('PYTHON_TEST_URLGOOD')
 envurl = os.environ.get('PYTHON_TEST_URL')
 
-seed(1)
+seed()
 x=1
 
 
@@ -24,7 +24,7 @@ x=1
 def pythonreqs():
     try: 
         badchance = random()
-        if badchance <= .90 and isurlgood=="BAD":
+        if badchance <= .95 and isurlgood=="BAD":
             url = envurl + "/bad" 
         else:
             url = envurl + "/transact"
@@ -32,7 +32,7 @@ def pythonreqs():
         response = requests.get(url)
         jsonResponse=response.json()
 
-        if badchance <= .90 and isurlgood=="BAD":
+        if badchance <= .95 and isurlgood=="BAD":
             logger.info("transactionlog", extra={'props': {'user_IP': (jsonResponse["detail"]["USER_IP"]),'transaction': (jsonResponse["detail"]["transaction"]),'result': (jsonResponse["detail"]["result"])}})
         else:
             logger.info("transactionlog", extra={'props': {'user_IP': (jsonResponse["USER_IP"]),'transaction': (jsonResponse["transaction"]), 'result': (jsonResponse["result"])}})

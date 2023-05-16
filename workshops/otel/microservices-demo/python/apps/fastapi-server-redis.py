@@ -10,10 +10,9 @@ redis_host = os.getenv('REDIS_SERVICE_HOST')
 redis_port = 6379
 redis_password = ""
 
-# json_logging.init_fastapi(enable_json=True)
 app = FastAPI()
 json_logging.init_fastapi(enable_json=True)
-# json_logging.init_request_instrument(app)
+json_logging.init_request_instrument(app)
 
 logger = logging.getLogger("transaction-logger")
 logger.setLevel(logging.INFO)

@@ -12,11 +12,8 @@ logger.addHandler(logging.StreamHandler(sys.stdout))
 
 @app.route('/')
 def home():
-    logger.info("test log statement")
     logger.info("test log statement with extra props", extra={'props': {"extra_property": 'extra_value'}})
     correlation_id = json_logging.get_correlation_id()
-    return "Hello world : " + str(datetime.datetime.now())
-
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=int(5000), use_reloader=False)

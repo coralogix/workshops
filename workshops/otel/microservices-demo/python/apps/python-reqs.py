@@ -17,19 +17,22 @@ isurlgood = os.environ.get('PYTHON_TEST_URLGOOD')
 seed(1)
 x=1
 
-# the bad url- adding /bad to the req
-badurl = url + "/bad" 
-
 # if the ISURLGOOD simulation is 0 then direct reqs at urlbad which adds /bad to the req to simulate a bad deployment
 # however only do this less than 5% of time so simulate an intermittent problem
 
 def pythonreqs():
     try: 
-        if random() <= .2 and isurlgood=="BAD" :
+        if random() <= .2 and isurlgood=="BAD":
+            badurl = url + "/bad" 
             response=requests.get(badurl)
-        else :
+        else:
+            url = url +"/transact"
             response=requests.get(url)
-        logger.info(response)   
+
+        jsonResponse=response.json()
+        # logger.info("transactionlog", extra={'props': {'user_IP': (jsonResponse["USER_IP"]),'transaction': (jsonResponse["transaction"])}})
+        print(jsonResponse)
+ 
     except requests.exceptions.RequestException as err:
         log_dict = {'error': str(err),   
             }

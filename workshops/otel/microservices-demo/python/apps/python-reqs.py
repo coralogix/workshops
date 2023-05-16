@@ -30,7 +30,7 @@ def pythonreqs():
             url = envurl + "/transact"
         response = requests.get(url)
         jsonResponse=response.json()
-        print(jsonResponse) 
+        # print(jsonResponse) 
         if badchance <= .25 and isurlgood=="BAD":
             # logger.info("transactionlog", extra={'props': {'user_IP': (jsonResponse["detail"]["USER_IP"]),'transaction': (jsonResponse["detail"]["transaction"])}})
             logger.info("transactionlog", extra={'props': {'user_IP': "255.255.255.255",'transaction': "invalidtransaction"}})

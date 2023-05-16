@@ -4,7 +4,7 @@ from random import random, seed
 import json_logging, json, logging
 
 # This simulator requres env variables PYTHON_TEST_URL which is the IP address of the server simulator port 5001
-# and PYTHON_TEST_URLBAD which is 0 or 1
+# and PYTHON_TEST_URLBAD which is GOOD or BAD
 
 json_logging.init_non_web(enable_json=True)
 logger = logging.getLogger("python-reqs")
@@ -32,7 +32,7 @@ def pythonreqs():
         response = requests.get(url)
         jsonResponse=response.json()
 
-        if badchance <= .25 and isurlgood=="BAD":
+        if badchance <= .90 and isurlgood=="BAD":
             logger.info("transactionlog", extra={'props': {'user_IP': (jsonResponse["detail"]["USER_IP"]),'transaction': (jsonResponse["detail"]["transaction"]),'result': (jsonResponse["detail"]["result"])}})
         else:
             logger.info("transactionlog", extra={'props': {'user_IP': (jsonResponse["USER_IP"]),'transaction': (jsonResponse["transaction"]), 'result': (jsonResponse["result"])}})

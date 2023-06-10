@@ -165,7 +165,7 @@ spec:
         - name: PYTHON_TEST_URLGOOD
           value: "GOOD"
         - name: PYTHON_TEST_URL
-          value: http:/cx-fastapi-server:5001
+          value: http://cx-fastapi-server:5001
         command: ["/bin/sh"]
         args: ["start-reqs-envurl-otel.sh"]
         # test if needed

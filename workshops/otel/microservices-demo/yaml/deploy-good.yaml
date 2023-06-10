@@ -47,6 +47,8 @@ spec:
           value: otlp
         - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
           value: http://$(OTEL_IP):4317
+        - name: OTEL_PYTHON_LOG_CORRELATION
+          value: "true"
         - name: REDIS_SERVICE_HOST
           value: redis
         command: ["/bin/sh"]
@@ -162,6 +164,8 @@ spec:
           value: application.name=cx-client-py-reqs,api.name=cx-client-py-reqs,cx.application.name=cx-client-py-reqs,cx.subsystem.name=cx-client-py-reqs
         - name: OTEL_EXPORTER_OTLP_ENDPOINT
           value: http://$(OTEL_IP):4317
+        - name: OTEL_PYTHON_LOG_CORRELATION
+          value: "true"
         - name: PYTHON_TEST_URLGOOD
           value: "GOOD"
         - name: PYTHON_TEST_URL

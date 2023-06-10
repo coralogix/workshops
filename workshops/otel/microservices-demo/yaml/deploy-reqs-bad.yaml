@@ -3,19 +3,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: client-py-reqs
+  name: cx-client-py-reqs
   namespace: default
 spec:
   selector:
     matchLabels:
-      name: client-py-reqs
+      name: cx-client-py-reqs
   template:
     metadata:
       labels:
-        name: client-py-reqs
+        name: cx-client-py-reqs
     spec:
       containers:
-      - name: client-py-reqs
+      - name: cx-client-py-reqs
         image: docker.io/stevelerner/microsvcsdemo-python
         workingDir: /home/code/k8s
         env:
@@ -24,13 +24,15 @@ spec:
             fieldRef:
               fieldPath: status.hostIP
         - name: OTEL_SERVICE_NAME
-          value: client-py-reqs
+          value: cx-client-py-reqs
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: application.name=cx-client-py-reqs,api.name=cx-client-py-reqs,cx.application.name=cx-client-py-reqs,cx.subsystem.name=cx-client-py-reqs
         - name: OTEL_EXPORTER_OTLP_ENDPOINT
           value: http://$(OTEL_IP):4317
         - name: PYTHON_TEST_URLGOOD
           value: "BAD"
         - name: PYTHON_TEST_URL
-          value: http://fastapi-server:5001
+          value: http://cx-fastapi-server:5001
         command: ["/bin/sh"]
         args: ["start-reqs-envurl-otel.sh"]
         # test if needed

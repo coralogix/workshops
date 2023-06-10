@@ -38,7 +38,7 @@ spec:
         - name: OTEL_SERVICE_NAME
           value: cx-fastapi-server
         - name: OTEL_RESOURCE_ATTRIBUTES
-          value: application.name=cx-fastapi-server,api.name=cx-fastapi-server,cx.application.name=cx-fastapi-server,cx.subsystem.name=cx-fastapi-server
+          value: "application.name=cx-fastapi-server,api.name=cx-fastapi-server,cx.application.name=cx-fastapi-server,cx.subsystem.name=cx-fastapi-server"
         - name: OTEL_IP
           valueFrom:
             fieldRef:
@@ -90,7 +90,7 @@ spec:
         - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
           value: http://$(OTEL_IP):4317
         - name: REDIS_SERVICE_HOST
-          value: redis
+          value: cx-redis
         command: ["/bin/sh"]
         args: ["start-fastapi-redis-otel.sh"]
         # test if needed
@@ -161,7 +161,7 @@ spec:
         - name: OTEL_SERVICE_NAME
           value: cx-client-py-reqs
         - name: OTEL_RESOURCE_ATTRIBUTES
-          value: application.name=cx-client-py-reqs,api.name=cx-client-py-reqs,cx.application.name=cx-client-py-reqs,cx.subsystem.name=cx-client-py-reqs
+          value: "application.name=cx-client-py-reqs,api.name=cx-client-py-reqs,cx.application.name=cx-client-py-reqs,cx.subsystem.name=cx-client-py-reqs"
         - name: OTEL_EXPORTER_OTLP_ENDPOINT
           value: http://$(OTEL_IP):4317
         - name: OTEL_PYTHON_LOG_CORRELATION

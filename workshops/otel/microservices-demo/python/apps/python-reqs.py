@@ -8,7 +8,7 @@ import json_logging, json, logging
 
 json_logging.init_non_web(enable_json=True)
 logger = logging.getLogger("python-reqs")
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 logger.addHandler(logging.StreamHandler(sys.stdout))
 
 isurlgood = os.environ.get('PYTHON_TEST_URLGOOD')

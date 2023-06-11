@@ -15,7 +15,7 @@ json_logging.init_fastapi(enable_json=True)
 json_logging.init_request_instrument(app)
 
 logger = logging.getLogger("transaction-logger")
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 logger.addHandler(logging.StreamHandler(sys.stdout))
 
 network = ipaddr.IPv4Network('255.255.255.255/0')

@@ -33,12 +33,10 @@ def pythonreqs():
         jsonResponse=response.json()
 
         if badchance <= .95 and isurlgood=="BAD":
-        #     logger.info("transactionlog", extra={'props': {'user_IP': (jsonResponse["detail"]["USER_IP"]),'transaction': (jsonResponse["detail"]["transaction"]),'result': (jsonResponse["detail"]["result"])}})
-        # else:
-        #     logger.info("transactionlog", extra={'props': {'user_IP': (jsonResponse["USER_IP"]),'transaction': (jsonResponse["transaction"]), 'result': (jsonResponse["result"])}})
-            logger.info("transactionlog")
+            logger.info("transactionlog", extra={'props': {'user_IP': (jsonResponse["detail"]["USER_IP"]),'transaction': (jsonResponse["detail"]["transaction"]),'result': (jsonResponse["detail"]["result"])}})
         else:
-            logger.info("transactionlog")
+            logger.info("transactionlog", extra={'props': {'user_IP': (jsonResponse["USER_IP"]),'transaction': (jsonResponse["transaction"]), 'result': (jsonResponse["result"])}})
+
     except requests.exceptions.RequestException as err:
         log_dict = {'error': str(err),   
             }

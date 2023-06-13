@@ -20,7 +20,7 @@ cd workshops/otel/microservices-demo
 ```
 
 ### Step 3  
-Deploy example- this will deploy to the default k8s namespace.  
+Deploy example to your k8s cluster- this will deploy to the default k8s namespace.  
 If you want to change the namespace, edit `yaml/deploy-good.yaml`  
 There will be three services spun up:  
 
@@ -37,7 +37,7 @@ source deploy-all.sh
 Study results in Coralogix portal
 
 ### Step 5
-To delete the example:
+To remove all the deployments/services/pods from the example from your k8s cluster:  
 ```
 source delete-all.sh
 ```

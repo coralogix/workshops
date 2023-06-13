@@ -1,0 +1,1 @@
+opentelemetry-instrument python ../apps/flask-server-redis.py

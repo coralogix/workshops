@@ -24,7 +24,7 @@ def pythonreqs():
         else:
             url = envurl + "/transact"
         response = requests.get(url)
-        print(response)
+        print(response.content)
     except requests.exceptions.RequestException as err:
         log_dict = {'error': str(err),   
             }

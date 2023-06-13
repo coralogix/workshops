@@ -1,44 +1,44 @@
 ---
-### Fastapi server service
+### Flask Server Service
 apiVersion: v1
 kind: Service
 metadata:
-  name: cx-fastapi-server
+  name: cx-flask-server
 spec:
   selector:
-    name: cx-fastapi-server
+    name: cx-flask-server
   ports:
   - protocol: TCP
-    port: 5001
-    targetPort: 5001
+    port: 5000
+    targetPort: 5000
 ---
-# Fastapi server
+# Flask Server Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cx-fastapi-server
+  name: cx-flask-server
   namespace: default
 spec:
   selector:
     matchLabels:
-      name: cx-fastapi-server
+      name: cx-flask-server
   template:
     metadata:
       labels:
-        name: cx-fastapi-server
+        name: cx-flask-server
     spec:
       containers:
-      - name: cx-fastapi-server
+      - name: cx-flask-server
         image: docker.io/stevelerner/microsvcsdemo-python
         workingDir: /home/code/k8s
         ports:
           - name: http
-            containerPort: 5001
+            containerPort: 5000
         env:
         - name: OTEL_SERVICE_NAME
-          value: cx-fastapi-server
+          value: cx-flask-server
         - name: OTEL_RESOURCE_ATTRIBUTES
-          value: "application.name=cx-fastapi-server,api.name=cx-fastapi-server,cx.application.name=cx-fastapi-server,cx.subsystem.name=cx-fastapi-server"
+          value: "application.name=cx-flask-server,api.name=cx-flask-server,cx.application.name=cx-flask-server,cx.subsystem.name=cx-flask-server"
         - name: OTEL_IP
           valueFrom:
             fieldRef:
@@ -49,50 +49,12 @@ spec:
           value: http://$(OTEL_IP):4317
         - name: OTEL_PYTHON_LOG_CORRELATION
           value: "true"
+        - name: OTEL_PYTHON_LOG_LEVEL
+          value: "debug"
         - name: REDIS_SERVICE_HOST
           value: redis
         command: ["/bin/sh"]
-        args: ["start-fastapi-redis-otel.sh"]
-        # test if needed
-        # command: [ "/bin/bash", "-c", "--" ]
-        # args: [ "while true; do sleep 30; done;" ]---
-# Fastapi server
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: cx-fastapi-server
-  namespace: default
-spec:
-  selector:
-    matchLabels:
-      name: cx-fastapi-server
-  template:
-    metadata:
-      labels:
-        name: cx-fastapi-server
-    spec:
-      containers:
-      - name: cx-fastapi-server
-        image: docker.io/stevelerner/microsvcsdemo-python
-        workingDir: /home/code/k8s
-        ports:
-          - name: http
-            containerPort: 5001
-        env:
-        - name: OTEL_SERVICE_NAME
-          value: cx-fastapi-server
-        - name: OTEL_IP
-          valueFrom:
-            fieldRef:
-              fieldPath: status.hostIP
-        - name: OTEL_TRACES_EXPORTER
-          value: otlp
-        - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
-          value: http://$(OTEL_IP):4317
-        - name: REDIS_SERVICE_HOST
-          value: cx-redis
-        command: ["/bin/sh"]
-        args: ["start-fastapi-redis-otel.sh"]
+        args: ["start-Flask-redis-otel.sh"]
         # test if needed
         # command: [ "/bin/bash", "-c", "--" ]
         # args: [ "while true; do sleep 30; done;" ]
@@ -134,7 +96,7 @@ spec:
         - containerPort: 6379
         command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
 ---
-# Python Requests Client
+# Python Requests Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -166,10 +128,12 @@ spec:
           value: http://$(OTEL_IP):4317
         - name: OTEL_PYTHON_LOG_CORRELATION
           value: "true"
+        - name: OTEL_PYTHON_LOG_LEVEL
+          value: "debug"
         - name: PYTHON_TEST_URLGOOD
           value: "GOOD"
         - name: PYTHON_TEST_URL
-          value: http://cx-fastapi-server:5001
+          value: http://cx-flask-server:5000
         command: ["/bin/sh"]
         args: ["start-reqs-envurl-otel.sh"]
         # test if needed

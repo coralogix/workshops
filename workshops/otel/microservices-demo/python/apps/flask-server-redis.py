@@ -5,6 +5,7 @@ import logging, json
 import datetime, sys, ipaddr, random, os, binascii
 import redis
 
+print('Coralogix Transaction Server Demo')
 # logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
 
 # This simulator requres env variable REDIS_SERVICE_HOST
@@ -27,24 +28,22 @@ def redis_transact():  # simple redis example that will be picked up by auto-ins
         print(e)
 
 app = Flask(__name__)
-app.logger.removeHandler(default_handler)
+# app.logger.removeHandler(default_handler)
 @app.route("/<path>")
 def data(path):
     transaction=(redis_transact())
     random_ip = ipaddr.IPv4Address(random.randrange(int(network.network) + 1, int(network.broadcast) - 1)) # generate random IP address
     now = datetime.datetime.now()
     log_line_date_time = now.strftime("%Y-%m-%d %H:%M:%S")
-    response = {
-                "USER_IP": str(random_ip),
-                "transaction": transaction,
-                "result": path,
-                "datetime": log_line_date_time
-        }
-    if path != "transact":
-        response["transaction"]=failed
-    response.content_type = "application/json"
-    print(response.data)
-    return response.data
+    if path == "transact":
+        response = json.dumps({
+            "USER_IP": str(random_ip),
+            "transaction": transaction,
+            "result": path,
+            "datetime": log_line_date_time
+        })
+    print(response)
+    return response
 
 @app.errorhandler(HTTPException)
 def handle_exception(e):
@@ -65,6 +64,5 @@ def handle_exception(e):
     print(response.data)
     return response.data
 
-# main 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')

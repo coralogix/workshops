@@ -1,6 +1,5 @@
 requests
 redis
 json_logging
-fastapi
-uvicorn
 ipaddr
+flask

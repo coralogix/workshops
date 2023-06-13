@@ -54,7 +54,7 @@ spec:
         - name: REDIS_SERVICE_HOST
           value: redis
         command: ["/bin/sh"]
-        args: ["start-Flask-redis-otel.sh"]
+        args: ["start-flask-redis-otel.sh"]
         # test if needed
         # command: [ "/bin/bash", "-c", "--" ]
         # args: [ "while true; do sleep 30; done;" ]

@@ -2,8 +2,8 @@
 
 ## Instructions
 
-Requires a completely operational OpenTelemetry collector configured for Coralogix: https://coralogix.com/docs/opentelemetry-using-kubernetes/
-This example is for basic study only and is not documentation.
+Requires a completely operational OpenTelemetry collector configured for Coralogix: https://coralogix.com/docs/opentelemetry-using-kubernetes/  
+This example is for basic study only and is not documentation.  
 For full documentation: https://coralogix.com/docs/  
 
 ### Step 1  

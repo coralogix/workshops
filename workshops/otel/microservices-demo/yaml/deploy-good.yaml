@@ -52,7 +52,7 @@ spec:
         - name: OTEL_PYTHON_LOG_LEVEL
           value: "debug"
         - name: REDIS_SERVICE_HOST
-          value: redis
+          value: cx-redis
         command: ["/bin/sh"]
         args: ["start-flask-redis-otel.sh"]
         # test if needed

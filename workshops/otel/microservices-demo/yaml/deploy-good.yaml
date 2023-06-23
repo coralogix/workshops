@@ -130,6 +130,8 @@ spec:
           value: "true"
         - name: OTEL_PYTHON_LOG_LEVEL
           value: "debug"
+        - name: OTEL_PYTHON_LOG_FORMAT
+          value: OTEL_PYTHON_LOG_FORMAT="%(asctime)s %(levelname)s [%(name)s] [%(filename)s:%(lineno)d] trace_id=%(otelTraceID)s - %(message)s"
         - name: PYTHON_TEST_URLGOOD
           value: "GOOD"
         - name: PYTHON_TEST_URL

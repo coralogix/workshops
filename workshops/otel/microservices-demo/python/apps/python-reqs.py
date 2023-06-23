@@ -12,7 +12,8 @@ envurl = os.environ.get('PYTHON_TEST_URL')
 seed()
 x=1
 
-logging.basicConfig(level=logging.INFO)
+# logging.basicConfig(level=logging.INFO)
+logging.basicConfig(format='%(levelname)s:%(message)s %(otelSpanID)s %(otelTraceID)s %(otelServiceName)s %(otelTraceSampled)s', level=logging.DEBUG)
 
 # if the ISURLGOOD simulation is 0 then direct reqs at urlbad which adds /bad to the req to simulate a bad deployment
 # however only do this less than 5% of time so simulate an intermittent problem

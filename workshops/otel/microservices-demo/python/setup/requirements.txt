@@ -1,5 +1,4 @@
 requests
 redis
-json_logging
 ipaddr
 flask

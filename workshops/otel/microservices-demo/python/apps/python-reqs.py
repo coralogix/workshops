@@ -12,6 +12,7 @@ envurl = os.environ.get('PYTHON_TEST_URL')
 seed()
 x=1
 
+logging.basicConfig(level=logging.INFO)
 
 # if the ISURLGOOD simulation is 0 then direct reqs at urlbad which adds /bad to the req to simulate a bad deployment
 # however only do this less than 5% of time so simulate an intermittent problem
@@ -24,7 +25,7 @@ def pythonreqs():
         else:
             url = envurl + "/transact"
         response = requests.get(url)
-        print(response.content)
+        logging.info(response.json())
     except requests.exceptions.RequestException as err:
         log_dict = {'error': str(err),   
             }

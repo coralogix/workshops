@@ -1,9 +1,8 @@
 export PYTHON_TEST_URLGOOD=GOOD
-export PYTHON_TEST_URL="http://localhost:5001"
+export PYTHON_TEST_URL="http://localhost:5000"
+export OTEL_PYTHON_LOG_CORRELATION=true
+export OTEL_PYTHON_LOG_LEVEL=debug
 opentelemetry-instrument \
     --traces_exporter console \
-    --metrics_exporter console \
-    --logs_exporter console \
     --service_name cx-python-reqs \
-    --OTEL_PYTHON_LOG_CORRELATION true \
     python3 ../../apps/python-reqs.py

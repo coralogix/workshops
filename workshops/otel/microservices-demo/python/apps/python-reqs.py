@@ -1,7 +1,7 @@
-import requests, os, sys
+import requests, os, sys, json, logging
 from time import sleep
 from random import random, seed
-import json, logging
+from opentelemetry.instrumentation.logging import LoggingInstrumentor
 
 # This simulator requres env variables PYTHON_TEST_URL which is the IP address of the server simulator port 5001
 # and PYTHON_TEST_URLBAD which is GOOD or BAD
@@ -12,8 +12,9 @@ envurl = os.environ.get('PYTHON_TEST_URL')
 seed()
 x=1
 
-# logging.basicConfig(level=logging.INFO)
-logging.basicConfig(format='%(levelname)s:%(message)s %(otelSpanID)s %(otelTraceID)s %(otelServiceName)s %(otelTraceSampled)s', level=logging.DEBUG)
+LoggingInstrumentor(set_logging_format=True)
+LoggingInstrumentor(log_level=logging.DEBUG)
+logging.basicConfig(format='%(levelname)s:%(message)s SPANID=%(otelSpanID)s TRACEID=%(otelTraceID)s SERVICENAME=%(otelServiceName)s', level=logging.DEBUG)
 
 # if the ISURLGOOD simulation is 0 then direct reqs at urlbad which adds /bad to the req to simulate a bad deployment
 # however only do this less than 5% of time so simulate an intermittent problem

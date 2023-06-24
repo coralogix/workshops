@@ -4,6 +4,7 @@ from werkzeug.exceptions import HTTPException
 import logging, json
 import datetime, sys, ipaddr, random, os, binascii
 import redis
+from opentelemetry.instrumentation.logging import LoggingInstrumentor
 
 print('Coralogix Transaction Server Demo')
 # logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
@@ -14,7 +15,9 @@ redis_host = os.getenv('REDIS_SERVICE_HOST')
 redis_port = 6379
 redis_password = ""
 
-logging.basicConfig(level=logging.INFO)
+LoggingInstrumentor(set_logging_format=True)
+LoggingInstrumentor(log_level=logging.DEBUG)
+logging.basicConfig(format='%(levelname)s:%(message)s SPANID=%(otelSpanID)s TRACEID=%(otelTraceID)s SERVICENAME=%(otelServiceName)s', level=logging.DEBUG)
 
 network = ipaddr.IPv4Network('255.255.255.255/0')
 

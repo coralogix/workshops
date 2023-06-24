@@ -48,10 +48,10 @@ spec:
           value: otlp
         - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
           value: http://$(OTEL_IP):4317
-        - name: OTEL_PYTHON_LOG_CORRELATION
-          value: "true"
-        - name: OTEL_PYTHON_LOG_LEVEL
-          value: "debug"
+        # - name: OTEL_PYTHON_LOG_CORRELATION
+        #   value: "true"
+        # - name: OTEL_PYTHON_LOG_LEVEL
+        #   value: "debug"
         - name: REDIS_SERVICE_HOST
           value: cx-redis
         command: ["/bin/sh"]

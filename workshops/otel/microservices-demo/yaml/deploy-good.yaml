@@ -30,6 +30,7 @@ spec:
       containers:
       - name: cx-flask-server
         image: public.ecr.aws/w3s4j9x9/microservices-demo:python
+        imagePullPolicy: Always
         workingDir: /home/code/k8s
         ports:
           - name: http
@@ -92,6 +93,7 @@ spec:
       containers:
       - name: cx-redis
         image: public.ecr.aws/w3s4j9x9/microservices-demo:redis
+        imagePullPolicy: Always
         ports:
         - containerPort: 6379
         command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
@@ -114,6 +116,7 @@ spec:
       containers:
       - name: cx-client-py-reqs
         image: public.ecr.aws/w3s4j9x9/microservices-demo:python
+        imagePullPolicy: Always
         workingDir: /home/code/k8s
         env:
         - name: OTEL_IP
@@ -126,12 +129,12 @@ spec:
           value: "application.name=cx-client-py-reqs,api.name=cx-client-py-reqs,cx.application.name=cx-client-py-reqs,cx.subsystem.name=cx-client-py-reqs"
         - name: OTEL_EXPORTER_OTLP_ENDPOINT
           value: http://$(OTEL_IP):4317
-        - name: OTEL_PYTHON_LOG_CORRELATION
-          value: "true"
-        - name: OTEL_PYTHON_LOG_LEVEL
-          value: "debug"
-        - name: OTEL_PYTHON_LOG_FORMAT
-          value: OTEL_PYTHON_LOG_FORMAT="%(asctime)s %(levelname)s [%(name)s] [%(filename)s:%(lineno)d] trace_id=%(otelTraceID)s - %(message)s"
+        # - name: OTEL_PYTHON_LOG_CORRELATION
+        #   value: "true"
+        # - name: OTEL_PYTHON_LOG_LEVEL
+        #   value: "debug"
+        # - name: OTEL_PYTHON_LOG_FORMAT
+        #   value: OTEL_PYTHON_LOG_FORMAT="%(asctime)s %(levelname)s [%(name)s] [%(filename)s:%(lineno)d] trace_id=%(otelTraceID)s - %(message)s"
         - name: PYTHON_TEST_URLGOOD
           value: "GOOD"
         - name: PYTHON_TEST_URL

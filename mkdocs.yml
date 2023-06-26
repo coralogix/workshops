@@ -34,5 +34,7 @@ extra_css:
 
 nav:
   - Home: index.md
+  - OpenTelemetry Microservices Workshop:
+    - Microservices Workshop: otel/microservices-workshop/index.md
   - OpenTelemetry APM Instrumentation:
     - .NET Windows: otel/dotnet-windows/index.md

@@ -4,6 +4,10 @@ These workshops are designed to help learn and practice observability and practi
 
 These workshops are not documentation- Coralogix platform documentation is located [here](https://coralogix.com/docs/).
 
+### OpenTelemetry Microservices Workshop
+
+[Microservices Workshop](otel/microservices-workshop/index.md)
+
 ### OpenTelemetry Tracing Instrumentation
 
 [.NET for Windows](otel/dotnet-windows/index.md)

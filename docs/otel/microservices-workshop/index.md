@@ -36,10 +36,7 @@ Deploys the following as seen from the `http://cx-payment-gateway-flask:5000/` r
 
 ![Microservices Workshop](../../images/microservices-workshop/01.png)
 
-With healthy low latency spans:  
-
-![Microservices Workshop](../../images/microservices-workshop/02.png)  
-  
+With healthy low latency spans for all services:  
   
 ![Microservices Workshop](../../images/microservices-workshop/03.png)  
 

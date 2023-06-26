@@ -521,7 +521,7 @@ There will be three services spun up:  </p>
 <p>Simulate a "bad" deployment:  </p>
 <pre><code>source deploy-bad.sh
 </code></pre>
-<p>This deployment will cause severe sporadic problems in <code>payment-gateway</code> such as 404s, a log key:value <code>'transaction': 'failed',</code> and latency in the service response. You can see the latency spikes here:    </p>
+<p>This deployment will cause severe sporadic problems in <code>payment-gateway</code> such as 404s, a log key:value <code>'transaction': 'failed',</code> and latency in the service response along with a drop in transaction volume. You can see the latency spikes here:    </p>
 <p><img alt="Microservices Workshop" src="../../images/microservices-workshop/04.png" />  </p>
 <p>Roll back the bad deployment for the services to return to normal:  </p>
 <pre><code>source deploy-good.sh

@@ -24,13 +24,24 @@ Deploy example to your k8s cluster- this will deploy to the default k8s namespac
 If you want to change the namespace, edit `yaml/deploy-good.yaml`  
 There will be three services spun up:  
 
-`cx-client-py-reqs` - a requesting service initiating a transaction  
-`cx-flask-server` - a server that is a bridge for a transaction to a database  
-`cx-redis` - an instance of a redis database  
+- `cx-shopping-cart-reqs` - a requesting service initiating a transaction  
+- `cx-payment-gateway-flask` - a server that is a bridge for a transaction to a database- returns a transaction ID to the `shopping-cart`  
+- `cx-redis` - an instance of a redis database used for a transaction
 
 ```
 source deploy-all.sh
 ```
+
+Deploys the following as seen from the `http://cx-payment-gateway-flask:5000/` root span:  
+
+![Microservices Workshop](../../images/microservices-workshop/01.png)
+
+With healthy low latency spans:  
+
+![Microservices Workshop](../../images/microservices-workshop/02.png)  
+  
+  
+![Microservices Workshop](../../images/microservices-workshop/03.png)  
 
 ### Step 4 - Study results and simulate CI/CD scenarios
 Study results in Coralogix portal
@@ -40,7 +51,9 @@ Simulate a "bad" deployment:
 source deploy-bad.sh
 ```
 
-This deployment will cause severe sporadic problems in `cx-flask-server` such as 404s, a log key:value ` 'transaction': 'failed',` and latency in the service response.  
+This deployment will cause severe sporadic problems in `payment-gateway` such as 404s, a log key:value ` 'transaction': 'failed',` and latency in the service response. You can see the latency spikes here:    
+
+![Microservices Workshop](../../images/microservices-workshop/04.png)  
   
 Roll back the bad deployment for the services to return to normal:  
 ```

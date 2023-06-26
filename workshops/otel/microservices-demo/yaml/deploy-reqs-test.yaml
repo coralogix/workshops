@@ -33,7 +33,7 @@ spec:
         - name: PYTHON_TEST_URLGOOD
           value: "GOOD"
         - name: PYTHON_TEST_URL
-          value: http://cx-fastapi-server:5000
+          value: http://cx-flask-server:5000
         # command: ["/bin/sh"]
         # args: ["start-reqs-envurl-otel.sh"]
         # test if needed

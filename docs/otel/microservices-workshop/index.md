@@ -48,7 +48,7 @@ Simulate a "bad" deployment:
 source deploy-bad.sh
 ```
 
-This deployment will cause severe sporadic problems in `payment-gateway` such as 404s, a log key:value ` 'transaction': 'failed',` and latency in the service response. You can see the latency spikes here:    
+This deployment will cause severe sporadic problems in `payment-gateway` such as 404s, a log key:value ` 'transaction': 'failed',` and latency in the service response along with a drop in transaction volume. You can see the latency spikes here:    
 
 ![Microservices Workshop](../../images/microservices-workshop/04.png)  
   

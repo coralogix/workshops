@@ -1,9 +1,8 @@
 from flask import Flask, make_response, request
 from flask.logging import default_handler
 from werkzeug.exceptions import HTTPException
-import logging, json
-import datetime, sys, ipaddr, random, os, binascii
-import redis
+import logging, json, datetime, sys, ipaddr, random, os, binascii, redis
+from time import sleep
 from opentelemetry.instrumentation.logging import LoggingInstrumentor
 
 print('Coralogix Transaction Server Demo')
@@ -54,6 +53,8 @@ def data(path):
 @app.errorhandler(HTTPException)
 def handle_exception(e):
     response = e.get_response()
+    y = random()*3
+    sleep(y)
     random_ip = ipaddr.IPv4Address(random.randrange(int(network.network) + 1, int(network.broadcast) - 1)) # generate random IP address
     now = datetime.datetime.now()
     log_line_date_time = now.strftime("%Y-%m-%d %H:%M:%S")

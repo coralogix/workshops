@@ -505,9 +505,9 @@ For full documentation: https://coralogix.com/docs/  </p>
 <p>Deploy example to your k8s cluster- this will deploy to the default k8s namespace.<br />
 If you want to change the namespace, edit <code>yaml/deploy-good.yaml</code><br />
 There will be three services spun up:  </p>
-<p>cx-client-py-reqs - a requesting service initiating a transaction<br />
-cx-flask-server - a server that is a bridge for a transaction to a database<br />
-cx-redis - an instance of a redis database  </p>
+<p><code>cx-client-py-reqs</code> - a requesting service initiating a transaction<br />
+<code>cx-flask-server</code> - a server that is a bridge for a transaction to a database<br />
+<code>cx-redis</code> - an instance of a redis database  </p>
 <pre><code>source deploy-all.sh
 </code></pre>
 <h3 id="step-4-study-results-and-simulate-cicd-scenarios">Step 4 - Study results and simulate CI/CD scenarios</h3>
@@ -515,7 +515,8 @@ cx-redis - an instance of a redis database  </p>
 <p>Simulate a "bad" deployment:  </p>
 <pre><code>source deploy-bad.sh
 </code></pre>
-<p>and then repair it:  </p>
+<p>This deployment will cause severe sporadic problems in <code>cx-flask-server</code> such as 404s, a log key:value <code>'transaction': 'failed',</code> and latency in the service response.  </p>
+<p>Roll back the bad deployment for the services to return to normal:  </p>
 <pre><code>source deploy-good.sh
 </code></pre>
 <p>Study how the example is built:<br />

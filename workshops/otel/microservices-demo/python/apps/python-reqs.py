@@ -22,7 +22,7 @@ logging.basicConfig(format='%(levelname)s:%(message)s SPANID=%(otelSpanID)s TRAC
 def pythonreqs():
     try: 
         badchance = random()
-        if badchance <= .95 and isurlgood=="BAD":
+        if badchance <= .80 and isurlgood=="BAD":
             url = envurl
         else:
             url = envurl + "/transact"

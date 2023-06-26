@@ -52,9 +52,9 @@ def data(path):
 
 @app.errorhandler(HTTPException)
 def handle_exception(e):
-    response = e.get_response()
-    y = random()*3
+    y = random()*2
     sleep(y)
+    response = e.get_response()
     random_ip = ipaddr.IPv4Address(random.randrange(int(network.network) + 1, int(network.broadcast) - 1)) # generate random IP address
     now = datetime.datetime.now()
     log_line_date_time = now.strftime("%Y-%m-%d %H:%M:%S")

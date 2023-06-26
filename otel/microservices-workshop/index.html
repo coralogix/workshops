@@ -365,36 +365,36 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#step-1" class="md-nav__link">
-    Step 1
+  <a href="#step-1-setup" class="md-nav__link">
+    Step 1 - Setup
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#step-2" class="md-nav__link">
-    Step 2
+  <a href="#step-2-change-to-workshop-dir" class="md-nav__link">
+    Step 2 - Change to workshop dir
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#step-3" class="md-nav__link">
-    Step 3
+  <a href="#step-3-deploy-example" class="md-nav__link">
+    Step 3 - Deploy example
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#step-4" class="md-nav__link">
-    Step 4
+  <a href="#step-4-study-results-and-simulate-cicd-scenarios" class="md-nav__link">
+    Step 4 - Study results and simulate CI/CD scenarios
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#step-5" class="md-nav__link">
-    Step 5
+  <a href="#step-5-cleanup" class="md-nav__link">
+    Step 5 - Cleanup
   </a>
   
 </li>
@@ -493,15 +493,15 @@
 <p>Requires a completely operational OpenTelemetry collector configured for Coralogix: https://coralogix.com/docs/opentelemetry-using-kubernetes/<br />
 This example is for basic study only and is not documentation.<br />
 For full documentation: https://coralogix.com/docs/  </p>
-<h3 id="step-1">Step 1</h3>
+<h3 id="step-1-setup">Step 1 - Setup</h3>
 <p>Clone repo:</p>
 <pre><code>git clone https://github.com/coralogix/workshops
 </code></pre>
-<h3 id="step-2">Step 2</h3>
+<h3 id="step-2-change-to-workshop-dir">Step 2 - Change to workshop dir</h3>
 <p>Change to the proper directory for workshop example:  </p>
 <pre><code>cd workshops/otel/microservices-demo
 </code></pre>
-<h3 id="step-3">Step 3</h3>
+<h3 id="step-3-deploy-example">Step 3 - Deploy example</h3>
 <p>Deploy example to your k8s cluster- this will deploy to the default k8s namespace.<br />
 If you want to change the namespace, edit <code>yaml/deploy-good.yaml</code><br />
 There will be three services spun up:  </p>
@@ -510,7 +510,7 @@ cx-flask-server - a server that is a bridge for a transaction to a database<br /
 cx-redis - an instance of a redis database  </p>
 <pre><code>source deploy-all.sh
 </code></pre>
-<h3 id="step-4">Step 4</h3>
+<h3 id="step-4-study-results-and-simulate-cicd-scenarios">Step 4 - Study results and simulate CI/CD scenarios</h3>
 <p>Study results in Coralogix portal</p>
 <p>Simulate a "bad" deployment:  </p>
 <pre><code>source deploy-bad.sh
@@ -519,10 +519,10 @@ cx-redis - an instance of a redis database  </p>
 <pre><code>source deploy-good.sh
 </code></pre>
 <p>Study how the example is built:<br />
-* The Python apps that drive this example are in the <code>python/apps</code> dir
-* <code>.yaml</code> deployment files are in <code>python/yaml</code>
-* Dockerfiles for the containers show how the OpenTelemetry instrumentation works and are in the <code>/python</code> root level</p>
-<h3 id="step-5">Step 5</h3>
+- The Python apps that drive this example are in the <code>python/apps</code> dir<br />
+- <code>.yaml</code> deployment files are in <code>python/yaml</code><br />
+- Dockerfiles for the containers show how the OpenTelemetry instrumentation works and are in the <code>/python</code> root level  </p>
+<h3 id="step-5-cleanup">Step 5 - Cleanup</h3>
 <p>To remove all the deployments/services/pods from the example from your k8s cluster:  </p>
 <pre><code>source delete-all.sh
 </code></pre>

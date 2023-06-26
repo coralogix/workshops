@@ -1,0 +1,145 @@
+---
+### Flask Server Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: cx-flask-server
+spec:
+  selector:
+    name: cx-flask-server
+  ports:
+  - protocol: TCP
+    port: 5000
+    targetPort: 5000
+---
+# Flask Server Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cx-flask-server
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      name: cx-flask-server
+  template:
+    metadata:
+      labels:
+        name: cx-flask-server
+    spec:
+      containers:
+      - name: cx-flask-server
+        image: public.ecr.aws/w3s4j9x9/microservices-demo:python
+        imagePullPolicy: Always
+        workingDir: /home/code/k8s
+        ports:
+          - name: http
+            containerPort: 5000
+        env:
+        - name: OTEL_SERVICE_NAME
+          value: cx-flask-server
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: "application.name=cx-flask-server,api.name=cx-flask-server,cx.application.name=cx-flask-server,cx.subsystem.name=cx-flask-server"
+        - name: OTEL_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: OTEL_TRACES_EXPORTER
+          value: otlp
+        - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
+          value: http://$(OTEL_IP):4317
+        # - name: OTEL_PYTHON_LOG_CORRELATION
+        #   value: "true"
+        # - name: OTEL_PYTHON_LOG_LEVEL
+        #   value: "debug"
+        - name: REDIS_SERVICE_HOST
+          value: cx-redis
+        # command: ["/bin/sh"]
+        # args: ["start-flask-redis-otel.sh"]
+        command: [ "/bin/bash", "-c", "--" ]
+        args: [ "while true; do sleep 30; done;" ]
+---
+# Redis Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: cx-redis
+  namespace: default
+spec:
+  selector:
+    name: cx-redis
+  ports:
+  - protocol: TCP
+    port: 6379
+    targetPort: 6379
+---
+# Redis Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cx-redis
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      name: cx-redis
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: cx-redis
+    spec:
+      containers:
+      - name: cx-redis
+        image: public.ecr.aws/w3s4j9x9/microservices-demo:redis
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 6379
+        command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+---
+# Python Requests Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cx-client-py-reqs
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      name: cx-client-py-reqs
+  template:
+    metadata:
+      labels:
+        name: cx-client-py-reqs
+    spec:
+      containers:
+      - name: cx-client-py-reqs
+        image: public.ecr.aws/w3s4j9x9/microservices-demo:python
+        imagePullPolicy: Always
+        workingDir: /home/code/k8s
+        env:
+        - name: OTEL_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: OTEL_SERVICE_NAME
+          value: cx-client-py-reqs
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: "application.name=cx-client-py-reqs,api.name=cx-client-py-reqs,cx.application.name=cx-client-py-reqs,cx.subsystem.name=cx-client-py-reqs"
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: http://$(OTEL_IP):4317
+        # - name: OTEL_PYTHON_LOG_CORRELATION
+        #   value: "true"
+        # - name: OTEL_PYTHON_LOG_LEVEL
+        #   value: "debug"
+        # - name: OTEL_PYTHON_LOG_FORMAT
+        #   value: OTEL_PYTHON_LOG_FORMAT="%(asctime)s %(levelname)s [%(name)s] [%(filename)s:%(lineno)d] trace_id=%(otelTraceID)s - %(message)s"
+        - name: PYTHON_TEST_URLGOOD
+          value: "GOOD"
+        - name: PYTHON_TEST_URL
+          value: http://cx-flask-server:5000
+        command: ["/bin/sh"]
+        args: ["start-reqs-envurl-otel.sh"]
+        # test if needed
+        # command: [ "/bin/bash", "-c", "--" ]
+        # args: [ "while true; do sleep 30; done;" ]

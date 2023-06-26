@@ -505,17 +505,25 @@ For full documentation: https://coralogix.com/docs/  </p>
 <p>Deploy example to your k8s cluster- this will deploy to the default k8s namespace.<br />
 If you want to change the namespace, edit <code>yaml/deploy-good.yaml</code><br />
 There will be three services spun up:  </p>
-<p><code>cx-client-py-reqs</code> - a requesting service initiating a transaction<br />
-<code>cx-flask-server</code> - a server that is a bridge for a transaction to a database<br />
-<code>cx-redis</code> - an instance of a redis database  </p>
+<ul>
+<li><code>cx-shopping-cart-reqs</code> - a requesting service initiating a transaction  </li>
+<li><code>cx-payment-gateway-flask</code> - a server that is a bridge for a transaction to a database- returns a transaction ID to the <code>shopping-cart</code>  </li>
+<li><code>cx-redis</code> - an instance of a redis database used for a transaction</li>
+</ul>
 <pre><code>source deploy-all.sh
 </code></pre>
+<p>Deploys the following as seen from the <code>http://cx-payment-gateway-flask:5000/</code> root span:  </p>
+<p><img alt="Microservices Workshop" src="../../images/microservices-workshop/01.png" /></p>
+<p>With healthy low latency spans:  </p>
+<p><img alt="Microservices Workshop" src="../../images/microservices-workshop/02.png" />  </p>
+<p><img alt="Microservices Workshop" src="../../images/microservices-workshop/03.png" />  </p>
 <h3 id="step-4-study-results-and-simulate-cicd-scenarios">Step 4 - Study results and simulate CI/CD scenarios</h3>
 <p>Study results in Coralogix portal</p>
 <p>Simulate a "bad" deployment:  </p>
 <pre><code>source deploy-bad.sh
 </code></pre>
-<p>This deployment will cause severe sporadic problems in <code>cx-flask-server</code> such as 404s, a log key:value <code>'transaction': 'failed',</code> and latency in the service response.  </p>
+<p>This deployment will cause severe sporadic problems in <code>payment-gateway</code> such as 404s, a log key:value <code>'transaction': 'failed',</code> and latency in the service response. You can see the latency spikes here:    </p>
+<p><img alt="Microservices Workshop" src="../../images/microservices-workshop/04.png" />  </p>
 <p>Roll back the bad deployment for the services to return to normal:  </p>
 <pre><code>source deploy-good.sh
 </code></pre>

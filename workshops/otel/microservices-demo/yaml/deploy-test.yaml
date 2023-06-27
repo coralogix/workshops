@@ -3,10 +3,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: cx-flask-server
+  name: cx-payment-gateway-flask
 spec:
   selector:
-    name: cx-flask-server
+    name: cx-payment-gateway-flask
   ports:
   - protocol: TCP
     port: 5000
@@ -16,19 +16,19 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cx-flask-server
+  name: cx-payment-gateway-flask
   namespace: default
 spec:
   selector:
     matchLabels:
-      name: cx-flask-server
+      name: cx-payment-gateway-flask
   template:
     metadata:
       labels:
-        name: cx-flask-server
+        name: cx-payment-gateway-flask
     spec:
       containers:
-      - name: cx-flask-server
+      - name: cx-payment-gateway-flask
         image: public.ecr.aws/w3s4j9x9/microservices-demo:python
         imagePullPolicy: Always
         workingDir: /home/code/k8s
@@ -37,9 +37,9 @@ spec:
             containerPort: 5000
         env:
         - name: OTEL_SERVICE_NAME
-          value: cx-flask-server
+          value: cx-payment-gateway-flask
         - name: OTEL_RESOURCE_ATTRIBUTES
-          value: "application.name=cx-flask-server,api.name=cx-flask-server,cx.application.name=cx-flask-server,cx.subsystem.name=cx-flask-server"
+          value: "application.name=cx-payment-gateway-flask,api.name=cx-payment-gateway-flask,cx.application.name=cx-payment-gateway-flask,cx.subsystem.name=cx-payment-gateway-flask"
         - name: OTEL_IP
           valueFrom:
             fieldRef:
@@ -101,19 +101,19 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cx-client-py-reqs
+  name: cx-shopping-cart-reqs
   namespace: default
 spec:
   selector:
     matchLabels:
-      name: cx-client-py-reqs
+      name: cx-shopping-cart-reqs
   template:
     metadata:
       labels:
-        name: cx-client-py-reqs
+        name: cx-shopping-cart-reqs
     spec:
       containers:
-      - name: cx-client-py-reqs
+      - name: cx-shopping-cart-reqs
         image: public.ecr.aws/w3s4j9x9/microservices-demo:python
         imagePullPolicy: Always
         workingDir: /home/code/k8s
@@ -123,9 +123,9 @@ spec:
             fieldRef:
               fieldPath: status.hostIP
         - name: OTEL_SERVICE_NAME
-          value: cx-client-py-reqs
+          value: cx-shopping-cart-reqs
         - name: OTEL_RESOURCE_ATTRIBUTES
-          value: "application.name=cx-client-py-reqs,api.name=cx-client-py-reqs,cx.application.name=cx-client-py-reqs,cx.subsystem.name=cx-client-py-reqs"
+          value: "application.name=cx-shopping-cart-reqs,api.name=cx-shopping-cart-reqs,cx.application.name=cx-shopping-cart-reqs,cx.subsystem.name=cx-shopping-cart-reqs"
         - name: OTEL_EXPORTER_OTLP_ENDPOINT
           value: http://$(OTEL_IP):4317
         # - name: OTEL_PYTHON_LOG_CORRELATION
@@ -137,7 +137,7 @@ spec:
         - name: PYTHON_TEST_URLGOOD
           value: "GOOD"
         - name: PYTHON_TEST_URL
-          value: http://cx-flask-server:5000
+          value: http://cx-payment-gateway-flask:5000
         command: ["/bin/sh"]
         args: ["start-reqs-envurl-otel.sh"]
         # test if needed

@@ -34,11 +34,11 @@ source deploy-all.sh
 
 Deploys the following as seen from the `http://cx-payment-gateway-flask:5000/` root span:  
 
-![Microservices Workshop](../../images/microservices-workshop/01.png)
-
+<img src="https://coralogix.github.io/workshops/images/microservices-workshop/01.png" width=540>     
+<!-- ![Microservices Workshop](../../images/microservices-workshop/01.png) -->
 With healthy low latency spans for all services:  
   
-![Microservices Workshop](../../images/microservices-workshop/03.png){width=340} git  
+<img src="https://coralogix.github.io/workshops/images/microservices-workshop/03.png" width=540>  
 
 ### Step 4 - Study results and simulate CI/CD scenarios
 Study results in Coralogix portal
@@ -50,7 +50,7 @@ source deploy-bad.sh
 
 This deployment will cause severe sporadic problems in `payment-gateway` such as 404s, a log key:value ` 'transaction': 'failed',` and latency in the service response along with a drop in transaction volume. You can see the latency spikes here:    
 
-![Microservices Workshop](../../images/microservices-workshop/04.png){width=340}  
+<img src="https://coralogix.github.io/workshops/images/microservices-workshop/04.png" width=540>   
   
 Roll back the bad deployment for the services to return to normal:  
 ```

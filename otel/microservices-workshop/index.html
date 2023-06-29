@@ -508,16 +508,17 @@ There will be three services spun up:  </p>
 <pre><code>source deploy-all.sh
 </code></pre>
 <p>Deploys the following as seen from the <code>http://cx-payment-gateway-flask:5000/</code> root span:  </p>
-<p><img alt="Microservices Workshop" src="../../images/microservices-workshop/01.png" /></p>
+<p><img src="https://coralogix.github.io/workshops/images/microservices-workshop/01.png" width=540>     </p>
+<!-- ![Microservices Workshop](../../images/microservices-workshop/01.png) -->
 <p>With healthy low latency spans for all services:  </p>
-<p><img alt="Microservices Workshop" src="../../images/microservices-workshop/03.png" />{width=340} git  </p>
+<p><img src="https://coralogix.github.io/workshops/images/microservices-workshop/03.png" width=540>  </p>
 <h3 id="step-4-study-results-and-simulate-cicd-scenarios">Step 4 - Study results and simulate CI/CD scenarios</h3>
 <p>Study results in Coralogix portal</p>
 <p>Simulate a "bad" deployment:  </p>
 <pre><code>source deploy-bad.sh
 </code></pre>
 <p>This deployment will cause severe sporadic problems in <code>payment-gateway</code> such as 404s, a log key:value <code>'transaction': 'failed',</code> and latency in the service response along with a drop in transaction volume. You can see the latency spikes here:    </p>
-<p><img alt="Microservices Workshop" src="../../images/microservices-workshop/04.png" />{width=340}  </p>
+<p><img src="https://coralogix.github.io/workshops/images/microservices-workshop/04.png" width=540>   </p>
 <p>Roll back the bad deployment for the services to return to normal:  </p>
 <pre><code>source deploy-good.sh
 </code></pre>

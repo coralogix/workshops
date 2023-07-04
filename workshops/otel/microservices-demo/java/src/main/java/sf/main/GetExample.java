@@ -35,8 +35,8 @@ public static void main(String[] args) throws IOException {
     {
        GetExample okhttpexample = new GetExample();
        String okhttpresponse = okhttpexample.run(targetUrl);
-       System.out.println(" + targetUrl + " + okhttpresponse);
-       wait(100);
+       System.out.println(okhttpresponse);
+       wait(500);
       } // while loop
   } // main
 } // class

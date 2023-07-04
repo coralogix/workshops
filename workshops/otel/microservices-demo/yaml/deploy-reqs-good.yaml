@@ -28,7 +28,7 @@ spec:
         - name: OTEL_RESOURCE_ATTRIBUTES
           value: application.name=cx-shopping-cart-reqs,api.name=cx-shopping-cart-reqs,cx.application.name=cx-shopping-cart-reqs,cx.subsystem.name=cx-shopping-cart-reqs
         - name: OTEL_EXPORTER_OTLP_ENDPOINT
-          value: http://$(OTEL_IP):4317
+          value: http://$(OTEL_IP):4317, console
         - name: PYTHON_TEST_URLGOOD
           value: "GOOD"
         - name: PYTHON_TEST_URL

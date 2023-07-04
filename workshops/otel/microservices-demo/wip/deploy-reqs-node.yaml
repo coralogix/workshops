@@ -28,11 +28,9 @@ spec:
         - name: OTEL_RESOURCE_ATTRIBUTES
           value: application.name=cx-marketing-node-reqs,api.name=cx-marketing-node-reqs,cx.application.name=cx-marketing-node-reqs,cx.subsystem.name=cx-marketing-node-reqs
         - name: OTEL_LOG_LEVEL
-          value: verbose
+          value: all
         - name: NODE_OPTIONS
           value: "--require @opentelemetry/auto-instrumentations-node/register"
-        - name: OTEL_TRACES_EXPORTER
-          value: OTLP
         - name: OTEL_EXPORTER_OTLP_ENDPOINT
           value: http://$(OTEL_IP):4317
         - name: NODE_TEST_HOST

@@ -1,15 +1,15 @@
-# FROM node:lts-bookworm-slim
-FROM ubuntu:jammy
+FROM node:lts-bookworm-slim
+# FROM ubuntu:jammy
 RUN mkdir /home/code
 COPY . /home/code/
 WORKDIR /home/code
 RUN apt -y update && \
     # export PATH="$HOME/.local/bin:$PATH" && \
-    apt install -y curl && \
-    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-    apt-get install -y nodejs && \
-    npm init -y && \
+    # apt install -y curl && \
+    # curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    # apt-get install -y nodejs && \
     npm install --save @opentelemetry/api && \
+    npm install --save @opentelemetry/instrumentation-http && \
     npm install --save @opentelemetry/auto-instrumentations-node && \
     apt -y autoremove && apt-get -y autoclean
 # apt install -y dnsutils && \

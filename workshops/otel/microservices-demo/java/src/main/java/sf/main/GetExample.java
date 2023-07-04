@@ -1,9 +1,10 @@
 package demo.main;
 
-import java.io.*;
+import java.io.IOException;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import java.lang.InterruptedException;
 
 public class GetExample {
   OkHttpClient client = new OkHttpClient();
@@ -29,15 +30,13 @@ public static void wait(int ms)
 } // wait
 
 public static void main(String[] args) throws IOException {
-  int x = 1;
   String targetUrl = System.getProperty("targetUrl");
-  while (x <= 100000 )
+  while (true)
     {
        GetExample okhttpexample = new GetExample();
        String okhttpresponse = okhttpexample.run(targetUrl);
-       System.out.println(x + " " + targetUrl + " " + okhttpresponse);
-       x++;
-       wait(250);
+       System.out.println(" + targetUrl + " + okhttpresponse);
+       wait(100);
       } // while loop
   } // main
 } // class

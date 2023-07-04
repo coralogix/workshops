@@ -1,4 +1,4 @@
-FROM openjdk:8-slim
+FROM eclipse-temurin:8-jdk-jammy
 RUN apt-get update && \
     apt-get -y install curl && \
     mkdir /home/code

@@ -1,0 +1,39 @@
+---
+# Python Requests Client
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cx-inventory-java-reqs
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      name: cx-inventory-java-reqs
+  template:
+    metadata:
+      labels:
+        name: cx-inventory-java-reqs
+    spec:
+      containers:
+      - name: cx-inventory-java-reqs
+        image: public.ecr.aws/w3s4j9x9/microservices-demo:java
+        imagePullPolicy: Always
+        workingDir: /home/code
+        env:
+        - name: OTEL_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: OTEL_SERVICE_NAME
+          value: cx-inventory-java-reqs
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: application.name=cx-inventory-java-reqs,api.name=cx-inventory-java-reqs,cx.application.name=cx-inventory-java-reqs,cx.subsystem.name=cx-inventory-java-reqs
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: http://$(OTEL_IP):4317
+        - name: JAVA_TEST_URL
+          value: http://cx-payment-gateway-flask:5000/transact
+        command: ["/bin/sh"]
+        args: ["run-client.sh"]
+        # test if needed
+        # command: [ "/bin/bash", "-c", "--" ]
+        # args: [ "while true; do sleep 30; done;" ]

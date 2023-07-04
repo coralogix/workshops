@@ -1,5 +1,4 @@
 ---
-# Python Requests Client
 apiVersion: apps/v1
 kind: Deployment
 metadata:

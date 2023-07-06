@@ -1,1 +1,1 @@
-kubectl apply -f yaml/deploy-oneshot-server.yaml
+kubectl apply -f yaml/deploy-server.yaml

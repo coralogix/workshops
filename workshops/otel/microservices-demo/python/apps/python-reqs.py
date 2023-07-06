@@ -8,7 +8,7 @@ from opentelemetry.instrumentation.logging import LoggingInstrumentor
 
 isurlgood = os.environ.get('PYTHON_TEST_URLGOOD')
 envurl = os.environ.get('PYTHON_TEST_URL')
-oneshot = os.env.get('PYTHON_ONESHOT')
+oneshot = os.environ.get('PYTHON_ONESHOT')
 
 seed()
 x=1

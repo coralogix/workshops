@@ -1,39 +1,45 @@
-import requests, os, sys, json, logging
+import os
+import sys
+import json
+import logging
+import requests
 from time import sleep
 from random import random, seed
 from opentelemetry.instrumentation.logging import LoggingInstrumentor
 
-# This simulator requres env variables PYTHON_TEST_URL which is the IP address of the server simulator port 5001
-# and PYTHON_TEST_URLBAD which is GOOD or BAD
-
-isurlgood = os.environ.get('PYTHON_TEST_URLGOOD')
-envurl = os.environ.get('PYTHON_TEST_URL')
-
 seed()
-x=1
+x = 1
 
+# Set up logging
 LoggingInstrumentor(set_logging_format=True)
 LoggingInstrumentor(log_level=logging.DEBUG)
-logging.basicConfig(format='%(levelname)s:%(message)s SPANID=%(otelSpanID)s TRACEID=%(otelTraceID)s SERVICENAME=%(otelServiceName)s', level=logging.DEBUG)
+logging.basicConfig(
+    format='%(levelname)s:%(message)s SPANID=%(otelSpanID)s TRACEID=%(otelTraceID)s SERVICENAME=%(otelServiceName)s',
+    level=logging.DEBUG
+)
 
-# if the ISURLGOOD simulation is 0 then direct reqs at urlbad which adds /bad to the req to simulate a bad deployment
-# however only do this less than 5% of time so simulate an intermittent problem
+env_url = os.environ.get('PYTHON_TEST_URL')
+env_url_good = os.environ.get('PYTHON_TEST_URLGOOD')
+one_shot = os.environ.get('PYTHON_ONESHOT')
 
-def pythonreqs():
-    try: 
-        badchance = random()
-        if badchance <= .85 and isurlgood=="BAD":
-            url = envurl
+def python_reqs():
+    try:
+        if one_shot == "NO":
+            bad_chance = random()
+            url = env_url if bad_chance <= 0.85 and env_url_good == "BAD" else env_url + "/transact"
         else:
-            url = envurl + "/transact"
+            bad_chance = 1
+            url = env_url
+
         response = requests.get(url)
         logging.info(response.json())
+        if one_shot == "YES":
+            sys.exit("Oneshot")
+
     except requests.exceptions.RequestException as err:
-        log_dict = {'error': str(err),   
-            }
-        print(json.dumps(log_dict,indent=2,separators=(',', ':')))
+        log_dict = {'error': str(err)}
+        print(json.dumps(log_dict, indent=2, separators=(',', ':')))
 
 while x:
-    pythonreqs()
-    y = random()
-    sleep(round(y,1))
+    python_reqs()
+    sleep(round(random(), 1))

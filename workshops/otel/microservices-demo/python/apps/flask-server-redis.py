@@ -40,8 +40,6 @@ app = Flask(__name__)
 # app.logger.removeHandler(default_handler)
 @app.route("/<path>")
 def data(path):
-    y = random.uniform(.75, 1.5)
-    sleep(y)
     if slow_server=="YES":
         y = random.uniform(1.5, 3)
         sleep(y)
@@ -64,6 +62,8 @@ def data(path):
 
 @app.errorhandler(HTTPException)
 def handle_exception(e):
+    y = random.uniform(.75, 3)
+    sleep(y)
     response = e.get_response()
     random_ip = ipaddr.IPv4Address(random.randrange(int(network.network) + 1, int(network.broadcast) - 1)) # generate random IP address
     now = datetime.datetime.now()

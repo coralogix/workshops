@@ -1,45 +1,39 @@
-import os
-import sys
-import json
-import logging
-import requests
+import requests, os, sys, json, logging
 from time import sleep
 from random import random, seed
 from opentelemetry.instrumentation.logging import LoggingInstrumentor
 
-seed()
-x = 1
+# This simulator requres env variables PYTHON_TEST_URL which is the IP address of the server simulator port 5001
+# and PYTHON_TEST_URLBAD which is GOOD or BAD
 
-# Set up logging
+isurlgood = os.environ.get('PYTHON_TEST_URLGOOD')
+envurl = os.environ.get('PYTHON_TEST_URL')
+
+seed()
+x=1
+
 LoggingInstrumentor(set_logging_format=True)
 LoggingInstrumentor(log_level=logging.DEBUG)
-logging.basicConfig(
-    format='%(levelname)s:%(message)s SPANID=%(otelSpanID)s TRACEID=%(otelTraceID)s SERVICENAME=%(otelServiceName)s',
-    level=logging.DEBUG
-)
+logging.basicConfig(format='%(levelname)s:%(message)s SPANID=%(otelSpanID)s TRACEID=%(otelTraceID)s SERVICENAME=%(otelServiceName)s', level=logging.DEBUG)
 
-env_url = os.environ.get('PYTHON_TEST_URL')
-env_url_good = os.environ.get('PYTHON_TEST_URLGOOD')
-one_shot = os.environ.get('PYTHON_ONESHOT')
+# if the ISURLGOOD simulation is 0 then direct reqs at urlbad which adds /bad to the req to simulate a bad deployment
+# however only do this less than 5% of time so simulate an intermittent problem
 
-def python_reqs():
-    try:
-        if one_shot == "NO":
-            bad_chance = random()
-            url = env_url if bad_chance <= 0.85 and env_url_good == "BAD" else env_url + "/transact"
+def pythonreqs():
+    try: 
+        badchance = random()
+        if badchance <= .85 and isurlgood=="BAD":
+            url = envurl
         else:
-            bad_chance = 1
-            url = env_url
-
+            url = envurl + "/transact"
         response = requests.get(url)
         logging.info(response.json())
-        if one_shot == "YES":
-            sys.exit("Oneshot")
-
     except requests.exceptions.RequestException as err:
-        log_dict = {'error': str(err)}
-        print(json.dumps(log_dict, indent=2, separators=(',', ':')))
+        log_dict = {'error': str(err),   
+            }
+        print(json.dumps(log_dict,indent=2,separators=(',', ':')))
 
 while x:
-    python_reqs()
-    sleep(round(random(), 1))
+    pythonreqs()
+    y = random()
+    sleep(round(y,1))

@@ -8,6 +8,7 @@ from opentelemetry.instrumentation.logging import LoggingInstrumentor
 
 isurlgood = os.environ.get('PYTHON_TEST_URLGOOD')
 envurl = os.environ.get('PYTHON_TEST_URL')
+oneshot = os.env.get('PYTHON_ONESHOT')
 
 seed()
 x=1
@@ -21,19 +22,22 @@ logging.basicConfig(format='%(levelname)s:%(message)s SPANID=%(otelSpanID)s TRAC
 
 def pythonreqs():
     try: 
-        badchance = random()
-        if badchance <= .85 and isurlgood=="BAD":
+        if oneshot==("NO"): # if its not one shot run standard chance
+            badchance = random()
+            if badchance <= .85 and isurlgood=="BAD":
+                url = envurl # req a bad url
+            else:
+                url = envurl + "/transact" # req a good url
+        else: # if this is a oneshot bad trace req a bad url
+            badchance = 1
             url = envurl
-        else:
-            url = envurl + "/transact"
+            sys.exit("Oneshot") # exit since its a one shot op
         response = requests.get(url)
         logging.info(response.json())
     except requests.exceptions.RequestException as err:
         log_dict = {'error': str(err),   
             }
         print(json.dumps(log_dict,indent=2,separators=(',', ':')))
-
-#loop requests with a 5% chance of generating a 404 by requesting /bad from the fastapi server
 
 while x:
     pythonreqs()

@@ -33,6 +33,8 @@ spec:
           value: "GOOD"
         - name: PYTHON_TEST_URL
           value: http://cx-payment-gateway-flask:5000
+        - name: PYTHON_ONESHOT
+          value: "NO"
         command: ["/bin/sh"]
         args: ["start-reqs-envurl-otel.sh"]
         # test if needed

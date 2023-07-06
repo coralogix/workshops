@@ -1,4 +1,5 @@
 ---
+# Python Requests Deployment One Shot Bad URL
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -26,15 +27,21 @@ spec:
         - name: OTEL_SERVICE_NAME
           value: cx-shopping-cart-reqs
         - name: OTEL_RESOURCE_ATTRIBUTES
-          value: application.name=cx-shopping-cart-reqs,api.name=cx-shopping-cart-reqs,cx.application.name=cx-shopping-cart-reqs,cx.subsystem.name=cx-shopping-cart-reqs
+          value: "application.name=cx-shopping-cart-reqs,api.name=cx-shopping-cart-reqs,cx.application.name=cx-shopping-cart-reqs,cx.subsystem.name=cx-shopping-cart-reqs"
         - name: OTEL_EXPORTER_OTLP_ENDPOINT
           value: http://$(OTEL_IP):4317
+        # - name: OTEL_PYTHON_LOG_CORRELATION
+        #   value: "true"
+        # - name: OTEL_PYTHON_LOG_LEVEL
+        #   value: "debug"
+        # - name: OTEL_PYTHON_LOG_FORMAT
+        #   value: OTEL_PYTHON_LOG_FORMAT="%(asctime)s %(levelname)s [%(name)s] [%(filename)s:%(lineno)d] trace_id=%(otelTraceID)s - %(message)s"
         - name: PYTHON_TEST_URLGOOD
           value: "BAD"
         - name: PYTHON_TEST_URL
           value: http://cx-payment-gateway-flask:5000
         - name: PYTHON_ONESHOT
-          value: "NO"
+          value: "YES"
         command: ["/bin/sh"]
         args: ["start-reqs-envurl-otel.sh"]
         # test if needed

@@ -16,6 +16,8 @@ redis_host = os.getenv('REDIS_SERVICE_HOST')
 redis_port = 6379
 redis_password = ""
 
+slow_server = os.environ.get('SLOW_SERVER')
+
 LoggingInstrumentor(set_logging_format=True)
 LoggingInstrumentor(log_level=logging.DEBUG)
 logging.basicConfig(format='%(levelname)s:%(message)s SPANID=%(otelSpanID)s TRACEID=%(otelTraceID)s SERVICENAME=%(otelServiceName)s', level=logging.DEBUG)
@@ -38,6 +40,9 @@ app = Flask(__name__)
 # app.logger.removeHandler(default_handler)
 @app.route("/<path>")
 def data(path):
+    if slow_server=="YES":
+        y = random.uniform(.75, 1)
+        sleep(y)
     if redis_host != "FALSE":
         transaction=(redis_transact())
     random_ip = ipaddr.IPv4Address(random.randrange(int(network.network) + 1, int(network.broadcast) - 1)) # generate random IP address
@@ -57,8 +62,6 @@ def data(path):
 
 @app.errorhandler(HTTPException)
 def handle_exception(e):
-    y = random.uniform(.75, 3)
-    sleep(y)
     response = e.get_response()
     random_ip = ipaddr.IPv4Address(random.randrange(int(network.network) + 1, int(network.broadcast) - 1)) # generate random IP address
     now = datetime.datetime.now()

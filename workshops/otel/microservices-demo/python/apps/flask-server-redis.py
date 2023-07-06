@@ -40,8 +40,10 @@ app = Flask(__name__)
 # app.logger.removeHandler(default_handler)
 @app.route("/<path>")
 def data(path):
+    y = random.uniform(.75, 1.5)
+    sleep(y)
     if slow_server=="YES":
-        y = random.uniform(.75, 1)
+        y = random.uniform(1.5, 3)
         sleep(y)
     if redis_host != "FALSE":
         transaction=(redis_transact())

@@ -42,8 +42,8 @@ spec:
           value: http://cx-payment-gateway-flask:5000
         - name: PYTHON_ONESHOT
           value: "YES"
-        command: ["/bin/sh"]
-        args: ["start-reqs-envurl-otel.sh"]
+        # command: ["/bin/sh"]
+        # args: ["start-reqs-envurl-otel.sh"]
         # test if needed
-        # command: [ "/bin/bash", "-c", "--" ]
-        # args: [ "while true; do sleep 30; done;" ]
+        command: [ "/bin/bash", "-c", "--" ]
+        args: [ "while true; do sleep 30; done;" ]

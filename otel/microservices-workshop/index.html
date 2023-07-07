@@ -361,36 +361,56 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#step-1-setup" class="md-nav__link">
-    Step 1 - Setup
+  <a href="#step-1-install-the-opentelemetry-collector-on-your-k8s-cluster" class="md-nav__link">
+    Step 1 - Install the OpenTelemetry Collector on your k8s cluster
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#step-2-change-to-workshop-dir" class="md-nav__link">
-    Step 2 - Change to workshop dir
+  <a href="#step-2-setup" class="md-nav__link">
+    Step 2 - Setup
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#step-3-deploy-example" class="md-nav__link">
-    Step 3 - Deploy example
+  <a href="#step-3-change-to-workshop-dir" class="md-nav__link">
+    Step 3 - Change to workshop dir
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#step-4-study-results-and-simulate-cicd-scenarios" class="md-nav__link">
-    Step 4 - Study results and simulate CI/CD scenarios
+  <a href="#step-4-deploy-example" class="md-nav__link">
+    Step 4 - Deploy example
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#step-5-cleanup" class="md-nav__link">
-    Step 5 - Cleanup
+  <a href="#step-5-study-results-and-simulate-cicd-scenarios" class="md-nav__link">
+    Step 5 - Study results and simulate CI/CD scenarios
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 5 - Study results and simulate CI/CD scenarios">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bonus-example" class="md-nav__link">
+    Bonus Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-6-cleanup" class="md-nav__link">
+    Step 6 - Cleanup
   </a>
   
 </li>
@@ -485,18 +505,19 @@
 
 <h1 id="microservices-observability-demo-v1">Microservices Observability Demo V1</h1>
 <h2 id="instructions">Instructions</h2>
-<p>Requires a completely operational OpenTelemetry collector configured for Coralogix: <a href="https://coralogix.com/docs/opentelemetry-using-kubernetes/">https://coralogix.com/docs/opentelemetry-using-kubernetes/</a>  <br />
-This example is for basic study only and is not documentation.  <br />
+<p>This example is for basic study only and is not documentation.  <br />
 Full documentation: <a href="https://coralogix.com/docs/">https://coralogix.com/docs/</a></p>
-<h3 id="step-1-setup">Step 1 - Setup</h3>
+<h3 id="step-1-install-the-opentelemetry-collector-on-your-k8s-cluster">Step 1 - Install the OpenTelemetry Collector on your k8s cluster</h3>
+<p>This workshop requires OpenTelemetry collector configured for Coralogix: <a href="https://coralogix.com/docs/opentelemetry-using-kubernetes/">https://coralogix.com/docs/opentelemetry-using-kubernetes/</a>    </p>
+<h3 id="step-2-setup">Step 2 - Setup</h3>
 <p>Clone repo:</p>
 <pre><code>git clone https://github.com/coralogix/workshops
 </code></pre>
-<h3 id="step-2-change-to-workshop-dir">Step 2 - Change to workshop dir</h3>
+<h3 id="step-3-change-to-workshop-dir">Step 3 - Change to workshop dir</h3>
 <p>Change to the proper directory for workshop example:  </p>
 <pre><code>cd workshops/otel/microservices-demo
 </code></pre>
-<h3 id="step-3-deploy-example">Step 3 - Deploy example</h3>
+<h3 id="step-4-deploy-example">Step 4 - Deploy example</h3>
 <p>Deploy example to your k8s cluster- this will deploy to the default k8s namespace.<br />
 If you want to change the namespace, edit <code>yaml/deploy-good.yaml</code><br />
 There will be three services spun up:  </p>
@@ -512,22 +533,27 @@ There will be three services spun up:  </p>
 <!-- ![Microservices Workshop](../../images/microservices-workshop/01.png) -->
 <p>With healthy low latency spans for all services:  </p>
 <p><img src="https://coralogix.github.io/workshops/images/microservices-workshop/03.png" width=540>  </p>
-<h3 id="step-4-study-results-and-simulate-cicd-scenarios">Step 4 - Study results and simulate CI/CD scenarios</h3>
+<h3 id="step-5-study-results-and-simulate-cicd-scenarios">Step 5 - Study results and simulate CI/CD scenarios</h3>
 <p>Study results in Coralogix portal</p>
 <p>Simulate a "bad" deployment:  </p>
 <pre><code>source deploy-bad.sh
 </code></pre>
 <p>This deployment will cause severe sporadic problems in <code>payment-gateway</code> such as 404s, a log key:value <code>'transaction': 'failed',</code> and latency in the service response along with a drop in transaction volume. You can see the latency spikes here:    </p>
 <p><img src="https://coralogix.github.io/workshops/images/microservices-workshop/04.png" width=540>   </p>
+<p>Alerts and automation can be built around span latency or Payment Gateway 404 responses.  </p>
 <p>Roll back the bad deployment for the services to return to normal:  </p>
 <pre><code>source deploy-good.sh
 </code></pre>
+<p>Span latency will return to normal and Payment Gateway 404 responses will cease.  </p>
 <p>Study how the example is built:<br />
 - The Python apps that drive this example are in the <code>python/apps</code> dir<br />
 - <code>.yaml</code> deployment files are in <code>python/yaml</code><br />
 - Dockerfiles for the containers show how the OpenTelemetry instrumentation works and are in the <code>/python</code> root level  </p>
-<p>Build alerts and dashboards (examples TBD)  </p>
-<h3 id="step-5-cleanup">Step 5 - Cleanup</h3>
+<h4 id="bonus-example">Bonus Example</h4>
+<p>Deploy Java based Inventory service:  </p>
+<pre><code>source deploy-java.sh
+</code></pre>
+<h3 id="step-6-cleanup">Step 6 - Cleanup</h3>
 <p>To remove all the deployments/services/pods from the example from your k8s cluster:  </p>
 <pre><code>source delete-all.sh
 </code></pre>

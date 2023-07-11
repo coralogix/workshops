@@ -88,8 +88,7 @@ source delete-all.sh
 - Install k3s minimal Dockerless Kubernetes- use script top right of homepage: [https://k3s.io/](https://k3s.io/) 
 - Every time you open a new shell, to use k3s for helm, kubectl, etc you must set the appropriate env variable:  
     ```
-    sudo chmod 644 /etc/rancher/k3s/k3s.yaml  
-    export KUBECONFIG=/etc/rancher/k3s/k3s.yaml  
+    sudo chmod 644 /etc/rancher/k3s/k3s.yaml && export KUBECONFIG=/etc/rancher/k3s/k3s.yaml  
     ```  
     This script is included in the workshop in the k3s folder: `source ./k3s/k3s.sh`  
 - Install helm- use bash script: [https://helm.sh/docs/intro/install/](https://helm.sh/docs/intro/install/])  

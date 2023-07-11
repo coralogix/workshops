@@ -3,11 +3,12 @@
 ## Instructions
 
 This example is for basic study only and is not documentation.    
-Full documentation: [https://coralogix.com/docs/](https://coralogix.com/docs/)
+Full documentation: [https://k3s.io/](https://k3s.io/)  
+See Appendix Below for a suggested Kubernetes sandbox environment with a quick and easy setup  
 
 ### Step 1 - Install the OpenTelemetry Collector on your k8s cluster
 
-This workshop requires OpenTelemetry collector configured for Coralogix: [https://coralogix.com/docs/opentelemetry-using-kubernetes/](https://coralogix.com/docs/opentelemetry-using-kubernetes/)    
+This workshop requires OpenTelemetry collector configured for Coralogix: [https://k3s.io/opentelemetry-using-kubernetes/](https://k3s.io/opentelemetry-using-kubernetes/)    
 
 ### Step 2 - Setup
 Clone repo:
@@ -81,3 +82,16 @@ To remove all the deployments/services/pods from the example from your k8s clust
 ```
 source delete-all.sh
 ```
+
+### Appendix - Quick Kubernetes Sandbox Setup  
+- AWS EC2 t2.xl VM with 22GB of storage w/ Ubuntu Linux or equivalent other cloud provider  
+- Install k3s minimal Dockerless Kubernetes- use script top right of homepage: [https://k3s.io/](https://k3s.io/) 
+- Every time you open a new shell, to use k3s for helm, kubectl, etc you must set the appropriate env variable:
+    ```
+    sudo chmod 644 /etc/rancher/k3s/k3s.yaml  
+    export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+    ```  
+    This script is included in the workshop in the k3s folder: `source ./k3s/k3s.sh`  
+- Install helm- use bash script: [https://helm.sh/docs/intro/install/](https://helm.sh/docs/intro/install/])  
+- Install k9s kubernetes monitor: [https://k9scli.io/](https://k9scli.io/) 
+    - Recommend to download appropriate release and gunzip / tar -xf the release [https://github.com/derailed/k9s/releases](https://github.com/derailed/k9s/releases)

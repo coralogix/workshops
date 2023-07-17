@@ -7,7 +7,7 @@
 ```
 sudo cp /etc/otelcol-contrig/config.yaml /etc/otelcol-contrig/config-orig.yaml
 ```
-- Replace and configure `/etc/otelcol-contrig/config.yaml` and make sure to update the `<variables>` from template config: [./otelcol/config.yaml](./otelcol/config.yanl)
+- Replace and configure `/etc/otelcol-contrig/config.yaml` and make sure to update the `<variables>` from template `config.yaml` here: [./otelcol](./otelcol)
 
 ### Tracing Example: Host based client and server tested on Debian Linux  
 

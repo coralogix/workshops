@@ -11,7 +11,8 @@ sudo cp /etc/otelcol-contrig/config.yaml /etc/otelcol-contrig/config-orig.yaml
 
 ### Example host based client and server tested on Debian Linux  
 
-If you don't want ot configure Python and run a local Flask server, you can configure the destination URL in the Node client to be any public URL- just be careful because firewalls may eventually block this type of repetitive client request.  
+This example sets up a Python Flask Server and a Node requests client both which generate traces sent ot the otel collector.  
+If you don't want to configure Python and run a local Flask server, you can configure the destination URL in the Node client to be any public URL- just be careful because firewalls may eventually block this type of repetitive client request.  
 
 in `python` dir:
 ```

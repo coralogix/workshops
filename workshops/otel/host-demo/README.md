@@ -2,7 +2,7 @@
 
 ### Set Up Otel Collector On Linux Host 
 - Download and install a Coralogix recommended release (currently 76.1) from here: [https://github.com/open-telemetry/opentelemetry-collector-releases/releases](https://github.com/open-telemetry/opentelemetry-collector-releases/releases)
-- Install using the debian / RPM method of your platform
+- Install using the Debian / RPM method of your platform
 - Back up `/etc/otelcol-contrig/config.yaml`:  
 ```
 sudo cp /etc/otelcol-contrig/config.yaml /etc/otelcol-contrig/config-orig.yaml

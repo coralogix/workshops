@@ -1,6 +1,6 @@
 ## Work In Process Host Example
 
-### How To Set Up Otel Collector On Linux Host 
+### How to set up Otel Collector on a Linux host 
 - Download and install a Coralogix recommended release (currently 76.1) from here: [https://github.com/open-telemetry/opentelemetry-collector-releases/releases](https://github.com/open-telemetry/opentelemetry-collector-releases/releases)
 - Install using the Debian / RPM method of your platform
 - Back up `/etc/otelcol-contrig/config.yaml`:  

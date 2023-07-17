@@ -14,6 +14,8 @@ sudo cp /etc/otelcol-contrig/config.yaml /etc/otelcol-contrig/config-orig.yaml
 This example sets up a Python Flask Server and a Node requests client both which generate traces sent ot the Otel Collector.  
 If you don't want to configure Python and run a local Flask server, you can configure the destination URL in the Node client to be any public URL- just be careful because firewalls may eventually block this type of repetitive client request.  
 
+#### Flask server in new terminal
+
 in [./python](./python) subdir:
 ```
 source setup.sh
@@ -23,6 +25,7 @@ source start-flask.sh
 #### Run Node client in new terminal
 
 See above- you can configure the node client to be any URL- the default is a local Flask server running as shown above.  
+*Make sure you do this in a new terminal and leave above Flask server running*
 
 in [./node](./node) subdir:
 ```

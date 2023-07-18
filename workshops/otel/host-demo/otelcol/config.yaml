@@ -93,16 +93,19 @@ service:
     traces:
       receivers: [otlp]
       processors: [resourcedetection, batch]
-      exporters: [otlp]
+      # exporters: [otlp]
+      exporters: [coralogix]
 
     metrics:
       receivers: [otlp, hostmetrics, opencensus, prometheus]
       processors: [resourcedetection, batch]
-      exporters: [otlp]
+      # exporters: [otlp]
+      exporters: [coralogix]
 
     logs:
       receivers: [otlp,filelog]
       processors: [resourcedetection,batch]
-      exporters: [otlp]
+      # exporters: [otlp]
+      exporters: [coralogix]
 
   extensions: [health_check, pprof, zpages]

@@ -53,14 +53,38 @@ processors:
 exporters:
   logging:
     verbosity: detailed
-  otlp:
-    endpoint: "<your coralogix ingress here>:443"
-    headers:
-      "Authorization": "<your coralogix key here>"
-      "CX-Application-Name": "<your coralogix app name here>"
-      "CX-Subsystem-Name": "<your coralogix subystemname name here>"
-      ApplicationName: "<your application name here>"
-      ApiName: "<your api name here>"
+  coralogix:
+    # The Coralogix domain
+    domain: "coralogix.com"
+    # Your Coralogix private key is sensitive
+    private_key: "xxx"
+
+    # (Optional) Ordered list of Resource attributes that are used for Coralogix
+    # AppName and SubSystem values. The first non-empty Resource attribute is used.
+    # Example: application_name_attributes: ["k8s.namespace.name", "service.namespace"]
+    # Example: subsystem_name_attributes: ["k8s.deployment.name", "k8s.daemonset.name", "service.name"]
+    application_name_attributes:
+    - "service.namespace"
+    subsystem_name_attributes:
+    - "service.name"
+
+    # Traces, Metrics and Logs emitted by this OpenTelemetry exporter 
+    # are tagged in Coralogix with the default application and subsystem constants.
+    application_name: "MyBusinessEnvironment"
+    subsystem_name: "MyBusinessSystem"
+
+    # (Optional) Timeout is the timeout for every attempt to send data to the backend.
+    timeout: 30s
+  
+  # use this section instead of the Coralogix exporter if not using a contrib version of the otel collector
+  # otlp:
+  #   endpoint: "<your coralogix ingress here>:443"
+  #   headers:
+  #     "Authorization": "<your coralogix key here>"
+  #     "CX-Application-Name": "<your coralogix app name here>"
+  #     "CX-Subsystem-Name": "<your coralogix subystemname name here>"
+  #     ApplicationName: "<your application name here>"
+  #     ApiName: "<your api name here>"
 
 service:
 

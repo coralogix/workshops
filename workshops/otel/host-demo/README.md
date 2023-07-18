@@ -8,7 +8,7 @@
 sudo cp /etc/otelcol-contrig/config.yaml /etc/otelcol-contrig/config-orig.yaml
 ```
 - Replace and configure `/etc/otelcol-contrig/config.yaml` and make sure to update the variable values from template `config.yaml` here: [./otelcol](./otelcol)
-- If not using a contrib version of the collector, comment out the Coralogix exporter and uncomment the `otlp` exporter and configure its variables  
+- If not using a contrib version of the collector, comment out the Coralogix exporter and uncomment the `otlp` exporter and configure its variables, and then replace the pipelines with the `otlp` exporter instead of `coralogix`.
 
 ### Tracing Example: Host based client and server tested on Debian Linux  
 

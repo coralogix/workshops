@@ -13,12 +13,13 @@ class CustomJsonEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
 # Function to log resources individually
-def log_resource(resource_type, resource):
+def log_resource(resource_type, resource, account_number):
     # Create a dictionary for the log message
     log_message = {
         'timestamp': datetime.now(),
         'log_level': 'INFO',
         'body': {
+            'account_number': account_number,
             'resource_type': resource_type,
             'resource': resource,
         },
@@ -90,10 +91,19 @@ def get_aws_inventory(access_key, secret_key, region):
         region_name=region
     )
 
+    # Extract the account number from the session's credentials
+    account_number = session.client('sts').get_caller_identity().get('Account')
+
     # Retrieve AWS resource information using the resource retrieval functions for relevant services
     inventory = {}
     for resource_type, resource_function in resource_functions.items():
         inventory[resource_type] = resource_function(session)
+
+    # Log each resource individually with the account number
+    for resource_type, resources in inventory.items():
+        for resource in resources:
+            resource.pop('Environment', None)
+            log_resource(resource_type, resource, account_number)
 
     return inventory
 
@@ -123,6 +133,14 @@ if __name__ == "__main__":
             for configuration in aws_configurations:
                 access_key, secret_key, region = configuration.split(':')
 
+                # Get the AWS account number from the session's credentials
+                session = boto3.Session(
+                    aws_access_key_id=access_key.strip(),
+                    aws_secret_access_key=secret_key.strip(),
+                    region_name=region.strip()
+                )
+                account_number = session.client('sts').get_caller_identity().get('Account')
+
                 # Get the AWS inventory for the current configuration
                 inventory = get_aws_inventory(access_key.strip(), secret_key.strip(), region.strip())
 
@@ -130,7 +148,7 @@ if __name__ == "__main__":
                 for resource_type, resources in inventory.items():
                     for resource in resources:
                         resource.pop('Environment', None)
-                        log_resource(resource_type, resource)
+                        log_resource(resource_type, resource, account_number)
 
             # Wait for the specified interval before running again
             time.sleep(inventory_interval)

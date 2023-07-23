@@ -1,0 +1,52 @@
+---
+### Inventory Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: inventory
+spec:
+  selector:
+    name: inventory
+---
+# Inventory Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventory
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      name: inventory
+  template:
+    metadata:
+      labels:
+        name: inventory
+    spec:
+      containers:
+      - name: inventory
+        image: public.ecr.aws/w3s4j9x9/utilities-inventory
+        imagePullPolicy: Always
+        workingDir: /home/code/k8s
+        env:
+        - name: OTEL_SERVICE_NAME
+          value: inventory
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: "application.name=inventory,api.name=inventory,cx.application.name=inventory,cx.subsystem.name=inventory"
+        - name: OTEL_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: OTEL_TRACES_EXPORTER
+          value: otlp
+        - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
+          value: http://$(OTEL_IP):4317
+        - name: AWS_CONFIGURATIONS
+          value: "ACCESS_KEY_1:SECRET_KEY_1:us-east-1"
+        - name: INVENTORY_INTERVAL
+          value: "30"
+        command: ["/bin/sh"]
+        args: ["start-inventory.sh"]
+        # test if needed
+        # command: [ "/bin/bash", "-c", "--" ]
+        # args: [ "while true; do sleep 30; done;" ]

@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
       - name: inventory
-        image: public.ecr.aws/w3s4j9x9/utilities-inventory
+        image: public.ecr.aws/w3s4j9x9/utilities:python-inventory
         imagePullPolicy: Always
         workingDir: /home/code/k8s
         env:

@@ -12,8 +12,73 @@ class CustomJsonEncoder(json.JSONEncoder):
             return obj.isoformat()
         return json.JSONEncoder.default(self, obj)
 
-# Configure the logging module to display the inventory results on the console
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+# Function to log resources individually
+def log_resource(resource_type, resource):
+    # Create a dictionary for the log message
+    log_message = {
+        'timestamp': datetime.now(),
+        'log_level': 'INFO',
+        'resource_type': resource_type,
+        'resource': resource,
+    }
+
+    # Convert the log message dictionary to a JSON string
+    log_json = json.dumps(log_message, indent=2, cls=CustomJsonEncoder)
+
+    # Log the JSON message as an info message
+    logging.info(log_json)
+
+def get_ec2_instances(session):
+    ec2_client = session.client('ec2')
+    ec2_response = ec2_client.describe_instances()
+    return ec2_response['Reservations']
+
+def get_s3_buckets(session):
+    s3_client = session.client('s3')
+    s3_response = s3_client.list_buckets()
+    return s3_response['Buckets']
+
+def get_rds_instances(session):
+    rds_client = session.client('rds')
+    rds_response = rds_client.describe_db_instances()
+    return rds_response['DBInstances']
+
+def get_lambda_functions(session):
+    lambda_client = session.client('lambda')
+    lambda_response = lambda_client.list_functions()
+    return lambda_response['Functions']
+
+def get_vpcs(session):
+    ec2_resource = session.resource('ec2')
+    vpcs = list(ec2_resource.vpcs.all())
+    return [{'VpcId': vpc.id, 'CidrBlock': vpc.cidr_block} for vpc in vpcs]
+
+def get_ecr_repositories(session):
+    ecr_client = session.client('ecr')
+    ecr_response = ecr_client.describe_repositories()
+    return ecr_response['repositories']
+
+def get_ecs_clusters(session):
+    ecs_client = session.client('ecs')
+    ecs_response = ecs_client.list_clusters()
+    return ecs_response['clusterArns']
+
+def get_eks_clusters(session):
+    eks_client = session.client('eks')
+    eks_response = eks_client.list_clusters()
+    return eks_response['clusters']
+
+# Dictionary to map AWS service names to their corresponding resource retrieval functions
+resource_functions = {
+    'ec2_instances': get_ec2_instances,
+    's3_buckets': get_s3_buckets,
+    'rds_instances': get_rds_instances,
+    'lambda_functions': get_lambda_functions,
+    'vpcs': get_vpcs,
+    'ecr_repositories': get_ecr_repositories,
+    'ecs_clusters': get_ecs_clusters,
+    'eks_clusters': get_eks_clusters,
+}
 
 def get_aws_inventory(access_key, secret_key, region):
     # Create a boto3 session to interact with AWS services using the specified credentials and region
@@ -23,63 +88,17 @@ def get_aws_inventory(access_key, secret_key, region):
         region_name=region
     )
 
-    # Initialize a dictionary to store the inventory
+    # Retrieve AWS resource information using the resource retrieval functions for relevant services
     inventory = {}
-
-    # Retrieve AWS resource information using the describe functions for relevant services
-
-    # EC2 Instances
-    ec2_client = session.client('ec2')
-    ec2_response = ec2_client.describe_instances()
-    inventory['ec2_instances'] = ec2_response['Reservations']
-
-    # S3 Buckets
-    s3_client = session.client('s3')
-    s3_response = s3_client.list_buckets()
-    inventory['s3_buckets'] = s3_response['Buckets']
-
-    # RDS Instances
-    rds_client = session.client('rds')
-    rds_response = rds_client.describe_db_instances()
-    inventory['rds_instances'] = rds_response['DBInstances']
-
-    # Lambda Functions
-    lambda_client = session.client('lambda')
-    lambda_response = lambda_client.list_functions()
-    inventory['lambda_functions'] = lambda_response['Functions']
-
-    # VPCs
-    ec2_resource = session.resource('ec2')
-    vpcs = list(ec2_resource.vpcs.all())
-    inventory['vpcs'] = [{'VpcId': vpc.id, 'CidrBlock': vpc.cidr_block} for vpc in vpcs]
-
-    # ECR Repositories
-    ecr_client = session.client('ecr')
-    ecr_response = ecr_client.describe_repositories()
-    inventory['ecr_repositories'] = ecr_response['repositories']
-
-    # ECS Clusters
-    ecs_client = session.client('ecs')
-    ecs_response = ecs_client.list_clusters()
-    inventory['ecs_clusters'] = ecs_response['clusterArns']
-
-    # EKS Clusters
-    eks_client = session.client('eks')
-    eks_response = eks_client.list_clusters()
-    inventory['eks_clusters'] = eks_response['clusters']
-
-    # Add other AWS resources here using the describe methods of their respective services
+    for resource_type, resource_function in resource_functions.items():
+        inventory[resource_type] = resource_function(session)
 
     return inventory
 
-def write_inventory_to_console(inventory):
-    # Convert the inventory dictionary to JSON format using the custom JSON encoder
-    inventory_json = json.dumps(inventory, indent=2, cls=CustomJsonEncoder)
-
-    # Write the JSON result to the console using the logging module
-    logging.info(f"Inventory Results:\n{inventory_json}")
-
 if __name__ == "__main__":
+    # Configure the logging module to display the inventory results as JSON format
+    logging.basicConfig(level=logging.INFO, format='%(message)s')
+
     # Retrieve the environment variable containing AWS configurations (keys and regions)
     aws_configurations = os.environ.get('AWS_CONFIGURATIONS', '').split(',')
 
@@ -105,20 +124,14 @@ if __name__ == "__main__":
                 # Get the AWS inventory for the current configuration
                 inventory = get_aws_inventory(access_key.strip(), secret_key.strip(), region.strip())
 
-                # Remove "Environment" data from the inventory (if present)
-                for resource_type in inventory:
-                    resources = inventory[resource_type]
+                # Remove "Environment" data from the inventory (if present) and log each resource individually
+                for resource_type, resources in inventory.items():
                     for resource in resources:
                         resource.pop('Environment', None)
-                
-                # Write the inventory to the console
-                write_inventory_to_console(inventory)
+                        log_resource(resource_type, resource)
 
             # Wait for the specified interval before running again
             time.sleep(inventory_interval)
         except KeyboardInterrupt:
             # Stop the script when Ctrl+C is pressed
             break
-        except Exception as e:
-            # Catch any exceptions and log the error
-            logging.error(f"Error occurred: {str(e)}")

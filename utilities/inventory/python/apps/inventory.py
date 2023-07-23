@@ -14,9 +14,6 @@ class CustomJsonEncoder(json.JSONEncoder):
 
 # Function to log resources individually
 def log_resource(resource_type, resource):
-    # Convert the resource to JSON format using the custom JSON encoder
-    resource_json = json.dumps(resource, indent=2, cls=CustomJsonEncoder)
-
     # Create a dictionary for the log message
     log_message = {
         'timestamp': datetime.now(),
@@ -26,8 +23,9 @@ def log_resource(resource_type, resource):
             'resource': resource,
         },
     }
-    # Convert the log message dictionary to a JSON string
-    log_json = json.dumps(log_message, indent=2, cls=CustomJsonEncoder)
+
+    # Convert the log message dictionary to a JSON string without line breaks
+    log_json = json.dumps(log_message, separators=(',', ':'), cls=CustomJsonEncoder)
 
     # Log the JSON message as an info message
     logging.info(log_json)

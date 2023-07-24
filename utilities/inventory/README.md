@@ -23,7 +23,7 @@ The following services are included in the inventory- more can be added upon req
 - `ECS`
 - `EKS`
 
-The inventory will be returned in a log body like this example:
+The inventory will be returned in a log body like this example after the original `describe` body is parsed and moved to top level of JSON:  
 
 ```
 {

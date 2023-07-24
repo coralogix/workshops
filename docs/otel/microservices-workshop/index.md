@@ -3,8 +3,9 @@
 ## Instructions
 
 This example is for basic study only and is not documentation.    
-Full documentation: [https://k3s.io/](https://k3s.io/)  
-See Appendix below for a suggested Kubernetes sandbox environment with a quick and easy setup  
+Full documentation: [https://coralogix.com/docs/](https://coralogix.com/docs/)  
+
+**See Appendix below for a suggested Kubernetes sandbox environment with a quick and easy setup**  
 
 ### Step 1 - Install the OpenTelemetry Collector on your k8s cluster
 

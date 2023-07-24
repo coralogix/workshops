@@ -8,7 +8,7 @@ See Appendix below for a suggested Kubernetes sandbox environment with a quick a
 
 ### Step 1 - Install the OpenTelemetry Collector on your k8s cluster
 
-This workshop requires OpenTelemetry collector configured for Coralogix: [https://k3s.io/opentelemetry-using-kubernetes/](https://k3s.io/opentelemetry-using-kubernetes/)    
+This workshop requires OpenTelemetry collector configured for Coralogix: [https://coralogix.com/docs/opentelemetry-using-kubernetes/](https://coralogix.com/docs/opentelemetry-using-kubernetes/)    
 
 ### Step 2 - Setup
 Clone repo:

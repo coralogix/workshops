@@ -1,0 +1,1 @@
+zip -r lamdbda-demo.zip lambda-demo/python

@@ -19,7 +19,7 @@ git clone https://github.com/coralogix/workshops
 ```  
 
 ## 1. OTEL Collector Installation
-You can download the collector from the [OpenTelemetry Collector releases page](https://github.com/open-telemetry/opentelemetry-collector/releases). Download the file for your platform (in this case, Windows) and version (e.g. v0.75.0). 
+You can download the collector from the [OpenTelemetry Collector releases page](https://github.com/open-telemetry/opentelemetry-collector/releases). Download the file for your platform (in this case, Windows) and version (e.g. v0.76.0). 
 
 Use the following example from this repo a template for the OTEL collector config:  
 `~/workshops/workshops/otel/dotnet-windows/Collector/config.yaml`  
@@ -109,7 +109,7 @@ dotnet run
 ## 3. Example Application
 
 You can download & instrument the example application:  
-``~/workshops/workshops/otel/dotnet-windows/Collector/config.yaml`  
+`~/workshops/workshops/otel/dotnet-windows/ExampleApp`  
 provided in this repository for testing.  
 
 The example sends traces of `http get` requests of a public URL.   

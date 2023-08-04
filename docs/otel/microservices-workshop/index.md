@@ -50,7 +50,7 @@ Study results in Coralogix portal
 
 Simulate a "bad" deployment:  
 ```
-source deploy-bad.sh
+source deploy-reqs-bad.sh
 ```
 
 This deployment will cause severe sporadic problems in `payment-gateway` such as 404s, a log key:value ` 'transaction': 'failed',` and latency in the service response along with a drop in transaction volume. You can see the latency spikes here:    
@@ -61,7 +61,7 @@ Alerts and automation can be built around span latency or Payment Gateway 404 re
 
 Roll back the bad deployment for the services to return to normal:  
 ```
-source deploy-good.sh
+source deploy-req-good.sh
 ```  
 
 Span latency will return to normal and Payment Gateway 404 responses will cease.  
@@ -79,7 +79,7 @@ source deploy-java.sh
 ```  
 
 ### Step 6 - Cleanup
-To remove all the deployments/services/pods from the example from your k8s cluster:  
+To remove all the deployments/services/pods from the example from your k8s cluster (ignore any errors it reports:  
 ```
 source delete-all.sh
 ```

@@ -1,7 +1,14 @@
 const request = require('request');
 
 function httpget() {
-    request(options, function(error, response, body) {
+    const requestOptions = {
+        url: 'https://api.github.com',
+        headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36'
+        }
+    };
+
+    request(requestOptions, function(error, response, body) {
         if (error) {
             console.error(error);
             return;
@@ -15,13 +22,9 @@ function httpget() {
     console.log("This gets logged");
 }
 
-const options = {
-    url: 'https://api.github.com',
-};
-
 const interval = 750;
 
-for (let i = 0; i <= 250; i++) {
+for (let i = 0; i <= 100000; i++) {
     setTimeout(function(i) {
         httpget();
     }, interval * i, i);

@@ -11,6 +11,6 @@
   "license": "ISC",
   "dependencies": {
     "@opentelemetry/api": "^1.4.1",
-    "@opentelemetry/auto-instrumentations-node": "^0.37.1"
+    "@opentelemetry/auto-instrumentations-node": "^0.38.0"
   }
 }

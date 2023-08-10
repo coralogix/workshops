@@ -5,6 +5,7 @@
 from here: [https://github.com/open-telemetry/opentelemetry-collector-releases/releases](https://github.com/open-telemetry/opentelemetry-collector-releases/releases)  
 
 Collector must be configured with Coralogix Exporter.  
+See the `config.yaml` example in [./otelcol](./otelcol)
 
 #### Run Node client in new terminal
 

@@ -55,7 +55,7 @@ exporters:
     verbosity: detailed
   coralogix:
     # The Coralogix domain
-    domain: "coralogix.com"
+    domain: "your-Coralogix-Domain-Here"
     # Your Coralogix private key is sensitive
     private_key: "xxx"
 
@@ -97,13 +97,13 @@ service:
       exporters: [coralogix]
 
     metrics:
-      receivers: [otlp, hostmetrics, opencensus, prometheus]
+      receivers: [otlp, opencensus, prometheus]
       processors: [resourcedetection, batch]
       # exporters: [otlp]
       exporters: [coralogix]
 
     logs:
-      receivers: [otlp,filelog]
+      receivers: [otlp]
       processors: [resourcedetection,batch]
       # exporters: [otlp]
       exporters: [coralogix]

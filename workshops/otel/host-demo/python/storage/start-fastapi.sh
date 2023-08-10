@@ -1,1 +1,0 @@
-python3 ../apps/storage/fastapi-server.py

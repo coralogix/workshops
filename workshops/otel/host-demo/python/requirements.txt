@@ -1,4 +1,0 @@
-requests
-redis
-ipaddr
-flask

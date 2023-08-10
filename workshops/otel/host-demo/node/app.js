@@ -1,31 +1,28 @@
-var http = require('http');
+const request = require('request');
 
 function httpget() {
-    http.get(options,  function(res) {
-        console.log("statusCode: ", res.statusCode); //nothing
-        console.log("headers: ", res.headers); //nothing
+    request(options, function(error, response, body) {
+        if (error) {
+            console.error(error);
+            return;
+        }
 
-        res.on('data', function(d) {
-            process.stdout.write(d);
-        });
-
-    }).on('error', function(e) {
-        console.error(e);
+        console.log("statusCode:", response.statusCode);
+        console.log("headers:", response.headers);
+        console.log(body);
     });
+
     console.log("This gets logged");
+}
+
+const options = {
+    url: 'https://api.github.com',
 };
 
-options = {
-            hostname: 'localhost',
-            port: 5000,
-            path: 'transact'
-        };
+const interval = 750;
 
-// 250ms delay
-var interval = 250;
-
-for (var i = 0; i <=100000; i++) {
-    setTimeout( function (i) {
+for (let i = 0; i <= 250; i++) {
+    setTimeout(function(i) {
         httpget();
     }, interval * i, i);
 }

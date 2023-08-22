@@ -92,6 +92,6 @@ source delete-all.sh
     sudo chmod 644 /etc/rancher/k3s/k3s.yaml && export KUBECONFIG=/etc/rancher/k3s/k3s.yaml  
     ```  
     This script is included in the workshop in the k3s folder: `source ./k3s/k3s.sh`  
-- Install helm- use bash script: [https://helm.sh/docs/intro/install/](https://helm.sh/docs/intro/install/])  
+- Install helm- use bash script: [https://helm.sh/docs/intro/install/](https://helm.sh/docs/intro/install/)  
 - Install k9s kubernetes monitor: [https://k9scli.io/](https://k9scli.io/) 
     - Recommend to download appropriate release and gunzip / tar -xf the release [https://github.com/derailed/k9s/releases](https://github.com/derailed/k9s/releases)

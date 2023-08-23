@@ -61,7 +61,7 @@ Alerts and automation can be built around span latency or Payment Gateway 404 re
 
 Roll back the bad deployment for the services to return to normal:  
 ```
-source deploy-req-good.sh
+source deploy-reqs-good.sh
 ```  
 
 Span latency will return to normal and Payment Gateway 404 responses will cease.  

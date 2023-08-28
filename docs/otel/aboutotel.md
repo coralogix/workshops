@@ -3,10 +3,10 @@
 [OpenTelemetry](http://www.opentelemetry.io) is a standard organized by the [Cloud Native Compute Foundation](https://www.cncf.io/) comprised of two key elements:  
 - A standard format for metrics, logs, and traces as well as standard protocols for shipping them  
 - OpenTelemetry Software  
-&nbsp;&nbsp;- [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/) which can run anywhere (host/container/local) and receives, processes, and exports telemetry  
-&nbsp;&nbsp;- [OpenTelemetry Tracing Instrumentation](https://opentelemetry.io/docs/instrumentation/) for many languages that instruments your apps to emit traces and works in two ways    
-&nbsp;&nbsp;&nbsp;&nbsp;1. Automatic Instrumentation: no code changes, instruments a long list of frameworks for each language  
-&nbsp;&nbsp;&nbsp;&nbsp;2. Manual Instrumentation that is added to your code for fine grain trace span building  
+&nbsp;&nbsp;* [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/) which can run anywhere (host/container/local) and receives, processes, and exports telemetry  
+&nbsp;&nbsp;* [OpenTelemetry Tracing Instrumentation](https://opentelemetry.io/docs/instrumentation/) for many languages that instruments your apps to emit traces and works in two ways    
+&nbsp;&nbsp;&nbsp;&nbsp;1. **Automatic Instrumentation** with no code changes and instruments a long list of frameworks for each language  
+&nbsp;&nbsp;&nbsp;&nbsp;2. **Manual Instrumentation** that is added to your code for fine grain trace span building  
 
 ## Why OpenTelemetry? Because Observability Should Use Universal Standards
 

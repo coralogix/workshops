@@ -11,3 +11,7 @@ These workshops are not documentation- Coralogix platform documentation is locat
 ### OpenTelemetry Tracing Instrumentation
 
 [.NET for Windows](otel/dotnet-windows/index.md)
+
+### OpenTelemetry Overview and Value Proposition  
+
+[About Opentelemetry](otel/aboutotel.md)

@@ -5,14 +5,10 @@
 - Two pieces of software  
 
 OpenTelemetry Software  
-1. he OpenTelemetry Collector which can run anywhere (host/container/local) and receives, processes, and exports telemetry 
-2. OpenTelemtry Tracing Instrumentation for many languages that instruments your apps to emit traces and works in two ways  
+1. [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/) which can run anywhere (host/container/local) and receives, processes, and exports telemetry  
+2. [OpenTelemetry Tracing Instrumentation](https://opentelemetry.io/docs/instrumentation/) for many languages that instruments your apps to emit traces and works in two ways    
     - Automatic Instrumentation: no code changes, instruments a long list of frameworks for each language  
     - Manual Instrumentation that is added to your code for fine grain trace span building  
-
-Quick Links:  
-[OpenTelemetry Collector](https://opentelemetry.io/docs/collector/)  
-[OpenTelemetry Tracing Instrumentation](https://opentelemetry.io/docs/instrumentation/)  
 
 ## Why OpenTelemetry? Because Observability Should Use Universal Standards
 
@@ -20,6 +16,6 @@ Observability means measuring a system based on its outputs. In modern complex e
 
 Monitoring systems traditionally required negotiation with vendors to supply "monitoring software" and "agents" that are threaded througout an environment. This means annual negotiations are required to keep a business online because the "monitoring software" and "agents" are proprietary and technical debt of vendor relationships has to be cured on a regular basis. As systems grow larger and more distributed and complex, the private vendor lock on monitoring creates a fatal reliability flaw in the tech stack.  
 
-No one negotiates for HTTP, SQL, HTTPS, TCP etc every year- so why should anyone negotiative for observability formats and agents? These should be open standard and included as part of day-to-day system building and operations.  
+*No one negotiates for HTTP, SQL, HTTPS, TCP etc every year- so why should anyone negotiative for observability formats and agents? These should be open standard and included as part of day-to-day system building and operations.*  
 
 OpenTelemetry formats and tracing instrumentation allow for devops, operations, and development to scale infinitely without worry of vendor lock-in or future risk to an environment due to proprietary software.

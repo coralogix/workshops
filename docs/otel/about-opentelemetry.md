@@ -18,4 +18,6 @@ Monitoring systems traditionally required negotiation with vendors to supply "mo
 
 **No one negotiates for HTTP, SQL, HTTPS, TCP etc every year- so why should anyone negotiative for observability formats and agents? These should be based open standards and included as part of day-to-day system building and operations.**  
 
-OpenTelemetry formats and tracing instrumentation allow for devops, operations, and development to scale infinitely without worry of vendor lock-in or future risk to an environment due to proprietary software.
+OpenTelemetry formats and tracing instrumentation allow for devops, operations, and development to scale infinitely without worry of vendor lock-in or future risk to an environment due to proprietary software.  
+
+The [OpenTelemetry](http://www.opentelemetry.io) publishes standards like Kubernetes and others that are the leading standards in the industry.  

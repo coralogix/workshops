@@ -14,4 +14,4 @@ These workshops are not documentation- Coralogix platform documentation is locat
 
 ### OpenTelemetry Overview and Value Proposition  
 
-[About Opentelemetry](otel/aboutotel.md)
+[About Opentelemetry](otel/about-opentelemetry.md)

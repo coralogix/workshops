@@ -1,4 +1,4 @@
-## OpenTelmetry
+## OpenTelemetry
 
 [OpenTelemetry](http://www.opentelemetry.io) is a standard organized by the [Cloud Native Compute Foundation](https://www.cncf.io/) comprised of two key elements:  
 - A standard format for metrics, logs, and traces as well as standard protocols for shipping them  

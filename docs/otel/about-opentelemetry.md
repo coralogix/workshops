@@ -1,6 +1,10 @@
 ## OpenTelemetry
 
-[OpenTelemetry](http://www.opentelemetry.io) is a standard organized by the [Cloud Native Compute Foundation](https://www.cncf.io/) comprised of two key elements:  
+[OpenTelemetry](http://www.opentelemetry.io) is a standard organized by the [Cloud Native Compute Foundation](https://www.cncf.io/)  
+
+The [Cloud Native Compute Foundation](https://www.cncf.io/) publishes standards like Kubernetes and others that are the leading standards in the industry.  
+
+OpenTelemetry is comprised of two key elements:  
 - A standard format for metrics, logs, and traces as well as standard protocols for shipping them  
 - OpenTelemetry Software  
 &nbsp;&nbsp;- [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/) which can run anywhere (host/container/local) and receives, processes, and exports telemetry  
@@ -21,5 +25,3 @@ Monitoring systems traditionally required negotiation with vendors to supply "mo
 **No one negotiates for HTTP, SQL, HTTPS, TCP etc every year- so why should anyone negotiative for observability formats and agents? These should be based open standards and included as part of day-to-day system building and operations.**  
 
 OpenTelemetry formats and tracing instrumentation allow for devops, operations, and development to scale infinitely without worry of vendor lock-in or future risk to an environment due to proprietary software.  
-
-The [Cloud Native Compute Foundation](https://www.cncf.io/) publishes standards like Kubernetes and others that are the leading standards in the industry.  

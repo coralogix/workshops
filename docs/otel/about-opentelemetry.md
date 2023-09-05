@@ -12,7 +12,9 @@
 
 Observability means measuring a system based on its outputs.  
 
-In a complex environment consisting of servers, containers, cloud, many application languages, and mixes and variations of all of the above, Observability is required to be able to proactively and/or in real time discover and repair problems however sytems are so diverse that traditional post-problem find/fix monitoring solutions no longer function or are scalable. Using Observability and monitoring systems and applications based on their outputs allows proper technology platform operations and problem prevention/remediation.  
+This is contrast to installing proprietary software for monitoring/remediation purposes- if a system can simply emit telemetry natively, software is no longer needed.  
+
+In a complex environment consisting of servers, containers, cloud, many application languages, and mixes and variations of all of the above, Observability is required to be able to proactively and/or in real time discover and repair problems however sytems are so diverse that traditional post-problem find/fix monitoring solutions no longer function or are scalable.  
 
 Monitoring systems traditionally required negotiation with vendors to supply "monitoring software" and "agents" that are threaded througout an environment. This means annual negotiations are required to keep a business online because technical debt of vendor relationships has to be cured on a regular basis. As systems grow larger and more distributed and complex, the private vendor lock on monitoring creates a fatal reliability flaw in the tech stack.  
 

@@ -1,1 +1,1 @@
-dotnet MyApp.dll
+dotnet /App/MyApp.dll

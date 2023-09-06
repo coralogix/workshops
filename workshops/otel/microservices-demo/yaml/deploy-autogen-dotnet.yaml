@@ -43,8 +43,8 @@ spec:
           value: "/otel-dotnet-auto/net/OpenTelemetry.AutoInstrumentation.StartupHook.dll"
         - name: OTEL_DOTNET_AUTO_HOME
           value: "/otel-dotnet-auto"
-        command: ["/bin/sh"]
-        args: ["/App/run-client.sh"]
+        # command: ["/bin/sh"]
+        # args: ["/App/run-client.sh"]
         # test if needed
-        # command: [ "/bin/bash", "-c", "--" ]
-        # args: [ "while true; do sleep 30; done;" ]
+        command: [ "/bin/bash", "-c", "--" ]
+        args: [ "while true; do sleep 30; done;" ]

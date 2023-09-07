@@ -54,4 +54,5 @@ Below is a table explaining each parameter used with the `aws cloudformation dep
 
 ## References
 1. [Coralogix ECS Fargate integrations](https://github.com/coralogix/cloudformation-coralogix-aws/tree/master/aws-integrations/ecs-fargate)
-2. [Coralogix AWS ECS Fargate Documentation](https://coralogix.com/docs/aws-ecs-fargate/).
+
+2. [Coralogix AWS ECS Fargate Documentation](https://coralogix.com/docs/aws-ecs-fargate/)

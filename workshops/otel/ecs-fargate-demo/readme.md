@@ -18,6 +18,8 @@ Before using running the template, make sure you have the following prerequisite
 
    - Metrics & Traces: Utilize the Amazon Systems Manager Parameter Store for your OpenTelemetry (OTel) Collector configurations as described in the documentation.
 
+5. **Application**: This demo uses a tracegenerator container for .NET. The demo app is a .NET 6 linux container from our workshop [here] (https://github.com/YonghuiCho/workshops/tree/master/workshops/otel/dotnet6-linux)
+
 ## Usage
 
 To deploy your CloudFormation stack, use the following command:
@@ -52,4 +54,5 @@ Below is a table explaining each parameter used with the `aws cloudformation dep
 
 ## References
 1. [Coralogix ECS Fargate integrations](https://github.com/coralogix/cloudformation-coralogix-aws/tree/master/aws-integrations/ecs-fargate)
-2. [Coralogix AWS ECS Fargate Documentation](https://coralogix.com/docs/aws-ecs-fargate/).
+
+2. [Coralogix AWS ECS Fargate Documentation](https://coralogix.com/docs/aws-ecs-fargate/)

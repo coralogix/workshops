@@ -121,7 +121,7 @@ Resources:
             - Name: OTEL_RESOURCE_ATTRIBUTES
               Value: application.name=dotnet-autogen,api.name=dotnet-autogen,cx.application.name=dotnet-autogen,cx.subsystem.name=dotnet-autogen
             - Name: OTEL_EXPORTER_OTLP_ENDPOINT
-              Value: http://localhost:4317
+              Value: http://localhost:4318
             - Name: CORECLR_ENABLE_PROFILING
               Value: "1"
             - Name: CORECLR_PROFILER

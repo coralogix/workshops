@@ -18,7 +18,10 @@ Before using running the template, make sure you have the following prerequisite
 
    - Metrics & Traces: Utilize the Amazon Systems Manager Parameter Store for your OpenTelemetry (OTel) Collector configurations as described in the documentation.
 
-5. **Application**: This demo uses a tracegenerator container for .NET. The demo app is a .NET 6 linux container from our workshop [here] (https://github.com/YonghuiCho/workshops/tree/master/workshops/otel/dotnet6-linux)
+5. **Application**: 
+
+    - The .NET version of the template uses a tracegenerator container for .NET from our workshop [here] (https://github.com/YonghuiCho/workshops/tree/master/workshops/otel/dotnet6-linux)
+    - The Java version of the template uses a Java app from our [microservices workshop] (https://github.com/YonghuiCho/workshops/tree/master/workshops/otel/microservices-demo/java).
 
 ## Usage
 
@@ -26,7 +29,7 @@ To deploy your CloudFormation stack, use the following command:
 
 ```bash
 aws cloudformation deploy \
-    --template-file ecs-fargate-cf.yaml \
+    --template-file ecs-fargate-<dotnet or java>.yaml \
     --stack-name <stack_name> \
     --region <aws region> \
     --capabilities "CAPABILITY_NAMED_IAM" \

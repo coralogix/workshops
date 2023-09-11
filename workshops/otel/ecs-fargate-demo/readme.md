@@ -18,7 +18,14 @@ Before using running the template, make sure you have the following prerequisite
 
    - Metrics & Traces: Utilize the Amazon Systems Manager Parameter Store for your OpenTelemetry (OTel) Collector configurations as described in the documentation.
 
+<<<<<<< HEAD
 5. **Application**: This demo uses a tracegenerator container for .NET. The demo app is a .NET 6 linux container from our workshop [here] (https://github.com/YonghuiCho/workshops/tree/master/workshops/otel/dotnet6-linux)
+=======
+5. **Application**: 
+
+    - The .NET version of the template uses a tracegenerator container for .NET from our workshop [here](https://github.com/YonghuiCho/workshops/tree/master/workshops/otel/dotnet6-linux)
+    - The Java version of the template uses a Java app from our [microservices workshop](https://github.com/YonghuiCho/workshops/tree/master/workshops/otel/microservices-demo/java).
+>>>>>>> f672b5682b5e640673382c742ab5f9547981be60
 
 ## Usage
 
@@ -26,7 +33,7 @@ To deploy your CloudFormation stack, use the following command:
 
 ```bash
 aws cloudformation deploy \
-    --template-file ecs-fargate-cf.yaml \
+    --template-file ecs-fargate-<dotnet or java>.yaml \
     --stack-name <stack_name> \
     --region <aws region> \
     --capabilities "CAPABILITY_NAMED_IAM" \
@@ -55,4 +62,8 @@ Below is a table explaining each parameter used with the `aws cloudformation dep
 ## References
 1. [Coralogix ECS Fargate integrations](https://github.com/coralogix/cloudformation-coralogix-aws/tree/master/aws-integrations/ecs-fargate)
 
+<<<<<<< HEAD
 2. [Coralogix AWS ECS Fargate Documentation](https://coralogix.com/docs/aws-ecs-fargate/)
+=======
+2. [Coralogix AWS ECS Fargate Documentation](https://coralogix.com/docs/aws-ecs-fargate/)
+>>>>>>> f672b5682b5e640673382c742ab5f9547981be60

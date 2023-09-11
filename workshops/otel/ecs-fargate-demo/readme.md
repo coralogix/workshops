@@ -20,8 +20,8 @@ Before using running the template, make sure you have the following prerequisite
 
 5. **Application**: 
 
-    - The .NET version of the template uses a tracegenerator container for .NET from our workshop [here] (https://github.com/YonghuiCho/workshops/tree/master/workshops/otel/dotnet6-linux)
-    - The Java version of the template uses a Java app from our [microservices workshop] (https://github.com/YonghuiCho/workshops/tree/master/workshops/otel/microservices-demo/java).
+    - The .NET version of the template uses a tracegenerator container for .NET from our workshop [here](https://github.com/YonghuiCho/workshops/tree/master/workshops/otel/dotnet6-linux)
+    - The Java version of the template uses a Java app from our [microservices workshop](https://github.com/YonghuiCho/workshops/tree/master/workshops/otel/microservices-demo/java).
 
 ## Usage
 

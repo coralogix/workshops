@@ -98,10 +98,15 @@ source deploy-prometheus.sh
   
 - Update OpenTelemetry Collector to scrape Prometheus metrics from deployment:  
 ```
-helm upgrade otel-coralogix-integration coralogix-charts-virtual/otel-integration --values ./yaml/override-prometheus.yaml
+helm upgrade --reuse-values otel-coralogix-integration coralogix-charts-virtual/otel-integration --values ./yaml/override-prometheus.yaml 
 ```  
-- A metric called `CustomGauge` with value **17** will now be available  
+- A metric called `CustomGauge` with value **17** will now be available 
 
+- Add a label (aka dimension or tag) called `env:dev` to the `CustomGauge` metric:  
+```
+helm upgrade --reuse-values otel-coralogix-integration coralogix-charts-virtual/otel-integration --values ./yaml/override-attr.yaml
+```  
+  
 ### Step 6 - Cleanup
 To remove all the deployments/services/pods from the example from your k8s cluster (ignore any errors it reports:  
 ```

@@ -1,7 +1,4 @@
 ---
-global:
-  domain: "coralogix.us"
-  clusterName: "slerner-cluster"
 opentelemetry-agent:
   config:
     receivers:

@@ -9,8 +9,19 @@ Full documentation: [https://coralogix.com/docs/](https://coralogix.com/docs/)
 
 ### Step 1 - Install the OpenTelemetry Collector on your k8s cluster
 
-This workshop requires OpenTelemetry collector configured for Coralogix: [https://coralogix.com/docs/opentelemetry-using-kubernetes/](https://coralogix.com/docs/opentelemetry-using-kubernetes/)    
+This workshop requires OpenTelemetry Collector configured for Coralogix: [https://github.com/coralogix/telemetry-shippers/tree/master/otel-integration/k8s-helm/](https://github.com/coralogix/telemetry-shippers/tree/master/otel-integration/k8s-helm/)    
+  
+Note that Coralogix makes several examples of the Collector helm charts available- the one above is the fully featured chart with `Kube State Metrics` etc.  
+  
+It requires a `values.yaml` file as follows:  
 
+```
+---
+global:
+  domain: "YourCoralogix.domain-i.e.-coralogix.us"
+  clusterName: "YourClusterName"
+```  
+  
 ### Step 2 - Setup
 Clone repo:
 ```
@@ -71,12 +82,25 @@ Study how the example is built:
 - `.yaml` deployment files are in `python/yaml`  
 - Dockerfiles for the containers show how the OpenTelemetry instrumentation works and are in the `/python` root level  
 
-#### Bonus Example
+#### Bonus Examples
 
 Deploy Java based Inventory service:  
 ```
 source deploy-java.sh
 ```  
+  
+Prometheus metrics example:  
+  
+- Deployment with Prometheus metrics exposed:
+```
+source deploy-prometheus.sh
+```
+  
+- Update OpenTelemetry Collector to scrape Prometheus metrics from deployment:  
+```
+helm upgrade otel-coralogix-integration coralogix-charts-virtual/otel-integration --values ./yaml/override-prometheus.yaml
+```  
+- A metric called `CustomeGauge` with value 17 will now be available  
 
 ### Step 6 - Cleanup
 To remove all the deployments/services/pods from the example from your k8s cluster (ignore any errors it reports:  

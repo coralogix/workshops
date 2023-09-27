@@ -645,11 +645,18 @@ There will be three services spun up:  </p>
 <ul>
 <li>Update OpenTelemetry Collector to scrape Prometheus metrics from deployment:  </li>
 </ul>
-<pre><code>helm upgrade otel-coralogix-integration coralogix-charts-virtual/otel-integration --values ./yaml/override-prometheus.yaml
+<pre><code>helm upgrade --reuse-values otel-coralogix-integration coralogix-charts-virtual/otel-integration --values ./yaml/override-prometheus.yaml 
 </code></pre>
 <ul>
-<li>A metric called <code>CustomGauge</code> with value <strong>17</strong> will now be available  </li>
+<li>
+<p>A metric called <code>CustomGauge</code> with value <strong>17</strong> will now be available </p>
+</li>
+<li>
+<p>Add a label (aka dimension or tag) called <code>env:dev</code> to the <code>CustomGauge</code> metric:  </p>
+</li>
 </ul>
+<pre><code>helm upgrade --reuse-values otel-coralogix-integration coralogix-charts-virtual/otel-integration --values ./yaml/override-attr.yaml
+</code></pre>
 <h3 id="step-6-cleanup">Step 6 - Cleanup</h3>
 <p>To remove all the deployments/services/pods from the example from your k8s cluster (ignore any errors it reports:  </p>
 <pre><code>source delete-all.sh

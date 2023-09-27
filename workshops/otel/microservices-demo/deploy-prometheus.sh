@@ -1,0 +1,1 @@
+kubectl apply -f yaml/deploy-prometheus.yaml

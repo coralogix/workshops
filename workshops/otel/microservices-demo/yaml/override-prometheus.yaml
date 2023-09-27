@@ -1,0 +1,19 @@
+---
+global:
+  domain: "coralogix.us"
+  clusterName: "slerner-cluster"
+opentelemetry-agent:
+  config:
+    receivers:
+      prometheus:
+        config:
+          scrape_configs:
+          - job_name: opentelemetry-collector
+            scrape_interval: 30s
+            static_configs:
+            - targets:
+              - ${MY_POD_IP}:8888
+          - job_name: 'prometheus-client'
+            scrape_interval: 5s
+            static_configs:
+              - targets: ['prometheus-client:9090']

@@ -1,0 +1,41 @@
+---
+### Prometheus-client Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus-client
+spec:
+  selector:
+    matchLabels:
+      name: prometheus-client
+  template:
+    metadata:
+      labels:
+        name: prometheus-client
+    spec:
+      containers:
+      - name: prometheus-client
+        image: public.ecr.aws/w3s4j9x9/microservices-demo:python
+        ports:
+          - name: http
+            containerPort: 9090
+        imagePullPolicy: Always
+        workingDir: /home/code/k8s
+        command: ["/bin/sh"]
+        args: ["start-prometheus.sh"]
+        # test if needed
+        # command: [ "/bin/bash", "-c", "--" ]
+        # args: [ "while true; do sleep 30; done;" ]
+---
+### Prometheus-client Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-client
+spec:
+  selector:
+    name: prometheus-client
+  ports:
+  - protocol: TCP
+    port: 9090
+    targetPort: 9090

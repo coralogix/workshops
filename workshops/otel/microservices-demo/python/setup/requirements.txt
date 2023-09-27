@@ -2,3 +2,4 @@ requests
 redis
 ipaddr
 flask
+prometheus-client

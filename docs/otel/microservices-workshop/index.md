@@ -100,7 +100,7 @@ source deploy-prometheus.sh
 ```
 helm upgrade otel-coralogix-integration coralogix-charts-virtual/otel-integration --values ./yaml/override-prometheus.yaml
 ```  
-- A metric called `CustomeGauge` with value 17 will now be available  
+- A metric called `CustomGauge` with value **17** will now be available  
 
 ### Step 6 - Cleanup
 To remove all the deployments/services/pods from the example from your k8s cluster (ignore any errors it reports:  

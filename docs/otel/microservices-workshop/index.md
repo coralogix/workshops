@@ -96,11 +96,11 @@ Prometheus metrics example:
 source deploy-prometheus.sh
 ```
   
-- Update OpenTelemetry Collector to scrape Prometheus metrics from deployment:  
+- Update OpenTelemetry Collector to scrape Prometheus metrics from deployment:
+- A metric called `CustomGauge` with value **17** will now be available     
 ```
 helm upgrade --reuse-values otel-coralogix-integration coralogix-charts-virtual/otel-integration --values ./yaml/override-prometheus.yaml 
 ```  
-- A metric called `CustomGauge` with value **17** will now be available 
 
 - Add a label (aka dimension or tag) called `env:dev` to the `CustomGauge` metric:  
 ```

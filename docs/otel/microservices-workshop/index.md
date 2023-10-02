@@ -106,6 +106,11 @@ helm upgrade --reuse-values otel-coralogix-integration coralogix-charts-virtual/
 ```
 helm upgrade --reuse-values otel-coralogix-integration coralogix-charts-virtual/otel-integration --values ./yaml/override-attr.yaml
 ```  
+
+- Drop the metric `CustomGauge` to clean up extra metrics- but leave the `env:dev` label:
+```
+helm upgrade --reuse-values otel-coralogix-integration coralogix-charts-virtual/otel-integration --values ./yaml/override-attr-drop.yaml
+```
   
 ### Step 6 - Cleanup
 To remove all the deployments/services/pods from the example from your k8s cluster (ignore any errors it reports:  

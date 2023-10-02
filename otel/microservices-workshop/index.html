@@ -657,6 +657,11 @@ There will be three services spun up:  </p>
 </ul>
 <pre><code>helm upgrade --reuse-values otel-coralogix-integration coralogix-charts-virtual/otel-integration --values ./yaml/override-attr.yaml
 </code></pre>
+<ul>
+<li>Drop the metric <code>CustomGauge</code> to clean up extra metrics- but leave the <code>env:dev</code> label:</li>
+</ul>
+<pre><code>helm upgrade --reuse-values otel-coralogix-integration coralogix-charts-virtual/otel-integration --values ./yaml/override-attr-drop.yaml
+</code></pre>
 <h3 id="step-6-cleanup">Step 6 - Cleanup</h3>
 <p>To remove all the deployments/services/pods from the example from your k8s cluster (ignore any errors it reports:  </p>
 <pre><code>source delete-all.sh

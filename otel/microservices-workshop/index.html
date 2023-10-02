@@ -643,17 +643,13 @@ There will be three services spun up:  </p>
 <pre><code>source deploy-prometheus.sh
 </code></pre>
 <ul>
-<li>Update OpenTelemetry Collector to scrape Prometheus metrics from deployment:  </li>
+<li>Update OpenTelemetry Collector to scrape Prometheus metrics from deployment:</li>
+<li>A metric called <code>CustomGauge</code> with value <strong>17</strong> will now be available     </li>
 </ul>
 <pre><code>helm upgrade --reuse-values otel-coralogix-integration coralogix-charts-virtual/otel-integration --values ./yaml/override-prometheus.yaml 
 </code></pre>
 <ul>
-<li>
-<p>A metric called <code>CustomGauge</code> with value <strong>17</strong> will now be available </p>
-</li>
-<li>
-<p>Add a label (aka dimension or tag) called <code>env:dev</code> to the <code>CustomGauge</code> metric:  </p>
-</li>
+<li>Add a label (aka dimension or tag) called <code>env:dev</code> to the <code>CustomGauge</code> metric:  </li>
 </ul>
 <pre><code>helm upgrade --reuse-values otel-coralogix-integration coralogix-charts-virtual/otel-integration --values ./yaml/override-attr.yaml
 </code></pre>

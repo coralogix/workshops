@@ -32,7 +32,7 @@ git clone https://github.com/coralogix/workshops
 Change to the proper directory for workshop example:  
 
 ```
-cd workshops/otel/microservices-demo
+cd workshops/workshops/otel/microservices-demo
 ```
 
 ### Step 4 - Deploy example

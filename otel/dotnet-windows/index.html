@@ -468,33 +468,33 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#description" class="md-nav__link">
-    Description
+  <a href="#instructions" class="md-nav__link">
+    Instructions
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
+    <nav class="md-nav" aria-label="Instructions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#net-instrumentation" class="md-nav__link">
     .NET Instrumentation
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#1-otel-collector-installation" class="md-nav__link">
     1. OTEL Collector Installation
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#2-install-net-instrumentation" class="md-nav__link">
     2. Install .NET Instrumentation
   </a>
   
-    <nav class="md-nav" aria-label="2. Install .NET Instrumentation">
-      <ul class="md-nav__list">
+</li>
         
           <li class="md-nav__item">
   <a href="#quick-start" class="md-nav__link">
@@ -512,6 +512,19 @@
   <a href="#3-example-application" class="md-nav__link">
     3. Example Application
   </a>
+  
+    <nav class="md-nav" aria-label="3. Example Application">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aspnet" class="md-nav__link">
+    ASP.NET
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -550,9 +563,16 @@
 
 
 <h1 id="opentelemetry-for-net-coralogix">OpenTelemetry for .NET / Coralogix</h1>
-<h2 id="description">Description</h2>
-<p>OpenTelemetry on .net is comprised of only two major moving parts: the OpenTelemetry Collector and the OpenTelemetry .NET instrumentation. It supports .NET Framework and Core 3.5 and higher.</p>
-<h2 id="net-instrumentation">.NET Instrumentation</h2>
+<h2 id="instructions">Instructions</h2>
+<p>This example is for basic study only and is not documentation.  <br />
+Full documentation: <a href="https://coralogix.com/docs/">https://coralogix.com/docs/</a><br />
+Requirements:<br />
+- Windows Server 2019 or newer  <br />
+- Updated versions and sufficient permissions for downloading and installing software and no restrictions on GitHub domain  <br />
+- .NET Framework 3.5 or greater installed <br />
+- PowerShell 5.1 or higher<br />
+- Proper IDE i.e. Visual Studio Code </p>
+<h3 id="net-instrumentation">.NET Instrumentation</h3>
 <p>You can find the complete instruction for .NET OpenTelemetry Agent Instrumentation is in <a href="https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation">.NET OpenTelemetry GitHub Repository</a>. </p>
 <p>There are three steps to sending traces from a .NET application on Windows:<br />
 1. Install the OpenTelemetry collector<br />
@@ -561,7 +581,7 @@
 <p>Before executing the steps, download the repo:  </p>
 <pre><code>git clone https://github.com/coralogix/workshops
 </code></pre>
-<h2 id="1-otel-collector-installation">1. OTEL Collector Installation</h2>
+<h3 id="1-otel-collector-installation">1. OTEL Collector Installation</h3>
 <p>You can download the collector from the <a href="https://github.com/open-telemetry/opentelemetry-collector/releases">OpenTelemetry Collector releases page</a>. Download the file for your platform (in this case, Windows) and version (e.g. v0.76.0). </p>
 <p>Use the following example from this repo a template for the OTEL collector config:<br />
 <code>~/workshops/workshops/otel/dotnet-windows/Collector/config.yaml</code>  </p>
@@ -597,13 +617,14 @@ exporters:
 <p>Next: run the collector using the command</p>
 <pre><code class="language-powershell">otelcol-contrib.exe --config=config.yaml
 </code></pre>
-<h2 id="2-install-net-instrumentation">2. Install .NET Instrumentation</h2>
-<p>You can find the complete instruction for .NET OpenTelemetry Agent Instrumentation is in <a href="https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation">.NET OpenTelemetry GitHub Repository</a>. </p>
+<h3 id="2-install-net-instrumentation">2. Install .NET Instrumentation</h3>
+<p>You can find the complete instructions for .NET OpenTelemetry Agent Instrumentation is in <a href="https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation">.NET OpenTelemetry GitHub Repository</a>.  </p>
+<p>Below is a shortcut set of instructions but these may be updated in the official documentation above, so we recommend following the officical set.  </p>
 <h3 id="quick-start">Quick start</h3>
 <p>The official Otel instrumentation guide shows the following:<br />
 Run the commands below in your PowerShell. Update the <code>"MyServiceDisplayName"</code> with the name of your application.  </p>
 <pre><code class="language-powershell"># Download the module
-$module_url = &quot;https://raw.githubusercontent.com/open-telemetry/opentelemetry-dotnet-instrumentation/v0.7.0/OpenTelemetry.DotNet.Auto.psm1&quot;
+$module_url = &quot;https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation/releases/latest/download/OpenTelemetry.DotNet.Auto.psm1&quot;
 $download_path = Join-Path $env:temp &quot;OpenTelemetry.DotNet.Auto.psm1&quot;
 Invoke-WebRequest -Uri $module_url -OutFile $download_path -UseBasicParsing
 
@@ -632,6 +653,9 @@ provided in this repository for testing.  </p>
 <p>The example sends traces of <code>http get</code> requests of a public URL. <br />
 Simply use <code>dotnet run</code> to start the application.  </p>
 <p>You may want to open it first in Visual Studio 2022 or higher to ensure dependencies are installed first and then run from the Visual Studio 2022 console.</p>
+<h3 id="aspnet">ASP.NET</h3>
+<p>IIS / ASP.NET follows a different instruction path for instrumentation and is shown here:<br />
+<a href="https://opentelemetry.io/docs/instrumentation/net/automatic/">https://opentelemetry.io/docs/instrumentation/net/automatic/</a></p>
 
 
 

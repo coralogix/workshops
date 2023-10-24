@@ -1,4 +1,4 @@
-## Linux Monolith APM Workshop (Node.js)
+# OpenTelemetry for Node.js / Monolith
 
 ## Instructions
 

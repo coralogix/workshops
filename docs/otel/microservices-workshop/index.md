@@ -1,4 +1,4 @@
-# Microservices Observability Demo
+# OpenTelemetry Microservices / Kubernetes
 
 ## Instructions
 

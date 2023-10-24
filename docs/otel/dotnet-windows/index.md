@@ -1,6 +1,6 @@
-## OpenTelemetry for .NET / Coralogix
+# OpenTelemetry for .NET / Monolith
 
-### Instructions
+## Instructions
 
 This example is for basic study only and is not documentation.    
 Full documentation: [https://coralogix.com/docs/](https://coralogix.com/docs/)  

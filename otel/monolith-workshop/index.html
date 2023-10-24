@@ -606,13 +606,13 @@ Requirements:<br />
 </code></pre>
 <h3 id="step-2-change-to-workshop-dir">Step 2 - Change to workshop dir</h3>
 <p>Change to the proper directory for workshop example:  </p>
-<pre><code>cd workshops/workshops/otel/monolith-workshop
+<pre><code>cd ./workshops/workshops/otel/monolith-workshop/node/
 </code></pre>
 <h3 id="step-3-set-up-otel-collector-on-a-linux-host">Step 3 - Set up Otel Collector on a Linux host</h3>
 <p>Download and install latest CONTRIB release version from here:<br />
 <a href="https://github.com/open-telemetry/opentelemetry-collector-releases/releases">https://github.com/open-telemetry/opentelemetry-collector-releases/releases</a>  </p>
 <p>Collector <code>config.yaml</code> must be configured with Coralogix Exporter. See the "Send Data to Coralogix" section for determining telemetry endpoint and and API key: <a href="https://coralogix.com/docs/guide-first-steps-coralogix/">https://coralogix.com/docs/guide-first-steps-coralogix/</a>    </p>
-<p>See the <code>config.yaml</code> example in <a href="./otelcol">./otelcol</a><br />
+<p>See the <code>config.yaml</code> example in <code>./workshops/workshops/otel/monolith-workshop/node/otelcol</code><br />
 This file can be updated in <code>/etc/otelcol/contrib/config.yaml</code> - make a backup of the default version first.    </p>
 <p>Manage the collector using <code>systemctl</code> i.e. <code>sudo systemctl restart otelcol</code><br />
 More info is here: <a href="https://coralogix.com/docs/guide-first-steps-coralogix/">https://coralogix.com/docs/guide-first-steps-coralogix/</a>  </p>
@@ -621,8 +621,8 @@ More info is here: <a href="https://coralogix.com/docs/guide-first-steps-coralog
 <code>http://localhost:55679/debug/pipelinez</code>  <br />
 For more info: <a href="https://github.com/open-telemetry/opentelemetry-collector/blob/main/extension/zpagesextension/README.md">zpages docs</a>  </p>
 <h3 id="step-4-run-node-client-in-new-terminal">Step 4 - Run Node client in new terminal</h3>
-<p>This will make 250 requests of <code>https://api.github.com</code> and then exit.  </p>
-<p>in <a href="./node">./node</a> subdir:  </p>
+<p>Demo app will make 250 requests of <code>https://api.github.com</code> and then exit.  </p>
+<p>in <code>./workshops/workshops/otel/monolith-workshop/node/</code> </p>
 <p>Install node.js OpenTelemetry Instrumentation:  </p>
 <pre><code>setup-node.sh
 </code></pre>
@@ -633,6 +633,7 @@ For more info: <a href="https://github.com/open-telemetry/opentelemetry-collecto
 <pre><code>start-node.sh
 </code></pre>
 <h3 id="step-5-study-results-in-coralogix-portal">Step 5 - Study results in Coralogix portal</h3>
+<p>The shell scripts show how a monolith is set up and instrumented for OpenTelemetry.</p>
 
 
 

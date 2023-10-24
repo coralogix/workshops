@@ -633,7 +633,7 @@ Requirements:<br />
 <p>Download and install latest CONTRIB release version from here:<br />
 <a href="https://github.com/open-telemetry/opentelemetry-collector-releases/releases">https://github.com/open-telemetry/opentelemetry-collector-releases/releases</a>  </p>
 <p>Use the following example from this repo a template for the OTEL collector config:<br />
-<code>~/workshops/workshops/otel/dotnet-windows/Collector/config.yaml</code>  </p>
+<code>/workshops/workshops/otel/monolith-workshop/dotnet-windows/otelcol/config.yaml</code>  </p>
 <p>In <code>config.yaml</code> adjust the domains and your Coralogix private key shown in the snippet below. Also define your application &amp; subsystem name tags.</p>
 <p>References:<br />
 - <a href="https://coralogix.com/docs/coralogix-endpoints/">Coralogix Endpoints</a><br />
@@ -696,10 +696,10 @@ $env:OTEL_EXPORTER_OTLP_TRACES_PROTOCOL='grpc'
 </code></pre>
 <h3 id="step-4-example-application">Step 4 - Example Application</h3>
 <p>You can download &amp; instrument the example application:<br />
-<code>~/workshops/workshops/otel/dotnet-windows/ExampleApp</code><br />
+<code>./workshops/workshops/otel/monolith-workshop/dotnet-windows/ExampleApp/</code><br />
 provided in this repository for testing.  </p>
 <p>The example sends traces of <code>http get</code> requests of a public URL. <br />
-Simply use <code>dotnet run</code> to start the application.  </p>
+Use <code>dotnet run</code> to start the application.  </p>
 <p>You may want to open it first in Visual Studio 2022 or higher to ensure dependencies are installed first and then run from the Visual Studio 2022 console.</p>
 <h3 id="aspnet">ASP.NET</h3>
 <p>IIS / ASP.NET follows a different instruction path for instrumentation and is shown here:<br />

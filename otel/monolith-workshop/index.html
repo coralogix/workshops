@@ -485,8 +485,8 @@ This file can be updated in <code>/etc/otelcol/contrib/config.yaml</code> - make
 <p>Manage the collector using <code>systemctl</code> i.e. <code>sudo systemctl restart otelcol</code><br />
 More info is here: <a href="https://coralogix.com/docs/guide-first-steps-coralogix/">https://coralogix.com/docs/guide-first-steps-coralogix/</a>  </p>
 <p>You can check Collector status with these status URLS:<br />
-http://localhost:55679/debug/tracez<br />
-http://localhost:55679/debug/pipelinez<br />
+<code>http://localhost:55679/debug/tracez</code><br />
+<code>http://localhost:55679/debug/pipelinez</code>  <br />
 For more info: <a href="https://github.com/open-telemetry/opentelemetry-collector/blob/main/extension/zpagesextension/README.md">zpages docs</a>  </p>
 <h3 id="step-4-run-node-client-in-new-terminal">Step 4 - Run Node client in new terminal</h3>
 <p>This will make 250 requests of <code>https://api.github.com</code> and then exit.  </p>

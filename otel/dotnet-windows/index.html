@@ -428,8 +428,6 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
-        
-      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
@@ -458,8 +456,6 @@
   
   
   
-    
-  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -468,33 +464,48 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#opentelemetry-for-net-coralogix" class="md-nav__link">
+    OpenTelemetry for .NET / Coralogix
+  </a>
+  
+    <nav class="md-nav" aria-label="OpenTelemetry for .NET / Coralogix">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#instructions" class="md-nav__link">
     Instructions
   </a>
   
-    <nav class="md-nav" aria-label="Instructions">
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#about-opentelemetry-for-net" class="md-nav__link">
+    About OpenTelemetry For .NET
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-1-setup" class="md-nav__link">
+    Step 1 - Setup
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-otel-collector-installation" class="md-nav__link">
+    Step 2 - OTEL Collector Installation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-install-net-instrumentation" class="md-nav__link">
+    Step 3 - Install .NET Instrumentation
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 3 - Install .NET Instrumentation">
       <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#net-instrumentation" class="md-nav__link">
-    .NET Instrumentation
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#1-otel-collector-installation" class="md-nav__link">
-    1. OTEL Collector Installation
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-install-net-instrumentation" class="md-nav__link">
-    2. Install .NET Instrumentation
-  </a>
-  
-</li>
         
           <li class="md-nav__item">
   <a href="#quick-start" class="md-nav__link">
@@ -507,14 +518,13 @@
     </nav>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#3-example-application" class="md-nav__link">
-    3. Example Application
+        
+          <li class="md-nav__item">
+  <a href="#step-4-example-application" class="md-nav__link">
+    Step 4 - Example Application
   </a>
   
-    <nav class="md-nav" aria-label="3. Example Application">
-      <ul class="md-nav__list">
+</li>
         
           <li class="md-nav__item">
   <a href="#aspnet" class="md-nav__link">
@@ -562,8 +572,10 @@
   
 
 
-<h1 id="opentelemetry-for-net-coralogix">OpenTelemetry for .NET / Coralogix</h1>
-<h2 id="instructions">Instructions</h2>
+  <h1>.NET Windows</h1>
+
+<h2 id="opentelemetry-for-net-coralogix">OpenTelemetry for .NET / Coralogix</h2>
+<h3 id="instructions">Instructions</h3>
 <p>This example is for basic study only and is not documentation.  <br />
 Full documentation: <a href="https://coralogix.com/docs/">https://coralogix.com/docs/</a><br />
 Requirements:<br />
@@ -572,17 +584,19 @@ Requirements:<br />
 - .NET Framework 3.5 or greater installed <br />
 - PowerShell 5.1 or higher<br />
 - Proper IDE i.e. Visual Studio Code </p>
-<h3 id="net-instrumentation">.NET Instrumentation</h3>
+<h3 id="about-opentelemetry-for-net">About OpenTelemetry For .NET</h3>
 <p>You can find the complete instruction for .NET OpenTelemetry Agent Instrumentation is in <a href="https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation">.NET OpenTelemetry GitHub Repository</a>. </p>
-<p>There are three steps to sending traces from a .NET application on Windows:<br />
-1. Install the OpenTelemetry collector<br />
-2. Install OpenTelemetry .NET instrumentation<br />
-3. Run a sample .NET application to test traces  </p>
-<p>Before executing the steps, download the repo:  </p>
+<p>There are three key steps to sending traces from a .NET application on Windows:<br />
+- Install the OpenTelemetry collector<br />
+- Install OpenTelemetry .NET instrumentation<br />
+- Run a sample .NET application to test traces  </p>
+<h3 id="step-1-setup">Step 1 - Setup</h3>
+<p>Clone repo:</p>
 <pre><code>git clone https://github.com/coralogix/workshops
 </code></pre>
-<h3 id="1-otel-collector-installation">1. OTEL Collector Installation</h3>
-<p>You can download the collector from the <a href="https://github.com/open-telemetry/opentelemetry-collector/releases">OpenTelemetry Collector releases page</a>. Download the file for your platform (in this case, Windows) and version (e.g. v0.76.0). </p>
+<h3 id="step-2-otel-collector-installation">Step 2 - OTEL Collector Installation</h3>
+<p>Download and install latest CONTRIB release version from here:<br />
+<a href="https://github.com/open-telemetry/opentelemetry-collector-releases/releases">https://github.com/open-telemetry/opentelemetry-collector-releases/releases</a>  </p>
 <p>Use the following example from this repo a template for the OTEL collector config:<br />
 <code>~/workshops/workshops/otel/dotnet-windows/Collector/config.yaml</code>  </p>
 <p>In <code>config.yaml</code> adjust the domains and your Coralogix private key shown in the snippet below. Also define your application &amp; subsystem name tags.</p>
@@ -617,10 +631,10 @@ exporters:
 <p>Next: run the collector using the command</p>
 <pre><code class="language-powershell">otelcol-contrib.exe --config=config.yaml
 </code></pre>
-<h3 id="2-install-net-instrumentation">2. Install .NET Instrumentation</h3>
+<h3 id="step-3-install-net-instrumentation">Step 3 - Install .NET Instrumentation</h3>
 <p>You can find the complete instructions for .NET OpenTelemetry Agent Instrumentation is in <a href="https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation">.NET OpenTelemetry GitHub Repository</a>.  </p>
 <p>Below is a shortcut set of instructions but these may be updated in the official documentation above, so we recommend following the officical set.  </p>
-<h3 id="quick-start">Quick start</h3>
+<h4 id="quick-start">Quick start</h4>
 <p>The official Otel instrumentation guide shows the following:<br />
 Run the commands below in your PowerShell. Update the <code>"MyServiceDisplayName"</code> with the name of your application.  </p>
 <pre><code class="language-powershell"># Download the module
@@ -645,8 +659,7 @@ $env:OTEL_EXPORTER_OTLP_TRACES_PROTOCOL='grpc'
 <p>Finally, run your dotnet application with</p>
 <pre><code class="language-powershell">dotnet run
 </code></pre>
-<p><small>Note: You'll see the tracing data in Coralogix if you have a OTEL collector forwarding data received at the specified endpoint to Coralogix. Please follow the instructions below for configuring the OTEL Collector for Coralogix.</small></p>
-<h2 id="3-example-application">3. Example Application</h2>
+<h3 id="step-4-example-application">Step 4 - Example Application</h3>
 <p>You can download &amp; instrument the example application:<br />
 <code>~/workshops/workshops/otel/dotnet-windows/ExampleApp</code><br />
 provided in this repository for testing.  </p>

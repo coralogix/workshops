@@ -1,4 +1,4 @@
-# Microservices Observability Demo V1
+# Microservices Observability Demo
 
 ## Instructions
 
@@ -11,7 +11,7 @@ Requirements:
 
 **See Appendix below for a suggested Kubernetes sandbox environment with a quick and easy setup**  
 
-### Step 1 - Install the OpenTelemetry Collector on your k8s cluster
+### Step 1 - Install the OpenTelemetry Collector on your k8s cluster  
 
 This workshop requires OpenTelemetry Collector configured for Coralogix: [https://github.com/coralogix/telemetry-shippers/tree/master/otel-integration/k8s-helm/](https://github.com/coralogix/telemetry-shippers/tree/master/otel-integration/k8s-helm/)    
   

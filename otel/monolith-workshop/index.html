@@ -15,6 +15,10 @@
         <link rel="canonical" href="http://coralogix.github.io/otel/monolith-workshop/">
       
       
+        <link rel="prev" href="../microservices-workshop/">
+      
+      
+        <link rel="next" href="../dotnet-windows/">
       
       
       <link rel="icon" href="../../../images/favicon.png">
@@ -22,7 +26,7 @@
     
     
       
-        <title>OpenTelemetry for Node.js / Monolith - Workshops</title>
+        <title>Linux Monolith APM (Node.js) - Workshops</title>
       
     
     
@@ -110,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              OpenTelemetry for Node.js / Monolith
+              Linux Monolith APM (Node.js)
             
           </span>
         </div>
@@ -203,10 +207,10 @@
     
     
       <li class="md-tabs__item">
-        <a href="../microservices-workshop/" class="md-tabs__link">
+        <a href="../about-opentelemetry/" class="md-tabs__link">
           
   
-  OpenTelemetry Microservices Workshop
+  OpenTelemetry Info
 
         </a>
       </li>
@@ -217,14 +221,16 @@
         
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../dotnet-windows/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../microservices-workshop/" class="md-tabs__link">
           
   
-  OpenTelemetry APM Instrumentation
+  Workshops
 
         </a>
       </li>
@@ -330,7 +336,7 @@
             
   
   <span class="md-ellipsis">
-    OpenTelemetry Microservices Workshop
+    OpenTelemetry Info
   </span>
   
 
@@ -340,7 +346,7 @@
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
-            OpenTelemetry Microservices Workshop
+            OpenTelemetry Info
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -350,11 +356,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../microservices-workshop/" class="md-nav__link">
+      <a href="../about-opentelemetry/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Microservices Workshop
+    Overview and Value Proposition
   </span>
   
 
@@ -375,6 +381,8 @@
       
   
   
+    
+  
   
     
     
@@ -384,33 +392,159 @@
       
       
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
         
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
             
   
   <span class="md-ellipsis">
-    OpenTelemetry APM Instrumentation
+    Workshops
   </span>
   
 
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
-            OpenTelemetry APM Instrumentation
+            Workshops
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../microservices-workshop/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Microservices APM Kubernetes (Python, Java)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Linux Monolith APM (Node.js)
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Linux Monolith APM (Node.js)
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#instructions" class="md-nav__link">
+    Instructions
+  </a>
+  
+    <nav class="md-nav" aria-label="Instructions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-setup" class="md-nav__link">
+    Step 1 - Setup
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-change-to-workshop-dir" class="md-nav__link">
+    Step 2 - Change to workshop dir
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-set-up-otel-collector-on-a-linux-host" class="md-nav__link">
+    Step 3 - Set up Otel Collector on a Linux host
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-run-node-client-in-new-terminal" class="md-nav__link">
+    Step 4 - Run Node client in new terminal
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-5-study-results-in-coralogix-portal" class="md-nav__link">
+    Step 5 - Study results in Coralogix portal
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
             
               
                 
@@ -422,7 +556,7 @@
         
   
   <span class="md-ellipsis">
-    .NET Windows
+    Windows Monolith APM (.NET)
   </span>
   
 

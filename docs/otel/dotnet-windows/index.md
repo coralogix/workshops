@@ -31,7 +31,7 @@ Download and install latest CONTRIB release version from here:
 [https://github.com/open-telemetry/opentelemetry-collector-releases/releases](https://github.com/open-telemetry/opentelemetry-collector-releases/releases)  
 
 Use the following example from this repo a template for the OTEL collector config:  
-`~/workshops/workshops/otel/dotnet-windows/Collector/config.yaml`  
+`/workshops/workshops/otel/monolith-workshop/dotnet-windows/otelcol/config.yaml`  
 
 In `config.yaml` adjust the domains and your Coralogix private key shown in the snippet below. Also define your application & subsystem name tags.
 
@@ -117,11 +117,11 @@ dotnet run
 ### Step 4 - Example Application
 
 You can download & instrument the example application:  
-`~/workshops/workshops/otel/dotnet-windows/ExampleApp`  
+`./workshops/workshops/otel/monolith-workshop/dotnet-windows/ExampleApp/`  
 provided in this repository for testing.  
 
 The example sends traces of `http get` requests of a public URL.   
-Simply use `dotnet run` to start the application.  
+Use `dotnet run` to start the application.  
 
 You may want to open it first in Visual Studio 2022 or higher to ensure dependencies are installed first and then run from the Visual Studio 2022 console.
 

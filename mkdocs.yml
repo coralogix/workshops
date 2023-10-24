@@ -1,7 +1,7 @@
-site_name: Workshops
+site_name: Coralogix Workshops
 site_url: http://coralogix.github.io
-site_author: Coralogix Solution Architects
-site_description: Coralogix workshops for observability and integrations
+site_author: Coralogix
+site_description: Coralogix workshops for observability
 repo_url: http://github.com/coralogix/workshops
 copyright: Copyright Coralogix. All rights reserved.
 
@@ -10,8 +10,8 @@ theme:
   # custom_dir: overrides
   palette:
     primary: green
-  logo: ../images/horizontal.png
-  favicon: ../images/favicon.png
+  logo: images/horizontal.png
+  favicon: images/favicon.png
   font:
       text: "Nunito Sans"
       code: "Jetbrains mono"

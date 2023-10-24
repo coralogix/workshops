@@ -1,25 +1,34 @@
-# OpenTelemetry for .NET / Coralogix
+## OpenTelemetry for .NET / Coralogix
 
-## Description
+### Instructions
 
-OpenTelemetry on .net is comprised of only two major moving parts: the OpenTelemetry Collector and the OpenTelemetry .NET instrumentation. It supports .NET Framework and Core 3.5 and higher.
+This example is for basic study only and is not documentation.    
+Full documentation: [https://coralogix.com/docs/](https://coralogix.com/docs/)  
+Requirements:  
+- Windows Server 2019 or newer    
+- Updated versions and sufficient permissions for downloading and installing software and no restrictions on GitHub domain    
+- .NET Framework 3.5 or greater installed   
+- PowerShell 5.1 or higher  
+- Proper IDE i.e. Visual Studio Code 
 
-## .NET Instrumentation
-
+### About OpenTelemetry For .NET  
+  
 You can find the complete instruction for .NET OpenTelemetry Agent Instrumentation is in [.NET OpenTelemetry GitHub Repository](https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation). 
 
-There are three steps to sending traces from a .NET application on Windows:  
-1. Install the OpenTelemetry collector  
-2. Install OpenTelemetry .NET instrumentation  
-3. Run a sample .NET application to test traces  
-
-Before executing the steps, download the repo:  
+There are three key steps to sending traces from a .NET application on Windows:  
+- Install the OpenTelemetry collector  
+- Install OpenTelemetry .NET instrumentation  
+- Run a sample .NET application to test traces  
+  
+### Step 1 - Setup  
+Clone repo:
 ```
 git clone https://github.com/coralogix/workshops
 ```  
-
-## 1. OTEL Collector Installation
-You can download the collector from the [OpenTelemetry Collector releases page](https://github.com/open-telemetry/opentelemetry-collector/releases). Download the file for your platform (in this case, Windows) and version (e.g. v0.76.0). 
+  
+### Step 2 - OTEL Collector Installation    
+Download and install latest CONTRIB release version from here:  
+[https://github.com/open-telemetry/opentelemetry-collector-releases/releases](https://github.com/open-telemetry/opentelemetry-collector-releases/releases)  
 
 Use the following example from this repo a template for the OTEL collector config:  
 `~/workshops/workshops/otel/dotnet-windows/Collector/config.yaml`  
@@ -64,18 +73,20 @@ Next: run the collector using the command
 otelcol-contrib.exe --config=config.yaml
 ```
 
-## 2. Install .NET Instrumentation
+### Step 3 - Install .NET Instrumentation
 
-You can find the complete instruction for .NET OpenTelemetry Agent Instrumentation is in [.NET OpenTelemetry GitHub Repository](https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation). 
+You can find the complete instructions for .NET OpenTelemetry Agent Instrumentation is in [.NET OpenTelemetry GitHub Repository](https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation).  
 
-### Quick start
+Below is a shortcut set of instructions but these may be updated in the official documentation above, so we recommend following the officical set.  
+
+#### Quick start
 
 The official Otel instrumentation guide shows the following:  
 Run the commands below in your PowerShell. Update the `"MyServiceDisplayName"` with the name of your application.  
 
 ```powershell
 # Download the module
-$module_url = "https://raw.githubusercontent.com/open-telemetry/opentelemetry-dotnet-instrumentation/v0.7.0/OpenTelemetry.DotNet.Auto.psm1"
+$module_url = "https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation/releases/latest/download/OpenTelemetry.DotNet.Auto.psm1"
 $download_path = Join-Path $env:temp "OpenTelemetry.DotNet.Auto.psm1"
 Invoke-WebRequest -Uri $module_url -OutFile $download_path -UseBasicParsing
 
@@ -88,7 +99,6 @@ Install-OpenTelemetryCore
 # Set up the instrumentation for the current PowerShell session
 Register-OpenTelemetryForCurrentSession -OTelServiceName "MyServiceDisplayName"
 ```
-
 
 Next, configure the follwing Environment Variables
 
@@ -104,9 +114,7 @@ Finally, run your dotnet application with
 dotnet run
 ```
 
-<small>Note: You'll see the tracing data in Coralogix if you have a OTEL collector forwarding data received at the specified endpoint to Coralogix. Please follow the instructions below for configuring the OTEL Collector for Coralogix.</small>
-
-## 3. Example Application
+### Step 4 - Example Application
 
 You can download & instrument the example application:  
 `~/workshops/workshops/otel/dotnet-windows/ExampleApp`  
@@ -116,3 +124,8 @@ The example sends traces of `http get` requests of a public URL.
 Simply use `dotnet run` to start the application.  
 
 You may want to open it first in Visual Studio 2022 or higher to ensure dependencies are installed first and then run from the Visual Studio 2022 console.
+
+### ASP.NET
+
+IIS / ASP.NET follows a different instruction path for instrumentation and is shown here:  
+[https://opentelemetry.io/docs/instrumentation/net/automatic/](https://opentelemetry.io/docs/instrumentation/net/automatic/)

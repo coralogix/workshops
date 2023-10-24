@@ -36,8 +36,8 @@ Manage the collector using `systemctl` i.e. `sudo systemctl restart otelcol`
 More info is here: [https://coralogix.com/docs/guide-first-steps-coralogix/](https://coralogix.com/docs/guide-first-steps-coralogix/)  
   
 You can check Collector status with these status URLS:  
-http://localhost:55679/debug/tracez  
-http://localhost:55679/debug/pipelinez  
+`http://localhost:55679/debug/tracez`  
+`http://localhost:55679/debug/pipelinez`    
 For more info: [zpages docs](https://github.com/open-telemetry/opentelemetry-collector/blob/main/extension/zpagesextension/README.md)  
 
 

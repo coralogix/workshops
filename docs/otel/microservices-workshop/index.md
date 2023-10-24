@@ -86,7 +86,7 @@ Study how the example is built:
 - `.yaml` deployment files are in `python/yaml`  
 - Dockerfiles for the containers show how the OpenTelemetry instrumentation works and are in the `/python` root level  
 
-#### Bonus Examples
+### Bonus Examples
 
 Deploy Java based Inventory service:  
 ```

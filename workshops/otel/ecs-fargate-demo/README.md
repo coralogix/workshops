@@ -1,5 +1,6 @@
-DRAFT
+DRAFT WORK IN PROGRESS
 
+## Step 1: Prep Requirements  
 Requirements:
 The following file in an S3 bucket:  
 https://github.com/coralogix/telemetry-shippers/blob/master/logs/fluent-bit/ecs-fargate/base_filters.conf  
@@ -13,10 +14,15 @@ and two example policies from this workshop:
 `ecs-policy-s3-access.json`  
 `ecs-policy-secrets-access.json`  
 
-These should be tuned for your own production security needs after trying a demo.  
+These two policies should be tuned for your own production security needs when going into production.  
+
+## Step 2: Prep Task   
 
 Prep example Task: `aws-fargate-otel-demo`:  
 
-Update all 14 locations replacing contents bewteen `< >` and removing those bracks: adding task execution role, key, domain, S3 ARN, Systems Parameter etc...  
+Update all 14 locations replacing contents bewteen `< >` and removing those brackets but leaving the quotes: adding task execution role, key, domain, S3 ARN, Systems Parameter etc...  
 
-Once prepped it can be registered and made into a service that creates Python HTTP client and server that will generate spans and logs and send to Coralogix.  
+Once prepped the task can be registered and made into a service.  
+
+ The task has two microservice containers, the FireLens log container, and the Otel collector.   
+ It creates Python HTTP client and server that will generate spans and logs and send to Coralogix.  

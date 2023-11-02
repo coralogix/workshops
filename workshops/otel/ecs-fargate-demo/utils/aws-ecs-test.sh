@@ -1,0 +1,1 @@
+aws ecs list-tasks --cluster slerner-cluster --service fargate-service

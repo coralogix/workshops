@@ -1,0 +1,1 @@
+aws ecs register-task-definition --cli-input-json $1

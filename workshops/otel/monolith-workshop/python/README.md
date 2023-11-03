@@ -26,7 +26,7 @@ source setup-python.sh
 source setup-python-env.sh
 source start-python.sh
 ```
-**Note**: Running ```source setup-python.sh``` would output long list of packages and with messages like Successfully installed opentelemetry-instrumentation-*-*.
+**Note**: Running ```source setup-python.sh``` would output long list of packages and with messages like Successfully installed *opentelemetry-instrumentation-some-package*.
 
 ### Validate in Coralogix
 #### Explore >> Logs UI

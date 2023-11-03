@@ -12,8 +12,12 @@
 - If your application is writing logs to a file system, use [filelog receiver](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/filelogreceiver) in the **config.yaml**.
 - Restart the **otelcol-contrib** service.
 
+### Pre-requisite to Run a Python App
+- Run ```python3 --version``` to check you have python3 installed. If not follow the python3 installation document for your linux distribution. For ubuntu follow
+- Run ```pip3 --version``` to check pip3 is installed. If not follow the pip3 installation documentation for your linux distribution. For ubuntu use command ```sudo apt-get install python3-pip```
+- For ubuntu Run ```sudo apt upgrade``` to upgrde already installed packages. If you receive a message to reboot your server do so before moving on to the next steps.
 
-### Run Python Client
+### Run Python App
 This application make 100 requests to `https://reqbin.com/echo/get/json` and then exit.
 
 Run following scripts found under [./python](.):
@@ -22,6 +26,7 @@ source setup-python.sh
 source setup-python-env.sh
 source start-python.sh
 ```
+**Note**: Running ```source setup-python.sh``` would output long list of packages and with messages like Successfully installed opentelemetry-instrumentation-*-*.
 
 ### Validate in Coralogix
 #### Explore >> Logs UI
@@ -30,5 +35,7 @@ source start-python.sh
 ![Traces](images/Traces.png)
 #### Individual Trace
 ![Trace Map](images/TraceMap.png)
+#### Setup Correlation (logs in-context)
+![Setup Correlation](images/SetupCorrelation.png)
 #### Logs In-context
 ![Trace logs in-context](images/LogsInContext.png)

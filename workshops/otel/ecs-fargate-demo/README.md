@@ -18,7 +18,7 @@ These two policies should be tuned for your own production security needs when g
 
 ## Step 2: Prep Task   
 
-Prep example Task: `aws-fargate-otel-demo.json:  
+Prep example Task: `aws-fargate-otel-demo.json`:  
 
 Update all 14 locations replacing contents bewteen `< >` and removing those brackets but leaving the quotes: adding task execution role, key, domain, S3 ARN, Systems Parameter etc...  
 

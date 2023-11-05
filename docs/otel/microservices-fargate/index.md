@@ -52,7 +52,7 @@ Once prepped the task can be registered and made into a service.
 Launch according to your standard procedure.  
 
 The task creates the following containers:  
-- two microservices (Client/Server) 
+- two microservices (Client/Server)  
 - FireLens log router  
 - Otel collector  
 

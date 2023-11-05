@@ -12,26 +12,24 @@
         <meta name="author" content="Coralogix">
       
       
-        <link rel="canonical" href="http://coralogix.github.io/">
+        <link rel="canonical" href="http://coralogix.github.io/otel/microservices-fargate/">
       
       
       
-        <link rel="next" href="otel/about-opentelemetry/">
       
-      
-      <link rel="icon" href="images/favicon.png">
+      <link rel="icon" href="../../images/favicon.png">
       <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.2">
     
     
       
-        <title>Coralogix Workshops</title>
+        <title>OpenTelemetry for AWS ECS Fargate - Microservice Example - Coralogix Workshops</title>
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.d451bc0e.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.d451bc0e.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.a5377069.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.a5377069.min.css">
       
       
 
@@ -50,9 +48,9 @@
       
     
     
-      <link rel="stylesheet" href="stylesheets/extra.css">
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -77,7 +75,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#coralogix-workshops" class="md-skip">
+        <a href="#opentelemetry-for-aws-ecs-fargate-microservice-example" class="md-skip">
           Skip to content
         </a>
       
@@ -93,9 +91,9 @@
 
 <header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="." title="Coralogix Workshops" class="md-header__button md-logo" aria-label="Coralogix Workshops" data-md-component="logo">
+    <a href="../.." title="Coralogix Workshops" class="md-header__button md-logo" aria-label="Coralogix Workshops" data-md-component="logo">
       
-  <img src="images/horizontal.png" alt="logo">
+  <img src="../../images/horizontal.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -112,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Home
+              OpenTelemetry for AWS ECS Fargate - Microservice Example
             
           </span>
         </div>
@@ -184,11 +182,9 @@
         
   
   
-    
   
-  
-    <li class="md-tabs__item md-tabs__item--active">
-      <a href="." class="md-tabs__link">
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
         
   
     
@@ -207,7 +203,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="otel/about-opentelemetry/" class="md-tabs__link">
+        <a href="../about-opentelemetry/" class="md-tabs__link">
           
   
   OpenTelemetry Info
@@ -225,7 +221,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="otel/microservices-workshop/" class="md-tabs__link">
+        <a href="../microservices-workshop/" class="md-tabs__link">
           
   
   Workshops
@@ -266,9 +262,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="Coralogix Workshops" class="md-nav__button md-logo" aria-label="Coralogix Workshops" data-md-component="logo">
+    <a href="../.." title="Coralogix Workshops" class="md-nav__button md-logo" aria-label="Coralogix Workshops" data-md-component="logo">
       
-  <img src="images/horizontal.png" alt="logo">
+  <img src="../../images/horizontal.png" alt="logo">
 
     </a>
     Coralogix Workshops
@@ -292,29 +288,9 @@
       
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Home
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="." class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -323,53 +299,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#opentelemetry-info" class="md-nav__link">
-    OpenTelemetry Info
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#workshops" class="md-nav__link">
-    Workshops
-  </a>
-  
-    <nav class="md-nav" aria-label="Workshops">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#apm-application-perfomance-measurement-reference-examples-and-training" class="md-nav__link">
-    APM - Application Perfomance Measurement Reference Examples and Training
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -421,7 +350,7 @@
   
   
     <li class="md-nav__item">
-      <a href="otel/about-opentelemetry/" class="md-nav__link">
+      <a href="../about-opentelemetry/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -489,7 +418,7 @@
   
   
     <li class="md-nav__item">
-      <a href="otel/microservices-workshop/" class="md-nav__link">
+      <a href="../microservices-workshop/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -509,7 +438,7 @@
   
   
     <li class="md-nav__item">
-      <a href="otel/monolith-workshop/" class="md-nav__link">
+      <a href="../monolith-workshop/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -529,7 +458,7 @@
   
   
     <li class="md-nav__item">
-      <a href="otel/dotnet-windows/" class="md-nav__link">
+      <a href="../dotnet-windows/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -568,26 +497,47 @@
   
 
 
-<h1 id="coralogix-workshops">Coralogix Workshops</h1>
-<p>These workshops are designed to help learn and practice observability and practice integrations to the Coralogix platform. They include reference implementations that are easy to deploy and understand.</p>
-<p>These workshops are not documentation- Coralogix platform documentation is located <a href="https://coralogix.com/docs/">here</a></p>
-<h2 id="opentelemetry-info">OpenTelemetry Info</h2>
-<p><a href="otel/about-opentelemetry/">OpenTelemetry Overview and Value Proposition</a>  </p>
-<h2 id="workshops">Workshops</h2>
-<h3 id="apm-application-perfomance-measurement-reference-examples-and-training">APM - Application Perfomance Measurement Reference Examples and Training</h3>
-<p><a href="otel/microservices-workshop/">Microservices Kubernetes (Python, Java)</a><br />
-- Kubernetes OpenTelemetry Collector for metrics/traces/logs<br />
-- OpenTelemetry tracing instrumentation for containerized Python and Java apps<br />
-- Prometheus custom metrics collection  </p>
-<p><a href="otel/microservices-fargate/">Microservices AWS ECS Fargate (Python)</a> 
-- Linux host OpenTelemetry Collector for metrics/traces/logs<br />
-- OpenTelemetry Instrumentation for monolothic node.js app </p>
-<p><a href="otel/monolith-workshop/">Linux Monolith (Node.js)</a>
-- Linux host OpenTelemetry Collector for metrics/traces/logs<br />
-- OpenTelemetry Instrumentation for monolothic node.js app  </p>
-<p><a href="otel/dotnet-windows/">Windows Monolith (.NET)</a>
-- Windows Server host OpenTelemetry Collector for metrics/traces/logs<br />
-- OpenTelemetry tracing instrumentation for monolothic .NET app    </p>
+<h1 id="opentelemetry-for-aws-ecs-fargate-microservice-example">OpenTelemetry for AWS ECS Fargate - Microservice Example</h1>
+<h2 id="instructions">Instructions</h2>
+<p>This example is for basic study only and is not documentation.  <br />
+Full documentation: <a href="https://coralogix.com/docs/">https://coralogix.com/docs/</a><br />
+Requirements:<br />
+- AWS Account
+- Intermediate to Advanced skill with ECS-Fargate<br />
+- Sufficient permissions to configure AWS<br />
+- Proper IDE i.e. Visual Studio Code </p>
+<h3 id="step-1-setup">Step 1 - Setup</h3>
+<p>Clone repo:</p>
+<pre><code>git clone https://github.com/coralogix/workshops
+</code></pre>
+<h3 id="step-2-change-to-workshop-dir">Step 2 - Change to workshop dir</h3>
+<p>Change to the proper directory for workshop example:  </p>
+<pre><code>cd ./workshops/workshops/otel/ecs-fargate
+</code></pre>
+<h3 id="step-3-prep-requirements">Step 3: Prep Requirements</h3>
+<h1 id="1-put-the-following-file-in-an-s3-bucket">1 Put the following file in an S3 bucket:</h1>
+<p>https://github.com/coralogix/telemetry-shippers/blob/master/logs/fluent-bit/ecs-fargate/base_filters.conf  </p>
+<h1 id="2-put-the-following-in-a-systems-manager-parameter-store">2 Put the following in a Systems Manager Parameter Store:</h1>
+<p>https://github.com/coralogix/telemetry-shippers/blob/master/otel-ecs-fargate/config.yaml  </p>
+<h1 id="3-create-a-role-called-ecstaskexecutionrole">3 Create a role called <code>ecsTaskExecutionRole</code></h1>
+<p>that contains the AWS managed <code>AmazonECSTaskExecutionRolePolicy</code><br />
+and two example policies from this workshop:<br />
+<code>ecs-policy-s3-access.json</code><br />
+<code>ecs-policy-secrets-access.json</code>  </p>
+<p>These two policies should be tuned for your own production security needs when going into production.  </p>
+<h3 id="step-4-prep-register-task">Step 4: Prep / Register Task</h3>
+<p>Prep example Task: <code>aws-fargate-otel-demo.json</code> </p>
+<p>Update all 14 locations replacing contents bewteen <code>&lt; &gt;</code> and removing those brackets but leaving the quotes: adding task execution role, key, domain, S3 ARN, Systems Parameter etc...  </p>
+<p>Once prepped the task can be registered and made into a service.  </p>
+<h3 id="step-5-launch-task">Step 5: Launch Task</h3>
+<p>Launch according to your standard procedure.  </p>
+<p>The task creates the following containers:<br />
+<em> two microservice containers<br />
+</em> FireLens log containers<br />
+* Otel collector  </p>
+<p>The microservice containers create a Python HTTP client and server that will generate spans and logs and send to Coralogix.  </p>
+<h3 id="step-6-study-results-in-coralogix-portal">Step 6 - Study results in Coralogix portal</h3>
+<p>The shell scripts show how a the microservices example.</p>
 
 
 
@@ -635,10 +585,10 @@
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": ".", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.instant", "navigation.sections", "navigation.expand", "navigation.top", "navigation.tracking", "toc.integrate", "toc.follow"], "search": "assets/javascripts/workers/search.a264c092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.instant", "navigation.sections", "navigation.expand", "navigation.top", "navigation.tracking", "toc.integrate", "toc.follow"], "search": "../../assets/javascripts/workers/search.a264c092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="assets/javascripts/bundle.726fbb30.min.js"></script>
+      <script src="../../assets/javascripts/bundle.726fbb30.min.js"></script>
       
     
   </body>

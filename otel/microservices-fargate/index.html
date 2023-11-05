@@ -515,12 +515,12 @@ Requirements:<br />
 <pre><code>cd ./workshops/workshops/otel/ecs-fargate
 </code></pre>
 <h3 id="step-3-prep-requirements">Step 3: Prep Requirements</h3>
-<h1 id="1-put-the-following-file-in-an-s3-bucket">1 Put the following file in an S3 bucket:</h1>
-<p>https://github.com/coralogix/telemetry-shippers/blob/master/logs/fluent-bit/ecs-fargate/base_filters.conf  </p>
-<h1 id="2-put-the-following-in-a-systems-manager-parameter-store">2 Put the following in a Systems Manager Parameter Store:</h1>
-<p>https://github.com/coralogix/telemetry-shippers/blob/master/otel-ecs-fargate/config.yaml  </p>
-<h1 id="3-create-a-role-called-ecstaskexecutionrole">3 Create a role called <code>ecsTaskExecutionRole</code></h1>
-<p>that contains the AWS managed <code>AmazonECSTaskExecutionRolePolicy</code><br />
+<p>1 - Put the following file in an S3 bucket:<br />
+https://github.com/coralogix/telemetry-shippers/blob/master/logs/fluent-bit/ecs-fargate/base_filters.conf  </p>
+<p>2 - Put the following in a Systems Manager Parameter Store:<br />
+https://github.com/coralogix/telemetry-shippers/blob/master/otel-ecs-fargate/config.yaml  </p>
+<p>3 - Create a role called <code>ecsTaskExecutionRole</code><br />
+that contains the AWS managed <code>AmazonECSTaskExecutionRolePolicy</code><br />
 and two example policies from this workshop:<br />
 <code>ecs-policy-s3-access.json</code><br />
 <code>ecs-policy-secrets-access.json</code>  </p>
@@ -532,9 +532,9 @@ and two example policies from this workshop:<br />
 <h3 id="step-5-launch-task">Step 5: Launch Task</h3>
 <p>Launch according to your standard procedure.  </p>
 <p>The task creates the following containers:<br />
-<em> two microservice containers<br />
-</em> FireLens log containers<br />
-* Otel collector  </p>
+- two microservices (Client/Server) 
+- FireLens log router<br />
+- Otel collector  </p>
 <p>The microservice containers create a Python HTTP client and server that will generate spans and logs and send to Coralogix.  </p>
 <h3 id="step-6-study-results-in-coralogix-portal">Step 6 - Study results in Coralogix portal</h3>
 <p>The shell scripts show how a the microservices example.</p>

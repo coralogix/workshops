@@ -18,8 +18,8 @@ These workshops are not documentation- Coralogix platform documentation is locat
 - Prometheus custom metrics collection  
 
 [Microservices AWS ECS Fargate (Python)](otel/microservices-fargate/index.md) 
-- Linux host OpenTelemetry Collector for metrics/traces/logs  
-- OpenTelemetry Instrumentation for monolothic node.js app 
+- 2x conatiner microservice, OpenTelemetry Collector, Firelens log router  
+- Complete Fargate task and ECS config instructions  
 
 [Linux Monolith (Node.js)](otel/monolith-workshop/index.md)
 - Linux host OpenTelemetry Collector for metrics/traces/logs  

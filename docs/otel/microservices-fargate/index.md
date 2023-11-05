@@ -25,13 +25,13 @@ cd ./workshops/workshops/otel/ecs-fargate
 
 ### Step 3: Prep Requirements  
   
-#1 Put the following file in an S3 bucket:  
+1 - Put the following file in an S3 bucket:  
 https://github.com/coralogix/telemetry-shippers/blob/master/logs/fluent-bit/ecs-fargate/base_filters.conf  
   
-#2 Put the following in a Systems Manager Parameter Store:  
+2 - Put the following in a Systems Manager Parameter Store:  
 https://github.com/coralogix/telemetry-shippers/blob/master/otel-ecs-fargate/config.yaml  
 
-#3 Create a role called `ecsTaskExecutionRole`  
+3 - Create a role called `ecsTaskExecutionRole`  
 that contains the AWS managed `AmazonECSTaskExecutionRolePolicy`  
 and two example policies from this workshop:  
 `ecs-policy-s3-access.json`  
@@ -49,12 +49,12 @@ Once prepped the task can be registered and made into a service.
 
 ### Step 5: Launch Task
 
- Launch according to your standard procedure.  
+Launch according to your standard procedure.  
 
 The task creates the following containers:  
-* two microservice containers  
-* FireLens log containers  
-* Otel collector  
+- two microservices (Client/Server) 
+- FireLens log router  
+- Otel collector  
 
 The microservice containers create a Python HTTP client and server that will generate spans and logs and send to Coralogix.  
 

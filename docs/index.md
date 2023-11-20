@@ -10,9 +10,7 @@ These workshops are not documentation- Coralogix platform documentation is locat
 
 ## Workshops  
 
-### APM - Application Perfomance Measurement Reference Examples and Training
-
-#### Microservices
+### APM - Microservices
 [Kubernetes (Python, Java)](otel/microservices-workshop/index.md)  
 - Kubernetes OpenTelemetry Collector for metrics/traces/logs  
 - OpenTelemetry tracing instrumentation for containerized Python and Java apps  
@@ -23,7 +21,7 @@ These workshops are not documentation- Coralogix platform documentation is locat
 - 2x container microservice, OpenTelemetry Collector, Firelens log router  
 - Complete Fargate task and ECS config instructions  
 
-#### Monolith
+### APM - Monolith
 Monolith Otel Collector & Host based applications  
 - [Node.js / Linux](otel/monolith-workshop/node.md)  
 - [Python / Linux](otel/monolith-workshop/python.md)  

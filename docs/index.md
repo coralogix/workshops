@@ -26,5 +26,5 @@ These workshops are not documentation- Coralogix platform documentation is locat
 #### Monolith
 Monolith Otel Collector & Host based applications  
 - [Node.js / Linux](otel/monolith-workshop/node.md)  
-- [Python / Linux](otel/monolith-workshop/python.md) 
+- [Python / Linux](otel/monolith-workshop/python.md)  
 - [.NET / Windows](otel/monolith-workshop/windows.md)  

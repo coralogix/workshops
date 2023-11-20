@@ -15,6 +15,10 @@
         <link rel="canonical" href="http://coralogix.github.io/otel/microservices-fargate/">
       
       
+        <link rel="prev" href="../microservices-workshop/">
+      
+      
+        <link rel="next" href="../monolith-workshop/node/">
       
       
       <link rel="icon" href="../../images/favicon.png">
@@ -22,7 +26,7 @@
     
     
       
-        <title>OpenTelemetry for AWS ECS Fargate - Microservice Example - Coralogix Workshops</title>
+        <title>AWS ECS Fargate (Python) - Coralogix Workshops</title>
       
     
     
@@ -110,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              OpenTelemetry for AWS ECS Fargate - Microservice Example
+              AWS ECS Fargate (Python)
             
           </span>
         </div>
@@ -217,10 +221,12 @@
         
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
+      <li class="md-tabs__item md-tabs__item--active">
         <a href="../microservices-workshop/" class="md-tabs__link">
           
   
@@ -375,6 +381,8 @@
       
   
   
+    
+  
   
     
     
@@ -384,14 +392,12 @@
       
       
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
         
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
@@ -405,7 +411,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             Workshops
@@ -422,7 +428,142 @@
         
   
   <span class="md-ellipsis">
-    Microservices APM Kubernetes (Python, Java)
+    Kubernetes (Python, Java)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    AWS ECS Fargate (Python)
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    AWS ECS Fargate (Python)
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#instructions" class="md-nav__link">
+    Instructions
+  </a>
+  
+    <nav class="md-nav" aria-label="Instructions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-setup" class="md-nav__link">
+    Step 1 - Setup
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-change-to-workshop-dir" class="md-nav__link">
+    Step 2 - Change to workshop dir
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-prep-requirements" class="md-nav__link">
+    Step 3: Prep Requirements
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-prep-register-task" class="md-nav__link">
+    Step 4: Prep / Register Task
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-5-launch-task" class="md-nav__link">
+    Step 5: Launch Task
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-6-study-results-in-coralogix-portal" class="md-nav__link">
+    Step 6 - Study results in Coralogix portal
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../monolith-workshop/node/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Monolith - Node.js / Linux
   </span>
   
 
@@ -438,11 +579,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../monolith-workshop/" class="md-nav__link">
+      <a href="../monolith-workshop/python/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Linux Monolith APM (Node.js)
+    Monolith - Python / Linux
   </span>
   
 
@@ -458,11 +599,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../dotnet-windows/" class="md-nav__link">
+      <a href="../monolith-workshop/windows/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Windows Monolith APM (.NET)
+    Monolith - .NET / Windows
   </span>
   
 

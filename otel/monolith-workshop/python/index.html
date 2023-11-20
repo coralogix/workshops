@@ -12,26 +12,28 @@
         <meta name="author" content="Coralogix">
       
       
-        <link rel="canonical" href="http://coralogix.github.io/otel/dotnet-windows/">
+        <link rel="canonical" href="http://coralogix.github.io/otel/monolith-workshop/python/">
       
       
-        <link rel="prev" href="../monolith-workshop/">
+        <link rel="prev" href="../node/">
       
       
+        <link rel="next" href="../windows/">
       
-      <link rel="icon" href="../../images/favicon.png">
+      
+      <link rel="icon" href="../../../images/favicon.png">
       <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.2">
     
     
       
-        <title>Windows Monolith APM (.NET) - Coralogix Workshops</title>
+        <title>Monolith - Python / Linux - Coralogix Workshops</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.d451bc0e.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.d451bc0e.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.a5377069.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.a5377069.min.css">
       
       
 
@@ -50,9 +52,9 @@
       
     
     
-      <link rel="stylesheet" href="../../stylesheets/extra.css">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -77,7 +79,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#opentelemetry-for-net-monolith" class="md-skip">
+        <a href="#opentelemetry-for-nodejs-monolith" class="md-skip">
           Skip to content
         </a>
       
@@ -93,9 +95,9 @@
 
 <header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="Coralogix Workshops" class="md-header__button md-logo" aria-label="Coralogix Workshops" data-md-component="logo">
+    <a href="../../.." title="Coralogix Workshops" class="md-header__button md-logo" aria-label="Coralogix Workshops" data-md-component="logo">
       
-  <img src="../../images/horizontal.png" alt="logo">
+  <img src="../../../images/horizontal.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -112,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Windows Monolith APM (.NET)
+              Monolith - Python / Linux
             
           </span>
         </div>
@@ -186,7 +188,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../.." class="md-tabs__link">
+      <a href="../../.." class="md-tabs__link">
         
   
     
@@ -205,7 +207,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../about-opentelemetry/" class="md-tabs__link">
+        <a href="../../about-opentelemetry/" class="md-tabs__link">
           
   
   OpenTelemetry Info
@@ -225,7 +227,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="../microservices-workshop/" class="md-tabs__link">
+        <a href="../../microservices-workshop/" class="md-tabs__link">
           
   
   Workshops
@@ -266,9 +268,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="Coralogix Workshops" class="md-nav__button md-logo" aria-label="Coralogix Workshops" data-md-component="logo">
+    <a href="../../.." title="Coralogix Workshops" class="md-nav__button md-logo" aria-label="Coralogix Workshops" data-md-component="logo">
       
-  <img src="../../images/horizontal.png" alt="logo">
+  <img src="../../../images/horizontal.png" alt="logo">
 
     </a>
     Coralogix Workshops
@@ -294,7 +296,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href="../../.." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -354,7 +356,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../about-opentelemetry/" class="md-nav__link">
+      <a href="../../about-opentelemetry/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -422,11 +424,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../microservices-workshop/" class="md-nav__link">
+      <a href="../../microservices-workshop/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Microservices APM Kubernetes (Python, Java)
+    Kubernetes (Python, Java)
   </span>
   
 
@@ -442,11 +444,31 @@
   
   
     <li class="md-nav__item">
-      <a href="../monolith-workshop/" class="md-nav__link">
+      <a href="../../microservices-fargate/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Linux Monolith APM (Node.js)
+    AWS ECS Fargate (Python)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Monolith - Node.js / Linux
   </span>
   
 
@@ -475,7 +497,7 @@
           
   
   <span class="md-ellipsis">
-    Windows Monolith APM (.NET)
+    Monolith - Python / Linux
   </span>
   
 
@@ -486,7 +508,7 @@
         
   
   <span class="md-ellipsis">
-    Windows Monolith APM (.NET)
+    Monolith - Python / Linux
   </span>
   
 
@@ -516,13 +538,6 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#about-opentelemetry-for-net" class="md-nav__link">
-    About OpenTelemetry For .NET
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#step-1-setup" class="md-nav__link">
     Step 1 - Setup
   </a>
@@ -530,23 +545,37 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#step-2-otel-collector-installation" class="md-nav__link">
-    Step 2 - OTEL Collector Installation
+  <a href="#step-2-change-to-workshop-dir" class="md-nav__link">
+    Step 2 - Change to workshop dir
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#step-3-install-net-instrumentation" class="md-nav__link">
-    Step 3 - Install .NET Instrumentation
+  <a href="#step-3-set-up-otel-collector-on-a-linux-host" class="md-nav__link">
+    Step 3 - Set up Otel Collector on a Linux host
   </a>
   
-    <nav class="md-nav" aria-label="Step 3 - Install .NET Instrumentation">
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-run-python-client-in-new-terminal" class="md-nav__link">
+    Step 4 - Run Python client in new terminal
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 4 - Run Python client in new terminal">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#quick-start" class="md-nav__link">
-    Quick start
+  <a href="#pre-requisite-to-run-a-python-app" class="md-nav__link">
+    Pre-requisite to Run a Python App
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run-python-app" class="md-nav__link">
+    Run Python App
   </a>
   
 </li>
@@ -557,15 +586,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#step-4-example-application" class="md-nav__link">
-    Step 4 - Example Application
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#aspnet" class="md-nav__link">
-    ASP.NET
+  <a href="#step-5-study-results-in-coralogix-portal" class="md-nav__link">
+    Step 5 - Study results in Coralogix portal
   </a>
   
 </li>
@@ -579,6 +601,26 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../windows/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Monolith - .NET / Windows
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -609,101 +651,62 @@
   
 
 
-<h1 id="opentelemetry-for-net-monolith">OpenTelemetry for .NET / Monolith</h1>
+<h1 id="opentelemetry-for-nodejs-monolith">OpenTelemetry for Node.js / Monolith</h1>
 <h2 id="instructions">Instructions</h2>
 <p>This example is for basic study only and is not documentation.  <br />
 Full documentation: <a href="https://coralogix.com/docs/">https://coralogix.com/docs/</a><br />
 Requirements:<br />
-- Windows Server 2019 or newer  <br />
-- Updated versions and sufficient permissions for downloading and installing software and no restrictions on GitHub domain  <br />
-- .NET Framework 3.5 or greater installed <br />
-- PowerShell 5.1 or higher<br />
+- Linux host (Debian preferred but RPM flavors will work)<br />
+- Updated versions and sufficient permissions for installing software<br />
+- Updated verson of <code>node</code> and <code>npm</code> installed <a href="https://nodejs.org/">https://nodejs.org/</a><br />
 - Proper IDE i.e. Visual Studio Code </p>
-<h3 id="about-opentelemetry-for-net">About OpenTelemetry For .NET</h3>
-<p>You can find the complete instruction for .NET OpenTelemetry Agent Instrumentation is in <a href="https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation">.NET OpenTelemetry GitHub Repository</a>. </p>
-<p>There are three key steps to sending traces from a .NET application on Windows:<br />
-- Install the OpenTelemetry collector<br />
-- Install OpenTelemetry .NET instrumentation<br />
-- Run a sample .NET application to test traces  </p>
 <h3 id="step-1-setup">Step 1 - Setup</h3>
 <p>Clone repo:</p>
 <pre><code>git clone https://github.com/coralogix/workshops
 </code></pre>
-<h3 id="step-2-otel-collector-installation">Step 2 - OTEL Collector Installation</h3>
+<h3 id="step-2-change-to-workshop-dir">Step 2 - Change to workshop dir</h3>
+<p>Change to the proper directory for workshop example:  </p>
+<pre><code>cd ./workshops/workshops/otel/monolith-workshop/python/
+</code></pre>
+<h3 id="step-3-set-up-otel-collector-on-a-linux-host">Step 3 - Set up Otel Collector on a Linux host</h3>
 <p>Download and install latest CONTRIB release version from here:<br />
 <a href="https://github.com/open-telemetry/opentelemetry-collector-releases/releases">https://github.com/open-telemetry/opentelemetry-collector-releases/releases</a>  </p>
-<p>Use the following example from this repo a template for the OTEL collector config:<br />
-<code>/workshops/workshops/otel/monolith-workshop/dotnet-windows/otelcol/config.yaml</code>  </p>
-<p>In <code>config.yaml</code> adjust the domains and your Coralogix private key shown in the snippet below. Also define your application &amp; subsystem name tags.</p>
-<p>References:<br />
-- <a href="https://coralogix.com/docs/coralogix-endpoints/">Coralogix Endpoints</a><br />
-- <a href="https://coralogix.com/docs/private-key/">Coralogix Private Key</a><br />
-- <a href="https://coralogix.com/docs/application-and-subsystem-names/">Application &amp; Subsystem Names</a></p>
-<pre><code class="language-yaml">#config.yaml
-
-exporters:
-  logging:
-    verbosity: detailed
-  coralogix:
-    # The Coralogix traces ingress endpoint
-    traces:
-      endpoint: &quot;YOURDOMAINHERE i.e. ingress.coralogix.us:443&quot;
-    metrics:
-      endpoint: &quot;YOURDOMAINHERE i.e. ingress.coralogix.us:443&quot;
-    logs:
-      endpoint: &quot;YOURDOMAINHERE i.e. ingress.coralogix.us:443&quot;
-
-    # Your Coralogix private key is sensitive
-    private_key: &quot;YOURKEYHERE&quot;
-
-...
-
-    # Traces, Metrics and Logs emitted by this OpenTelemetry exporter 
-    # are tagged in Coralogix with the default application and subsystem constants.
-    application_name: &quot;MyBusinessEnvironment&quot;
-    subsystem_name: &quot;MyBusinessSystem&quot;
+<p>Collector <code>config.yaml</code> must be configured with Coralogix Exporter. See the "Send Data to Coralogix" section for determining telemetry endpoint and and API key: <a href="https://coralogix.com/docs/guide-first-steps-coralogix/">https://coralogix.com/docs/guide-first-steps-coralogix/</a>    </p>
+<p>See the <code>config.yaml</code> example in <code>./workshops/workshops/otel/monolith-workshop/node/otelcol</code><br />
+This file can be updated in <code>/etc/otelcol/contrib/config.yaml</code> - make a backup of the default version first.    </p>
+<p>Manage the collector using <code>systemctl</code> i.e. <code>sudo systemctl restart otelcol</code><br />
+More info is here: <a href="https://coralogix.com/docs/guide-first-steps-coralogix/">https://coralogix.com/docs/guide-first-steps-coralogix/</a>  </p>
+<p>You can check Collector status with these status URLS:<br />
+<code>http://localhost:55679/debug/tracez</code><br />
+<code>http://localhost:55679/debug/pipelinez</code>  <br />
+For more info: <a href="https://github.com/open-telemetry/opentelemetry-collector/blob/main/extension/zpagesextension/README.md">zpages docs</a>  </p>
+<h3 id="step-4-run-python-client-in-new-terminal">Step 4 - Run Python client in new terminal</h3>
+<h4 id="pre-requisite-to-run-a-python-app">Pre-requisite to Run a Python App</h4>
+<ul>
+<li>Run <code>python3 --version</code> to check you have python3 installed. If not follow the python3 installation document for your linux distribution. For ubuntu follow</li>
+<li>Run <code>pip3 --version</code> to check pip3 is installed. If not follow the pip3 installation documentation for your linux distribution. For ubuntu use command <code>sudo apt-get install python3-pip</code></li>
+<li>For ubuntu Run <code>sudo apt upgrade</code> to upgrde already installed packages. If you receive a message to reboot your server do so before moving on to the next steps.</li>
+</ul>
+<h4 id="run-python-app">Run Python App</h4>
+<p>This application make 100 requests to <code>https://reqbin.com/echo/get/json</code> and then exit.</p>
+<p>Run following scripts found under <a href=".">./python</a>:</p>
+<pre><code>source setup-python.sh
+source setup-python-env.sh
+source start-python.sh
 </code></pre>
-<p>Next: run the collector using the command</p>
-<pre><code class="language-powershell">otelcol-contrib.exe --config=config.yaml
-</code></pre>
-<h3 id="step-3-install-net-instrumentation">Step 3 - Install .NET Instrumentation</h3>
-<p>You can find the complete instructions for .NET OpenTelemetry Agent Instrumentation is in <a href="https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation">.NET OpenTelemetry GitHub Repository</a>.  </p>
-<p>Below is a shortcut set of instructions but these may be updated in the official documentation above, so we recommend following the officical set.  </p>
-<h4 id="quick-start">Quick start</h4>
-<p>The official Otel instrumentation guide shows the following:<br />
-Run the commands below in your PowerShell. Update the <code>"MyServiceDisplayName"</code> with the name of your application.  </p>
-<pre><code class="language-powershell"># Download the module
-$module_url = &quot;https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation/releases/latest/download/OpenTelemetry.DotNet.Auto.psm1&quot;
-$download_path = Join-Path $env:temp &quot;OpenTelemetry.DotNet.Auto.psm1&quot;
-Invoke-WebRequest -Uri $module_url -OutFile $download_path -UseBasicParsing
-
-# Import the module to use its functions
-Import-Module $download_path
-
-# Install core files
-Install-OpenTelemetryCore
-
-# Set up the instrumentation for the current PowerShell session
-Register-OpenTelemetryForCurrentSession -OTelServiceName &quot;MyServiceDisplayName&quot;
-</code></pre>
-<p>Next, configure the follwing Environment Variables</p>
-<pre><code class="language-powershell">$env:OTEL_RESOURCE_ATTRIBUTES='service.name=dotnetsvc,application.name=dotnetapp cx.application.name=dotnetappcx,cx.subsystem.name=dotnetsubcx'
-$env:OTEL_EXPORTER_OTLP_TRACES_ENDPOINT='localhost:4317'
-$env:OTEL_EXPORTER_OTLP_TRACES_PROTOCOL='grpc'
-</code></pre>
-<p>Finally, run your dotnet application with</p>
-<pre><code class="language-powershell">dotnet run
-</code></pre>
-<h3 id="step-4-example-application">Step 4 - Example Application</h3>
-<p>You can download &amp; instrument the example application:<br />
-<code>./workshops/workshops/otel/monolith-workshop/dotnet-windows/ExampleApp/</code><br />
-provided in this repository for testing.  </p>
-<p>The example sends traces of <code>http get</code> requests of a public URL. <br />
-Use <code>dotnet run</code> to start the application.  </p>
-<p>You may want to open it first in Visual Studio 2022 or higher to ensure dependencies are installed first and then run from the Visual Studio 2022 console.</p>
-<h3 id="aspnet">ASP.NET</h3>
-<p>IIS / ASP.NET follows a different instruction path for instrumentation and is shown here:<br />
-<a href="https://opentelemetry.io/docs/instrumentation/net/automatic/">https://opentelemetry.io/docs/instrumentation/net/automatic/</a></p>
+<p><strong>Note</strong>: Running <code>source setup-python.sh</code> would output long list of packages and with messages like Successfully installed <em>opentelemetry-instrumentation-some-package</em>.  </p>
+<h3 id="step-5-study-results-in-coralogix-portal">Step 5 - Study results in Coralogix portal</h3>
+<p><strong>Explore &gt;&gt; Logs UI</strong><br />
+<img alt="Logs with Trace and Span Ids" src="../images/LogsWithTraceId.png" />
+<strong>Explore &gt;&gt; Tracing UI</strong><br />
+<img alt="Traces" src="../images/Traces.png" />
+<strong>Individual Trace</strong><br />
+<img alt="Trace Map" src="../images/TraceMap.png" />
+<strong>Setup Correlation (logs in-context)</strong><br />
+<img alt="Setup Correlation" src="../images/SetupCorrelation.png" />
+<strong>Logs In-context</strong><br />
+<img alt="Trace logs in-context" src="../images/LogsInContext.png" />
+```</p>
 
 
 
@@ -751,10 +754,10 @@ Use <code>dotnet run</code> to start the application.  </p>
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.instant", "navigation.sections", "navigation.expand", "navigation.top", "navigation.tracking", "toc.integrate", "toc.follow"], "search": "../../assets/javascripts/workers/search.a264c092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.instant", "navigation.sections", "navigation.expand", "navigation.top", "navigation.tracking", "toc.integrate", "toc.follow"], "search": "../../../assets/javascripts/workers/search.a264c092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.726fbb30.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.726fbb30.min.js"></script>
       
     
   </body>

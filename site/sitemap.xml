@@ -2,32 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>http://coralogix.github.io/</loc>
-         <lastmod>2023-11-05</lastmod>
+         <lastmod>2023-11-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://coralogix.github.io/otel/about-opentelemetry/</loc>
-         <lastmod>2023-11-05</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>http://coralogix.github.io/otel/dotnet-windows/</loc>
-         <lastmod>2023-11-05</lastmod>
+         <lastmod>2023-11-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://coralogix.github.io/otel/microservices-fargate/</loc>
-         <lastmod>2023-11-05</lastmod>
+         <lastmod>2023-11-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://coralogix.github.io/otel/microservices-workshop/</loc>
-         <lastmod>2023-11-05</lastmod>
+         <lastmod>2023-11-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>http://coralogix.github.io/otel/monolith-workshop/</loc>
-         <lastmod>2023-11-05</lastmod>
+         <loc>http://coralogix.github.io/otel/monolith-workshop/node/</loc>
+         <lastmod>2023-11-20</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>http://coralogix.github.io/otel/monolith-workshop/python/</loc>
+         <lastmod>2023-11-20</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>http://coralogix.github.io/otel/monolith-workshop/windows/</loc>
+         <lastmod>2023-11-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>

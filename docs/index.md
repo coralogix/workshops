@@ -12,19 +12,19 @@ These workshops are not documentation- Coralogix platform documentation is locat
 
 ### APM - Application Perfomance Measurement Reference Examples and Training
 
-[Microservices Kubernetes (Python, Java)](otel/microservices-workshop/index.md)  
+#### Microservices
+[Kubernetes (Python, Java)](otel/microservices-workshop/index.md)  
 - Kubernetes OpenTelemetry Collector for metrics/traces/logs  
 - OpenTelemetry tracing instrumentation for containerized Python and Java apps  
 - Prometheus custom metrics collection  
+- Sample "bad" deployment and errors  
 
-[Microservices AWS ECS Fargate (Python)](otel/microservices-fargate/index.md)  
+[AWS ECS Fargate (Python)](otel/microservices-fargate/index.md)  
 - 2x container microservice, OpenTelemetry Collector, Firelens log router  
 - Complete Fargate task and ECS config instructions  
 
-[Linux Monolith (Node.js)](otel/monolith-workshop/index.md)
-- Linux host OpenTelemetry Collector for metrics/traces/logs  
-- OpenTelemetry Instrumentation for monolothic node.js app  
-
-[Windows Monolith (.NET)](otel/dotnet-windows/index.md)
-- Windows Server host OpenTelemetry Collector for metrics/traces/logs  
-- OpenTelemetry tracing instrumentation for monolothic .NET app    
+#### Monolith
+Monolith Otel Collector & Host based applications  
+- [Node.js / Linux](otel/monolith-workshop/node.md)  
+- [Python / Linux](otel/monolith-workshop/python.md) 
+- [.NET / Windows](otel/monolith-workshop/windows.md)  

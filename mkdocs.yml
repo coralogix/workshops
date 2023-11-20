@@ -37,6 +37,8 @@ nav:
   - OpenTelemetry Info:
     - Overview and Value Proposition: otel/about-opentelemetry.md
   - Workshops:
-    - Microservices APM Kubernetes (Python, Java): otel/microservices-workshop/index.md
-    - Linux Monolith APM (Node.js): otel/monolith-workshop/index.md
-    - Windows Monolith APM (.NET): otel/dotnet-windows/index.md
+    - Kubernetes (Python, Java): otel/microservices-workshop/index.md
+    - AWS ECS Fargate (Python): otel/microservices-fargate/index.md
+    - Monolith - Node.js / Linux: otel/monolith-workshop/node.md
+    - Monolith - Python / Linux: otel/monolith-workshop/python.md
+    - Monolith - .NET / Windows: otel/monolith-workshop/windows.md

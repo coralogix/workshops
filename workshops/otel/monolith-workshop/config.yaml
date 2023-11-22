@@ -91,7 +91,7 @@ service:
       exporters: [coralogix]
 
     metrics:
-      receivers: [otlp, prometheus]
+      receivers: [otlp, prometheus, hostmetrics]
       processors: [resourcedetection, batch]
       exporters: [coralogix]
 

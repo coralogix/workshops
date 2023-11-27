@@ -29,7 +29,7 @@ Download and install latest CONTRIB release version from here:
 
 Collector `config.yaml` must be configured with Coralogix Exporter. See the "Send Data to Coralogix" section for determining telemetry endpoint and and API key: [https://coralogix.com/docs/guide-first-steps-coralogix/](https://coralogix.com/docs/guide-first-steps-coralogix/)    
 
-See the `config.yaml` example in `./workshops/workshops/otel/monolith-workshop/node/otelcol`  
+See the `config.yaml` example in `./workshops/workshops/otel/monolith-workshop/python/otelcol`  
 This file can be updated in `/etc/otelcol/contrib/config.yaml` - make a backup of the default version first.    
   
 Manage the collector using `systemctl` i.e. `sudo systemctl restart otelcol`  

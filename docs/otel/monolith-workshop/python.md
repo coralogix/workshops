@@ -1,4 +1,4 @@
-# OpenTelemetry for Node.js / Monolith
+# OpenTelemetry for Python / Monolith
 
 ## Instructions
 
@@ -7,7 +7,7 @@ Full documentation: [https://coralogix.com/docs/](https://coralogix.com/docs/)
 Requirements:  
 - Linux host (Debian preferred but RPM flavors will work)  
 - Updated versions and sufficient permissions for installing software  
-- Updated verson of `node` and `npm` installed [https://nodejs.org/](https://nodejs.org/)  
+- Updated verson of `python` and `pip` installed 
 - Proper IDE i.e. Visual Studio Code 
 
 ### Step 1 - Setup

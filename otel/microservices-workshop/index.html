@@ -706,10 +706,15 @@ There will be three services spun up:  </p>
 <pre><code>source deploy-reqs-good.sh
 </code></pre>
 <p>Span latency will return to normal and Payment Gateway 404 responses will cease.  </p>
-<p>Study how the example is built:<br />
-- The Python apps that drive this example are in the <code>python/apps</code> dir<br />
-- <code>.yaml</code> deployment files are in <code>python/yaml</code><br />
-- Dockerfiles for the containers show how the OpenTelemetry instrumentation works and are in the <code>/python</code> root level  </p>
+<p>Study how OpenTelemetry tracing instrumentation works:  </p>
+<p><strong>Add Instrumentation To Containerized Apps</strong><br />
+- Dockerfiles for the containers contain OpenTelemetry auto instrumentation for Python and are in <code>/python</code> root level<br />
+- Study Otel Python <a href="https://opentelemetry.io/docs/instrumentation/python/automatic/">Auto Instrumentation</a></p>
+<p><strong>Kubernetes Deployments for Otel Tracing Instrumentation</strong>  <br />
+- <code>.yaml</code> deployment files are in <code>python/yaml</code> and show how environment variables are used to control the instrumentation</p>
+<p><strong>Instrumented Applications and Frameworks</strong><br />
+- The Python apps that drive this example are in the <code>python/apps</code> dir.<br />
+Examine the frameworks used so you can see how tracing picks up their execution.    </p>
 <h3 id="bonus-examples">Bonus Examples</h3>
 <p>Deploy Java based Inventory service:  </p>
 <pre><code>source deploy-java.sh

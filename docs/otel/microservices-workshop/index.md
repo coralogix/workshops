@@ -81,10 +81,18 @@ source deploy-reqs-good.sh
 
 Span latency will return to normal and Payment Gateway 404 responses will cease.  
   
-Study how the example is built:  
-- The Python apps that drive this example are in the `python/apps` dir  
-- `.yaml` deployment files are in `python/yaml`  
-- Dockerfiles for the containers show how the OpenTelemetry instrumentation works and are in the `/python` root level  
+Study how OpenTelemetry tracing instrumentation works:  
+   
+**Add Instrumentation To Containerized Apps**  
+- Dockerfiles for the containers contain OpenTelemetry auto instrumentation for Python and are in `/python` root level  
+- Study Otel Python [Auto Instrumentation](https://opentelemetry.io/docs/instrumentation/python/automatic/)
+
+**Kubernetes Deployments for Otel Tracing Instrumentation**    
+- `.yaml` deployment files are in `python/yaml` and show how environment variables are used to control the instrumentation
+
+**Instrumented Applications and Frameworks**  
+- The Python apps that drive this example are in the `python/apps` dir.  
+Examine the frameworks used so you can see how tracing picks up their execution.    
 
 ### Bonus Examples
 

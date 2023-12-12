@@ -506,8 +506,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#step-5-study-results-and-simulate-cicd-scenarios" class="md-nav__link">
-    Step 5 - Study results and simulate CI/CD scenarios
+  <a href="#step-5-simulate-cicd-scenarios" class="md-nav__link">
+    Step 5 - Simulate CI/CD scenarios
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-6-study-how-opentelemetry-tracing-instrumentation-works" class="md-nav__link">
+    Step 6 - Study how OpenTelemetry tracing instrumentation works
   </a>
   
 </li>
@@ -520,8 +527,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#step-6-cleanup" class="md-nav__link">
-    Step 6 - Cleanup
+  <a href="#cleanup" class="md-nav__link">
+    Cleanup
   </a>
   
 </li>
@@ -694,7 +701,7 @@ There will be three services spun up:  </p>
 <!-- ![Microservices Workshop](../../images/microservices-workshop/01.png) -->
 <p>With healthy low latency spans for all services:  </p>
 <p><img src="https://coralogix.github.io/workshops/images/microservices-workshop/03.png" width=540>  </p>
-<h3 id="step-5-study-results-and-simulate-cicd-scenarios">Step 5 - Study results and simulate CI/CD scenarios</h3>
+<h3 id="step-5-simulate-cicd-scenarios">Step 5 - Simulate CI/CD scenarios</h3>
 <p>Study results in Coralogix portal</p>
 <p>Simulate a "bad" deployment:  </p>
 <pre><code>source deploy-reqs-bad.sh
@@ -706,15 +713,19 @@ There will be three services spun up:  </p>
 <pre><code>source deploy-reqs-good.sh
 </code></pre>
 <p>Span latency will return to normal and Payment Gateway 404 responses will cease.  </p>
-<p>Study how OpenTelemetry tracing instrumentation works:  </p>
-<p><strong>Add Instrumentation To Containerized Apps</strong><br />
+<h3 id="step-6-study-how-opentelemetry-tracing-instrumentation-works">Step 6 - Study how OpenTelemetry tracing instrumentation works</h3>
+<p><strong>OpenTelemetry Instrumentation For Containerized Apps</strong><br />
 - Dockerfiles for the containers contain OpenTelemetry auto instrumentation for Python and are in <code>/python</code> root level<br />
-- Study Otel Python <a href="https://opentelemetry.io/docs/instrumentation/python/automatic/">Auto Instrumentation</a></p>
+- Study Otel Python <a href="https://opentelemetry.io/docs/instrumentation/python/automatic/">Auto Instrumentation</a>
+- Notice how the <a href="https://github.com/coralogix/workshops/blob/master/workshops/otel/microservices-demo/python/dockerfile-microsvcsdemo">Dockerfile</a> adds the automatic instrumentation<br />
+- And observe how the <a href="https://github.com/coralogix/workshops/blob/master/workshops/otel/microservices-demo/python/k8s/start-reqs-envurl-otel.sh">kickstart script</a> uses the instrumenting command  </p>
 <p><strong>Kubernetes Deployments for Otel Tracing Instrumentation</strong>  <br />
-- <code>.yaml</code> deployment files are in <code>python/yaml</code> and show how environment variables are used to control the instrumentation</p>
+- <code>.yaml</code> deployment files are in <code>python/yaml</code> and show how environment variables are used to control the instrumentation
+- study the <a href="(https://github.com/coralogix/workshops/tree/master/workshops/otel/microservices-demo/yaml)">deploy-good.yaml</a> which shows the environment variables that control OpenTelemetry tracing instrumentation. Focus on how the <a href="https://kubernetes.io/docs/concepts/workloads/pods/downward-api/">Kubernetes Downward API</a> use of <code>status.hostIP</code> to tell the instrumentation where to send traces: to the IP adddress of the host node on port 4317  </p>
 <p><strong>Instrumented Applications and Frameworks</strong><br />
-- The Python apps that drive this example are in the <code>python/apps</code> dir.<br />
-Examine the frameworks used so you can see how tracing picks up their execution.    </p>
+- The Python apps that drive this example are in the <code>python/apps</code> dir<br />
+- Examine the frameworks used so you can see how tracing picks up their execution <br />
+- Note that the <code>python requests</code> library is used to make http requests, and that <a href="https://opentelemetry.io/docs/instrumentation/python/automatic/">OpenTelemetry Python Instrumentation</a> lists <code>requests</code> as an <a href="https://opentelemetry.io/ecosystem/registry/?language=python&amp;component=instrumentation">automatically instrumented library</a>  </p>
 <h3 id="bonus-examples">Bonus Examples</h3>
 <p>Deploy Java based Inventory service:  </p>
 <pre><code>source deploy-java.sh
@@ -741,7 +752,7 @@ Examine the frameworks used so you can see how tracing picks up their execution.
 </ul>
 <pre><code>helm upgrade --reuse-values otel-coralogix-integration coralogix-charts-virtual/otel-integration --values ./yaml/override-attr-drop.yaml
 </code></pre>
-<h3 id="step-6-cleanup">Step 6 - Cleanup</h3>
+<h3 id="cleanup">Cleanup</h3>
 <p>To remove all the deployments/services/pods from the example from your k8s cluster (ignore any errors it reports:  </p>
 <pre><code>source delete-all.sh
 </code></pre>

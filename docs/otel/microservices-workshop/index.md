@@ -60,7 +60,7 @@ With healthy low latency spans for all services:
   
 <img src="https://coralogix.github.io/workshops/images/microservices-workshop/03.png" width=540>  
 
-### Step 5 - Study results and simulate CI/CD scenarios
+### Step 5 - Simulate CI/CD scenarios
 Study results in Coralogix portal
 
 Simulate a "bad" deployment:  
@@ -81,18 +81,22 @@ source deploy-reqs-good.sh
 
 Span latency will return to normal and Payment Gateway 404 responses will cease.  
   
-Study how OpenTelemetry tracing instrumentation works:  
+### Step 6 - Study how OpenTelemetry tracing instrumentation works  
    
-**Add Instrumentation To Containerized Apps**  
+**OpenTelemetry Instrumentation For Containerized Apps**  
 - Dockerfiles for the containers contain OpenTelemetry auto instrumentation for Python and are in `/python` root level  
 - Study Otel Python [Auto Instrumentation](https://opentelemetry.io/docs/instrumentation/python/automatic/)
+- Notice how the [Dockerfile](https://github.com/coralogix/workshops/blob/master/workshops/otel/microservices-demo/python/dockerfile-microsvcsdemo) adds the automatic instrumentation  
+- And observe how the [kickstart script](https://github.com/coralogix/workshops/blob/master/workshops/otel/microservices-demo/python/k8s/start-reqs-envurl-otel.sh) uses the instrumenting command  
 
 **Kubernetes Deployments for Otel Tracing Instrumentation**    
 - `.yaml` deployment files are in `python/yaml` and show how environment variables are used to control the instrumentation
+- study the [deploy-good.yaml]((https://github.com/coralogix/workshops/tree/master/workshops/otel/microservices-demo/yaml)) which shows the environment variables that control OpenTelemetry tracing instrumentation. Focus on how the [Kubernetes Downward API](https://kubernetes.io/docs/concepts/workloads/pods/downward-api/) use of `status.hostIP` to tell the instrumentation where to send traces: to the IP adddress of the host node on port 4317  
 
 **Instrumented Applications and Frameworks**  
-- The Python apps that drive this example are in the `python/apps` dir.  
-Examine the frameworks used so you can see how tracing picks up their execution.    
+- The Python apps that drive this example are in the `python/apps` dir  
+- Examine the frameworks used so you can see how tracing picks up their execution   
+- Note that the `python requests` library is used to make http requests, and that [OpenTelemetry Python Instrumentation](https://opentelemetry.io/docs/instrumentation/python/automatic/) lists `requests` as an [automatically instrumented library](https://opentelemetry.io/ecosystem/registry/?language=python&component=instrumentation)  
 
 ### Bonus Examples
 
@@ -124,7 +128,7 @@ helm upgrade --reuse-values otel-coralogix-integration coralogix-charts-virtual/
 helm upgrade --reuse-values otel-coralogix-integration coralogix-charts-virtual/otel-integration --values ./yaml/override-attr-drop.yaml
 ```
   
-### Step 6 - Cleanup
+### Cleanup
 To remove all the deployments/services/pods from the example from your k8s cluster (ignore any errors it reports:  
 ```
 source delete-all.sh

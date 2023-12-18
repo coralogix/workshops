@@ -1,1 +1,1 @@
-opentelemetry-instrument python3 app.py
+~/.local/bin/opentelemetry-instrument python3 app.py

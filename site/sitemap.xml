@@ -11,6 +11,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>http://coralogix.github.io/otel/logparsing/logparsing/</loc>
+         <lastmod>2023-12-18</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>http://coralogix.github.io/otel/microservices-fargate/</loc>
          <lastmod>2023-12-18</lastmod>
          <changefreq>daily</changefreq>

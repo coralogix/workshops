@@ -5,6 +5,7 @@
 This example is for basic study only and is not documentation.    
 Full documentation: [https://coralogix.com/docs/](https://coralogix.com/docs/)  
 Requirements:  
+- Coralogix Acccount  
 - Kubernetes cluster that can be used as a sandbox environment  
 - Updated versions and sufficient permissions for `helm` and `kubectl`  
 - Proper IDE i.e. Visual Studio Code  

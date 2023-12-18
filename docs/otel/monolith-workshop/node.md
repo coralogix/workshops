@@ -5,6 +5,7 @@
 This example is for basic study only and is not documentation.    
 Full documentation: [https://coralogix.com/docs/](https://coralogix.com/docs/)  
 Requirements:  
+- Coralogix Acccount  
 - Cloud Linux host (Debian preferred but RPM flavors will work)  
 - Updated versions and sufficient permissions for installing software  
 - Updated verson of `node` and `npm` installed [https://nodejs.org/](https://nodejs.org/)  

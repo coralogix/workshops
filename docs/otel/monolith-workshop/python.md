@@ -5,10 +5,11 @@
 This example is for basic study only and is not documentation.    
 Full documentation: [https://coralogix.com/docs/](https://coralogix.com/docs/)  
 Requirements:  
-- Linux host (Debian preferred but RPM flavors will work)  
+- Cloud Linux host (Debian preferred but RPM flavors will work)  
 - Updated versions and sufficient permissions for installing software  
 - Updated verson of `python` and `pip` installed 
 - Proper IDE i.e. Visual Studio Code 
+- Python Version 3.10 or higher  
 
 ### Step 1 - Setup
 Clone repo:

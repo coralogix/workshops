@@ -1,6 +1,9 @@
 # Coralogix Workshops
 
-These workshops are designed to help learn and practice observability and practice integrations to the Coralogix platform. They include reference implementations that are easy to deploy and understand.
+These workshops are designed to help learn and practice observability and practice integrations to the Coralogix platform. They include reference implementations that are easy to deploy and understand.  
+
+Unless otherwise specified, these are designed to run on an Ubuntu cloud host environment.  
+Specific workshops have sandbox setup guidelines beyond a cloud Ubuntu host.  
 
 These workshops are not documentation- Coralogix platform documentation is located [here](https://coralogix.com/docs/)
 
@@ -24,5 +27,5 @@ These workshops are not documentation- Coralogix platform documentation is locat
 ### APM - Monolith
 Monolith Otel Collector & Host based applications  
 - [Node.js / Linux](otel/monolith-workshop/node.md)  
-<!-- - [Python / Linux](otel/monolith-workshop/python.md)   -->
 - [.NET / Windows](otel/monolith-workshop/windows.md)  
+<!-- - [Python / Linux](otel/monolith-workshop/python.md)   -->

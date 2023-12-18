@@ -5,10 +5,11 @@
 This example is for basic study only and is not documentation.    
 Full documentation: [https://coralogix.com/docs/](https://coralogix.com/docs/)  
 Requirements:  
-- Linux host (Debian preferred but RPM flavors will work)  
+- Cloud Linux host (Debian preferred but RPM flavors will work)  
 - Updated versions and sufficient permissions for installing software  
 - Updated verson of `node` and `npm` installed [https://nodejs.org/](https://nodejs.org/)  
 - Proper IDE i.e. Visual Studio Code 
+- Ensure that the Node version is current (20 or higher).  See [https://deb.nodesource.com/](https://deb.nodesource.com/) for Ubuntu installation instructions.   
 
 ### Step 1 - Setup
 Clone repo:

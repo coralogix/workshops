@@ -12,13 +12,9 @@
         <meta name="author" content="Coralogix">
       
       
-        <link rel="canonical" href="http://coralogix.github.io/otel/monolith-workshop/python/">
+        <link rel="canonical" href="http://coralogix.github.io/otel/logparsing/logparsing/">
       
       
-        <link rel="prev" href="../node/">
-      
-      
-        <link rel="next" href="../windows/">
       
       
       <link rel="icon" href="../../../images/favicon.png">
@@ -26,7 +22,7 @@
     
     
       
-        <title>Monolith - Python / Linux - Coralogix Workshops</title>
+        <title>OpenTelemetry for Log Observability - Coralogix Workshops</title>
       
     
     
@@ -78,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#opentelemetry-for-python-monolith" class="md-skip">
+        <a href="#opentelemetry-for-log-observability" class="md-skip">
           Skip to content
         </a>
       
@@ -113,7 +109,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Monolith - Python / Linux
+              OpenTelemetry for Log Observability
             
           </span>
         </div>
@@ -221,12 +217,10 @@
         
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
+      <li class="md-tabs__item">
         <a href="../../microservices-workshop/" class="md-tabs__link">
           
   
@@ -384,8 +378,6 @@
       
   
   
-    
-  
   
   
     
@@ -396,12 +388,14 @@
       
       
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
@@ -415,7 +409,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             Workshops
@@ -471,7 +465,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../node/" class="md-nav__link">
+      <a href="../../monolith-workshop/node/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -489,30 +483,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Monolith - Python / Linux
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../monolith-workshop/python/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -521,110 +495,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#instructions" class="md-nav__link">
-    <span class="md-ellipsis">
-      Instructions
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Instructions">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#step-1-setup" class="md-nav__link">
-    <span class="md-ellipsis">
-      Step 1 - Setup
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-2-change-to-workshop-dir" class="md-nav__link">
-    <span class="md-ellipsis">
-      Step 2 - Change to workshop dir
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-3-set-up-otel-collector-on-a-linux-host" class="md-nav__link">
-    <span class="md-ellipsis">
-      Step 3 - Set up Otel Collector on a Linux host
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-4-run-python-client-in-new-terminal" class="md-nav__link">
-    <span class="md-ellipsis">
-      Step 4 - Run Python client in new terminal
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Step 4 - Run Python client in new terminal">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#pre-requisite-to-run-a-python-app" class="md-nav__link">
-    <span class="md-ellipsis">
-      Pre-requisite to Run a Python App
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#run-python-app" class="md-nav__link">
-    <span class="md-ellipsis">
-      Run Python App
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-5-study-results-in-coralogix-portal" class="md-nav__link">
-    <span class="md-ellipsis">
-      Step 5 - Study results in Coralogix portal
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -637,7 +507,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../windows/" class="md-nav__link">
+      <a href="../../monolith-workshop/windows/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -676,7 +546,7 @@
   
 
 
-<h1 id="opentelemetry-for-python-monolith">OpenTelemetry for Python / Monolith</h1>
+<h1 id="opentelemetry-for-log-observability">OpenTelemetry for Log Observability</h1>
 <h2 id="instructions">Instructions</h2>
 <p>This example is for basic study only and is not documentation.  <br />
 Full documentation: <a href="https://coralogix.com/docs/">https://coralogix.com/docs/</a><br />
@@ -684,22 +554,20 @@ Requirements:<br />
 - Coralogix Acccount<br />
 - Cloud Linux host (Debian preferred but RPM flavors will work)<br />
 - Updated versions and sufficient permissions for installing software<br />
-- Updated verson of <code>python</code> and <code>pip</code> installed 
-- Proper IDE i.e. Visual Studio Code 
-- Python Version 3.10 or higher  </p>
+- Proper IDE i.e. Visual Studio Code </p>
 <h3 id="step-1-setup">Step 1 - Setup</h3>
 <p>Clone repo:</p>
 <pre><code>git clone https://github.com/coralogix/workshops
 </code></pre>
 <h3 id="step-2-change-to-workshop-dir">Step 2 - Change to workshop dir</h3>
 <p>Change to the proper directory for workshop example:  </p>
-<pre><code>cd ./workshops/workshops/otel/monolith-workshop/python/
+<pre><code>cd ./workshops/workshops/otel/logparsing/
 </code></pre>
 <h3 id="step-3-set-up-otel-collector-on-a-linux-host">Step 3 - Set up Otel Collector on a Linux host</h3>
 <p>Download and install latest CONTRIB release version from here:<br />
 <a href="https://github.com/open-telemetry/opentelemetry-collector-releases/releases">https://github.com/open-telemetry/opentelemetry-collector-releases/releases</a>  </p>
 <p>Collector <code>config.yaml</code> must be configured with Coralogix Exporter. See the "Send Data to Coralogix" section for determining telemetry endpoint and and API key: <a href="https://coralogix.com/docs/guide-first-steps-coralogix/">https://coralogix.com/docs/guide-first-steps-coralogix/</a>    </p>
-<p>See the <code>config.yaml</code> example in <code>./workshops/workshops/otel/monolith-workshop/python/otelcol</code><br />
+<p>See the <code>config.yaml</code> example in <code>./workshops/workshops/otel/logparsing/otelcol</code><br />
 This file can be updated in <code>/etc/otelcol/contrib/config.yaml</code> - make a backup of the default version first.    </p>
 <p>Manage the collector using <code>systemctl</code> i.e. <code>sudo systemctl restart otelcol</code><br />
 More info is here: <a href="https://coralogix.com/docs/guide-first-steps-coralogix/">https://coralogix.com/docs/guide-first-steps-coralogix/</a>  </p>
@@ -707,33 +575,39 @@ More info is here: <a href="https://coralogix.com/docs/guide-first-steps-coralog
 <code>http://localhost:55679/debug/tracez</code><br />
 <code>http://localhost:55679/debug/pipelinez</code>  <br />
 For more info: <a href="https://github.com/open-telemetry/opentelemetry-collector/blob/main/extension/zpagesextension/README.md">zpages docs</a>  </p>
-<h3 id="step-4-run-python-client-in-new-terminal">Step 4 - Run Python client in new terminal</h3>
-<h4 id="pre-requisite-to-run-a-python-app">Pre-requisite to Run a Python App</h4>
+<h3 id="step-4-prepare-log-example">Step 4 - Prepare Log Example</h3>
 <ul>
-<li>Run <code>python3 --version</code> to check you have python3 installed. If not follow the python3 installation document for your linux distribution. For ubuntu follow</li>
-<li>Run <code>pip3 --version</code> to check pip3 is installed. If not follow the pip3 installation documentation for your linux distribution. For ubuntu use command <code>sudo apt-get install python3-pip</code></li>
-<li>For ubuntu Run <code>sudo apt upgrade</code> to upgrde already installed packages. If you receive a message to reboot your server do so before moving on to the next steps.</li>
+<li>Copy the LOG.log.gz file to <code>/tmp/cx</code>  </li>
+<li><code>gunzip Log.log.gz</code>  </li>
 </ul>
-<h4 id="run-python-app">Run Python App</h4>
-<p>This application make 100 requests to <code>https://reqbin.com/echo/get/json</code> and then exit.</p>
-<p>Run following scripts found under <a href=".">./python</a>:</p>
-<pre><code>source setup-python.sh
-source setup-python-env.sh
-source start-python.sh
+<h3 id="step-5-update-collector-with-log-receiver">Step 5 - Update Collector with Log Receiver</h3>
+<ul>
+<li>Add the following receiver to <code>/etc/otelcol/config.yaml</code>  </li>
+</ul>
+<pre><code>receivers:
+  filelog:
+    include: [ /tmp/cx/LOG.log ]
 </code></pre>
-<p><strong>Note</strong>: Running <code>source setup-python.sh</code> would output long list of packages and with messages like Successfully installed <em>opentelemetry-instrumentation-some-package</em>.  </p>
-<h3 id="step-5-study-results-in-coralogix-portal">Step 5 - Study results in Coralogix portal</h3>
-<p><strong>Explore &gt;&gt; Logs UI</strong><br />
-<img alt="Logs with Trace and Span Ids" src="../images/LogsWithTraceId.png" />
-<strong>Explore &gt;&gt; Tracing UI</strong><br />
-<img alt="Traces" src="../images/Traces.png" />
-<strong>Individual Trace</strong><br />
-<img alt="Trace Map" src="../images/TraceMap.png" />
-<strong>Setup Correlation (logs in-context)</strong><br />
-<img alt="Setup Correlation" src="../images/SetupCorrelation.png" />
-<strong>Logs In-context</strong><br />
-<img alt="Trace logs in-context" src="../images/LogsInContext.png" />
-```</p>
+<ul>
+<li>Add the following pipeline to <code>/etc/otelcol/config.yaml</code>  </li>
+</ul>
+<pre><code>service:  
+  pipelines:
+    logs:
+      receivers: [otlp, filelog]
+</code></pre>
+<ul>
+<li>Restart the collector:</li>
+</ul>
+<pre><code>sudo systemctl restart otelcol-contrib.service 
+</code></pre>
+<ul>
+<li>Check collector status:</li>
+</ul>
+<pre><code>sudo systemctl status otelcol-contrib.service 
+</code></pre>
+<h3 id="step-5-study-logs-in-coralogix">Step 5 - Study Logs in Coralogix</h3>
+<p>The <code>Explore-&gt;Logs</code> option now will show the integrated logs.  </p>
 
 
 

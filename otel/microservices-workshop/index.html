@@ -22,7 +22,7 @@
       
       
       <link rel="icon" href="../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.2">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
     
     
       
@@ -693,11 +693,10 @@
 <p>This example is for basic study only and is not documentation.  <br />
 Full documentation: <a href="https://coralogix.com/docs/">https://coralogix.com/docs/</a><br />
 Requirements:<br />
-- Coralogix Acccount<br />
-- Kubernetes cluster that can be used as a sandbox environment<br />
-- Updated versions and sufficient permissions for <code>helm</code> and <code>kubectl</code><br />
+- Coralogix acccount<br />
+- Kubernetes cluster that can be used as a sandbox environment. <strong>See Appendix below for a suggested Kubernetes sandbox environment with a quick and easy setup. This setup is recommended for this workshop.</strong><br />
+- Updated versions and sufficient permissions for <code>helm</code> and <code>kubectl</code>  and open source software in general<br />
 - Proper IDE i.e. Visual Studio Code  </p>
-<p><strong>See Appendix below for a suggested Kubernetes sandbox environment with a quick and easy setup</strong>  </p>
 <h3 id="step-1-install-the-opentelemetry-collector-on-your-k8s-cluster">Step 1 - Install the OpenTelemetry Collector on your k8s cluster</h3>
 <p>This workshop requires OpenTelemetry Collector configured for Coralogix: <a href="https://github.com/coralogix/telemetry-shippers/tree/master/otel-integration/k8s-helm/">https://github.com/coralogix/telemetry-shippers/tree/master/otel-integration/k8s-helm/</a>    </p>
 <p>Note that Coralogix makes several examples of the Collector helm charts available- the one above is the fully featured chart with <code>Kube State Metrics</code> etc.  </p>

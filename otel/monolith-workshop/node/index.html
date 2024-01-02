@@ -22,7 +22,7 @@
       
       
       <link rel="icon" href="../../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.2">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
     
     
       
@@ -657,12 +657,12 @@
 <p>This example is for basic study only and is not documentation.  <br />
 Full documentation: <a href="https://coralogix.com/docs/">https://coralogix.com/docs/</a><br />
 Requirements:<br />
-- Coralogix Acccount<br />
-- Cloud Linux host (Debian preferred but RPM flavors will work)<br />
-- Updated versions and sufficient permissions for installing software<br />
-- Updated verson of <code>node</code> and <code>npm</code> installed <a href="https://nodejs.org/">https://nodejs.org/</a><br />
-- Proper IDE i.e. Visual Studio Code 
-- Ensure that the Node version is current (20 or higher).  See <a href="https://deb.nodesource.com/">https://deb.nodesource.com/</a> for Ubuntu installation instructions.   </p>
+- Coralogix acccount<br />
+- Cloud Linux host (Debian is preferred- workshop instructions are for Debian Linux but if RPM is preferred instructions can be modified)<br />
+- Updated versions and sufficient permissions for installing open source software<br />
+- Current verson of <code>node</code> and <code>npm</code> installed <a href="https://nodejs.org/">https://nodejs.org/</a><br />
+- Ensure that the Node version is current (20 or higher).  See <a href="https://deb.nodesource.com/">https://deb.nodesource.com/</a> for Ubuntu installation instructions<br />
+- Proper IDE i.e. Visual Studio Code </p>
 <h3 id="step-1-setup">Step 1 - Setup</h3>
 <p>Clone repo:</p>
 <pre><code>git clone https://github.com/coralogix/workshops
@@ -696,7 +696,9 @@ For more info: <a href="https://github.com/open-telemetry/opentelemetry-collecto
 <pre><code>start-node.sh
 </code></pre>
 <h3 id="step-5-study-results-in-coralogix-portal">Step 5 - Study results in Coralogix portal</h3>
-<p>The shell scripts show how a monolith is set up and instrumented for OpenTelemetry.</p>
+<p>The shell scripts show how a monolith is set up and instrumented for OpenTelemetry.<br />
+Traces can be found in <code>Explore-&gt;Tracing</code><br />
+Additionally, host metrics are available via Coralogix's metrics observability tools.  </p>
 
 
 

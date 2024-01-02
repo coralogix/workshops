@@ -1,30 +1,36 @@
-const request = require('request');
+const http = require('http');
 
 function httpget() {
-    const requestOptions = {
-        url: 'https://api.github.com',
+    const options = {
+        hostname: 'api.github.com',
+        path: '/',
+        method: 'GET',
         headers: {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36'
         }
     };
 
-    request(requestOptions, function(error, response, body) {
-        if (error) {
-            console.error(error);
-            return;
-        }
+    const req = http.request(options, (res) => {
+        console.log(`statusCode: ${res.statusCode}`);
+        console.log(`headers: ${JSON.stringify(res.headers)}`);
 
-        console.log("statusCode:", response.statusCode);
-        console.log("headers:", response.headers);
-        console.log(body);
+        res.on('data', (d) => {
+            process.stdout.write(d);
+        });
     });
 
-    console.log("This gets logged");
+    req.on('error', (error) => {
+        console.error(error);
+    });
+
+    req.end();
 }
+
+console.log("This gets logged");
 
 const interval = 750;
 
-for (let i = 0; i <= 100000; i++) {
+for (let i = 0; i <= 1000; i++) {
     setTimeout(function(i) {
         httpget();
     }, interval * i, i);

@@ -5,12 +5,11 @@
 This example is for basic study only and is not documentation.    
 Full documentation: [https://coralogix.com/docs/](https://coralogix.com/docs/)  
 Requirements:  
-- Coralogix Acccount  
-- Cloud Linux host (Debian preferred but RPM flavors will work)  
-- Updated versions and sufficient permissions for installing software  
-- Updated verson of `python` and `pip` installed 
-- Proper IDE i.e. Visual Studio Code 
-- Python Version 3.10 or higher  
+- Coralogix acccount  
+- Cloud Linux host (Debian is preferred- workshop instructions are for Debian Linux but if RPM is preferred instructions can be modified)  
+- Current versions and sufficient permissions for installing open source software  
+- Current versons (>3.10) of `python` and `pip` installed 
+- Proper IDE i.e. Visual Studio Code  
 
 ### Step 1 - Setup
 Clone repo:

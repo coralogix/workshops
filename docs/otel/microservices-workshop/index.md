@@ -5,12 +5,10 @@
 This example is for basic study only and is not documentation.    
 Full documentation: [https://coralogix.com/docs/](https://coralogix.com/docs/)  
 Requirements:  
-- Coralogix Acccount  
-- Kubernetes cluster that can be used as a sandbox environment  
-- Updated versions and sufficient permissions for `helm` and `kubectl`  
+- Coralogix acccount  
+- Kubernetes cluster that can be used as a sandbox environment. **See Appendix below for a suggested Kubernetes sandbox environment with a quick and easy setup. This setup is recommended for this workshop.**  
+- Updated versions and sufficient permissions for `helm` and `kubectl`  and open source software in general  
 - Proper IDE i.e. Visual Studio Code  
-
-**See Appendix below for a suggested Kubernetes sandbox environment with a quick and easy setup**  
 
 ### Step 1 - Install the OpenTelemetry Collector on your k8s cluster  
 

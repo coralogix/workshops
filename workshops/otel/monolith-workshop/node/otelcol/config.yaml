@@ -11,7 +11,7 @@ receivers:
       grpc:
       http:
   hostmetrics:
-    collection_interval: 30s
+    collection_interval: 15s
     scrapers:
       cpu:
       disk:
@@ -44,20 +44,46 @@ receivers:
   zipkin:
 
 processors:
-  resourcedetection:
-    detectors: [system]
+  resourcedetection/env:
+    detectors: ["system", "env"]
     system:
-      hostname_sources: ["os"]
+      resource_attributes:
+        host.name:
+          enabled: true
+        host.id:
+          enabled: true
+  resourcedetection/ec2:
+    detectors: ["ec2" ]
+    ec2:
+      resource_attributes:
+        host.name:
+          enabled: true
+        host.id:
+          enabled: true
+  tail_sampling:
+    decision_wait: 10s 
+    expected_new_traces_per_sec: 1000
+    policies:
+      [
+        {
+            name: percent-sample-policy,
+            type: probabilistic,
+            probabilistic: {sampling_percentage: 100}
+        },
+        {
+          name: errors-policy,
+          type: status_code,
+          status_code: { status_codes: [ERROR] }
+        }
+      ]
   batch:
 
 exporters:
-  logging:
-    verbosity: detailed
   coralogix:
     # The Coralogix domain
-    domain: "your-Coralogix-Domain-Here"
+    domain: "YOURDOMAINHERE"
     # Your Coralogix private key is sensitive
-    private_key: "xxx"
+    private_key: "YOURKEYHERE"
 
     # (Optional) Ordered list of Resource attributes that are used for Coralogix
     # AppName and SubSystem values. The first non-empty Resource attribute is used.
@@ -70,8 +96,8 @@ exporters:
 
     # Traces, Metrics and Logs emitted by this OpenTelemetry exporter 
     # are tagged in Coralogix with the default application and subsystem constants.
-    application_name: "MyBusinessEnvironment"
-    subsystem_name: "MyBusinessSystem"
+    application_name: "cx-app-node"
+    subsystem_name: "cx-app-node"
 
     # (Optional) Timeout is the timeout for every attempt to send data to the backend.
     timeout: 30s
@@ -84,28 +110,20 @@ exporters:
   #     "CX-Application-Name": "<your coralogix app name here>"
   #     "CX-Subsystem-Name": "<your coralogix subystemname name here>"
   #     ApplicationName: "<your application name here>"
-  #     ApiName: "<your api name here>"
 
 service:
-
   pipelines:
-
-    traces:
-      receivers: [otlp]
-      processors: [resourcedetection, batch]
-      # exporters: [otlp]
-      exporters: [coralogix]
-
     metrics:
-      receivers: [otlp, opencensus, prometheus]
-      processors: [resourcedetection, batch]
-      # exporters: [otlp]
+      receivers: [otlp,hostmetrics]
+      processors: [resourcedetection/env,resourcedetection/ec2,batch]
       exporters: [coralogix]
-
     logs:
       receivers: [otlp]
-      processors: [resourcedetection,batch]
-      # exporters: [otlp]
+      processors: [resourcedetection/env,resourcedetection/ec2,batch]
+      exporters: [coralogix]
+    traces:
+      receivers: [otlp]
+      processors: [resourcedetection/env,resourcedetection/ec2,batch]
       exporters: [coralogix]
 
   extensions: [health_check, pprof, zpages]

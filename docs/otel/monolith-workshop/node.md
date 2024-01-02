@@ -5,12 +5,12 @@
 This example is for basic study only and is not documentation.    
 Full documentation: [https://coralogix.com/docs/](https://coralogix.com/docs/)  
 Requirements:  
-- Coralogix Acccount  
-- Cloud Linux host (Debian preferred but RPM flavors will work)  
-- Updated versions and sufficient permissions for installing software  
-- Updated verson of `node` and `npm` installed [https://nodejs.org/](https://nodejs.org/)  
+- Coralogix acccount  
+- Cloud Linux host (Debian is preferred- workshop instructions are for Debian Linux but if RPM is preferred instructions can be modified)  
+- Updated versions and sufficient permissions for installing open source software  
+- Current verson of `node` and `npm` installed [https://nodejs.org/](https://nodejs.org/)  
+- Ensure that the Node version is current (20 or higher).  See [https://deb.nodesource.com/](https://deb.nodesource.com/) for Ubuntu installation instructions  
 - Proper IDE i.e. Visual Studio Code 
-- Ensure that the Node version is current (20 or higher).  See [https://deb.nodesource.com/](https://deb.nodesource.com/) for Ubuntu installation instructions.   
 
 ### Step 1 - Setup
 Clone repo:
@@ -66,4 +66,6 @@ start-node.sh
 
 ### Step 5 - Study results in Coralogix portal
 
-The shell scripts show how a monolith is set up and instrumented for OpenTelemetry.
+The shell scripts show how a monolith is set up and instrumented for OpenTelemetry.  
+Traces can be found in `Explore->Tracing`  
+Additionally, host metrics are available via Coralogix's metrics observability tools.  

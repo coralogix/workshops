@@ -26,7 +26,6 @@ These workshops are not documentation- Coralogix platform documentation is locat
 
 ### APM - Monolith
 Monolith Otel Collector & Host based applications  
-- [Python / Linux](otel/monolith-workshop/python.md) 
+- [Python / Linux](otel/monolith-workshop/python.md)   
 - [Node / Linux](otel/monolith-workshop/node.md)  
 - [.NET / Windows](otel/monolith-workshop/windows.md)  
-<!-- - [Node.js / Linux](otel/monolith-workshop/node.md)   -->

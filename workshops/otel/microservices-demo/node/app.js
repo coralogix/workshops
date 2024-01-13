@@ -1,11 +1,12 @@
 const http = require('http');
 
 /**
- * Function to make an HTTP GET request to the GitHub API.
+ * Function to make an HTTP GET request using the provided URL.
+ * @param {string} targetUrl - The target URL for the HTTP GET request.
  */
-function httpget() {
+function httpget(targetUrl) {
     const options = {
-        hostname: 'api.github.com',
+        hostname: targetUrl, // Use the provided URL as the hostname
         path: '/',
         method: 'GET',
         headers: {
@@ -44,7 +45,11 @@ function getRandomInterval() {
  */
 function performHttpRequests() {
     const interval = getRandomInterval();
-    httpget();
+
+    // Read the target URL from the NODE_TEST_URL environment variable
+    const targetUrl = process.env.NODE_TEST_URL || 'api.github.com'; // Default to 'api.github.com' if NODE_TEST_URL is not set
+
+    httpget(targetUrl);
 
     // Set a new timeout for the next HTTP GET request.
     setTimeout(performHttpRequests, interval);

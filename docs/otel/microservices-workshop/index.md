@@ -93,6 +93,11 @@ Deploy Java based Inventory service:
 ```
 source deploy-java.sh
 ```  
+
+Deploy Node.js self contained trace generator- makes requests to a URL specified in environment variables:  
+```
+source deploy-node-autogen.sh
+```  
   
 Prometheus metrics example:  
   
@@ -118,7 +123,7 @@ helm upgrade --reuse-values otel-coralogix-integration coralogix-charts-virtual/
 ```
   
 ### Cleanup
-To remove all the deployments/services/pods from the example from your k8s cluster (ignore any errors it reports:  
+To remove all the deployments/services/pods from the example from your k8s cluster (ignore any errors it reports):  
 ```
 source delete-all.sh
 ```

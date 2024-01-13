@@ -684,7 +684,7 @@ More info is here: <a href="https://coralogix.com/docs/guide-first-steps-coralog
 <code>http://localhost:55679/debug/pipelinez</code>  <br />
 For more info: <a href="https://github.com/open-telemetry/opentelemetry-collector/blob/main/extension/zpagesextension/README.md">zpages docs</a>  </p>
 <h3 id="step-4-run-node-client-in-new-terminal">Step 4 - Run Node client in new terminal</h3>
-<p>Demo app will make 250 requests of <code>https://api.github.com</code> and then exit.  </p>
+<p>Demo app will make requests of <code>https://api.github.com</code> and require `ctrl-c`` to exit.</p>
 <p>in <code>./workshops/workshops/otel/monolith-workshop/node/</code> </p>
 <p>Install node.js OpenTelemetry Instrumentation:  </p>
 <pre><code>setup-node.sh
@@ -695,6 +695,7 @@ For more info: <a href="https://github.com/open-telemetry/opentelemetry-collecto
 <p>Start demo app:  </p>
 <pre><code>start-node.sh
 </code></pre>
+<p>Stop app with <code>ctrl-c</code> when ready.</p>
 <h3 id="step-5-study-results-in-coralogix-portal">Step 5 - Study results in Coralogix portal</h3>
 <p>The shell scripts show how a monolith is set up and instrumented for OpenTelemetry.<br />
 Traces can be found in <code>Explore-&gt;Tracing</code><br />

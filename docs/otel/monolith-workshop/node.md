@@ -45,7 +45,7 @@ For more info: [zpages docs](https://github.com/open-telemetry/opentelemetry-col
 
 ### Step 4 - Run Node client in new terminal  
 
-Demo app will make 250 requests of `https://api.github.com` and then exit.  
+Demo app will make requests of `https://api.github.com` and require `ctrl-c`` to exit.
 
 in `./workshops/workshops/otel/monolith-workshop/node/` 
 
@@ -63,6 +63,8 @@ Start demo app:
 ```
 start-node.sh
 ```  
+
+Stop app with `ctrl-c` when ready.
 
 ### Step 5 - Study results in Coralogix portal
 

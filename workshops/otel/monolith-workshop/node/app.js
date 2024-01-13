@@ -1,5 +1,8 @@
 const http = require('http');
 
+/**
+ * Function to make an HTTP GET request to the GitHub API.
+ */
 function httpget() {
     const options = {
         hostname: 'api.github.com',
@@ -28,10 +31,24 @@ function httpget() {
 
 console.log("This gets logged");
 
-const interval = 750;
-
-for (let i = 0; i <= 1000; i++) {
-    setTimeout(function(i) {
-        httpget();
-    }, interval * i, i);
+/**
+ * Function to generate a random interval between 500ms and 1000ms.
+ * @returns {number} - Random interval in milliseconds.
+ */
+function getRandomInterval() {
+    return Math.floor(Math.random() * (1000 - 500 + 1) + 500);
 }
+
+/**
+ * Function to perform the HTTP GET requests with randomized intervals.
+ */
+function performHttpRequests() {
+    const interval = getRandomInterval();
+    httpget();
+
+    // Set a new timeout for the next HTTP GET request.
+    setTimeout(performHttpRequests, interval);
+}
+
+// Start the loop for making HTTP GET requests.
+performHttpRequests();

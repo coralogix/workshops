@@ -698,14 +698,7 @@ Requirements:<br />
 - Updated versions and sufficient permissions for <code>helm</code> and <code>kubectl</code>  and open source software in general<br />
 - Proper IDE i.e. Visual Studio Code  </p>
 <h3 id="step-1-install-the-opentelemetry-collector-on-your-k8s-cluster">Step 1 - Install the OpenTelemetry Collector on your k8s cluster</h3>
-<p>This workshop requires OpenTelemetry Collector configured for Coralogix: <a href="https://github.com/coralogix/telemetry-shippers/tree/master/otel-integration/k8s-helm/">https://github.com/coralogix/telemetry-shippers/tree/master/otel-integration/k8s-helm/</a>    </p>
-<p>Note that Coralogix makes several examples of the Collector helm charts available- the one above is the fully featured chart with <code>Kube State Metrics</code> etc.  </p>
-<p>It requires a <code>values.yaml</code> file as follows:  </p>
-<pre><code>---
-global:
-  domain: &quot;YourCoralogix.domain-i.e.-coralogix.us&quot;
-  clusterName: &quot;YourClusterName&quot;
-</code></pre>
+<p><a href="https://coralogix.com/docs/otel-collector-for-k8s/">Easy Coralogix instructions for Complete Observability are here</a>  </p>
 <h3 id="step-2-setup">Step 2 - Setup</h3>
 <p>Clone repo:</p>
 <pre><code>git clone https://github.com/coralogix/workshops
@@ -726,7 +719,8 @@ There will be three services spun up:  </p>
 <pre><code>source deploy-all.sh
 </code></pre>
 <p>Deploys the following as seen from the <code>http://cx-payment-gateway-flask:5000/</code> root span:  </p>
-<p><img src="https://coralogix.github.io/workshops/images/microservices-workshop/01.png" width=540>     </p>
+<p>Note: images may vary from actual UI due to frequent updates:<br />
+<img src="https://coralogix.github.io/workshops/images/microservices-workshop/01.png" width=540>     </p>
 <!-- ![Microservices Workshop](../../images/microservices-workshop/01.png) -->
 <p>With healthy low latency spans for all services:  </p>
 <p><img src="https://coralogix.github.io/workshops/images/microservices-workshop/03.png" width=540>  </p>

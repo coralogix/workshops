@@ -1,0 +1,1 @@
+aws cloudformation delete-stack --stack-name cx-node-autogen-stack --region us-east-2

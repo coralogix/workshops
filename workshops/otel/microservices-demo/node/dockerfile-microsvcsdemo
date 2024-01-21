@@ -5,7 +5,7 @@ COPY entrypoint.sh /home/code/
 WORKDIR /home/code
 RUN apt -y update && \
     export PATH="$HOME/.local/bin:$PATH" && \
-    apt install -y curl && \
+    apt install -y curl jq && \
     npm install --save @opentelemetry/api && \
     npm install --save @opentelemetry/auto-instrumentations-node && \
     npm install --save @opentelemetry/instrumentation-http && \

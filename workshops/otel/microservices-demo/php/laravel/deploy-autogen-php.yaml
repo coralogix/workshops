@@ -1,0 +1,61 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: php-laravel
+  namespace: default
+spec:
+  selector:
+    name: php-laravel
+  ports:
+  - protocol: TCP
+    port: 8000
+    targetPort: 8000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php-laravel
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      name: php-laravel
+  template:
+    metadata:
+      labels:
+        name: php-laravel
+    spec:
+      containers:
+      - name: php-laravel
+        image: public.ecr.aws/w3s4j9x9/php-demo:0.1.0
+        imagePullPolicy: Always
+        env:
+        - name: OTEL_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: http://$(OTEL_IP):4317
+        - name: OTEL_PHP_AUTOLOAD_ENABLED
+          value: "true"
+        - name: OTEL_SERVICE_NAME
+          value: php-laravel
+        - name: OTEL_TRACES_EXPORTER
+          value: otlp
+        - name: OTEL_EXPORTER_OTLP_PROTOCOL
+          value: grpc
+        - name: OTEL_PROPAGATORS
+          value: baggage, tracecontext
+        # - name: OTEL_RESOURCE_ATTRIBUTES
+        #   value: cx.application.name=php-laravel,cx.subsystem.name=php-laravel
+        # - name: OTEL_LOG_LEVEL
+        #   value: all
+        ports:
+          - name: http
+            containerPort: 8000
+        command: ["/bin/sh"]
+        args: ["/usr/local/bin/entrypoint.sh"]
+        # test if needed
+        # command: [ "/bin/bash", "-c", "--" ]
+        # args: [ "while true; do sleep 30; done;" ]

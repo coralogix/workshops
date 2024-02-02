@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: php-laravel
-        image: public.ecr.aws/w3s4j9x9/php-demo:0.1.0
+        image: public.ecr.aws/w3s4j9x9/php-demo:0.1.1
         imagePullPolicy: Always
         env:
         - name: OTEL_IP
@@ -36,7 +36,7 @@ spec:
             fieldRef:
               fieldPath: status.hostIP
         - name: OTEL_EXPORTER_OTLP_ENDPOINT
-          value: http://$(OTEL_IP):4317
+          value: http://$(OTEL_IP):4318
         - name: OTEL_PHP_AUTOLOAD_ENABLED
           value: "true"
         - name: OTEL_SERVICE_NAME
@@ -44,7 +44,7 @@ spec:
         - name: OTEL_TRACES_EXPORTER
           value: otlp
         - name: OTEL_EXPORTER_OTLP_PROTOCOL
-          value: grpc
+          value: http/json
         - name: OTEL_PROPAGATORS
           value: baggage, tracecontext
         # - name: OTEL_RESOURCE_ATTRIBUTES

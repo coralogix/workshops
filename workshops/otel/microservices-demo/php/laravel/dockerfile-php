@@ -28,15 +28,16 @@ RUN chmod +x /usr/local/bin/entrypoint.sh
 WORKDIR /var/www/hello-world
 
 # Install OpenTelemetry and other necessary PHP extensions
-RUN install-php-extensions opentelemetry grpc protobuf
+RUN install-php-extensions opentelemetry
+# RUN install-php-extensions opentelemetry grpc protobuf
 # Execute `php -m` and verify that the extension is installed
 
 # Install OpenTelemetry PHP SDK, Laravel auto-instrumentation, OTLP exporter, and gRPC transport
 RUN composer require open-telemetry/opentelemetry \
     open-telemetry/opentelemetry-auto-laravel \
     open-telemetry/exporter-otlp \
-    open-telemetry/sdk \
-    open-telemetry/transport-grpc
+    open-telemetry/sdk
+    # open-telemetry/transport-grpc
 
 # Add additional configuration for FPM, RoadRunner, etc. here
 

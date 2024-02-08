@@ -1,59 +1,82 @@
 const http = require('http');
+const { v4: uuidv4 } = require('uuid');
+const pino = require('pino');
 
-/**
- * Function to make an HTTP GET request using the provided URL.
- * @param {string} targetUrl - The target URL for the HTTP GET request.
- */
-function httpget(targetUrl) {
+const PORT = 3000;
+let requestCount = 0; // Initialize request counter
+const logger = pino(); // Initialize Pino logger
+
+function startServer() {
+    const server = http.createServer((req, res) => {
+        const requestId = uuidv4();
+        const responseBody = { message: 'Hello from the Node server!', requestId };
+
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify(responseBody));
+
+        // Log the request and response details using Pino
+        logger.info({
+            timestamp: new Date().toISOString(),
+            requestId,
+            method: req.method,
+            path: req.url,
+            statusCode: res.statusCode,
+            responseBody
+        }, 'Request processed');
+    });
+
+    server.listen(PORT, () => {
+        logger.info(`Server listening on port ${PORT}`);
+    });
+}
+
+function httpGetLocalServer() {
+    if (requestCount >= 200) {
+        logger.info('Completed 200 requests. Exiting application.');
+        process.exit(); // Exit the application after 200 requests
+    }
+    requestCount++; // Increment request counter
+
+    const requestId = uuidv4();
     const options = {
-        hostname: targetUrl, // Use the provided URL as the hostname
+        hostname: 'localhost',
+        port: PORT,
         path: '/',
         method: 'GET',
         headers: {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36'
-        }
+            'X-Request-ID': requestId,
+        },
     };
 
     const req = http.request(options, (res) => {
-        console.log(`statusCode: ${res.statusCode}`);
-        console.log(`headers: ${JSON.stringify(res.headers)}`);
+        let data = '';
+        res.on('data', (chunk) => {
+            data += chunk;
+        });
+        res.on('end', () => {
+            const responseBody = JSON.parse(data);
+            // Log the request and response details using Pino
+            logger.info({
+                timestamp: new Date().toISOString(),
+                requestId,
+                method: 'GET',
+                path: options.path,
+                statusCode: res.statusCode,
+                responseBody
+            }, 'Request received and processed');
 
-        res.on('data', (d) => {
-            process.stdout.write(d);
+            // Recursively make the next request with a slight delay
+            setTimeout(httpGetLocalServer, 100);
         });
     });
 
     req.on('error', (error) => {
-        console.error(error);
+        logger.error(error);
     });
 
     req.end();
 }
 
-console.log("This gets logged");
-
-/**
- * Function to generate a random interval between 500ms and 1000ms.
- * @returns {number} - Random interval in milliseconds.
- */
-function getRandomInterval() {
-    return Math.floor(Math.random() * (1000 - 500 + 1) + 500);
-}
-
-/**
- * Function to perform the HTTP GET requests with randomized intervals.
- */
-function performHttpRequests() {
-    const interval = getRandomInterval();
-
-    // Read the target URL from the NODE_TEST_URL environment variable
-    const targetUrl = process.env.NODE_TEST_URL || 'api.github.com'; // Default to 'api.github.com' if NODE_TEST_URL is not set
-
-    httpget(targetUrl);
-
-    // Set a new timeout for the next HTTP GET request.
-    setTimeout(performHttpRequests, interval);
-}
-
-// Start the loop for making HTTP GET requests.
-performHttpRequests();
+startServer();
+setTimeout(httpGetLocalServer, 100); // Start the requesting loop with a slight delay

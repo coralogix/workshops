@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: cx-node-autogen
-        image: public.ecr.aws/w3s4j9x9/microservices-demo:node
+        image: public.ecr.aws/w3s4j9x9/demo-node-autogen:latest
         imagePullPolicy: Always
         workingDir: /home/code
         env:
@@ -34,13 +34,11 @@ spec:
         - name: NODE_OPTIONS
           value: "--require @opentelemetry/auto-instrumentations-node/register"
         - name: OTEL_RESOURCE_ATTRIBUTES
-          value: application.name=cx-node-autogen,api.name=cx-node-autogen,cx.application.name=cx-node-autogen,cx.subsystem.name=cx-node-autogen
+          value: cx.application.name=cx-node-autogen,cx.subsystem.name=cx-node-autogen
         - name: OTEL_EXPORTER_OTLP_ENDPOINT
           value: http://$(OTEL_IP):4318
-        - name: NODE_TEST_URL
-          value: api.github.com
-        - name: OTEL_LOG_LEVEL
-          value: all
+        # - name: OTEL_LOG_LEVEL
+        #   value: all
         command: ["/bin/sh"]
         args: ["run-client.sh"]
         # test if needed

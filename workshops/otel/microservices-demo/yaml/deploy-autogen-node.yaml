@@ -40,7 +40,7 @@ spec:
         # - name: OTEL_LOG_LEVEL
         #   value: all
         command: ["/bin/sh"]
-        args: ["run-client.sh"]
+        args: ["entrypoint.sh"]
         # test if needed
         # command: [ "/bin/bash", "-c", "--" ]
         # args: [ "while true; do sleep 30; done;" ]

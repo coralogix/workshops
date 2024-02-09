@@ -1,1 +1,0 @@
-kubectl apply -f yaml/deploy-reqs-node-test.yaml

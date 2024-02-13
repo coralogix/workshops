@@ -67,7 +67,7 @@ function httpGetLocalServer() {
             }, 'Request received and processed');
 
             // Recursively make the next request with a slight delay
-            setTimeout(httpGetLocalServer, 100);
+            setTimeout(httpGetLocalServer, 300);
         });
     });
 

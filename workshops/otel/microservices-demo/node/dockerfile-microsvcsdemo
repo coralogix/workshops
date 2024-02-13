@@ -1,4 +1,4 @@
-FROM node:lts-bookworm
+FROM node:lts-slim
 RUN mkdir /home/code
 COPY app.js /home/code/
 COPY entrypoint.sh /home/code/

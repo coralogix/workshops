@@ -1,0 +1,1 @@
+kubectl apply -f yaml/deploy-autogen-fastapi.yaml  

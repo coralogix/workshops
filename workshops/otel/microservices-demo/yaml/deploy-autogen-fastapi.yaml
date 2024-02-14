@@ -1,0 +1,54 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cx-fastapi-autogen
+spec:
+  selector:
+    name: cx-fastapi-autogen
+  ports:
+  - protocol: TCP
+    port: 8000
+    targetPort: 8000
+---
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cx-fastapi-autogen
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      name: cx-fastapi-autogen
+  template:
+    metadata:
+      labels:
+        name: cx-fastapi-autogen
+    spec:
+      containers:
+      - name: cx-fastapi-autogen
+        image: public.ecr.aws/w3s4j9x9/microservices-demo:py-fastapi
+        imagePullPolicy: Always
+        workingDir: /home/code
+        ports:
+          - name: http
+            containerPort: 8000
+        env:
+        - name: OTEL_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: OTEL_SERVICE_NAME
+          value: cx-fastapi-autogen
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: cx.application.name=cx-fastapi-autogen,cx.subsystem.name=cx-fastapi-autogen
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: http://$(OTEL_IP):4317
+        # - name: OTEL_LOG_LEVEL
+        #   value: all
+        command: ["/bin/sh"]
+        args: ["entrypoint.sh"]
+        # test if needed
+        # command: [ "/bin/bash", "-c", "--" ]
+        # args: [ "while true; do sleep 30; done;" ]

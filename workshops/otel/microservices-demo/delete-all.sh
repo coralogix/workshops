@@ -9,3 +9,4 @@ kubectl delete deployment dotnet-autogen
 kubectl delete deployment prometheus-client
 kubectl delete deployment cx-node-autogen
 kubectl delete deployment cx-py-autogen
+kubectl delete deployment cx-fastapi-autogen

@@ -1,0 +1,54 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cx-py-autogen
+spec:
+  selector:
+    name: cx-py-autogen
+  ports:
+  - protocol: TCP
+    port: 5000
+    targetPort: 5000
+---
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cx-py-autogen
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      name: cx-py-autogen
+  template:
+    metadata:
+      labels:
+        name: cx-py-autogen
+    spec:
+      containers:
+      - name: cx-py-autogen
+        image: public.ecr.aws/w3s4j9x9/microservices-demo:py-autogen
+        imagePullPolicy: Always
+        workingDir: /home/code
+        ports:
+          - name: http
+            containerPort: 5000
+        env:
+        - name: OTEL_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: OTEL_SERVICE_NAME
+          value: cx-py-autogen
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: cx.application.name=cx-py-autogen,cx.subsystem.name=cx-py-autogen
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: http://$(OTEL_IP):4317
+        # - name: OTEL_LOG_LEVEL
+        #   value: all
+        command: ["/bin/sh"]
+        args: ["entrypoint.sh"]
+        # test if needed
+        # command: [ "/bin/bash", "-c", "--" ]
+        # args: [ "while true; do sleep 30; done;" ]

@@ -8,3 +8,4 @@ kubectl delete deployment cx-marketing-node-reqs
 kubectl delete deployment dotnet-autogen
 kubectl delete deployment prometheus-client
 kubectl delete deployment cx-node-autogen
+kubectl delete deployment cx-py-autogen

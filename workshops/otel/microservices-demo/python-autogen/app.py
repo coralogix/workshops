@@ -1,11 +1,13 @@
+# Import necessary libraries for web server, logging, threading, HTTP requests, and unique ID generation
 import logging
 import json
-from flask import Flask
+from flask import Flask, request
 import threading
 import requests
 import time
+import uuid
 
-# Import OpenTelemetry packages
+# Import OpenTelemetry libraries for tracing and logging instrumentation
 from opentelemetry import trace
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
 from opentelemetry.sdk.trace import TracerProvider
@@ -13,75 +15,96 @@ from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 from opentelemetry.instrumentation.logging import LoggingInstrumentor
 
-# Initialize Flask app
+# Initialize the Flask application
 app = Flask(__name__)
 
-# Setup OpenTelemetry
+# Set up the tracer provider for collecting traces
 trace.set_tracer_provider(TracerProvider())
 tracer_provider = trace.get_tracer_provider()
 
-# Configure OTLP exporter
+# Configure the OTLP exporter to send trace data
 otlp_exporter = OTLPSpanExporter()
 tracer_provider.add_span_processor(BatchSpanProcessor(otlp_exporter))
 
-# Instrument Flask
+# Instrument the Flask app for automatic tracing
 FlaskInstrumentor().instrument_app(app)
 
-# Enable OpenTelemetry logging instrumentation
+# Enable logging instrumentation to attach trace context to logs
 LoggingInstrumentor().instrument(set_logging_format=True)
 
-# Define a simple route
+# Define the home route
 @app.route('/')
 def home():
-    return 'Hello, World from Flask!'
+    # Retrieve the request ID from the incoming request headers
+    request_id = request.headers.get('X-Request-ID', 'Unknown')
+    # Respond with a message that includes the request ID
+    response_message = f'Hello, World from Flask! request_id: {request_id}'
+    return response_message
 
-# Function to run the Flask server
+# Function to run the Flask app in a separate thread
 def run_flask_app():
+    # Start the Flask application without debug mode and reloader
     app.run(debug=False, use_reloader=False, port=5000, host='127.0.0.1')
 
-# Custom JSON formatter
+# Custom JSON formatter for logging
 class JsonFormatter(logging.Formatter):
     def format(self, record):
+        # Construct a JSON log record using standard and custom fields
         log_record = {
             "time": self.formatTime(record, self.datefmt),
             "name": record.name,
             "level": record.levelname,
-            "message": record.getMessage(),
-            # Include trace context
+            "body": record.getMessage(),
             "trace_id": getattr(record, "otelTraceID", "N/A"),
             "span_id": getattr(record, "otelSpanID", "N/A"),
+            "response_body": getattr(record, "responseBody", "N/A"),
         }
         if record.exc_info:
             log_record["exception"] = self.formatException(record.exc_info)
         return json.dumps(log_record)
 
-# Setup logging to output as JSON
+# Set up logging with JSON format
 def setup_logging():
+    # Get the root logger
     logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)  # Set log level back to DEBUG
+    # Set logging level to DEBUG
+    logger.setLevel(logging.DEBUG)
     
+    # Create a stream handler for outputting logs
     ch = logging.StreamHandler()
-    ch.setLevel(logging.DEBUG)  # Set handler log level back to DEBUG
+    ch.setLevel(logging.DEBUG)
     
+    # Use the custom JSON formatter
     formatter = JsonFormatter()
     ch.setFormatter(formatter)
     
+    # Add the handler to the logger
     logger.addHandler(ch)
 
-# Main application code
 if __name__ == '__main__':
+    # Configure logging
     setup_logging()
+    # Get a logger instance for this module
     logger = logging.getLogger(__name__)
 
+    # Start the Flask app in a background thread
     flask_thread = threading.Thread(target=run_flask_app, daemon=True)
     flask_thread.start()
 
-    logger.debug("Flask server started in background.")  # Ensure logs are at DEBUG level
+    # Log that the Flask server has started
+    logger.debug("Flask server started in background.")
 
     try:
-        for i in range(200):
-            response = requests.get("http://127.0.0.1:5000")
-            logger.debug(f"Request {i+1}: Flask server responded with: {response.text}")  # Ensure logs are at DEBUG level
-            time.sleep(0.1)
+        # Main loop to send requests to the Flask server
+        while True:
+            # Generate a unique request ID for each request
+            request_id = str(uuid.uuid4())
+            # Send a GET request to the Flask server with the unique request ID
+            response = requests.get("http://127.0.0.1:5000", headers={'X-Request-ID': request_id})
+            # Log the response using the custom logger, including the response text
+            logger.debug(f"Received response: {response.text}", extra={'responseBody': response.text})
+            # Wait for a short period before sending the next request
+            time.sleep(0.3)
     except KeyboardInterrupt:
-        logger.debug("Application stopped.")  # Ensure logs are at DEBUG level
+        # Log a message when the script is stopped manually
+        logger.debug("Application stopped.")

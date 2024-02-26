@@ -5,101 +5,72 @@
     "executionRoleArn": "<your ecsTaskExecutionRole i.e. arn:aws:iam::104013952213:role/ecsTaskExecutionRole>", 
     "containerDefinitions": [
         {
-            "name": "ecs-payment-gateway",
-            "image": "public.ecr.aws/w3s4j9x9/microservices-demo:python",
-            "workingDirectory": "/home/code/k8s",
-            "portMappings": [
-                {
-                    "containerPort": 5000,
-                    "hostPort": 5000
-                }
-            ],
+            "name": "dotnet-autogen",
+            "image": "public.ecr.aws/w3s4j9x9/microservices-demo:dotnet",
+            "workingDirectory": "/home/code",
             "essential": true,
             "entryPoint": [
                 "sh",
                 "-c"
             ],
             "command": [
-                "/bin/sh start-flask-redis-otel.sh"
+                "/bin/sh /App/run-client.sh"
             ],
             "logConfiguration": {
                 "logDriver": "awsfirelens",
                 "options": {
                     "Format": "json_lines",
                     "Header": "Authorization Bearer <your privatekey>",
-                    "Host": "<your ingress i.e. ingress.coralogix.us>",
+                    "Host": "<your ingress i.e. ingress.<your domain i.e. coralogix.us>>",
                     "Name": "http",
                     "Port": "443",
                     "Retry_Limit": "10",
                     "TLS": "On",
-                    "URI": "/logs/rest/singles",
+                    "URI": "/logs/v1/singles",
                     "compress": "gzip"
                 }
             },
             "environment": [
                 {
                     "name": "OTEL_SERVICE_NAME",
-                    "value": "ecs-payment-gateway"
+                    "value": "dotnet-autogen"
                 },
                 {
                     "name": "OTEL_RESOURCE_ATTRIBUTES",
-                    "value": "application.name=ecs-payment-gateway,api.name=ecs-payment-gateway,cx.application.name=ecs-payment-gateway,cx.subsystem.name=ecs-payment-gateway"
+                    "value": "cx.application.name=dotnet-autogen,cx.subsystem.name=dotnet-autogen"
                 },
                 {
                     "name": "OTEL_EXPORTER_OTLP_TRACES_ENDPOINT",
-                    "value": "http://localhost:4317"
+                    "value": "http://localhost:4318"
+                },
+                {
+                    "name": "CORECLR_ENABLE_PROFILING",
+                    "value": "1"
+                },
+                {
+                    "name": "CORECLR_PROFILER",
+                    "value": "{918728DD-259F-4A6A-AC2B-B85E1B658318}"
+                },
+                {
+                    "name": "CORECLR_PROFILER_PATH",
+                    "value": "/otel-dotnet-auto/linux-x64/OpenTelemetry.AutoInstrumentation.Native.so"
+                },
+                {
+                    "name": "DOTNET_ADDITIONAL_DEPS",
+                    "value": "/otel-dotnet-auto/AdditionalDeps"
+                },
+                {
+                    "name": "DOTNET_SHARED_STORE",
+                    "value": "/otel-dotnet-auto/store"
+                },
+                {
+                    "name": "DOTNET_STARTUP_HOOKS",
+                    "value": "/otel-dotnet-auto/net/OpenTelemetry.AutoInstrumentation.StartupHook.dll"
+                },
+                {
+                    "name": "OTEL_DOTNET_AUTO_HOME",
+                    "value": "/otel-dotnet-auto"
                 }
-                
-            ]
-        },
-        {
-            "name": "ecs-shopping-cart",
-            "image": "public.ecr.aws/w3s4j9x9/microservices-demo:python",
-            "workingDirectory": "/home/code/k8s",
-            "essential": true,
-            "entryPoint": [
-                "sh",
-                "-c"
-            ],
-            "command": [
-                "/bin/sh start-reqs-envurl-otel.sh"
-            ],
-            "logConfiguration": {
-                "logDriver": "awsfirelens",
-                "options": {
-                    "Format": "json_lines",
-                    "Header": "private_key <your privatekey>",
-                    "Host": "<your ingress i.e. ingress.coralogix.us>",
-                    "Name": "http",
-                    "Port": "443",
-                    "Retry_Limit": "10",
-                    "TLS": "On",
-                    "URI": "/logs/rest/singles",
-                    "compress": "gzip"
-                }
-            },
-            "environment": [
-                {
-                    "name": "OTEL_SERVICE_NAME",
-                    "value": "ecs-shopping-cart"
-                },
-                {
-                    "name": "PYTHON_TEST_URLGOOD",
-                    "value": "GOOD"
-                },
-                {
-                    "name": "PYTHON_TEST_URL",
-                    "value": "http://localhost:5000"
-                },
-                {
-                    "name": "OTEL_RESOURCE_ATTRIBUTES",
-                    "value": "application.name=ecs-shopping-cart,api.name=ecs-shopping-cart,cx.application.name=ecs-shopping-cart,cx.subsystem.name=ecs-shopping-cart"
-                },
-                {
-                    "name": "OTEL_EXPORTER_OTLP_TRACES_ENDPOINT",
-                    "value": "http://localhost:4317"
-                }
-                
             ]
         },
         {
@@ -145,13 +116,13 @@
                 "logDriver": "awsfirelens",
                 "options": {
                     "Format": "json_lines",
-                    "Header": "private_key <your privatekey>",
-                    "Host": "<your ingress i.e. ingress.coralogix.us>",
+                    "Header": "Authorization Bearer <your privatekey>",
+                    "Host": "<your ingress i.e. ingress.<your domain i.e. coralogix.us>>",
                     "Name": "http",
                     "Port": "443",
                     "Retry_Limit": "10",
                     "TLS": "On",
-                    "URI": "/logs/rest/singles",
+                    "URI": "/logs/v1/singles",
                     "compress": "gzip"
                 }
             }
@@ -165,7 +136,7 @@
             "environment": [
                 {
                     "name": "aws_fluent_bit_init_s3_1",
-                    "value": "<yourS3ARNfilterlocationi.e. arn:aws:s3:::misc/base_filters.conf>"
+                    "value": "arn:aws:s3:::sri-fargate-conf/base_filters.conf"
                 }
             ],
             "mountPoints": [],
@@ -179,13 +150,13 @@
                 "logDriver": "awsfirelens",
                 "options": {
                     "Format": "json_lines",
-                    "Header": "private_key <your privatekey>",
-                    "Host": "<your ingress i.e. ingress.coralogix.us>",
+                    "Header": "Authorization Bearer <your privatekey>",
+                    "Host": "<your ingress i.e. ingress.<your domain i.e. coralogix.us>>",
                     "Name": "http",
                     "Port": "443",
                     "Retry_Limit": "10",
                     "TLS": "On",
-                    "URI": "/logs/rest/singles",
+                    "URI": "/logs/v1/singles",
                     "compress": "gzip"
                 }
             }

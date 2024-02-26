@@ -9,10 +9,7 @@ import uuid
 
 # Import OpenTelemetry libraries for tracing and logging instrumentation
 from opentelemetry import trace
-from opentelemetry.instrumentation.flask import FlaskInstrumentor
 from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 from opentelemetry.instrumentation.logging import LoggingInstrumentor
 
 # Initialize the Flask application
@@ -21,13 +18,6 @@ app = Flask(__name__)
 # Set up the tracer provider for collecting traces
 trace.set_tracer_provider(TracerProvider())
 tracer_provider = trace.get_tracer_provider()
-
-# Configure the OTLP exporter to send trace data
-otlp_exporter = OTLPSpanExporter()
-tracer_provider.add_span_processor(BatchSpanProcessor(otlp_exporter))
-
-# Instrument the Flask app for automatic tracing
-FlaskInstrumentor().instrument_app(app)
 
 # Enable logging instrumentation to attach trace context to logs
 LoggingInstrumentor().instrument(set_logging_format=True)

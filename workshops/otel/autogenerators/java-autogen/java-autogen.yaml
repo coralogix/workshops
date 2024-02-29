@@ -2,19 +2,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cx-inventory-java-reqs
+  name: java-autogen
   namespace: default
 spec:
   selector:
     matchLabels:
-      name: cx-inventory-java-reqs
+      name: java-autogen
   template:
     metadata:
       labels:
-        name: cx-inventory-java-reqs
+        name: java-autogen
     spec:
       containers:
-      - name: cx-inventory-java-reqs
+      - name: java-autogen
         image: public.ecr.aws/w3s4j9x9/microservices-demo:java
         imagePullPolicy: Always
         workingDir: /home/code
@@ -24,9 +24,9 @@ spec:
             fieldRef:
               fieldPath: status.hostIP
         - name: OTEL_SERVICE_NAME
-          value: cx-inventory-java-reqs
+          value: java-autogen
         - name: OTEL_RESOURCE_ATTRIBUTES
-          value: cx.application.name=cx-inventory-java-reqs,cx.subsystem.name=cx-inventory-java-reqs
+          value: cx.application.name=java-autogen,cx.subsystem.name=java-autogen
         - name: OTEL_EXPORTER_OTLP_ENDPOINT
           value: http://$(OTEL_IP):4317
         - name: JAVA_TEST_URL

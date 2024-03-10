@@ -101,13 +101,8 @@ source deploy-node-autogen.sh
   
 Prometheus metrics example:  
   
-- Deployment with Prometheus metrics exposed:
-```
-source deploy-prometheus.sh
-```
-  
-- Update OpenTelemetry Collector to scrape Prometheus metrics from deployment:
-- A metric called `CustomGauge` with value **17** will now be available     
+- Prometheus metrics and auto-discovery in own own repo area
+       
 ```
 helm upgrade --reuse-values otel-coralogix-integration coralogix-charts-virtual/otel-integration --values ./yaml/override-prometheus.yaml 
 ```  

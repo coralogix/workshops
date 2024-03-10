@@ -1,0 +1,52 @@
+global:
+  clusterName: sl-cluster
+  domain: coralogix.us
+opentelemetry-agent:
+  config:
+    extensions:
+    # Configures the Kubernetes observer to watch for pod start and stop events.
+      k8s_observer:
+        observe_nodes: true
+        observe_services: true
+      host_observer:
+    exporters:
+      logging:
+        loglevel: debug
+    receivers:
+      receiver_creator/prometheus-auto:
+        # Name of the extensions to watch for endpoints to start and stop.
+        watch_observers: [k8s_observer]
+        receivers:
+          prometheus_simple:
+            # Configure prometheus scraping if standard prometheus annotations are set on the pod.
+            rule: type == "pod" && annotations["prometheus.io/scrape"] == "true"
+            config:
+              metrics_path: '`"prometheus.io/path" in annotations ? annotations["prometheus.io/path"] : "/metrics"`'
+              endpoint: '`endpoint`:`"prometheus.io/port" in annotations ? annotations["prometheus.io/port"] : 9090`'
+            resource_attributes:
+              an.attribute: a.value
+              # Dynamic configuration values
+              app.version: '`labels["app_version"]`'
+        resource_attributes:
+          # Dynamic configuration values, overwriting default attributes`
+          pod:
+            service.name: '`labels["service_name"]`'
+            app: '`labels["app"]`'
+          port:
+            service.name: '`pod.labels["service_name"]`'
+            app: '`pod.labels["app"]`'
+    service:
+      extensions:
+      - zpages
+      - pprof
+      - health_check
+      - k8s_observer
+      - host_observer
+      pipelines:
+        metrics:
+          receivers:
+          - otlp
+          - prometheus
+          - hostmetrics
+          - statsd
+          - receiver_creator/prometheus-auto

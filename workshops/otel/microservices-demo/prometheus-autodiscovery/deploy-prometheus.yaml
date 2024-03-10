@@ -13,6 +13,8 @@ spec:
     metadata:
       labels:
         app: prometheus-client1
+      annotations:
+        prometheus.io/scrape: "true"
     spec:
       containers:
       - name: prometheus-client1
@@ -57,6 +59,8 @@ spec:
     metadata:
       labels:
         app: prometheus-client2
+      annotations:
+        prometheus.io/scrape: "true"
     spec:
       containers:
       - name: prometheus-client2

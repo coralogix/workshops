@@ -1,12 +1,12 @@
-kubectl delete deployment cx-payment-gateway-flask
-kubectl delete service cx-payment-gateway-flask
-kubectl delete deployment cx-redis
-kubectl delete service cx-redis
-kubectl delete deployment cx-shopping-cart-reqs
-kubectl delete deployment cx-inventory-java-reqs
-kubectl delete deployment cx-marketing-node-reqs
-kubectl delete deployment dotnet-autogen
-kubectl delete deployment prometheus-client
-kubectl delete deployment cx-node-autogen
-kubectl delete deployment cx-py-autogen
-kubectl delete deployment cx-fastapi-autogen
+kubectl delete deployment cx-payment-gateway-flask &
+kubectl delete service cx-payment-gateway-flask &
+kubectl delete deployment cx-redis &
+kubectl delete service cx-redis &
+kubectl delete deployment cx-shopping-cart-reqs &
+kubectl delete deployment cx-inventory-java-reqs &
+kubectl delete deployment cx-marketing-node-reqs &
+kubectl delete deployment dotnet-autogen &
+kubectl delete deployment prometheus-client &
+kubectl delete deployment cx-node-autogen &
+kubectl delete deployment cx-py-autogen &
+kubectl delete deployment cx-fastapi-autogen &

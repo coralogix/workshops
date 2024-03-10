@@ -1,4 +1,6 @@
----
+global:
+  clusterName: sl-cluster
+  domain: coralogix.us
 opentelemetry-agent:
   config:
     receivers:

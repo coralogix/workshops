@@ -101,7 +101,7 @@ source deploy-node-autogen.sh
   
 Prometheus metrics example:  
   
-- Prometheus metrics and auto-discovery in own own repo area
+- [Prometheus metrics and auto-discovery](./workshops/otel/microservices-demo/prometheus-autodiscovery) in own own repo area
        
 ```
 helm upgrade --reuse-values otel-coralogix-integration coralogix-charts-virtual/otel-integration --values ./yaml/override-prometheus.yaml 

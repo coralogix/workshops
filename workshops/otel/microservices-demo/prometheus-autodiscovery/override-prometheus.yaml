@@ -1,7 +1,7 @@
 global:
   clusterName: sl-cluster
   domain: coralogix.us
-opentelemetry-agent:
+opentelemetry-collector:
   config:
     extensions:
     # Configures the Kubernetes observer to watch for pod start and stop events.

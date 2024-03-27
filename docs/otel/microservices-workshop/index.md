@@ -101,21 +101,7 @@ source deploy-node-autogen.sh
   
 Prometheus metrics example:  
   
-- [Prometheus metrics and auto-discovery](https://github.com/coralogix/workshops/tree/master/workshops/otel/microservices-demo/prometheus-autodiscovery) in own own repo area
-       
-```
-helm upgrade --reuse-values otel-coralogix-integration coralogix-charts-virtual/otel-integration --values ./yaml/override-prometheus.yaml 
-```  
-
-- Add a label (aka dimension or tag) called `env:dev` to the `CustomGauge` metric:  
-```
-helm upgrade --reuse-values otel-coralogix-integration coralogix-charts-virtual/otel-integration --values ./yaml/override-attr.yaml
-```  
-
-- Drop the metric `CustomGauge` to clean up extra metrics- but leave the `env:dev` label:
-```
-helm upgrade --reuse-values otel-coralogix-integration coralogix-charts-virtual/otel-integration --values ./yaml/override-attr-drop.yaml
-```
+- [Prometheus metrics and auto-discovery](https://github.com/coralogix/workshops/tree/master/workshops/otel/microservices-demo/prometheus-autodiscovery) in own own repo area  
   
 ### Cleanup
 To remove all the deployments/services/pods from the example from your k8s cluster (ignore any errors it reports):  

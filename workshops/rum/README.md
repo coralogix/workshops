@@ -1,5 +1,5 @@
 ### 3 Minute RUM Workshop  
-#### This can be run from a PC  
+#### This can be run from a personal computer  
 
 - Current Node.js must be installed
 - Add Coralogix RUM integration `Browser SDK` and `User Context and Labels` to a new file called `dist/index.js`  

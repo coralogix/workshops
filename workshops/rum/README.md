@@ -2,7 +2,7 @@
 #### This can be run from a personal computer  
 
 - Current Node.js must be installed
-- Add Coralogix RUM integration `Browser SDK` and `User Context and Labels` to a new file called `dist/index.js`  
+- Add Coralogix RUM integration `Browser SDK` and `User Context and Labels` to a new file called `src/index.js`  
 - Set up node packages:
 ```
 source 1-setup-node.sh

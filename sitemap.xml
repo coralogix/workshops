@@ -11,17 +11,17 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>http://coralogix.github.io/otel/ecs-ec2/</loc>
+         <lastmod>2024-04-14</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>http://coralogix.github.io/otel/ecs-fargate/</loc>
+         <lastmod>2024-04-14</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>http://coralogix.github.io/otel/logparsing/logparsing/</loc>
-         <lastmod>2024-04-14</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>http://coralogix.github.io/otel/microservices-ecs-ec2/</loc>
-         <lastmod>2024-04-14</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>http://coralogix.github.io/otel/microservices-ecs-fargate/</loc>
          <lastmod>2024-04-14</lastmod>
          <changefreq>daily</changefreq>
     </url>

@@ -18,11 +18,11 @@
         <link rel="prev" href="../about-opentelemetry/">
       
       
-        <link rel="next" href="../microservices-fargate/">
+        <link rel="next" href="../microservices-ecs-fargate/">
       
       
       <link rel="icon" href="../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.13">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
     
     
       
@@ -30,7 +30,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.7e359304.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.50c56a3b.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
@@ -319,14 +319,14 @@
     
     
     
+    
+    
       
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
         
         
           
@@ -334,7 +334,7 @@
         <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -391,17 +391,14 @@
     
     
     
-      
-        
-        
-      
-      
-        
-      
     
+    
+      
+      
     
     <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
+        
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
@@ -589,11 +586,32 @@
   
   
     <li class="md-nav__item">
-      <a href="../microservices-fargate/" class="md-nav__link">
+      <a href="../microservices-ecs-fargate/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     AWS ECS Fargate (Python)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../microservices-ecs-ec2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AWS ECS EC2 (Python)
   </span>
   
 
@@ -657,6 +675,27 @@
   
   <span class="md-ellipsis">
     Monolith - .NET / Windows
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rum/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Real User Monitoring (RUM)
   </span>
   
 
@@ -761,20 +800,8 @@ There will be three services spun up:  </p>
 </code></pre>
 <p>Prometheus metrics example:  </p>
 <ul>
-<li><a href="https://github.com/coralogix/workshops/tree/master/workshops/otel/microservices-demo/prometheus-autodiscovery">Prometheus metrics and auto-discovery</a> in own own repo area</li>
+<li><a href="https://github.com/coralogix/workshops/tree/master/workshops/otel/microservices-demo/prometheus-autodiscovery">Prometheus metrics and auto-discovery</a> in own own repo area  </li>
 </ul>
-<pre><code>helm upgrade --reuse-values otel-coralogix-integration coralogix-charts-virtual/otel-integration --values ./yaml/override-prometheus.yaml 
-</code></pre>
-<ul>
-<li>Add a label (aka dimension or tag) called <code>env:dev</code> to the <code>CustomGauge</code> metric:  </li>
-</ul>
-<pre><code>helm upgrade --reuse-values otel-coralogix-integration coralogix-charts-virtual/otel-integration --values ./yaml/override-attr.yaml
-</code></pre>
-<ul>
-<li>Drop the metric <code>CustomGauge</code> to clean up extra metrics- but leave the <code>env:dev</code> label:</li>
-</ul>
-<pre><code>helm upgrade --reuse-values otel-coralogix-integration coralogix-charts-virtual/otel-integration --values ./yaml/override-attr-drop.yaml
-</code></pre>
 <h3 id="cleanup">Cleanup</h3>
 <p>To remove all the deployments/services/pods from the example from your k8s cluster (ignore any errors it reports):  </p>
 <pre><code>source delete-all.sh
@@ -848,10 +875,10 @@ There will be three services spun up:  </p>
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.instant", "navigation.sections", "navigation.expand", "navigation.top", "navigation.tracking", "toc.integrate", "toc.follow"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.instant", "navigation.sections", "navigation.expand", "navigation.top", "navigation.tracking", "toc.integrate", "toc.follow"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.c8d2eff1.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7c377c4.min.js"></script>
       
     
   </body>

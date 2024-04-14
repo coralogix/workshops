@@ -12,24 +12,26 @@
         <meta name="author" content="Coralogix">
       
       
-        <link rel="canonical" href="http://coralogix.github.io/otel/logparsing/logparsing/">
+        <link rel="canonical" href="http://coralogix.github.io/rum/">
+      
+      
+        <link rel="prev" href="../otel/monolith-workshop/windows/">
       
       
       
-      
-      <link rel="icon" href="../../../images/favicon.png">
+      <link rel="icon" href="../images/favicon.png">
       <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
     
     
       
-        <title>OpenTelemetry for Log Observability - Coralogix Workshops</title>
+        <title>Real User Monitoring (RUM) - Coralogix Workshops</title>
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.50c56a3b.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.50c56a3b.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -48,9 +50,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+      <link rel="stylesheet" href="../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -74,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#opentelemetry-for-log-observability" class="md-skip">
+        <a href="#3-minute-rum-workshop" class="md-skip">
           Skip to content
         </a>
       
@@ -90,9 +92,9 @@
 
 <header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../../.." title="Coralogix Workshops" class="md-header__button md-logo" aria-label="Coralogix Workshops" data-md-component="logo">
+    <a href=".." title="Coralogix Workshops" class="md-header__button md-logo" aria-label="Coralogix Workshops" data-md-component="logo">
       
-  <img src="../../../images/horizontal.png" alt="logo">
+  <img src="../images/horizontal.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -109,7 +111,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              OpenTelemetry for Log Observability
+              Real User Monitoring (RUM)
             
           </span>
         </div>
@@ -184,7 +186,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../.." class="md-tabs__link">
+      <a href=".." class="md-tabs__link">
         
   
     
@@ -203,7 +205,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../about-opentelemetry/" class="md-tabs__link">
+        <a href="../otel/about-opentelemetry/" class="md-tabs__link">
           
   
   OpenTelemetry Info
@@ -217,11 +219,13 @@
         
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../microservices-workshop/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../otel/microservices-workshop/" class="md-tabs__link">
           
   
   Workshops
@@ -262,9 +266,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../.." title="Coralogix Workshops" class="md-nav__button md-logo" aria-label="Coralogix Workshops" data-md-component="logo">
+    <a href=".." title="Coralogix Workshops" class="md-nav__button md-logo" aria-label="Coralogix Workshops" data-md-component="logo">
       
-  <img src="../../../images/horizontal.png" alt="logo">
+  <img src="../images/horizontal.png" alt="logo">
 
     </a>
     Coralogix Workshops
@@ -291,7 +295,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../.." class="md-nav__link">
+      <a href=".." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -353,7 +357,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../about-opentelemetry/" class="md-nav__link">
+      <a href="../otel/about-opentelemetry/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -378,8 +382,10 @@
       
   
   
+    
   
   
+  
     
     
     
@@ -388,14 +394,12 @@
       
       
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
         
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
@@ -409,7 +413,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             Workshops
@@ -423,7 +427,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../microservices-workshop/" class="md-nav__link">
+      <a href="../otel/microservices-workshop/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -444,7 +448,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../microservices-ecs-fargate/" class="md-nav__link">
+      <a href="../otel/microservices-ecs-fargate/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -465,7 +469,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../microservices-ecs-ec2/" class="md-nav__link">
+      <a href="../otel/microservices-ecs-ec2/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -486,7 +490,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../monolith-workshop/node/" class="md-nav__link">
+      <a href="../otel/monolith-workshop/node/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -507,7 +511,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../monolith-workshop/python/" class="md-nav__link">
+      <a href="../otel/monolith-workshop/python/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -528,7 +532,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../monolith-workshop/windows/" class="md-nav__link">
+      <a href="../otel/monolith-workshop/windows/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -546,10 +550,28 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../../rum/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Real User Monitoring (RUM)
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -558,6 +580,48 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#3-minute-rum-workshop" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 Minute RUM Workshop
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3 Minute RUM Workshop">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#this-can-be-run-from-a-personal-computer" class="md-nav__link">
+    <span class="md-ellipsis">
+      This can be run from a personal computer
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -588,68 +652,39 @@
   
 
 
-<h1 id="opentelemetry-for-log-observability">OpenTelemetry for Log Observability</h1>
-<h2 id="instructions">Instructions</h2>
-<p>This example is for basic study only and is not documentation.  <br />
-Full documentation: <a href="https://coralogix.com/docs/">https://coralogix.com/docs/</a><br />
-Requirements:<br />
-- Coralogix Acccount<br />
-- Cloud Linux host (Debian preferred but RPM flavors will work)<br />
-- Updated versions and sufficient permissions for installing software<br />
-- Proper IDE i.e. Visual Studio Code </p>
-<h3 id="step-1-setup">Step 1 - Setup</h3>
-<p>Clone repo:</p>
-<pre><code>git clone https://github.com/coralogix/workshops
-</code></pre>
-<h3 id="step-2-change-to-workshop-dir">Step 2 - Change to workshop dir</h3>
-<p>Change to the proper directory for workshop example:  </p>
-<pre><code>cd ./workshops/workshops/otel/logparsing/
-</code></pre>
-<h3 id="step-3-set-up-otel-collector-on-a-linux-host">Step 3 - Set up Otel Collector on a Linux host</h3>
-<p>Download and install latest CONTRIB release version from here:<br />
-<a href="https://github.com/open-telemetry/opentelemetry-collector-releases/releases">https://github.com/open-telemetry/opentelemetry-collector-releases/releases</a>  </p>
-<p>Collector <code>config.yaml</code> must be configured with Coralogix Exporter. See the "Send Data to Coralogix" section for determining telemetry endpoint and and API key: <a href="https://coralogix.com/docs/guide-first-steps-coralogix/">https://coralogix.com/docs/guide-first-steps-coralogix/</a>    </p>
-<p>See the <code>config.yaml</code> example in <code>./workshops/workshops/otel/logparsing/otelcol</code><br />
-This file can be updated in <code>/etc/otelcol/contrib/config.yaml</code> - make a backup of the default version first.    </p>
-<p>Manage the collector using <code>systemctl</code> i.e. <code>sudo systemctl restart otelcol</code><br />
-More info is here: <a href="https://coralogix.com/docs/guide-first-steps-coralogix/">https://coralogix.com/docs/guide-first-steps-coralogix/</a>  </p>
-<p>You can check Collector status with these status URLS:<br />
-<code>http://localhost:55679/debug/tracez</code><br />
-<code>http://localhost:55679/debug/pipelinez</code>  <br />
-For more info: <a href="https://github.com/open-telemetry/opentelemetry-collector/blob/main/extension/zpagesextension/README.md">zpages docs</a>  </p>
-<h3 id="step-4-prepare-log-example">Step 4 - Prepare Log Example</h3>
+  <h1>Real User Monitoring (RUM)</h1>
+
+<h3 id="3-minute-rum-workshop">3 Minute RUM Workshop</h3>
+<h4 id="this-can-be-run-from-a-personal-computer">This can be run from a personal computer</h4>
 <ul>
-<li>Copy the LOG.log.gz file to <code>/tmp/cx</code>  </li>
-<li><code>gunzip Log.log.gz</code>  </li>
+<li>Current Node.js must be installed</li>
+<li>Add Coralogix RUM integration <code>Browser SDK</code> and <code>User Context and Labels</code> to a new file called <code>src/index.js</code>  </li>
+<li>Set up node packages:</li>
 </ul>
-<h3 id="step-5-update-collector-with-log-receiver">Step 5 - Update Collector with Log Receiver</h3>
-<ul>
-<li>Add the following receiver to <code>/etc/otelcol/config.yaml</code>  </li>
-</ul>
-<pre><code>receivers:
-  filelog:
-    include: [ /tmp/cx/LOG.log ]
+<pre><code>source 1-setup-node.sh
 </code></pre>
 <ul>
-<li>Add the following pipeline to <code>/etc/otelcol/config.yaml</code>  </li>
+<li>Run webpack to package the files in <code>dist</code> into a single <code>dist/main.js</code> file</li>
 </ul>
-<pre><code>service:  
-  pipelines:
-    logs:
-      receivers: [otlp, filelog]
+<pre><code>source 2-webpack.sh
 </code></pre>
 <ul>
-<li>Restart the collector:</li>
+<li>Edit this file and add your sourcemap key and region. This key is available in the RUM Integration-&gt;SourceMap setup   </li>
+<li>Run this command to upload sourcemap  </li>
 </ul>
-<pre><code>sudo systemctl restart otelcol-contrib.service 
+<pre><code>source 3-sourcemap.sh
 </code></pre>
 <ul>
-<li>Check collector status:</li>
+<li>Run the app.js node app. This will run the node Express web server in the terminal- leave it running.</li>
 </ul>
-<pre><code>sudo systemctl status otelcol-contrib.service 
+<pre><code>source 4-node.sh
 </code></pre>
-<h3 id="step-5-study-logs-in-coralogix">Step 5 - Study Logs in Coralogix</h3>
-<p>The <code>Explore-&gt;Logs</code> option now will show the integrated logs.  </p>
+<ul>
+<li>Open a browser to <code>http://localhost:3000</code> to load the app served by Node. Refresh a few times  </li>
+<li>Study RUM results in Coralogix  </li>
+<li><code>ctrl-c</code> to stop Express server</li>
+<li>Optional: <code>source 5-cleanup.sh</code> removes all Node packages and webpack artifacts  </li>
+</ul>
 
 
 
@@ -706,10 +741,10 @@ For more info: <a href="https://github.com/open-telemetry/opentelemetry-collecto
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.instant", "navigation.sections", "navigation.expand", "navigation.top", "navigation.tracking", "toc.integrate", "toc.follow"], "search": "../../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.instant", "navigation.sections", "navigation.expand", "navigation.top", "navigation.tracking", "toc.integrate", "toc.follow"], "search": "../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7c377c4.min.js"></script>
+      <script src="../assets/javascripts/bundle.d7c377c4.min.js"></script>
       
     
   </body>

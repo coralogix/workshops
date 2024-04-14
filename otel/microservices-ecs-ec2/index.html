@@ -12,25 +12,25 @@
         <meta name="author" content="Coralogix">
       
       
-        <link rel="canonical" href="http://coralogix.github.io/otel/microservices-fargate/">
+        <link rel="canonical" href="http://coralogix.github.io/otel/microservices-ecs-ec2/">
       
       
-        <link rel="prev" href="../microservices-workshop/">
+        <link rel="prev" href="../microservices-ecs-fargate/">
       
       
         <link rel="next" href="../monolith-workshop/node/">
       
       
       <link rel="icon" href="../../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.13">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
     
     
       
-        <title>AWS ECS Fargate (Python) - Coralogix Workshops</title>
+        <title>AWS ECS EC2 (Python) - Coralogix Workshops</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.7e359304.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.50c56a3b.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
@@ -113,7 +113,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              AWS ECS Fargate (Python)
+              AWS ECS EC2 (Python)
             
           </span>
         </div>
@@ -319,14 +319,14 @@
     
     
     
+    
+    
       
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
         
         
           
@@ -334,7 +334,7 @@
         <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -391,17 +391,14 @@
     
     
     
-      
-        
-        
-      
-      
-        
-      
     
+    
+      
+      
     
     <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
+        
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
@@ -450,6 +447,27 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../microservices-ecs-fargate/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AWS ECS Fargate (Python)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -466,7 +484,7 @@
           
   
   <span class="md-ellipsis">
-    AWS ECS Fargate (Python)
+    AWS ECS EC2 (Python)
   </span>
   
 
@@ -477,7 +495,7 @@
         
   
   <span class="md-ellipsis">
-    AWS ECS Fargate (Python)
+    AWS ECS EC2 (Python)
   </span>
   
 
@@ -529,34 +547,34 @@
           <li class="md-nav__item">
   <a href="#step-3-prep-requirements" class="md-nav__link">
     <span class="md-ellipsis">
-      Step 3: Prep Requirements
+      Step 3 - Prep Requirements
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#step-4-prep-register-task" class="md-nav__link">
+  <a href="#step-4-execute-workshop" class="md-nav__link">
     <span class="md-ellipsis">
-      Step 4: Prep / Register Task
+      Step 4 - Execute Workshop
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#step-5-launch-task" class="md-nav__link">
+  <a href="#step-5-study-results-in-coralogix-portal" class="md-nav__link">
     <span class="md-ellipsis">
-      Step 5: Launch Task
+      Step 5 - Study results in Coralogix portal
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#step-6-study-results-in-coralogix-portal" class="md-nav__link">
+  <a href="#step-6-cleanup" class="md-nav__link">
     <span class="md-ellipsis">
-      Step 6 - Study results in Coralogix portal
+      Step 6 - Cleanup
     </span>
   </a>
   
@@ -639,6 +657,27 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rum/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Real User Monitoring (RUM)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -670,7 +709,7 @@
 Full documentation: <a href="https://coralogix.com/docs/">https://coralogix.com/docs/</a><br />
 Requirements:<br />
 - AWS Account
-- Intermediate to Advanced skill with ECS-Fargate<br />
+- Intermediate to Advanced skill with ECS-EC2
 - Sufficient permissions to configure AWS<br />
 - Proper IDE i.e. Visual Studio Code </p>
 <h3 id="step-1-setup">Step 1 - Setup</h3>
@@ -679,32 +718,37 @@ Requirements:<br />
 </code></pre>
 <h3 id="step-2-change-to-workshop-dir">Step 2 - Change to workshop dir</h3>
 <p>Change to the proper directory for workshop example:  </p>
-<pre><code>cd ./workshops/workshops/otel/ecs-fargate
+<pre><code>cd ./workshops/workshops/otel/ecs-ec2
 </code></pre>
-<h3 id="step-3-prep-requirements">Step 3: Prep Requirements</h3>
-<p>1 - Put the following file in an S3 bucket:<br />
-https://github.com/coralogix/telemetry-shippers/blob/master/logs/fluent-bit/ecs-fargate/base_filters.conf  </p>
-<p>2 - Put the following in a Systems Manager Parameter Store:<br />
-https://github.com/coralogix/telemetry-shippers/blob/master/otel-ecs-fargate/config.yaml  </p>
-<p>3 - Create a role called <code>ecsTaskExecutionRole</code><br />
-that contains the AWS managed <code>AmazonECSTaskExecutionRolePolicy</code><br />
-and two example policies from this workshop:<br />
-<code>ecs-policy-s3-access.json</code><br />
-<code>ecs-policy-secrets-access.json</code>  </p>
+<h3 id="step-3-prep-requirements">Step 3 - Prep Requirements</h3>
+<p>1 - Example ECS EC2 setup scripts to bring up and down an ECS cluster are included: <code>ecs-cli-up.sh</code> and <code>ecs-cli-down.sh</code><br />
+2 - Identify Coralogix Distro for OpenTelemetry container version <a href="https://hub.docker.com/r/coralogixrepo/coralogix-otel-collector/tags">here before starting</a><br />
+3 - REQUIRED! Review all scripts and update variables IN CAPS 
+4 - Study official documentation here: <a href="https://github.com/coralogix/cloudformation-coralogix-aws/tree/master/opentelemetry/ecs-ec2">https://github.com/coralogix/cloudformation-coralogix-aws/tree/master/opentelemetry/ecs-ec2</a></p>
 <p>These two policies should be tuned for your own production security needs when going into production.  </p>
-<h3 id="step-4-prep-register-task">Step 4: Prep / Register Task</h3>
-<p>Prep example Task: <code>aws-fargate-otel-demo.json</code> </p>
-<p>Update all 14 locations replacing contents bewteen <code>&lt; &gt;</code> and removing those brackets but leaving the quotes: adding task execution role, key, domain, S3 ARN, Systems Parameter etc...  </p>
-<p>Once prepped the task can be registered and made into a service.  </p>
-<h3 id="step-5-launch-task">Step 5: Launch Task</h3>
-<p>Launch according to your standard procedure.  </p>
-<p>The task creates the following containers:<br />
-- two microservices (Client/Server)<br />
-- FireLens log router<br />
-- Otel collector  </p>
-<p>The microservice containers create a Python HTTP client and server that will generate spans and logs and send to Coralogix.  </p>
-<h3 id="step-6-study-results-in-coralogix-portal">Step 6 - Study results in Coralogix portal</h3>
-<p>The shell scripts show how a the microservices example.</p>
+<h3 id="step-4-execute-workshop">Step 4 - Execute Workshop</h3>
+<ul>
+<li>Deploy Coralogix Otel Collector stack in ECS EC2 Cluster</li>
+</ul>
+<pre><code>source 1-ecs-deploy-otel.sh
+</code></pre>
+<ul>
+<li>Deploy example Python application stack that will generate traces and logs  </li>
+</ul>
+<pre><code>source 2-ecs-createstack-autogen-otel.sh
+</code></pre>
+<h3 id="step-5-study-results-in-coralogix-portal">Step 5 - Study results in Coralogix portal</h3>
+<h3 id="step-6-cleanup">Step 6 - Cleanup</h3>
+<ul>
+<li>Delete Python application stack   </li>
+</ul>
+<pre><code>source 3-ecs-deletestack-autogen-otel.sh  
+</code></pre>
+<ul>
+<li>Delete Coralogix Otel Collector stack in ECS EC2 Cluster  </li>
+</ul>
+<pre><code>source 4-ecs-deletestack-otel.sh
+</code></pre>
 
 
 
@@ -761,10 +805,10 @@ and two example policies from this workshop:<br />
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.instant", "navigation.sections", "navigation.expand", "navigation.top", "navigation.tracking", "toc.integrate", "toc.follow"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.instant", "navigation.sections", "navigation.expand", "navigation.top", "navigation.tracking", "toc.integrate", "toc.follow"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.c8d2eff1.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7c377c4.min.js"></script>
       
     
   </body>

@@ -12,27 +12,27 @@
         <meta name="author" content="Coralogix">
       
       
-        <link rel="canonical" href="http://coralogix.github.io/otel/microservices-workshop/">
+        <link rel="canonical" href="http://coralogix.github.io/otel/monolith/windows/">
       
       
-        <link rel="prev" href="../about-opentelemetry/">
+        <link rel="prev" href="../python/">
       
       
-        <link rel="next" href="../ecs-fargate/">
+        <link rel="next" href="../../../rum/">
       
-      <link rel="icon" href="../../images/favicon.png">
+      <link rel="icon" href="../../../images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.9">
     
     
       
-        <title>Kubernetes (Python, Java) - Coralogix Workshops</title>
+        <title>Monolith - .NET / Windows - Coralogix Workshops</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.85bb2934.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.85bb2934.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.a6bdf11c.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.a6bdf11c.min.css">
       
       
 
@@ -48,9 +48,9 @@
       
     
     
-      <link rel="stylesheet" href="../../stylesheets/extra.css">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -75,7 +75,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#opentelemetry-microservices-kubernetes" class="md-skip">
+        <a href="#opentelemetry-for-net-monolith" class="md-skip">
           Skip to content
         </a>
       
@@ -91,9 +91,9 @@
 
 <header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="Coralogix Workshops" class="md-header__button md-logo" aria-label="Coralogix Workshops" data-md-component="logo">
+    <a href="../../.." title="Coralogix Workshops" class="md-header__button md-logo" aria-label="Coralogix Workshops" data-md-component="logo">
       
-  <img src="../../images/horizontal.png" alt="logo">
+  <img src="../../../images/horizontal.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -109,7 +109,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Kubernetes (Python, Java)
+              Monolith - .NET / Windows
             
           </span>
         </div>
@@ -180,7 +180,7 @@
 
 
   <li class="md-tabs__item">
-    <a href="../.." class="md-tabs__link">
+    <a href="../../.." class="md-tabs__link">
       Home
     </a>
   </li>
@@ -195,7 +195,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../about-opentelemetry/" class="md-tabs__link">
+      <a href="../../about-opentelemetry/" class="md-tabs__link">
         OpenTelemetry Info
       </a>
     </li>
@@ -213,7 +213,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="./" class="md-tabs__link md-tabs__link--active">
+      <a href="../../microservices/" class="md-tabs__link md-tabs__link--active">
         Workshops
       </a>
     </li>
@@ -249,9 +249,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="Coralogix Workshops" class="md-nav__button md-logo" aria-label="Coralogix Workshops" data-md-component="logo">
+    <a href="../../.." title="Coralogix Workshops" class="md-nav__button md-logo" aria-label="Coralogix Workshops" data-md-component="logo">
       
-  <img src="../../images/horizontal.png" alt="logo">
+  <img src="../../../images/horizontal.png" alt="logo">
 
     </a>
     Coralogix Workshops
@@ -279,7 +279,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href="../../.." class="md-nav__link">
         Home
       </a>
     </li>
@@ -323,7 +323,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../about-opentelemetry/" class="md-nav__link">
+      <a href="../../about-opentelemetry/" class="md-nav__link">
         Overview and Value Proposition
       </a>
     </li>
@@ -372,6 +372,76 @@
               
   
   
+  
+    <li class="md-nav__item">
+      <a href="../../microservices/" class="md-nav__link">
+        Kubernetes (Python, Java)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ecs-fargate/" class="md-nav__link">
+        AWS ECS Fargate (Python)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ecs-ec2/" class="md-nav__link">
+        AWS ECS EC2 (Python)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/" class="md-nav__link">
+        Monolith - Node.js / Linux
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../python/" class="md-nav__link">
+        Monolith - Python / Linux
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
     
   
   
@@ -384,12 +454,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Kubernetes (Python, Java)
+          Monolith - .NET / Windows
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Kubernetes (Python, Java)
+        Monolith - .NET / Windows
       </a>
       
         
@@ -416,64 +486,56 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#step-1-install-the-opentelemetry-collector-on-your-k8s-cluster" class="md-nav__link">
-    Step 1 - Install the OpenTelemetry Collector on your k8s cluster
+  <a href="#about-opentelemetry-for-net" class="md-nav__link">
+    About OpenTelemetry For .NET
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#step-2-setup" class="md-nav__link">
-    Step 2 - Setup
+  <a href="#step-1-setup" class="md-nav__link">
+    Step 1 - Setup
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#step-3-change-to-workshop-dir" class="md-nav__link">
-    Step 3 - Change to workshop dir
+  <a href="#step-2-otel-collector-installation" class="md-nav__link">
+    Step 2 - OTEL Collector Installation
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#step-4-deploy-example" class="md-nav__link">
-    Step 4 - Deploy example
+  <a href="#step-3-install-net-instrumentation" class="md-nav__link">
+    Step 3 - Install .NET Instrumentation
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 3 - Install .NET Instrumentation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#quick-start" class="md-nav__link">
+    Quick start
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-example-application" class="md-nav__link">
+    Step 4 - Example Application
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#step-5-simulate-cicd-scenarios" class="md-nav__link">
-    Step 5 - Simulate CI/CD scenarios
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-6-study-how-opentelemetry-tracing-instrumentation-works" class="md-nav__link">
-    Step 6 - Study how OpenTelemetry tracing instrumentation works
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#bonus-examples" class="md-nav__link">
-    Bonus Examples
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cleanup" class="md-nav__link">
-    Cleanup
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#appendix-quick-kubernetes-sandbox-setup" class="md-nav__link">
-    Appendix - Quick Kubernetes Sandbox Setup
+  <a href="#aspnet" class="md-nav__link">
+    ASP.NET
   </a>
   
 </li>
@@ -498,77 +560,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../ecs-fargate/" class="md-nav__link">
-        AWS ECS Fargate (Python)
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../ecs-ec2/" class="md-nav__link">
-        AWS ECS EC2 (Python)
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../monolith-workshop/node/" class="md-nav__link">
-        Monolith - Node.js / Linux
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../monolith-workshop/python/" class="md-nav__link">
-        Monolith - Python / Linux
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../monolith-workshop/windows/" class="md-nav__link">
-        Monolith - .NET / Windows
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../rum/" class="md-nav__link">
+      <a href="../../../rum/" class="md-nav__link">
         Real User Monitoring (RUM)
       </a>
     </li>
@@ -600,91 +592,101 @@
   
 
 
-<h1 id="opentelemetry-microservices-kubernetes">OpenTelemetry Microservices / Kubernetes</h1>
+<h1 id="opentelemetry-for-net-monolith">OpenTelemetry for .NET / Monolith</h1>
 <h2 id="instructions">Instructions</h2>
 <p>This example is for basic study only and is not documentation.  <br />
 Full documentation: <a href="https://coralogix.com/docs/">https://coralogix.com/docs/</a><br />
 Requirements:<br />
-- Coralogix acccount<br />
-- Kubernetes cluster that can be used as a sandbox environment. <strong>See Appendix below for a suggested Kubernetes sandbox environment with a quick and easy setup. This setup is recommended for this workshop.</strong><br />
-- Updated versions and sufficient skill and permissions for <code>helm</code> and <code>kubectl</code>  and open source software in general<br />
-- Proper IDE i.e. Visual Studio Code  </p>
-<h3 id="step-1-install-the-opentelemetry-collector-on-your-k8s-cluster">Step 1 - Install the OpenTelemetry Collector on your k8s cluster</h3>
-<p><a href="https://coralogix.com/docs/otel-collector-for-k8s/">Easy Coralogix instructions for Complete Observability are here</a>  </p>
-<h3 id="step-2-setup">Step 2 - Setup</h3>
+- Windows Server 2019 or newer  <br />
+- Updated versions and sufficient permissions for downloading and installing software and no restrictions on GitHub domain  <br />
+- .NET Framework 3.5 or greater installed <br />
+- PowerShell 5.1 or higher<br />
+- Proper IDE i.e. Visual Studio Code </p>
+<h3 id="about-opentelemetry-for-net">About OpenTelemetry For .NET</h3>
+<p>You can find the complete instruction for .NET OpenTelemetry Agent Instrumentation is in <a href="https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation">.NET OpenTelemetry GitHub Repository</a>. </p>
+<p>There are three key steps to sending traces from a .NET application on Windows:<br />
+- Install the OpenTelemetry collector<br />
+- Install OpenTelemetry .NET instrumentation<br />
+- Run a sample .NET application to test traces  </p>
+<h3 id="step-1-setup">Step 1 - Setup</h3>
 <p>Clone repo:</p>
 <pre><code>git clone https://github.com/coralogix/workshops
 </code></pre>
-<h3 id="step-3-change-to-workshop-dir">Step 3 - Change to workshop dir</h3>
-<p>Change to the proper directory for workshop example:  </p>
-<pre><code>cd workshops/workshops/otel/microservices-demo
+<h3 id="step-2-otel-collector-installation">Step 2 - OTEL Collector Installation</h3>
+<p>Download and install latest CONTRIB release version from here:<br />
+<a href="https://github.com/open-telemetry/opentelemetry-collector-releases/releases">https://github.com/open-telemetry/opentelemetry-collector-releases/releases</a>  </p>
+<p>Use the following example from this repo a template for the OTEL collector config:<br />
+<code>/workshops/workshops/otel/monolith-workshop/dotnet-windows/otelcol/config.yaml</code>  </p>
+<p>In <code>config.yaml</code> adjust the domains and your Coralogix private key shown in the snippet below. Also define your application &amp; subsystem name tags.</p>
+<p>References:<br />
+- <a href="https://coralogix.com/docs/coralogix-endpoints/">Coralogix Endpoints</a><br />
+- <a href="https://coralogix.com/docs/private-key/">Coralogix Private Key</a><br />
+- <a href="https://coralogix.com/docs/application-and-subsystem-names/">Application &amp; Subsystem Names</a></p>
+<pre><code class="language-yaml">#config.yaml
+
+exporters:
+  logging:
+    verbosity: detailed
+  coralogix:
+    # The Coralogix traces ingress endpoint
+    traces:
+      endpoint: &quot;YOURDOMAINHERE i.e. ingress.coralogix.us:443&quot;
+    metrics:
+      endpoint: &quot;YOURDOMAINHERE i.e. ingress.coralogix.us:443&quot;
+    logs:
+      endpoint: &quot;YOURDOMAINHERE i.e. ingress.coralogix.us:443&quot;
+
+    # Your Coralogix private key is sensitive
+    private_key: &quot;YOURKEYHERE&quot;
+
+...
+
+    # Traces, Metrics and Logs emitted by this OpenTelemetry exporter 
+    # are tagged in Coralogix with the default application and subsystem constants.
+    application_name: &quot;MyBusinessEnvironment&quot;
+    subsystem_name: &quot;MyBusinessSystem&quot;
 </code></pre>
-<h3 id="step-4-deploy-example">Step 4 - Deploy example</h3>
-<p>Deploy example to your k8s cluster- this will deploy to the default k8s namespace.<br />
-If you want to change the namespace, edit <code>yaml/deploy-good.yaml</code><br />
-There will be three services spun up:  </p>
-<ul>
-<li><code>cx-shopping-cart-reqs</code> - a requesting service initiating a transaction  </li>
-<li><code>cx-payment-gateway-flask</code> - a server that is a bridge for a transaction to a database- returns a transaction ID to the <code>shopping-cart</code>  </li>
-<li><code>cx-redis</code> - an instance of a redis database used for a transaction</li>
-</ul>
-<pre><code>source deploy-all.sh
+<p>Next: run the collector using the command</p>
+<pre><code class="language-powershell">otelcol-contrib.exe --config=config.yaml
 </code></pre>
-<p>Deploys the following as seen from the <code>http://cx-payment-gateway-flask:5000/</code> root span:  </p>
-<p>Note: images may vary from actual UI due to frequent updates:<br />
-<img src="https://coralogix.github.io/workshops/images/microservices-workshop/01.png" width=540>     </p>
-<!-- ![Microservices Workshop](../../images/microservices-workshop/01.png) -->
-<p>With healthy low latency spans for all services:  </p>
-<p><img src="https://coralogix.github.io/workshops/images/microservices-workshop/03.png" width=540>  </p>
-<h3 id="step-5-simulate-cicd-scenarios">Step 5 - Simulate CI/CD scenarios</h3>
-<p>Study results in Coralogix portal</p>
-<p>Simulate a "bad" deployment:  </p>
-<pre><code>source deploy-reqs-bad.sh
+<h3 id="step-3-install-net-instrumentation">Step 3 - Install .NET Instrumentation</h3>
+<p>You can find the complete instructions for .NET OpenTelemetry Agent Instrumentation is in <a href="https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation">.NET OpenTelemetry GitHub Repository</a>.  </p>
+<p>Below is a shortcut set of instructions but these may be updated in the official documentation above, so we recommend following the officical set.  </p>
+<h4 id="quick-start">Quick start</h4>
+<p>The official Otel instrumentation guide shows the following:<br />
+Run the commands below in your PowerShell. Update the <code>"MyServiceDisplayName"</code> with the name of your application.  </p>
+<pre><code class="language-powershell"># Download the module
+$module_url = &quot;https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation/releases/latest/download/OpenTelemetry.DotNet.Auto.psm1&quot;
+$download_path = Join-Path $env:temp &quot;OpenTelemetry.DotNet.Auto.psm1&quot;
+Invoke-WebRequest -Uri $module_url -OutFile $download_path -UseBasicParsing
+
+# Import the module to use its functions
+Import-Module $download_path
+
+# Install core files
+Install-OpenTelemetryCore
+
+# Set up the instrumentation for the current PowerShell session
+Register-OpenTelemetryForCurrentSession -OTelServiceName &quot;MyServiceDisplayName&quot;
 </code></pre>
-<p>This deployment will cause severe sporadic problems in <code>payment-gateway</code> such as 404s, a log key:value <code>'transaction': 'failed',</code> and latency in the service response along with a drop in transaction volume. You can see the latency spikes here:    </p>
-<p><img src="https://coralogix.github.io/workshops/images/microservices-workshop/04.png" width=540>   </p>
-<p>Alerts and automation can be built around span latency or Payment Gateway 404 responses.  </p>
-<p>Roll back the bad deployment for the services to return to normal:  </p>
-<pre><code>source deploy-reqs-good.sh
+<p>Next, configure the follwing Environment Variables</p>
+<pre><code class="language-powershell">$env:OTEL_RESOURCE_ATTRIBUTES='service.name=dotnetsvc,application.name=dotnetapp cx.application.name=dotnetappcx,cx.subsystem.name=dotnetsubcx'
+$env:OTEL_EXPORTER_OTLP_TRACES_ENDPOINT='localhost:4317'
+$env:OTEL_EXPORTER_OTLP_TRACES_PROTOCOL='grpc'
 </code></pre>
-<p>Span latency will return to normal and Payment Gateway 404 responses will cease.  </p>
-<h3 id="step-6-study-how-opentelemetry-tracing-instrumentation-works">Step 6 - Study how OpenTelemetry tracing instrumentation works</h3>
-<p><strong>OpenTelemetry Instrumentation For Containerized Apps</strong><br />
-- Dockerfiles for the containers contain OpenTelemetry auto instrumentation for Python and are in <code>/python</code> root level<br />
-- Study Otel Python <a href="https://opentelemetry.io/docs/instrumentation/python/automatic/">Auto Instrumentation</a>
-- Notice how the <a href="https://github.com/coralogix/workshops/blob/master/workshops/otel/microservices-demo/python/dockerfile-microsvcsdemo">Dockerfile</a> adds the automatic instrumentation<br />
-- And observe how the <a href="https://github.com/coralogix/workshops/blob/master/workshops/otel/microservices-demo/python/k8s/start-reqs-envurl-otel.sh">kickstart script</a> uses the instrumenting command  </p>
-<p><strong>Kubernetes Deployments for Otel Tracing Instrumentation</strong>  <br />
-- <code>.yaml</code> deployment files are in <code>python/yaml</code> and show how environment variables are used to control the instrumentation
-- study the <a href="(https://github.com/coralogix/workshops/tree/master/workshops/otel/microservices-demo/yaml)">deploy-good.yaml</a> which shows the environment variables that control OpenTelemetry tracing instrumentation. Focus on how the <a href="https://kubernetes.io/docs/concepts/workloads/pods/downward-api/">Kubernetes Downward API</a> use of <code>status.hostIP</code> to tell the instrumentation where to send traces: to the IP adddress of the host node on port 4317  </p>
-<p><strong>Instrumented Applications and Frameworks</strong><br />
-- The Python apps that drive this example are in the <code>python/apps</code> dir<br />
-- Examine the frameworks used so you can see how tracing picks up their execution <br />
-- Note that the <code>python requests</code> library is used to make http requests, and that <a href="https://opentelemetry.io/docs/instrumentation/python/automatic/">OpenTelemetry Python Instrumentation</a> lists <code>requests</code> as an <a href="https://opentelemetry.io/ecosystem/registry/?language=python&amp;component=instrumentation">automatically instrumented library</a>  </p>
-<h3 id="bonus-examples">Bonus Examples</h3>
-<p>Deploy Java based Inventory service:  </p>
-<pre><code>source deploy-java.sh
+<p>Finally, run your dotnet application with</p>
+<pre><code class="language-powershell">dotnet run
 </code></pre>
-<p>Deploy Node.js self contained trace generator- makes requests to a URL specified in environment variables:  </p>
-<pre><code>source deploy-node-autogen.sh
-</code></pre>
-<h3 id="cleanup">Cleanup</h3>
-<p>To remove all the deployments/services/pods from the example from your k8s cluster (ignore any errors it reports):  </p>
-<pre><code>source delete-all.sh
-</code></pre>
-<h3 id="appendix-quick-kubernetes-sandbox-setup">Appendix - Quick Kubernetes Sandbox Setup</h3>
-<ul>
-<li>AWS EC2 t2.xl VM with 22GB of storage w/ Ubuntu Linux or equivalent other cloud provider  </li>
-<li>Install k3s minimal Dockerless Kubernetes- use script top right of homepage: <a href="https://k3s.io/">https://k3s.io/</a> </li>
-<li>Every time you open a new shell, to use k3s for helm, kubectl, etc you must set the appropriate env variable:<br />
-<code>sudo chmod 644 /etc/rancher/k3s/k3s.yaml &amp;&amp; export KUBECONFIG=/etc/rancher/k3s/k3s.yaml</code><br />
-    This script is included in the workshop in the k3s folder: <code>source ./k3s/k3s.sh</code>  </li>
-<li>Install helm- use bash script: <a href="https://helm.sh/docs/intro/install/">https://helm.sh/docs/intro/install/</a>  </li>
-<li>Install k9s kubernetes monitor: <a href="https://k9scli.io/">https://k9scli.io/</a> <ul>
-<li>Recommend to download appropriate release and gunzip / tar -xf the release <a href="https://github.com/derailed/k9s/releases">https://github.com/derailed/k9s/releases</a></li>
-</ul>
-</li>
-</ul>
+<h3 id="step-4-example-application">Step 4 - Example Application</h3>
+<p>You can download &amp; instrument the example application:<br />
+<code>./workshops/workshops/otel/monolith-workshop/dotnet-windows/ExampleApp/</code><br />
+provided in this repository for testing.  </p>
+<p>The example sends traces of <code>http get</code> requests of a public URL. <br />
+Use <code>dotnet run</code> to start the application.  </p>
+<p>You may want to open it first in Visual Studio 2022 or higher to ensure dependencies are installed first and then run from the Visual Studio 2022 console.</p>
+<h3 id="aspnet">ASP.NET</h3>
+<p>IIS / ASP.NET follows a different instruction path for instrumentation and is shown here:<br />
+<a href="https://opentelemetry.io/docs/instrumentation/net/automatic/">https://opentelemetry.io/docs/instrumentation/net/automatic/</a></p>
 
 
 
@@ -731,10 +733,10 @@ There will be three services spun up:  </p>
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.instant", "navigation.sections", "navigation.expand", "navigation.top", "navigation.tracking", "toc.integrate", "toc.follow"], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.instant", "navigation.sections", "navigation.expand", "navigation.top", "navigation.tracking", "toc.integrate", "toc.follow"], "search": "../../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.fac441b0.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.fac441b0.min.js"></script>
       
     
   </body>

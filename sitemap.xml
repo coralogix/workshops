@@ -31,22 +31,22 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>http://coralogix.github.io/otel/microservices-workshop/</loc>
+         <loc>http://coralogix.github.io/otel/microservices/</loc>
          <lastmod>2024-04-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>http://coralogix.github.io/otel/monolith-workshop/node/</loc>
+         <loc>http://coralogix.github.io/otel/monolith/node/</loc>
          <lastmod>2024-04-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>http://coralogix.github.io/otel/monolith-workshop/python/</loc>
+         <loc>http://coralogix.github.io/otel/monolith/python/</loc>
          <lastmod>2024-04-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>http://coralogix.github.io/otel/monolith-workshop/windows/</loc>
+         <loc>http://coralogix.github.io/otel/monolith/windows/</loc>
          <lastmod>2024-04-24</lastmod>
          <changefreq>daily</changefreq>
     </url>

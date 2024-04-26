@@ -599,8 +599,15 @@
 <li>Ability to set up virtual machines and Kubernetes clusters and all surrounding cloud infra necessary quickly before the workshop begins.</li>
 <li>Direct internet access on the workshop computer, without needing a VPN.</li>
 <li>Unrestricted access on computer and in cloud to GitHub, Helm, and the ability to use open source software.</li>
-<li>Users should understand the programming languages being used (for example Python) if asking questions about OpenTelemetry for Python.</li>
-<li>The following EC2 VM should be created, ready, and accessible before the workshop:</li>
+<li>
+<p>Users should understand the programming languages being used (for example Python) if asking questions about OpenTelemetry for Python.</p>
+</li>
+<li>
+<p>A unique <a href="https://coralogix.com/docs/send-your-data-api-key/">Coralogix API Key</a> should be ready for the workshop that will be discarded after.  </p>
+</li>
+<li>
+<p>The following EC2 VM should be created, ready, and accessible before the workshop. It should be set up and already tested with access via your IDE with the software list below installed:</p>
+</li>
 </ul>
 <p><code>aws ec2 run-instances \
 --image-id ami-0e83be366243f524a \

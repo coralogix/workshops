@@ -606,14 +606,15 @@
 --image-id ami-0e83be366243f524a \
 --count 1 \
 --instance-type t2.xlarge \
---key-name stevelernercxuseast2 \
+--key-name YOURKEYHERE \
 --security-group-ids sg-0b255a03981b65b40 \
 --subnet-id subnet-0517e5c4de64acc2b \
 --associate-public-ip-address \
 --block-device-mappings 'DeviceName=/dev/sda1,Ebs={VolumeSize=50}' \
 --tag-specifications \
-'ResourceType=instance, Tags=[{Key=user,Value=steve.lerner},{Key=Name,Value=slerner-2xl-32GB}]' 'ResourceType=volume, Tags=[{Key=Name,Value=YourVolumeName}]'`</code>
-With following software installed: <br />
+'ResourceType=instance, Tags=[{Key=user,Value=steve.lerner},{Key=Name,Value=slerner-2xl-32GB}]' 'ResourceType=volume, Tags=[{Key=Name,Value=YourVolumeName}]'`</code>  </p>
+<p>If that AMI is not available pick any Debian server AMI.  </p>
+<p>Install the following in advance of the workshop: <br />
 - <a href="https://k3s.io/">k3s</a> 
 - <a href="https://helm.sh/docs/intro/install/">Helm</a>
 - <a href="https://k9scli.io/">k9s</a></p>

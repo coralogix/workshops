@@ -542,6 +542,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#opentelemetry-collector-configs-for-microservices" class="md-nav__link">
+    <span class="md-ellipsis">
+      OpenTelemetry Collector Configs for Microservices
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#cleanup" class="md-nav__link">
     <span class="md-ellipsis">
       Cleanup
@@ -727,10 +736,8 @@
 <h1 id="opentelemetry-microservices-kubernetes">OpenTelemetry Microservices / Kubernetes</h1>
 <h2 id="instructions">Instructions</h2>
 <p>Requirements:<br />
-- Coralogix acccount<br />
-- Kubernetes cluster that can be used as a sandbox environment. <strong>See Appendix below for a suggested Kubernetes sandbox environment with a quick and easy setup. This setup is recommended for this workshop.</strong><br />
-- Updated versions and sufficient skill and permissions for <code>helm</code> and <code>kubectl</code> and open source software in general<br />
-- Proper IDE i.e. Visual Studio Code  </p>
+- <a href="https://coralogix.github.io/workshops/prereqs/">These prerequisites</a>
+- A Kubernetes cluster i.e. EKS or GKE for a sandbox environment. If you cannot procure EKS or GKE <strong>See Appendix at the end of this page for a Kubernetes sandbox environment setup.</strong></p>
 <h3 id="step-1-install-the-opentelemetry-collector-on-your-k8s-cluster">Step 1 - Install the OpenTelemetry Collector on your k8s cluster</h3>
 <p><a href="https://coralogix.com/docs/otel-collector-for-k8s/">Easy Coralogix instructions for Complete Observability are here</a>  </p>
 <h3 id="step-2-clone-workshop">Step 2 - Clone workshop</h3>
@@ -783,8 +790,31 @@ There will be three services spun up:  </p>
 - The Python apps that drive this example are in the <code>python/apps</code> dir<br />
 - Examine the frameworks used to show how tracing picks up their execution <br />
 - Note that the <code>python requests</code> library is used to make http requests, and that <a href="https://opentelemetry.io/docs/instrumentation/python/automatic/">OpenTelemetry Python Instrumentation</a> lists <code>requests</code> as an <a href="https://opentelemetry.io/ecosystem/registry/?language=python&amp;component=instrumentation">automatically instrumented library</a>  </p>
-<!-- ### Bonus Examples -->
-
+<h3 id="opentelemetry-collector-configs-for-microservices">OpenTelemetry Collector Configs for Microservices</h3>
+<p><strong>Prometheus</strong>  </p>
+<p>To study Prometheus metrics, deploy the Promteheus example metric generators. From directory level of the workshops repo:</p>
+<pre><code>cd /workshops/workshops/otel/microservices/prometheus
+source deploy-prom-app.sh 
+</code></pre>
+<p>Now two deployments appear each generating random number gauges with metric names: <code>prom1</code> and <code>prom2</code>  </p>
+<p>We will look at two examples of collecting Prometheus metrics:<br />
+- Prometheus Simple (<a href="https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/simpleprometheusreceiver">docs here</a>) declares explicit targts for scraping metrics<br />
+    - Study the override file called <code>override-prometheus-simple.yaml</code> to understand how it works<br />
+    - Update the <code>Cluster</code> name and <code>Domain</code> to match your stack and deploy:  <br />
+<code>source deploy-prom-simple.sh</code><br />
+    - You can now see metrics in Coralogix portal called <code>prom1</code> and <code>prom2</code><br />
+    - To restore original OpenTelemetry Collector config:<br />
+<code>helm rollback otel-coralogix-integration 1</code><br />
+- Prometheus Autodiscovery (<a href="https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/receivercreator">docs here</a>) uses various features of OpenTelmetry collector to create an autodiscovery set of receivers based on watching for changes in deployments. This will find all self declared Prometheus endpoints in deployments.  <br />
+    - Study the override file called <code>override-prometheus-auto.yaml</code> to understand how it works<br />
+    - Update the <code>Cluster</code> name and <code>Domain</code> to match your stack and deploy:  <br />
+<code>source deploy-prom-auto.sh</code><br />
+    - You can now see metrics in Coralogix portal called <code>prom1</code> and <code>prom2</code><br />
+    - To restore original OpenTelemetry Collector config:<br />
+<code>helm rollback otel-coralogix-integration 1</code> 
+- To delete the Prometheus metrics deployment:</p>
+<pre><code>source delete-prom-app.sh
+</code></pre>
 <h3 id="cleanup">Cleanup</h3>
 <p>To remove all the deployments/services/pods from the example from your k8s cluster (ignore any errors it reports):  </p>
 <pre><code>source delete-all.sh
@@ -792,13 +822,13 @@ There will be three services spun up:  </p>
 <h3 id="appendix-quick-kubernetes-sandbox-setup">Appendix - Quick Kubernetes Sandbox Setup</h3>
 <ul>
 <li>AWS EC2 t2.2xl VM with 24GB of storage w/ Ubuntu Linux or equivalent other cloud provider  </li>
-<li>Install k3s minimal Dockerless Kubernetes- use script top right of homepage: <a href="https://k3s.io/">https://k3s.io/</a> </li>
+<li>A quick k8s platform is k3s minimal Dockerless Kubernetes- use script top right of homepage: <a href="https://k3s.io/">https://k3s.io/</a> </li>
 <li>Every time you open a new shell, to use k3s for helm, kubectl, etc you must set the appropriate env variable:<br />
 <code>sudo chmod 644 /etc/rancher/k3s/k3s.yaml &amp;&amp; export KUBECONFIG=/etc/rancher/k3s/k3s.yaml</code><br />
     This script is included in the workshop in the k3s folder: <code>source ./k3s/k3s.sh</code>  </li>
 <li>Install helm- use bash script: <a href="https://helm.sh/docs/intro/install/">https://helm.sh/docs/intro/install/</a>  </li>
 <li>Install k9s kubernetes monitor: <a href="https://k9scli.io/">https://k9scli.io/</a> <ul>
-<li>Recommend to download appropriate release and gunzip / tar -xf the release <a href="https://github.com/derailed/k9s/releases">https://github.com/derailed/k9s/releases</a></li>
+<li>Download appropriate release and gunzip / tar -xf the release <a href="https://github.com/derailed/k9s/releases">https://github.com/derailed/k9s/releases</a></li>
 </ul>
 </li>
 </ul>

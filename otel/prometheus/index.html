@@ -12,13 +12,9 @@
         <meta name="author" content="Coralogix">
       
       
-        <link rel="canonical" href="http://coralogix.github.io/otel/ecs-fargate/">
+        <link rel="canonical" href="http://coralogix.github.io/otel/prometheus/">
       
       
-        <link rel="prev" href="../microservices/">
-      
-      
-        <link rel="next" href="../ecs-ec2/">
       
       
       <link rel="icon" href="../../images/favicon.png">
@@ -26,7 +22,7 @@
     
     
       
-        <title>AWS ECS Fargate (Python) - Coralogix Workshops</title>
+        <title>Prometheus for OpenTelemetry Collector - Coralogix Workshops</title>
       
     
     
@@ -78,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#opentelemetry-for-aws-ecs-fargate" class="md-skip">
+        <a href="#prometheus-for-opentelemetry-collector" class="md-skip">
           Skip to content
         </a>
       
@@ -113,7 +109,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              AWS ECS Fargate (Python)
+              Prometheus for OpenTelemetry Collector
             
           </span>
         </div>
@@ -221,12 +217,10 @@
         
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
+      <li class="md-tabs__item">
         <a href="../microservices/" class="md-tabs__link">
           
   
@@ -384,30 +378,27 @@
       
   
   
-    
   
   
-  
     
     
     
-      
-        
-        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -418,7 +409,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             Workshops
@@ -450,30 +441,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    AWS ECS Fargate (Python)
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../ecs-fargate/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -482,95 +453,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#instructions" class="md-nav__link">
-    <span class="md-ellipsis">
-      Instructions
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Instructions">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#step-1-setup" class="md-nav__link">
-    <span class="md-ellipsis">
-      Step 1 - Setup
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-2-change-to-workshop-dir" class="md-nav__link">
-    <span class="md-ellipsis">
-      Step 2 - Change to workshop dir
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-3-prep-requirements" class="md-nav__link">
-    <span class="md-ellipsis">
-      Step 3: Prep Requirements
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-4-prep-register-task" class="md-nav__link">
-    <span class="md-ellipsis">
-      Step 4: Prep / Register Task
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-5-launch-task" class="md-nav__link">
-    <span class="md-ellipsis">
-      Step 5: Launch Task
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-6-study-results-in-coralogix-portal" class="md-nav__link">
-    <span class="md-ellipsis">
-      Step 6 - Study results in Coralogix portal
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -706,44 +588,55 @@
   
 
 
-<h1 id="opentelemetry-for-aws-ecs-fargate">OpenTelemetry for AWS ECS-Fargate</h1>
+<h1 id="prometheus-for-opentelemetry-collector">Prometheus for OpenTelemetry Collector</h1>
 <h2 id="instructions">Instructions</h2>
-<p>Additional Requirements:<br />
-- AWS Account
-- Intermediate to Advanced skill with ECS-Fargate<br />
-- Sufficient permissions to configure AWS  </p>
-<h3 id="step-1-setup">Step 1 - Setup</h3>
-<p>Clone repo:</p>
-<pre><code>git clone https://github.com/coralogix/workshops
+<p>Complete the Microservices Workshop or install the OpenTelemetry Collector on your k8s cluster  </p>
+<p><a href="https://coralogix.com/docs/otel-collector-for-k8s/">Easy Coralogix instructions for Complete Observability are here</a>  </p>
+<h3 id="step-1-deploy-the-prometheus-example-metric-generators">Step 1 - Deploy the Prometheus example metric generators</h3>
+<p>From <code>/workshops/workshops/otel/microservices/prometheus</code> directory in repo:  </p>
+<pre><code>source deploy-prom-app.sh 
 </code></pre>
-<h3 id="step-2-change-to-workshop-dir">Step 2 - Change to workshop dir</h3>
-<p>Change to the proper directory for workshop example:  </p>
-<pre><code>cd ./workshops/workshops/otel/ecs-fargate
+<p>Two deployments appear each generating random number gauges with metric names: <code>prom1</code> and <code>prom2</code>  </p>
+<h3 id="step-2-prometheus-simple-receiver">Step 2 - Prometheus Simple Receiver</h3>
+<ul>
+<li>(<a href="https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/simpleprometheusreceiver">Prometheus Simple Receiver Docs</a>) declares explicit targts for scraping metrics  </li>
+<li>Study the override file called <code>override-prometheus-simple.yaml</code> to understand how it works  </li>
+<li>Update the <code>Cluster</code> name and <code>Domain</code> to match your stack and deploy:    </li>
+</ul>
+<pre><code>source deploy-prom-simple.sh
 </code></pre>
-<h3 id="step-3-prep-requirements">Step 3: Prep Requirements</h3>
-<p>1 - Put the following file in an S3 bucket:<br />
-https://github.com/coralogix/telemetry-shippers/blob/master/logs/fluent-bit/ecs-fargate/base_filters.conf  </p>
-<p>2 - Put the following in a Systems Manager Parameter Store:<br />
-https://github.com/coralogix/telemetry-shippers/blob/master/otel-ecs-fargate/config.yaml  </p>
-<p>3 - Create a role called <code>ecsTaskExecutionRole</code><br />
-that contains the AWS managed <code>AmazonECSTaskExecutionRolePolicy</code><br />
-and two example policies from this workshop:<br />
-<code>ecs-policy-s3-access.json</code><br />
-<code>ecs-policy-secrets-access.json</code>  </p>
-<p>These two policies should be tuned for your own production security needs when going into production.  </p>
-<h3 id="step-4-prep-register-task">Step 4: Prep / Register Task</h3>
-<p>Prep example Task: <code>aws-fargate-otel-demo.json</code> </p>
-<p>Update all 14 locations replacing contents bewteen <code>&lt; &gt;</code> and removing those brackets but leaving the quotes: adding task execution role, key, domain, S3 ARN, Systems Parameter etc...  </p>
-<p>Once prepped the task can be registered and made into a service.  </p>
-<h3 id="step-5-launch-task">Step 5: Launch Task</h3>
-<p>Launch according to your standard procedure.  </p>
-<p>The task creates the following containers:<br />
-- two microservices (Client/Server)<br />
-- FireLens log router<br />
-- Otel collector  </p>
-<p>The microservice containers create a Python HTTP client and server that will generate spans and logs and send to Coralogix.  </p>
-<h3 id="step-6-study-results-in-coralogix-portal">Step 6 - Study results in Coralogix portal</h3>
-<p>The shell scripts show how a the microservices example.</p>
+<ul>
+<li>You can now see metrics in Coralogix portal called <code>prom1</code> and <code>prom2</code>  </li>
+<li>To restore original OpenTelemetry Collector config:  </li>
+</ul>
+<pre><code>helm rollback otel-coralogix-integration 1 (or your previous helm version)
+</code></pre>
+<h3 id="step-3-prometheus-autodiscovery-receivercreator">Step 3 - Prometheus Autodiscovery ReceiverCreator</h3>
+<ul>
+<li>(<a href="https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/receivercreator">Prometheus Auto ReceiverCreator Docs</a>) uses various features of OpenTelmetry collector to create an autodiscovery set of receivers based on watching for changes in deployments. This will find all self declared Prometheus endpoints in deployments.    </li>
+<li>Study the override file called <code>override-prometheus-auto.yaml</code> to understand how it works  </li>
+<li>Update the <code>Cluster</code> name and <code>Domain</code> to match your stack and deploy:    </li>
+</ul>
+<pre><code>source deploy-prom-auto.sh
+</code></pre>
+<ul>
+<li>You can now see metrics in Coralogix portal called <code>prom1</code> and <code>prom2</code>  </li>
+<li>To restore original OpenTelemetry Collector config:  </li>
+</ul>
+<pre><code>helm rollback otel-coralogix-integration 1 (or your previous helm version)
+</code></pre>
+<ul>
+<li>To delete the Prometheus metrics deployment:</li>
+</ul>
+<pre><code>source delete-prom-app.sh
+</code></pre>
+<h2 id="cleanup">Cleanup</h2>
+<p>Roll back to original Collector config:  </p>
+<pre><code>helm rollback otel-coralogix-integration 1 (or your previous helm version)
+</code></pre>
+<p>From: <code>/workshops/workshops/otel/microservices/prometheus</code>  </p>
+<pre><code>source delete-all.sh
+</code></pre>
 
 
 

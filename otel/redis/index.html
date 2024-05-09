@@ -22,7 +22,7 @@
     
     
       
-        <title>OpenTelemetry Collector Configuration for MySQL - Coralogix Workshops</title>
+        <title>OpenTelemetry Collector Configuration for redis - Coralogix Workshops</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#opentelemetry-collector-configuration-for-mysql" class="md-skip">
+        <a href="#opentelemetry-collector-configuration-for-redis" class="md-skip">
           Skip to content
         </a>
       
@@ -109,7 +109,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              OpenTelemetry Collector Configuration for MySQL
+              OpenTelemetry Collector Configuration for redis
             
           </span>
         </div>
@@ -588,40 +588,25 @@
   
 
 
-<h1 id="opentelemetry-collector-configuration-for-mysql">OpenTelemetry Collector Configuration for MySQL</h1>
+<h1 id="opentelemetry-collector-configuration-for-redis">OpenTelemetry Collector Configuration for redis</h1>
 <h2 id="instructions">Instructions</h2>
-<p>Complete the Microservices Workshop or install the OpenTelemetry Collector on your k8s cluster  </p>
-<p><a href="https://coralogix.com/docs/otel-collector-for-k8s/">Easy Coralogix instructions for Complete Observability are here</a>  </p>
-<h3 id="step-1-setup">Step 1 - Setup</h3>
-<p>Clone repo or use existing clone of it:</p>
-<pre><code>git clone https://github.com/coralogix/workshops
-</code></pre>
-<h3 id="step-2-change-to-workshop-dir">Step 2 - Change to workshop dir</h3>
+<p>Complete the Microservices Workshop and leve the example running</p>
+<h3 id="step-1-change-to-workshop-dir">Step 1 - Change to workshop dir</h3>
 <p>Change to the proper directory for workshop example:  </p>
 <pre><code>cd ./workshops/workshops/otel/microservices
 </code></pre>
-<h3 id="step-3-deploy-the-example-mysql-database-deployment">Step 3 - Deploy the example MySQL database deployment</h3>
-<p>In: <code>mysql/mysqld</code><br />
-<code>source deploy-mysqld.sh</code> </p>
-<h3 id="step-4-deploy-the-otel-collector-mysql-receiver">Step 4 - Deploy the Otel Collector MySQL Receiver</h3>
-<p>In <code>mysql/mysqlreceiver</code><br />
-<code>source deploy-override.sh</code>  </p>
-<h3 id="step-5-deploy-the-otel-sql-query-receiver-example">Step 5 - Deploy the Otel SQL Query receiver Example</h3>
-<p>In <code>mysql/mysqlqueryreceiver</code><br />
-<code>source deploy-override.sh</code>  </p>
-<h3 id="step-6-upload-dashboard-example-to-custom-dashboards">Step 6 - Upload dashboard example to Custom Dashboards</h3>
+<h3 id="step-2-deploy-the-otel-collector-redis-receiver">Step 2 - Deploy the Otel Collector Redis Receiver</h3>
+<p>In: <code>redis/redis</code><br />
+<code>source deploy-redis.sh</code> </p>
+<h3 id="step-3-upload-dashboard-example-to-custom-dashboards">Step 3 - Upload dashboard example to Custom Dashboards</h3>
 <p><em>Coralogix-&gt;Dashboards-&gt;Custom Dashboards-&gt;New-&gt;Import</em>  </p>
-<p>Import: <code>mysql/dashboard.json</code>  </p>
-<h3 id="step-7-study-deployment-examples">Step 7 - Study deployment examples</h3>
-<p><code>mysqlreceiver</code> - override yaml shows the MySQL receiver configuration example  </p>
-<p><code>sqlqueryreceiver</code> - override yaml shows the SQL synthetic query configuration example  </p>
-<p>Observability samples of both are shown on the MySQL Custom Dashboard  </p>
-<h3 id="step-8-cleanup">Step 8 - Cleanup</h3>
+<p>Import: <code>redis/dashboard.json</code>  </p>
+<h3 id="step-4-study-deployment-examples">Step 4 - Study deployment examples</h3>
+<p><code>redisreceiver</code> - override yaml shows the redis receiver configuration example  </p>
+<p>Observability samples of both are shown on the redis Custom Dashboard  </p>
+<h3 id="cleanup">Cleanup</h3>
 <p>Roll back to remove receivers:<br />
-<code>helm rollback otel-coralogix-integration 1</code> (or your proper previous version) </p>
-<p>Delete the sample MySQL Database:<br />
-In: <code>mysql/mysqld</code><br />
-<code>source delete-mysqld.sh</code>   </p>
+<code>helm rollback otel-coralogix-integration 1</code> (or your proper previous version)</p>
 
 
 

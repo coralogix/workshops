@@ -728,7 +728,7 @@ Full documentation: <a href="https://coralogix.com/docs/">https://coralogix.com/
 Requirements:<br />
 - Windows Server 2019 or newer  <br />
 - Updated versions and sufficient permissions for downloading and installing software and no restrictions on GitHub domain  <br />
-- .NET Framework 3.5 or greater installed <br />
+- .NET Framework version supported by OpenTelemetry: <a href="https://opentelemetry.io/docs/languages/net/automatic/">check here</a>
 - PowerShell 5.1 or higher<br />
 - Proper IDE i.e. Visual Studio Code </p>
 <h3 id="about-opentelemetry-for-net">About OpenTelemetry For .NET</h3>
@@ -757,23 +757,28 @@ exporters:
   logging:
     verbosity: detailed
   coralogix:
-    # The Coralogix traces ingress endpoint
-    traces:
-      endpoint: &quot;YOURDOMAINHERE i.e. ingress.coralogix.us:443&quot;
-    metrics:
-      endpoint: &quot;YOURDOMAINHERE i.e. ingress.coralogix.us:443&quot;
-    logs:
-      endpoint: &quot;YOURDOMAINHERE i.e. ingress.coralogix.us:443&quot;
-
+  coralogix:
+    # The Coralogix domain
+    domain: &quot;yourdomain&quot;
     # Your Coralogix private key is sensitive
-    private_key: &quot;YOURKEYHERE&quot;
+    private_key: &quot;yourkey&quot;
 
-...
+    # (Optional) Ordered list of Resource attributes that are used for Coralogix
+    # AppName and SubSystem values. The first non-empty Resource attribute is used.
+    # Example: application_name_attributes: [&quot;k8s.namespace.name&quot;, &quot;service.namespace&quot;]
+    # Example: subsystem_name_attributes: [&quot;k8s.deployment.name&quot;, &quot;k8s.daemonset.name&quot;, &quot;service.name&quot;]
+    application_name_attributes:
+    - &quot;service.namespace&quot;
+    subsystem_name_attributes:
+    - &quot;service.name&quot;
 
     # Traces, Metrics and Logs emitted by this OpenTelemetry exporter 
     # are tagged in Coralogix with the default application and subsystem constants.
-    application_name: &quot;MyBusinessEnvironment&quot;
-    subsystem_name: &quot;MyBusinessSystem&quot;
+    application_name: &quot;workshop&quot;
+    subsystem_name: &quot;monolith&quot;
+
+    # (Optional) Timeout is the timeout for every attempt to send data to the backend.
+    timeout: 30s
 </code></pre>
 <p>Next: run the collector using the command</p>
 <pre><code class="language-powershell">otelcol-contrib.exe --config=config.yaml

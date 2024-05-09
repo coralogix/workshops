@@ -541,28 +541,53 @@
   
 </li>
         
-          <li class="md-nav__item">
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#opentelemetry-collector-configs-for-microservices" class="md-nav__link">
     <span class="md-ellipsis">
       OpenTelemetry Collector Configs for Microservices
     </span>
   </a>
   
-</li>
+    <nav class="md-nav" aria-label="OpenTelemetry Collector Configs for Microservices">
+      <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#cleanup" class="md-nav__link">
+  <a href="#prometheus" class="md-nav__link">
     <span class="md-ellipsis">
-      Cleanup
+      Prometheus
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#appendix-quick-kubernetes-sandbox-setup" class="md-nav__link">
+  <a href="#prometheus-metrics-collection-examples-for-opentelemetry-collector" class="md-nav__link">
     <span class="md-ellipsis">
-      Appendix - Quick Kubernetes Sandbox Setup
+      Prometheus metrics collection examples for OpenTelemetry Collector
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Prometheus metrics collection examples for OpenTelemetry Collector">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#prometheus-simple" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prometheus Simple
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prometheus-autodiscovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prometheus Autodiscovery
     </span>
   </a>
   
@@ -570,6 +595,29 @@
         
       </ul>
     </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cleanup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cleanup
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#appendix-quick-kubernetes-sandbox-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Appendix - Quick Kubernetes Sandbox Setup
+    </span>
+  </a>
   
 </li>
       
@@ -787,36 +835,52 @@ Tthree services will appear:  </p>
 - The Python apps that drive this example are in the <code>python/apps</code> dir<br />
 - Examine the frameworks used to show how tracing picks up their execution <br />
 - Note that the <code>python requests</code> library is used to make http requests, and that <a href="https://opentelemetry.io/docs/instrumentation/python/automatic/">OpenTelemetry Python Instrumentation</a> lists <code>requests</code> as an <a href="https://opentelemetry.io/ecosystem/registry/?language=python&amp;component=instrumentation">automatically instrumented library</a>  </p>
-<h3 id="opentelemetry-collector-configs-for-microservices">OpenTelemetry Collector Configs for Microservices</h3>
-<p><strong>Prometheus</strong>  </p>
-<p>To study Prometheus metrics, deploy the Promteheus example metric generators. From directory level of the workshops repo:</p>
-<pre><code>cd /workshops/workshops/otel/microservices/prometheus
-source deploy-prom-app.sh 
+<h2 id="opentelemetry-collector-configs-for-microservices">OpenTelemetry Collector Configs for Microservices</h2>
+<h3 id="prometheus">Prometheus</h3>
+<p>Deploy the Promteheus example metric generators:
+From <code>/workshops/workshops/otel/microservices/prometheus</code> directory in repo:  </p>
+<pre><code>source deploy-prom-app.sh 
 </code></pre>
-<p>Now two deployments appear each generating random number gauges with metric names: <code>prom1</code> and <code>prom2</code>  </p>
-<p>We will look at two examples of collecting Prometheus metrics:<br />
-- Prometheus Simple (<a href="https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/simpleprometheusreceiver">docs here</a>) declares explicit targts for scraping metrics<br />
-    - Study the override file called <code>override-prometheus-simple.yaml</code> to understand how it works<br />
-    - Update the <code>Cluster</code> name and <code>Domain</code> to match your stack and deploy:  <br />
-<code>source deploy-prom-simple.sh</code><br />
-    - You can now see metrics in Coralogix portal called <code>prom1</code> and <code>prom2</code><br />
-    - To restore original OpenTelemetry Collector config:<br />
-<code>helm rollback otel-coralogix-integration 1</code><br />
-- Prometheus Autodiscovery (<a href="https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/receivercreator">docs here</a>) uses various features of OpenTelmetry collector to create an autodiscovery set of receivers based on watching for changes in deployments. This will find all self declared Prometheus endpoints in deployments.  <br />
-    - Study the override file called <code>override-prometheus-auto.yaml</code> to understand how it works<br />
-    - Update the <code>Cluster</code> name and <code>Domain</code> to match your stack and deploy:  <br />
-<code>source deploy-prom-auto.sh</code><br />
-    - You can now see metrics in Coralogix portal called <code>prom1</code> and <code>prom2</code><br />
-    - To restore original OpenTelemetry Collector config:<br />
-<code>helm rollback otel-coralogix-integration 1</code> 
-- To delete the Prometheus metrics deployment:</p>
+<p>Two deployments appear each generating random number gauges with metric names: <code>prom1</code> and <code>prom2</code>  </p>
+<h3 id="prometheus-metrics-collection-examples-for-opentelemetry-collector">Prometheus metrics collection examples for OpenTelemetry Collector</h3>
+<h4 id="prometheus-simple">Prometheus Simple</h4>
+<ul>
+<li>(<a href="https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/simpleprometheusreceiver">Docs here</a>) declares explicit targts for scraping metrics  </li>
+<li>Study the override file called <code>override-prometheus-simple.yaml</code> to understand how it works  </li>
+<li>Update the <code>Cluster</code> name and <code>Domain</code> to match your stack and deploy:    </li>
+</ul>
+<pre><code>source deploy-prom-simple.sh
+</code></pre>
+<ul>
+<li>You can now see metrics in Coralogix portal called <code>prom1</code> and <code>prom2</code>  </li>
+<li>To restore original OpenTelemetry Collector config:  </li>
+</ul>
+<pre><code>helm rollback otel-coralogix-integration 1 (or your previous helm version)
+</code></pre>
+<h4 id="prometheus-autodiscovery">Prometheus Autodiscovery</h4>
+<ul>
+<li>(<a href="https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/receivercreator">docs here</a>) uses various features of OpenTelmetry collector to create an autodiscovery set of receivers based on watching for changes in deployments. This will find all self declared Prometheus endpoints in deployments.    </li>
+<li>Study the override file called <code>override-prometheus-auto.yaml</code> to understand how it works  </li>
+<li>Update the <code>Cluster</code> name and <code>Domain</code> to match your stack and deploy:    </li>
+</ul>
+<pre><code>source deploy-prom-auto.sh
+</code></pre>
+<ul>
+<li>You can now see metrics in Coralogix portal called <code>prom1</code> and <code>prom2</code>  </li>
+<li>To restore original OpenTelemetry Collector config:  </li>
+</ul>
+<pre><code>helm rollback otel-coralogix-integration 1 (or your previous helm version)
+</code></pre>
+<ul>
+<li>To delete the Prometheus metrics deployment:</li>
+</ul>
 <pre><code>source delete-prom-app.sh
 </code></pre>
-<h3 id="cleanup">Cleanup</h3>
+<h2 id="cleanup">Cleanup</h2>
 <p>To remove all the deployments/services/pods from the example from your k8s cluster (ignore any errors it reports):  </p>
 <pre><code>source delete-all.sh
 </code></pre>
-<h3 id="appendix-quick-kubernetes-sandbox-setup">Appendix - Quick Kubernetes Sandbox Setup</h3>
+<h2 id="appendix-quick-kubernetes-sandbox-setup">Appendix - Quick Kubernetes Sandbox Setup</h2>
 <ul>
 <li>AWS EC2 t2.2xl VM with 24GB of storage w/ Ubuntu Linux or equivalent other cloud provider  </li>
 <li>A quick k8s platform is k3s minimal Dockerless Kubernetes- use script top right of homepage: <a href="https://k3s.io/">https://k3s.io/</a> </li>

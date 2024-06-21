@@ -1,0 +1,5 @@
+{
+    "LogDirectory": "/tmp/otellog",
+    "FileSize": 1024,
+    "LogLevel": "Error"
+}

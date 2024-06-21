@@ -1,0 +1,12 @@
+kubectl delete deployment cx-payment-gateway-flask --ignore-not-found=true &
+kubectl delete service cx-payment-gateway-flask --ignore-not-found=true &
+kubectl delete deployment cx-redis --ignore-not-found=true &
+kubectl delete service cx-redis --ignore-not-found=true &
+kubectl delete deployment cx-shopping-cart-reqs --ignore-not-found=true &
+kubectl delete deployment cx-inventory-java-reqs --ignore-not-found=true&
+kubectl delete deployment cx-marketing-node-reqs --ignore-not-found=true &
+kubectl delete deployment dotnet-autogen --ignore-not-found=true &
+kubectl delete deployment prometheus-client --ignore-not-found=true &
+kubectl delete deployment cx-node-autogen --ignore-not-found=true &
+kubectl delete deployment cx-py-autogen --ignore-not-found=true &
+kubectl delete deployment cx-fastapi-autogen --ignore-not-found=true &

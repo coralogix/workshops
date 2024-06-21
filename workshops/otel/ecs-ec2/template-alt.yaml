@@ -1,0 +1,691 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+  The template used to create an Otel ECS Service from on an ECS Console. Logs and Traces
+  are enabled by default. Metrics are disabled by default. To enable metrics, set the
+  Metrics parameter to "enable".
+
+Parameters:
+  ClusterName:
+    Type: String
+
+  CDOTImageVersion:
+    Description: |
+      The Coralogix Open Telemetry Distribution Image
+      Version/Tag.
+      View available tags here: https://hub.docker.com/r/coralogixrepo/coralogix-otel-collector/tags
+    Type: String
+  
+  Image:
+    Description: |
+      The OpenTelemetry Collector Image to use.
+      If specified, this value will override the CDOTImageVersion parameter and
+      the coralogix otel collector image.
+    Default: none
+    Type: String
+
+  Memory:
+    Description: |
+      The amount of memory (in MiB) used by the task.
+      Note that you cluster must have sufficient memory available to support the given value.
+    Type: Number
+    Default: "256"
+
+  CoralogixRegion:
+      Type: String
+      Description: "The Coralogix location region [EU1|EU2|AP1|AP2|US1|US2]. Deprecated: [Europe, Europe2, India, Singapore, US, US2]"
+      AllowedValues:
+        - EU1
+        - EU2
+        - AP1
+        - AP2
+        - US1
+        - US2
+        - Europe
+        - Europe2
+        - India
+        - Singapore
+        - US
+        - US2
+
+  DefaultApplicationName:
+    Type: String
+    Description: The name of your application
+    MinLength: "1"
+    MaxLength: "64"
+
+  DefaultSubsystemName:
+    Type: String
+    Description: The subsystem name of your application
+    MinLength: "1"
+    MaxLength: "64"
+    Default: "default"
+
+  CoralogixApiKey:
+    Type: String
+    Description: "The Send-Your-Data API key for your Coralogix account. See: https://coralogix.com/docs/send-your-data-api-key/"
+    NoEcho: true
+    AllowedPattern: ".+"
+    ConstraintDescription: "API Key required."
+
+  PrivateKey:
+    Type: String
+    Description: "Deprecated. Do not use. Hard-replaced by \"CoralogixApiKey\". Formerly: The Coralogix private key which is used to validate your authenticity."
+    Default: "DO-NOT-USE"
+    AllowedPattern: "^DO-NOT-USE$" # hard-deprecate.
+    NoEcho: true
+
+  Metrics:
+    Type: String
+    Description: If true, cadivisor will be deployed on each node to collect metrics
+    AllowedValues:
+      - "enable"
+      - "disabled"
+    Default: "disabled"
+
+  OtelConfig:
+    Type: String
+    Description: |
+      The base64 encoded opentelemetry configuration string used to start the container.
+      If left as default, the embedded configuration will be used.
+    Default: "none"
+
+Conditions:
+  UseDefaultSubsystemName: !Equals [ !Ref DefaultSubsystemName, "default" ]
+  Metrics: !Equals [ !Ref Metrics, "enable" ]
+  UseImage: !Not [!Equals [ !Ref Image, "none" ]]
+  UseCustomConfig: 
+    Fn::Not: 
+    - !Equals [ !Ref OtelConfig, "none" ]
+  IgnoreCustomConfig: !Equals [ !Ref OtelConfig, "none" ]
+
+
+Mappings:
+  Otel:
+    Config:
+      Default: |
+        receivers:
+          datadog:
+            endpoint: "0.0.0.0:8127"
+            read_timeout: 60s
+          otlp:
+            protocols:
+              grpc:
+                endpoint: "0.0.0.0:4317"
+              http:
+                endpoint: "0.0.0.0:4318"
+
+          prometheus:
+            config:
+              scrape_configs:
+              - job_name: otel-collector-metrics
+                scrape_interval: 60s
+                static_configs:
+                - targets: ["localhost:8888"]
+
+          filelog:
+            start_at: end
+            force_flush_period: 0
+            include:
+              - /hostfs/var/lib/docker/containers/*/*.log
+            include_file_path: true
+            # add log.file.path to resource attributes
+            operators:
+              - type: json_parser
+                parse_from: body
+                parse_to: body
+                timestamp:
+                  parse_from: body.time
+                  layout: '%Y-%m-%dT%H:%M:%S.%fZ'
+
+              # handle logs split by docker
+              - type: recombine
+                id: recombine
+                combine_field: body.log
+                source_identifier: attributes["log.file.path"]
+                is_last_entry: body.log endsWith "\n"
+                force_flush_period: 10s	
+                on_error: drop
+                combine_with: ""
+
+              - type: move
+                from: attributes["log.file.path"]
+                to: resource["log.file.path"]
+
+        processors:
+
+          transform/dd_trace:
+            error_mode: ignore
+            trace_statements:
+            - context: span
+              statements:
+              - set(resource.attributes["service.name"], attributes["service.name"])
+
+          resourcedetection:
+            # ecs & docker detectors not required when using ecslogresourcedetection for logs
+            detectors: [env, ec2, system]
+            timeout: 2s
+            override: false
+
+          ecsattributes:
+            container_id:
+              sources:
+                - "log.file.path"
+
+          transform/logs:
+            error_mode: ignore
+            log_statements:
+              - context: resource
+                statements:
+                  - set(attributes["cx_container_id"], attributes["docker.id"])
+                  - set(attributes["aws_ecs_task_family"], attributes["aws.ecs.task.definition.family"])
+                  - set(attributes["image_id"], attributes["image.id"])
+                  - delete_key(attributes, "image.id")
+
+          batch:
+            send_batch_size: 1024
+            send_batch_max_size: 2048
+            timeout: "1s"
+
+          # otel-collector resource detection for collector
+          resourcedetection/otel-collector:
+            detectors: [ecs, ec2]
+            timeout: 2s
+            override: false
+
+        exporters:
+          logging:
+            verbosity: detailed
+          coralogix:
+            domain: "$CORALOGIX_DOMAIN"
+            private_key: "$PRIVATE_KEY"
+            application_name: "$APP_NAME"
+            subsystem_name: "$SUB_SYS"
+            application_name_attributes:
+            - "aws.ecs.cluster"
+            - "aws.ecs.cluster.name"
+            - "aws.ecs.task.definition.family"
+            subsystem_name_attributes:
+            - "aws.ecs.container.name"
+            - "aws.ecs.docker.name"
+            - "docker.name"
+            timeout: 30s
+          # datadog:
+          #   api:
+          #     site: "us5.datadoghq.com"
+          #     # Apply your datadog site.
+          #     key: "YOURDDKEYHERE"
+          #     # Apply your datadog API key.
+
+        extensions:
+          health_check:
+          pprof:
+
+        service:
+          extensions:
+            - health_check
+            - pprof
+
+          pipelines:
+            logs:
+              receivers: 
+                - filelog
+              processors:
+                - resourcedetection
+                - ecsattributes
+                - transform/logs
+              exporters:
+                - coralogix
+
+            traces:
+              receivers:
+                - otlp
+                - datadog
+              processors:
+                - transform/dd_trace
+                - batch
+              exporters:
+                - coralogix
+                # - datadog
+
+            metrics/otel-collector:
+              receivers:
+                - prometheus
+              processors:
+                - resourcedetection/otel-collector
+                - batch
+              exporters:
+                - coralogix
+
+          telemetry:
+            logs:
+              level: warn
+            metrics:
+              address: 0.0.0.0:8888
+              level: detailed
+
+      Metrics: |
+        receivers:
+          datadog:
+            endpoint: "0.0.0.0:8127"
+            read_timeout: 60s
+          otlp:
+            protocols:
+              grpc:
+                endpoint: "0.0.0.0:4317"
+              http:
+                endpoint: "0.0.0.0:4318"
+
+          prometheus:
+            config:
+              scrape_configs:
+              - job_name: otel-collector-metrics
+                scrape_interval: 60s
+                static_configs:
+                - targets: ['localhost:8888']
+
+          filelog:
+            start_at: end
+            force_flush_period: 0
+            include:
+              - /hostfs/var/lib/docker/containers/*/*.log
+            include_file_path: true
+            # add log.file.path to resource attributes
+            operators:
+              - type: json_parser
+                parse_from: body
+                parse_to: body
+                timestamp:
+                  parse_from: body.time
+                  layout: '%Y-%m-%dT%H:%M:%S.%fZ'
+
+              # handle logs split by docker
+              - type: recombine
+                id: recombine
+                combine_field: body.log
+                source_identifier: attributes["log.file.path"]
+                is_last_entry: body.log endsWith "\n"
+                force_flush_period: 10s	
+                on_error: drop
+                combine_with: ""
+
+              - type: move
+                from: attributes["log.file.path"]
+                to: resource["log.file.path"]
+
+          # add metrics
+          awsecscontainermetricsd:
+
+        processors:
+
+          transform/dd_trace:
+            error_mode: ignore
+            trace_statements:
+            - context: span
+              statements:
+              - set(resource.attributes["service.name"], attributes["service.name"])
+
+          resourcedetection:
+            # ecs & docker detectors not required when using ecslogresourcedetection for logs
+            detectors: [env, ec2, system]
+            timeout: 2s
+            override: false
+
+          ecsattributes:
+            container_id:
+              sources:
+                - "log.file.path"
+
+          transform/logs:
+            error_mode: ignore
+            log_statements:
+              - context: resource
+                statements:
+                  - set(attributes["cx_container_id"], attributes["docker.id"])
+                  - set(attributes["aws_ecs_task_family"], attributes["aws.ecs.task.definition.family"])
+                  - set(attributes["image_id"], attributes["image.id"])
+                  - delete_key(attributes, "image.id")
+
+          batch:
+            send_batch_size: 1024
+            send_batch_max_size: 2048
+            timeout: "1s"
+
+          # otel-collector resource detection for collector
+          resourcedetection/otel-collector:
+            detectors: [ecs, ec2]
+            timeout: 2s
+            override: false
+
+        exporters:
+          logging:
+          coralogix:
+            domain: "$CORALOGIX_DOMAIN"
+            private_key: "$PRIVATE_KEY"
+            application_name: "$APP_NAME"
+            subsystem_name: "$SUB_SYS"
+            application_name_attributes:
+            - "aws.ecs.cluster"
+            - "aws.ecs.cluster.name"
+            - "aws.ecs.task.definition.family"
+            subsystem_name_attributes:
+            - "aws.ecs.container.name"
+            - "aws.ecs.docker.name"
+            - "docker.name"
+            timeout: 30s
+          # datadog:
+          #   api:
+          #     site: "us5.datadoghq.com"
+          #     # Apply your datadog site.
+          #     key: "YOURDDKEYHERE"
+          #     # Apply your datadog API key.
+          
+        extensions:
+          health_check:
+          pprof:
+
+        service:
+          extensions:
+            - health_check
+            - pprof
+
+          pipelines:
+            logs:
+              receivers: 
+                - filelog
+              processors:
+                - resourcedetection
+                - ecsattributes
+                - transform/logs
+              exporters:
+                - coralogix
+
+            metrics:
+              receivers:
+                - otlp
+                - awsecscontainermetricsd
+              processors:
+                - batch
+              exporters:
+                - coralogix
+            
+            traces:
+              receivers:
+                - otlp
+                - datadog
+              processors:
+                - batch
+              exporters:
+                - coralogix
+                # - datadog
+
+            metrics/otel-collector:
+              receivers:
+                - prometheus
+              processors:
+                - resourcedetection/otel-collector
+                - batch
+              exporters:
+                - coralogix
+
+          telemetry:
+            logs:
+              level: warn
+            metrics:
+              address: 0.0.0.0:8888
+              level: detailed
+
+
+  CoralogixRegionMap:
+    EU1:
+      Endpoint: ingress.coralogix.com:443
+      Domain: coralogix.com
+    EU2:
+      Endpoint: ingress.eu2.coralogix.com:443
+      Domain: eu2.coralogix.com
+    AP1:
+      Endpoint: ingress.coralogix.in:443
+      Domain: coralogix.in
+    AP2:
+      Endpoint: ingress.coralogixsg.com:443
+      Domain: coralogixsg.com
+    US1:
+      Endpoint: ingress.coralogix.us:443
+      Domain: coralogix.us
+    US2:
+      Endpoint: ingress.cx498-aws-us-west-2.coralogix.com:443
+      Domain: cx498.coralogix.com
+    Europe:
+      Endpoint: ingress.coralogix.com:443
+      Domain: coralogix.com
+    Europe2:
+      Endpoint: ingress.eu2.coralogix.com:443
+      Domain: eu2.coralogix.com
+    India:
+      Endpoint: ingress.coralogix.in:443
+      Domain: coralogix.in
+    Singapore:
+      Endpoint: ingress.coralogixsg.com:443
+      Domain: coralogixsg.com
+    US:
+      Endpoint: ingress.coralogix.us:443
+      Domain: coralogix.us
+    US2:
+      Endpoint: ingress.cx498-aws-us-west-2.coralogix.com:443
+      Domain: cx498.coralogix.com
+
+
+Resources:
+  OtelTaskDefinition: 
+    Type: AWS::ECS::TaskDefinition
+    Condition: IgnoreCustomConfig
+    Properties:
+      Family: opentelemetry
+      RequiresCompatibilities:
+        - EC2
+      NetworkMode: host
+      Volumes:
+        - Name: hostfs
+          Host:
+            SourcePath: "/var/lib/docker/"
+  
+        - Name: docker-socket
+          Host:
+            SourcePath: /var/run/docker.sock
+
+      ContainerDefinitions:
+        - Name: coralogix-otel-agent
+          Cpu: 0
+          Memory: !Ref Memory
+          Image: !If
+            - UseImage
+            - !Ref Image
+            - !Sub "coralogixrepo/coralogix-otel-collector:${CDOTImageVersion}"
+
+          Essential: true
+
+          PortMappings:
+            # otel grpc endpoint
+            - HostPort: 4317
+              Protocol: tcp
+              ContainerPort: 4317
+            
+            # otel http endpoint
+            - HostPort: 4318
+              Protocol: tcp
+              ContainerPort: 4318
+
+            # otel metrics endpoint
+            - HostPort: 8888
+              Protocol: tcp
+              ContainerPort: 8888
+
+            # pprof extension default port
+            - HostPort: 1777
+              Protocol: tcp
+              ContainerPort: 1777
+
+            # datadog alt port
+            - HostPort: 8127
+              Protocol: tcp
+              ContainerPort: 8127
+
+          # Privileged required to access certain host metrics
+          Privileged: true
+
+          MountPoints:
+            - SourceVolume: hostfs
+              ContainerPath: "/hostfs/var/lib/docker"
+              ReadOnly: True
+
+            - SourceVolume: docker-socket
+              ContainerPath: /var/run/docker.sock
+
+          Environment:
+            - Name: CORALOGIX_DOMAIN
+              Value: !FindInMap [CoralogixRegionMap, !Ref CoralogixRegion, Domain]
+           
+            - Name: PRIVATE_KEY
+              Value: !Ref CoralogixApiKey
+
+            - Name: APP_NAME
+              Value: !Ref DefaultApplicationName
+
+            - Name: SUB_SYS
+              Value: !If
+                - UseDefaultSubsystemName
+                - !Sub "${AWS::AccountId}"
+                - !Ref DefaultSubsystemName
+
+            - Name: OTEL_CONFIG
+              Value: !If
+                - Metrics
+                - !FindInMap [Otel, Config, Metrics]
+                - !FindInMap [Otel, Config, Default]
+
+  OtelTaskDefinitionCustom: 
+    Type: AWS::ECS::TaskDefinition
+    Condition: UseCustomConfig
+    Properties:
+      Family: opentelemetry
+      RequiresCompatibilities:
+        - EC2
+      NetworkMode: host
+      Volumes:
+        - Name: hostfs
+          Host:
+            SourcePath: "/var/lib/docker/"
+  
+        - Name: docker-socket
+          Host:
+            SourcePath: /var/run/docker.sock
+
+      ContainerDefinitions:
+        - Name: coralogix-otel-agent
+          Cpu: 0
+          Memory: !Ref Memory
+          Image: !If
+            - UseImage
+            - !Ref Image
+            - !Sub "coralogixrepo/coralogix-otel-collector:${CDOTImageVersion}"
+            
+          Essential: true
+          PortMappings:
+            - HostPort: 4317
+              Protocol: tcp
+              ContainerPort: 4317
+            
+            - HostPort: 4318
+              Protocol: tcp
+              ContainerPort: 4318
+
+            - HostPort: 8888
+              Protocol: tcp
+              ContainerPort: 8888
+
+            # datadog alt port
+            - HostPort: 8127
+              Protocol: tcp
+              ContainerPort: 8127
+
+          # Privileged required to access certain host metrics
+          Privileged: true
+
+          MountPoints:
+            - SourceVolume: hostfs
+              ContainerPath: "/hostfs/var/lib/docker"
+              ReadOnly: True
+
+            - SourceVolume: docker-socket
+              ContainerPath: /var/run/docker.sock
+
+          Environment:
+            - Name: CORALOGIX_DOMAIN
+              Value: !FindInMap [CoralogixRegionMap, !Ref CoralogixRegion, Domain]
+           
+            - Name: PRIVATE_KEY
+              Value: !Ref CoralogixApiKey
+
+            - Name: APP_NAME
+              Value: !Ref DefaultApplicationName
+
+            - Name: SUB_SYS
+              Value: !If
+                - UseDefaultSubsystemName
+                - !Sub "${AWS::AccountId}"
+                - !Ref DefaultSubsystemName
+
+            - Name: OTEL_CONFIG
+              Value: !Ref OtelConfig
+
+  ECSService:
+    Type: 'AWS::ECS::Service'
+    Condition: IgnoreCustomConfig
+    Properties:
+      Cluster: !Ref ClusterName
+      LaunchType: EC2
+      ServiceName: coralogix-otel-agent
+      SchedulingStrategy: DAEMON
+      DeploymentConfiguration:
+        MaximumPercent: 100
+        MinimumHealthyPercent: 0
+        DeploymentCircuitBreaker:
+          Enable: true
+          Rollback: true
+      DeploymentController:
+        Type: ECS
+      ServiceConnectConfiguration:
+        Enabled: false
+      PlacementStrategies: []
+      PlacementConstraints: []
+      Tags:
+        - Key: 'ecs:service:stackId'
+          Value: !Ref 'AWS::StackId'
+      EnableECSManagedTags: true
+      TaskDefinition: !Ref OtelTaskDefinition
+
+  ECSServiceCustom:
+    Type: 'AWS::ECS::Service'
+    Condition: UseCustomConfig
+    Properties:
+      Cluster: !Ref ClusterName
+      LaunchType: EC2
+      ServiceName: coralogix-otel-agent
+      SchedulingStrategy: DAEMON
+      DeploymentConfiguration:
+        MaximumPercent: 100
+        MinimumHealthyPercent: 0
+        DeploymentCircuitBreaker:
+          Enable: true
+          Rollback: true
+      DeploymentController:
+        Type: ECS
+      ServiceConnectConfiguration:
+        Enabled: false
+      PlacementStrategies: []
+      PlacementConstraints: []
+      Tags:
+        - Key: 'ecs:service:stackId'
+          Value: !Ref 'AWS::StackId'
+      EnableECSManagedTags: true
+      TaskDefinition: !Ref OtelTaskDefinitionCustom
+      

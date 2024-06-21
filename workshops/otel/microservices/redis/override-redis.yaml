@@ -1,0 +1,18 @@
+---
+global:
+  clusterName: slerner
+  domain: cx498.coralogix.com
+opentelemetry-cluster-collector:
+  config:
+    receivers:
+      redis:
+        endpoint: "cx-redis:6379"
+        collection_interval: 10s
+        password: ""
+    service:
+      pipelines:
+        metrics/redis:
+          receivers:
+            - redis
+          exporters:
+            - coralogix

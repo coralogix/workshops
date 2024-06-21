@@ -1,0 +1,1 @@
+opentelemetry-instrument --resource_attributes application.name=cx-docker-py-auto,api.name=cx-docker-py-auto,cx.application.name=cx-docker-py-auto,cx.subsystem.name=cx-docker-py-auto,service.name=cx-docker-py-auto python app.py 

@@ -1,0 +1,7 @@
+export OTEL_TRACES_EXPORTER="otlp"
+export OTEL_METRICS_EXPORTER="otlp"
+export OTEL_EXPORTER_OTLP_ENDPOINT="http://127.0.0.1:4318"
+export OTEL_NODE_RESOURCE_DETECTORS="env,host,os"
+export OTEL_RESOURCE_ATTRIBUTES="cx.application.name=cx-node-test,cx.subsystem.name=cx-node-test" 
+export OTEL_SERVICE_NAME="cx-node-test"
+export NODE_OPTIONS="--require @opentelemetry/auto-instrumentations-node/register"

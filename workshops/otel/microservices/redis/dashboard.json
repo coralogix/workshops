@@ -1,0 +1,228 @@
+{
+  "id": "7mFPZGDHOTJTkC2pOY856",
+  "name": "Redis",
+  "layout": {
+    "sections": [
+      {
+        "id": {
+          "value": "54b2e2ee-8ad8-c613-d7ef-cadd7b208e71"
+        },
+        "rows": [
+          {
+            "id": {
+              "value": "9db29374-9089-1be3-ff24-bc85c0da08a8"
+            },
+            "appearance": {
+              "height": 19
+            },
+            "widgets": [
+              {
+                "id": {
+                  "value": "dce98fae-bba3-67ca-61e5-83a2699102b1"
+                },
+                "title": "Redis Memory Peak",
+                "definition": {
+                  "gauge": {
+                    "query": {
+                      "metrics": {
+                        "promqlQuery": {
+                          "value": "redis_memory_peak_By"
+                        },
+                        "aggregation": "AGGREGATION_UNSPECIFIED",
+                        "filters": []
+                      }
+                    },
+                    "min": 0,
+                    "max": 100,
+                    "showInnerArc": true,
+                    "showOuterArc": true,
+                    "unit": "UNIT_NUMBER",
+                    "thresholds": [
+                      {
+                        "from": 0,
+                        "color": "var(--c-severity-log-verbose)"
+                      }
+                    ],
+                    "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED",
+                    "thresholdBy": "THRESHOLD_BY_UNSPECIFIED"
+                  }
+                }
+              },
+              {
+                "id": {
+                  "value": "7896393f-86b6-fd51-aeb8-aaf9c5c47d10"
+                },
+                "title": "Redis Connected Clients",
+                "definition": {
+                  "lineChart": {
+                    "legend": {
+                      "isVisible": true,
+                      "columns": [],
+                      "groupByQuery": true
+                    },
+                    "tooltip": {
+                      "showLabels": false,
+                      "type": "TOOLTIP_TYPE_ALL"
+                    },
+                    "queryDefinitions": [
+                      {
+                        "id": "9cfe2632-ed69-6000-ecd8-0dc90c45d3dc",
+                        "query": {
+                          "metrics": {
+                            "promqlQuery": {
+                              "value": "redis_clients_connected__client_"
+                            },
+                            "filters": []
+                          }
+                        },
+                        "seriesCountLimit": "20",
+                        "unit": "UNIT_UNSPECIFIED",
+                        "scaleType": "SCALE_TYPE_LINEAR",
+                        "name": "Query 1",
+                        "isVisible": true,
+                        "colorScheme": "classic",
+                        "resolution": {
+                          "bucketsPresented": 96
+                        },
+                        "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED"
+                      },
+                      {
+                        "id": "8b8e8a01-fedc-d5ed-87c9-a2cf90f24d7d",
+                        "query": {
+                          "metrics": {
+                            "promqlQuery": {
+                              "value": "redis_clients_connected__client_"
+                            },
+                            "filters": []
+                          }
+                        },
+                        "seriesCountLimit": "20",
+                        "unit": "UNIT_UNSPECIFIED",
+                        "scaleType": "SCALE_TYPE_LINEAR",
+                        "isVisible": true,
+                        "colorScheme": "classic",
+                        "resolution": {
+                          "bucketsPresented": 96
+                        },
+                        "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED"
+                      }
+                    ],
+                    "stackedLine": "STACKED_LINE_UNSPECIFIED"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "id": {
+              "value": "4f1a0606-6697-1fe8-e2e9-5d1742bb8322"
+            },
+            "appearance": {
+              "height": 19
+            },
+            "widgets": [
+              {
+                "id": {
+                  "value": "ddbed50e-0a44-a5d0-2e2e-e8dcc9bb8ca8"
+                },
+                "title": "Redis Commands Processed Per Min",
+                "definition": {
+                  "lineChart": {
+                    "legend": {
+                      "isVisible": true,
+                      "columns": [],
+                      "groupByQuery": true
+                    },
+                    "tooltip": {
+                      "showLabels": false,
+                      "type": "TOOLTIP_TYPE_ALL"
+                    },
+                    "queryDefinitions": [
+                      {
+                        "id": "dc71029b-b3fc-3bee-0b67-ef5a91b929dc",
+                        "query": {
+                          "metrics": {
+                            "promqlQuery": {
+                              "value": "rate(redis_commands_processed__command__total[1m]) * 60\n"
+                            },
+                            "filters": []
+                          }
+                        },
+                        "seriesCountLimit": "20",
+                        "unit": "UNIT_UNSPECIFIED",
+                        "scaleType": "SCALE_TYPE_LINEAR",
+                        "name": "Query 1",
+                        "isVisible": true,
+                        "colorScheme": "classic",
+                        "resolution": {
+                          "bucketsPresented": 96
+                        },
+                        "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED"
+                      }
+                    ],
+                    "stackedLine": "STACKED_LINE_UNSPECIFIED"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "options": {
+          "internal": {}
+        }
+      }
+    ]
+  },
+  "variables": [],
+  "filters": [
+    {
+      "source": {
+        "logs": {
+          "operator": {
+            "equals": {
+              "selection": {
+                "list": {
+                  "values": []
+                }
+              }
+            }
+          },
+          "observationField": {
+            "keypath": [
+              "applicationname"
+            ],
+            "scope": "DATASET_SCOPE_LABEL"
+          }
+        }
+      },
+      "enabled": true,
+      "collapsed": false
+    },
+    {
+      "source": {
+        "logs": {
+          "operator": {
+            "equals": {
+              "selection": {
+                "list": {
+                  "values": []
+                }
+              }
+            }
+          },
+          "observationField": {
+            "keypath": [
+              "subsystemname"
+            ],
+            "scope": "DATASET_SCOPE_LABEL"
+          }
+        }
+      },
+      "enabled": true,
+      "collapsed": false
+    }
+  ],
+  "relativeTimeFrame": "900s",
+  "annotations": [],
+  "off": {}
+}

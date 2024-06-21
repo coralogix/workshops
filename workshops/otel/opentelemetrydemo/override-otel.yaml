@@ -1,0 +1,7 @@
+---
+global:
+  clusterName: slerner
+  domain: cx498.coralogix.com
+opentelemetry-agent:
+  fullnameOverride: coralogix-opentelemetry
+  mode: daemonset

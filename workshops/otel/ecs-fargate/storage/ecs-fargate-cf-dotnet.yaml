@@ -1,0 +1,266 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  CoralogixRegion:
+    Type: String
+    Description: The Coralogix location region [Europe, Europe2, India, Singapore, US, US2]
+    AllowedValues:
+      - Europe
+      - Europe2
+      - India
+      - Singapore
+      - US
+      - US2
+  PrivateKey:
+    Type: String
+    Description: The Coralogix private key which is used to validate your authenticity
+    NoEcho: true
+  S3ConfigARN:
+    Type: String
+    Description: The S3 ARN for your uploaded Coralogix Fluent Bit configuration file
+
+Mappings:
+  CoralogixRegionMap:
+    Europe:
+      Endpoint: ingress.coralogix.com
+      Domain: coralogix.com
+    Europe2:
+      Endpoint: ingress.eu2.coralogix.com
+      Domain: eu2.coralogix.com
+    India:
+      Endpoint: ingress.coralogix.in
+      Domain: coralogix.in
+    Singapore:
+      Endpoint: ingress.coralogixsg.com
+      Domain: coralogixsg.com
+    US:
+      Endpoint: ingress.coralogix.us
+      Domain: coralogix.us
+    US2:
+      Endpoint: ingress.cx498-aws-us-west-2.coralogix.com
+      Domain: cx498.coralogix.com
+
+Resources:
+  OTELConfigParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: /OTEL/config.yaml
+      Description: Configuration parameter for Coralogix ADOT (OTEL) Collector
+      Type: String
+      Value: |
+        receivers:
+          awsecscontainermetrics:
+            collection_interval: 10s
+          otlp:
+            protocols:
+              grpc:
+                endpoint: 0.0.0.0:4317
+              http:
+                endpoint: 0.0.0.0:4318
+        processors:
+          resource/traces:
+            attributes:
+            - key: cx.application.name
+              from_attribute: aws.ecs.task.family
+              action: upsert
+            - key: cx.subsystem.name
+              from_attribute: service.name
+              action: upsert
+          resource/metrics:
+            attributes:
+            - key: cx.application.name
+              from_attribute: aws.ecs.task.family
+              action: upsert
+            - key: cx.subsystem.name
+              from_attribute: aws.ecs.docker.name
+              action: upsert
+          batch:
+            timeout: 5s
+            send_batch_size: 256
+          resourcedetection:
+            detectors: [env, ec2, ecs]
+            timeout: 5s
+            override: true
+        exporters:
+          logging:
+            verbosity: detailed
+          otlp:
+           endpoint: https://ingress.${CORALOGIX_DOMAIN}:443
+           headers:
+              Authorization: Bearer ${PRIVATE_KEY}
+        service:
+          pipelines:
+            traces/otlp:
+              receivers: [otlp]
+              processors: [resourcedetection, resource/traces, batch]
+              exporters: [otlp]
+            metrics/otlp:
+              receivers: [otlp]
+              processors: [resourcedetection, resource/metrics, batch]
+              exporters: [otlp]
+            metrics/polled:
+              receivers: [awsecscontainermetrics]
+              processors: [resourcedetection, resource/metrics, batch]
+              exporters: [otlp]
+        
+      Tier: Standard
+
+  ECSTaskDefinition:
+    Type: 'AWS::ECS::TaskDefinition'
+    Properties:
+      Family: Coralogix-observability
+      TaskRoleArn: !GetAtt ECSTaskRole.Arn
+      ExecutionRoleArn: !GetAtt ECSExecutionRole.Arn
+      NetworkMode: awsvpc
+      ContainerDefinitions:
+        - Name: dotnet-autogen #.NET 6 demo app from https://github.com/coralogix/workshops/tree/master/workshops/otel/dotnet6-linux
+          Image: public.ecr.aws/w3s4j9x9/microservices-demo:dotnet 
+          WorkingDirectory: /home/code
+          Environment:
+            - Name: OTEL_SERVICE_NAME
+              Value: dotnet-autogen
+            - Name: OTEL_RESOURCE_ATTRIBUTES
+              Value: application.name=dotnet-autogen,api.name=dotnet-autogen,cx.application.name=dotnet-autogen,cx.subsystem.name=dotnet-autogen
+            - Name: OTEL_EXPORTER_OTLP_ENDPOINT
+              Value: http://localhost:4318
+            - Name: CORECLR_ENABLE_PROFILING
+              Value: "1"
+            - Name: CORECLR_PROFILER
+              Value: '{918728DD-259F-4A6A-AC2B-B85E1B658318}'
+            - Name: CORECLR_PROFILER_PATH
+              Value: "/otel-dotnet-auto/linux-x64/OpenTelemetry.AutoInstrumentation.Native.so"
+            - Name: DOTNET_ADDITIONAL_DEPS
+              Value: "/otel-dotnet-auto/AdditionalDeps"
+            - Name: DOTNET_SHARED_STORE
+              Value: "/otel-dotnet-auto/store"
+            - Name: DOTNET_STARTUP_HOOKS
+              Value: "/otel-dotnet-auto/net/OpenTelemetry.AutoInstrumentation.StartupHook.dll"
+            - Name: OTEL_DOTNET_AUTO_HOME
+              Value: "/otel-dotnet-auto"
+          Command:
+            - "/bin/sh"
+            - "/App/run-client.sh"
+          Cpu: 0
+          PortMappings:
+            - ContainerPort: 8080
+              HostPort: 8080
+              Protocol: tcp
+          Essential: true
+          MountPoints: []
+          VolumesFrom: []
+          LogConfiguration:
+            LogDriver: awsfirelens
+            Options:
+              Format: json_lines
+              Header: !Sub "private_key ${PrivateKey}"
+              Host: !FindInMap [CoralogixRegionMap, !Ref CoralogixRegion, Endpoint]
+              Name: http
+              Port: "443"
+              Retry_Limit: "10"
+              TLS: On
+              URI: /logs/rest/singles
+              Compress: gzip
+        - Name: otel-collector
+          Image: public.ecr.aws/aws-observability/aws-otel-collector
+          Cpu: 0
+          PortMappings:
+            - ContainerPort: 4317
+              HostPort: 4317
+              Protocol: tcp
+            - ContainerPort: 4318
+              HostPort: 4318
+              Protocol: tcp
+          Essential: false
+          Environment:
+            - Name: PRIVATE_KEY
+              Value: !Ref PrivateKey
+            - Name: CORALOGIX_DOMAIN
+              Value: !FindInMap [CoralogixRegionMap, !Ref CoralogixRegion, Domain]
+          MountPoints: []
+          VolumesFrom: []
+          Secrets:
+            - Name: AOT_CONFIG_CONTENT
+              ValueFrom: config.yaml
+          LogConfiguration:
+            LogDriver: awsfirelens
+            Options:
+              Format: json_lines
+              Header: !Sub "private_key ${PrivateKey}"
+              Host: !FindInMap [CoralogixRegionMap, !Ref CoralogixRegion, Endpoint]
+              Name: http
+              Port: "443"
+              Retry_Limit: "10"
+              TLS: On
+              URI: /logs/rest/singles
+              Compress: gzip
+        - Name: log_router
+          Image: public.ecr.aws/aws-observability/aws-for-fluent-bit:init-2.31.12
+          Cpu: 0
+          Essential: false
+          Environment:
+            - Name: aws_fluent_bit_init_s3_1
+              Value: !Ref S3ConfigARN
+          MountPoints: []
+          VolumesFrom: []
+          User: "0"
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-create-group: "true"
+              awslogs-group: /ecs/Coralogix-observability
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: log_router
+          FirelensConfiguration:
+            Type: fluentbit
+            Options: {}
+
+      RequiresCompatibilities:
+        - FARGATE
+      Cpu: '1024'
+      Memory: '2048'
+
+  ECSTaskRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      Description: Allows ECS tasks to call AWS services on your behalf.
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: ''
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action: 'sts:AssumeRole'
+      Policies:
+        - PolicyName: AWSOpenTelemetryPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'logs:PutLogEvents'
+                  - 'logs:CreateLogGroup'
+                  - 's3:GetObject'
+                  - 's3:GetBucketLocation'
+                  - 'ssm:GetParameters'
+                Resource: '*'
+      RoleName: AWSOTelRole
+
+  ECSExecutionRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      Description: >-
+        Allows ECS container agent makes calls to the Amazon ECS API on your
+        behalf.
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: ''
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action: 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy'
+        - 'arn:aws:iam::aws:policy/CloudWatchLogsFullAccess'
+        - 'arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess'
+      RoleName: AWSOTelExecutionRole

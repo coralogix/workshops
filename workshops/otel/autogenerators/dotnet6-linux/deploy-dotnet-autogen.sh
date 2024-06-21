@@ -1,0 +1,1 @@
+kubectl apply -f deploy-autogen-dotnet.yaml

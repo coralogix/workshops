@@ -1,0 +1,6 @@
+mkdocs-material
+mkdocs
+markdown
+mkdocs-git-revision-date-localized-plugin
+mkdocs-rtd-dropdown
+mkdocs-minify-plugin

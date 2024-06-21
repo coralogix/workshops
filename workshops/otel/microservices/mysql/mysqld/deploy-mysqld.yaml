@@ -1,0 +1,52 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cx-mysql
+  namespace: default
+spec:
+  type: ClusterIP
+  ports:
+  - port: 3306
+    targetPort: 3306
+    protocol: TCP
+    name: mysql
+  selector:
+    app: cx-mysql
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cx-mysql
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cx-mysql
+  template:
+    metadata:
+      labels:
+        app: cx-mysql
+    spec:
+      containers:
+      - name: cx-mysql
+        image: public.ecr.aws/w3s4j9x9/microservices-demo:mysql
+        imagePullPolicy: Always
+        ports:
+        - name: mysql
+          containerPort: 3306
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "200m"
+      #   volumeMounts:
+      #   - name: mysql-data
+      #     mountPath: /var/lib/mysql
+      # volumes:
+      # - name: mysql-data
+      #   persistentVolumeClaim:
+      #     claimName: mysql-pvc

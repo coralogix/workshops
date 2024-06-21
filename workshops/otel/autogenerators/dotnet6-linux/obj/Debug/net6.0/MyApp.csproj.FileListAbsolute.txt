@@ -1,0 +1,15 @@
+/home/ubuntu/MyApp/bin/Debug/net6.0/MyApp
+/home/ubuntu/MyApp/bin/Debug/net6.0/MyApp.deps.json
+/home/ubuntu/MyApp/bin/Debug/net6.0/MyApp.runtimeconfig.json
+/home/ubuntu/MyApp/bin/Debug/net6.0/MyApp.dll
+/home/ubuntu/MyApp/bin/Debug/net6.0/MyApp.pdb
+/home/ubuntu/MyApp/obj/Debug/net6.0/MyApp.csproj.AssemblyReference.cache
+/home/ubuntu/MyApp/obj/Debug/net6.0/MyApp.GeneratedMSBuildEditorConfig.editorconfig
+/home/ubuntu/MyApp/obj/Debug/net6.0/MyApp.AssemblyInfoInputs.cache
+/home/ubuntu/MyApp/obj/Debug/net6.0/MyApp.AssemblyInfo.cs
+/home/ubuntu/MyApp/obj/Debug/net6.0/MyApp.csproj.CoreCompileInputs.cache
+/home/ubuntu/MyApp/obj/Debug/net6.0/MyApp.dll
+/home/ubuntu/MyApp/obj/Debug/net6.0/refint/MyApp.dll
+/home/ubuntu/MyApp/obj/Debug/net6.0/MyApp.pdb
+/home/ubuntu/MyApp/obj/Debug/net6.0/MyApp.genruntimeconfig.cache
+/home/ubuntu/MyApp/obj/Debug/net6.0/ref/MyApp.dll

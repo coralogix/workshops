@@ -1,0 +1,46 @@
+site_name: Coralogix Workshops
+site_url: http://coralogix.github.io
+site_author: Coralogix
+site_description: Coralogix workshops for observability
+repo_url: http://github.com/coralogix/workshops
+copyright: Copyright Coralogix. All rights reserved.
+
+theme:
+  name: material
+  # custom_dir: overrides
+  palette:
+    primary: green
+  logo: images/horizontal.png
+  favicon: images/favicon.png
+  font:
+      text: "Nunito Sans"
+      code: "Jetbrains mono"
+  # include_search_page: false
+  # search_index_only: true
+  language: en
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.instant
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - navigation.tracking
+    - toc.integrate
+    - toc.follow
+
+extra_css:
+  - stylesheets/extra.css
+
+nav:
+  - Home: index.md
+  - OpenTelemetry Info:
+    - Overview and Value Proposition: otel/about-opentelemetry.md
+  - Workshops:
+    - Kubernetes Microservices+Otel Collector: otel/microservices/index.md
+    - AWS ECS Fargate (Python): otel/ecs-fargate/index.md
+    - AWS ECS EC2 (Python): otel/ecs-ec2/index.md
+    - Monolith - Node.js / Linux: otel/monolith/node.md
+    - Monolith - Python / Linux: otel/monolith/python.md
+    - Monolith - .NET / Windows: otel/monolith/windows.md
+    - Real User Monitoring (RUM): rum/index.md

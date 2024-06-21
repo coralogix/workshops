@@ -1,0 +1,1 @@
+/usr/local/bin/php /var/www/hello-world/artisan serve --host=0.0.0.0

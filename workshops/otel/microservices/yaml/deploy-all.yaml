@@ -1,0 +1,138 @@
+---
+### Flask Server Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: cx-payment-gateway-flask
+spec:
+  selector:
+    name: cx-payment-gateway-flask
+  ports:
+  - protocol: TCP
+    port: 5000
+    targetPort: 5000
+---
+# Flask Server Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cx-payment-gateway-flask
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      name: cx-payment-gateway-flask
+  template:
+    metadata:
+      labels:
+        name: cx-payment-gateway-flask
+    spec:
+      containers:
+      - name: cx-payment-gateway-flask
+        image: public.ecr.aws/w3s4j9x9/microservices-demo:python
+        imagePullPolicy: Always
+        workingDir: /home/code
+        ports:
+          - name: http
+            containerPort: 5000
+        env:
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: service.name=cx-payment-gateway-flask, application.name=cx-payment-gateway-flask,api.name=cx-payment-gateway-flask,cx.application.name=cx-payment-gateway-flask,cx.subsystem.name=cx-payment-gateway-flask
+        - name: OTEL_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: OTEL_TRACES_EXPORTER
+          value: otlp
+        - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
+          value: http://$(OTEL_IP):4317
+        - name: PYTHON_TEST_URLGOOD
+          value: "GOOD"
+        - name: REDIS_SERVICE_HOST
+          value: cx-redis
+        command: ["/bin/sh"]
+        args: ["start-flask-redis-otel.sh"]
+        # test if needed
+        # command: [ "/bin/bash", "-c", "--" ]
+        # args: [ "while true; do sleep 30; done;" ]
+---
+# Redis Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: cx-redis
+  namespace: default
+spec:
+  selector:
+    name: cx-redis
+  ports:
+  - protocol: TCP
+    port: 6379
+    targetPort: 6379
+---
+# Redis Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cx-redis
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      name: cx-redis
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: cx-redis
+    spec:
+      containers:
+      - name: cx-redis
+        image: public.ecr.aws/w3s4j9x9/microservices-demo:redis
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 6379
+        command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+---
+# Python Requests Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cx-shopping-cart-reqs
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      name: cx-shopping-cart-reqs
+  template:
+    metadata:
+      labels:
+        name: cx-shopping-cart-reqs
+    spec:
+      containers:
+      - name: cx-shopping-cart-reqs
+        image: public.ecr.aws/w3s4j9x9/microservices-demo:python
+        imagePullPolicy: Always
+        workingDir: /home/code
+        env:
+        - name: OTEL_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: OTEL_SERVICE_NAME
+          value: cx-shopping-cart-reqs
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: service.name=cx-shopping-cart-reqs, application.name=cx-shopping-cart-reqs,api.name=cx-shopping-cart-reqs,cx.application.name=cx-shopping-cart-reqs,cx.subsystem.name=cx-shopping-cart-reqs
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: http://$(OTEL_IP):4317
+        - name: PYTHON_TEST_URLGOOD
+          value: "GOOD"
+        - name: PYTHON_TEST_URL
+          value: http://cx-payment-gateway-flask:5000
+        - name: PYTHON_ONESHOT
+          value: "NO"
+        command: ["/bin/sh"]
+        args: ["start-reqs-envurl-otel.sh"]
+        # test if needed
+        # command: [ "/bin/bash", "-c", "--" ]
+        # args: [ "while true; do sleep 30; done;" ]

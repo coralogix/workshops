@@ -1,0 +1,81 @@
+receivers:
+  hostmetrics:
+    collection_interval: 15s
+    scrapers:
+      cpu:
+      disk:
+      load:
+      filesystem:
+      memory:
+      network:
+  otlp:
+    protocols:
+      grpc:
+      http:
+processors:
+  resourcedetection/env:
+    detectors: ["system", "env"]
+    system:
+      resource_attributes:
+        host.name:
+          enabled: true
+        host.id:
+          enabled: true
+  resourcedetection/ec2:
+    detectors: ["ec2" ]
+    ec2:
+      resource_attributes:
+        host.name:
+          enabled: true
+        host.id:
+          enabled: true
+      #tags:
+      #  - ^Owner$
+      #  - ^Env.*$
+      #  - ^BusinessUnit$  
+  tail_sampling:
+    decision_wait: 10s 
+    expected_new_traces_per_sec: 1000
+    policies:
+      [
+        {
+            name: percent-sample-policy,
+            type: probabilistic,
+            probabilistic: {sampling_percentage: 100}
+        },
+        {
+          name: errors-policy,
+          type: status_code,
+          status_code: { status_codes: [ERROR] }
+        }
+      ]
+  batch:
+
+exporters:
+  coralogix:
+    timeout: "30s"
+    private_key: <your-coralogix-api-key>
+    domain: <your-coralogix-domain>
+    application_name: <default-application-name>
+    subsystem_name: <default-subsystem-name>
+    application_name_attributes:
+      - "cloud.region"
+      #- "ec2.tag.Env"
+    subsystem_name_attributes:
+      - "host.name"
+      #- "ec2.tag.BusinessUnit"
+
+service:
+  pipelines:
+    metrics:
+      receivers: [otlp,hostmetrics]
+      processors: [resourcedetection/env,resourcedetection/ec2,batch]
+      exporters: [coralogix]
+    logs:
+      receivers: [otlp]
+      processors: [resourcedetection/env,resourcedetection/ec2,batch]
+      exporters: [coralogix]
+    traces:
+      receivers: [otlp]
+      processors: [resourcedetection/env,resourcedetection/ec2,tail_sampling,batch]
+      exporters: [coralogix]

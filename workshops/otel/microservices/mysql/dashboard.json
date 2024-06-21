@@ -1,0 +1,293 @@
+{
+  "id": "z4mrwiXVP7WUtct4bizp2",
+  "name": "MySQL",
+  "layout": {
+    "sections": [
+      {
+        "id": {
+          "value": "7d2446b3-43a3-d25d-f293-6080870fccb5"
+        },
+        "rows": [
+          {
+            "id": {
+              "value": "4cc9d59e-fc72-83e4-612f-19cb74c7b347"
+            },
+            "appearance": {
+              "height": 19
+            },
+            "widgets": [
+              {
+                "id": {
+                  "value": "1cace7ed-6fe9-4f10-a732-c9bb51942551"
+                },
+                "title": "MySQL Uptime",
+                "definition": {
+                  "gauge": {
+                    "query": {
+                      "metrics": {
+                        "promqlQuery": {
+                          "value": "mysql_uptime_total"
+                        },
+                        "aggregation": "AGGREGATION_UNSPECIFIED",
+                        "filters": []
+                      }
+                    },
+                    "min": 0,
+                    "max": 100,
+                    "showInnerArc": true,
+                    "showOuterArc": true,
+                    "unit": "UNIT_SECONDS",
+                    "thresholds": [
+                      {
+                        "from": 0,
+                        "color": "var(--c-severity-log-verbose)"
+                      }
+                    ],
+                    "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED",
+                    "thresholdBy": "THRESHOLD_BY_UNSPECIFIED"
+                  }
+                }
+              },
+              {
+                "id": {
+                  "value": "d4031e1c-314f-e6f9-4ea9-f5c2aac4b815"
+                },
+                "title": "Buffer Pool Reads",
+                "definition": {
+                  "gauge": {
+                    "query": {
+                      "metrics": {
+                        "promqlQuery": {
+                          "value": "mysql_buffer_pool_operations_1_total{operation=\"reads\"}"
+                        },
+                        "aggregation": "AGGREGATION_UNSPECIFIED",
+                        "filters": []
+                      }
+                    },
+                    "min": 0,
+                    "max": 100,
+                    "showInnerArc": true,
+                    "showOuterArc": true,
+                    "unit": "UNIT_NUMBER",
+                    "thresholds": [
+                      {
+                        "from": 0,
+                        "color": "var(--c-severity-log-verbose)"
+                      }
+                    ],
+                    "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED",
+                    "thresholdBy": "THRESHOLD_BY_UNSPECIFIED"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "id": {
+              "value": "5dd3464f-1873-0bdb-bba2-2529a3fe296f"
+            },
+            "appearance": {
+              "height": 19
+            },
+            "widgets": [
+              {
+                "id": {
+                  "value": "57c6491c-cd1c-85c9-3316-94c06a952817"
+                },
+                "title": "Pod memory Available",
+                "definition": {
+                  "lineChart": {
+                    "legend": {
+                      "isVisible": false,
+                      "columns": [],
+                      "groupByQuery": true
+                    },
+                    "tooltip": {
+                      "showLabels": false,
+                      "type": "TOOLTIP_TYPE_ALL"
+                    },
+                    "queryDefinitions": [
+                      {
+                        "id": "5e2ef490-b9ba-9ad0-5cc7-5f6202052767",
+                        "query": {
+                          "metrics": {
+                            "promqlQuery": {
+                              "value": "k8s_pod_memory_available_By{cx_subsystem_name=\"cx-mysql\"}"
+                            },
+                            "filters": []
+                          }
+                        },
+                        "seriesCountLimit": "20",
+                        "unit": "UNIT_UNSPECIFIED",
+                        "scaleType": "SCALE_TYPE_LINEAR",
+                        "name": "Query 1",
+                        "isVisible": true,
+                        "colorScheme": "classic",
+                        "resolution": {
+                          "bucketsPresented": 96
+                        },
+                        "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED"
+                      }
+                    ],
+                    "stackedLine": "STACKED_LINE_UNSPECIFIED"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "id": {
+              "value": "c8583c31-38a2-93b7-6a97-29cd2dee57d6"
+            },
+            "appearance": {
+              "height": 19
+            },
+            "widgets": [
+              {
+                "id": {
+                  "value": "26dbae91-cca4-0b28-b212-08cb03cba41c"
+                },
+                "title": "Query Monitoring",
+                "description": "SQLqueryreceiver",
+                "definition": {
+                  "lineChart": {
+                    "legend": {
+                      "isVisible": true,
+                      "columns": [],
+                      "groupByQuery": true
+                    },
+                    "tooltip": {
+                      "showLabels": false,
+                      "type": "TOOLTIP_TYPE_ALL"
+                    },
+                    "queryDefinitions": [
+                      {
+                        "id": "f3730cdb-a189-088b-fc81-40c5085a075b",
+                        "query": {
+                          "metrics": {
+                            "promqlQuery": {
+                              "value": "sqlquery_sin"
+                            },
+                            "filters": []
+                          }
+                        },
+                        "seriesCountLimit": "20",
+                        "unit": "UNIT_MILLISECONDS",
+                        "scaleType": "SCALE_TYPE_LINEAR",
+                        "name": "Sqlquery-Sine",
+                        "isVisible": true,
+                        "colorScheme": "classic",
+                        "resolution": {
+                          "bucketsPresented": 96
+                        },
+                        "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED"
+                      },
+                      {
+                        "id": "767ed658-741c-590f-46a0-77b3da79ef99",
+                        "query": {
+                          "metrics": {
+                            "promqlQuery": {
+                              "value": "sqlquery_order"
+                            },
+                            "filters": []
+                          }
+                        },
+                        "seriesCountLimit": "20",
+                        "unit": "UNIT_UNSPECIFIED",
+                        "scaleType": "SCALE_TYPE_LINEAR",
+                        "name": "Sqlquery-Order",
+                        "isVisible": true,
+                        "colorScheme": "classic",
+                        "resolution": {
+                          "bucketsPresented": 96
+                        },
+                        "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED"
+                      },
+                      {
+                        "id": "e9b19054-0999-ba8c-6177-ab419b77f0c5",
+                        "query": {
+                          "metrics": {
+                            "promqlQuery": {
+                              "value": "sqlquery_order2"
+                            },
+                            "filters": []
+                          }
+                        },
+                        "seriesCountLimit": "20",
+                        "unit": "UNIT_UNSPECIFIED",
+                        "scaleType": "SCALE_TYPE_LINEAR",
+                        "name": "Sqlquery-Order2",
+                        "isVisible": true,
+                        "colorScheme": "classic",
+                        "resolution": {
+                          "bucketsPresented": 96
+                        },
+                        "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED"
+                      }
+                    ],
+                    "stackedLine": "STACKED_LINE_UNSPECIFIED"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "options": {
+          "internal": {}
+        }
+      }
+    ]
+  },
+  "variables": [],
+  "filters": [
+    {
+      "source": {
+        "logs": {
+          "operator": {
+            "equals": {
+              "selection": {
+                "list": {
+                  "values": []
+                }
+              }
+            }
+          },
+          "observationField": {
+            "keypath": [
+              "applicationname"
+            ],
+            "scope": "DATASET_SCOPE_LABEL"
+          }
+        }
+      },
+      "enabled": true,
+      "collapsed": false
+    },
+    {
+      "source": {
+        "logs": {
+          "operator": {
+            "equals": {
+              "selection": {
+                "list": {
+                  "values": []
+                }
+              }
+            }
+          },
+          "observationField": {
+            "keypath": [
+              "subsystemname"
+            ],
+            "scope": "DATASET_SCOPE_LABEL"
+          }
+        }
+      },
+      "enabled": true,
+      "collapsed": false
+    }
+  ],
+  "relativeTimeFrame": "900s",
+  "annotations": [],
+  "off": {}
+}

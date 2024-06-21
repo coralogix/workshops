@@ -1,0 +1,1 @@
+opentelemetry-instrument python ../apps/storage/fastapi-server.py

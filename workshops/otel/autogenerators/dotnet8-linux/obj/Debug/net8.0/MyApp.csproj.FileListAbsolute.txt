@@ -1,0 +1,15 @@
+/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8-linux/bin/Debug/net8.0/MyApp
+/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8-linux/bin/Debug/net8.0/MyApp.deps.json
+/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8-linux/bin/Debug/net8.0/MyApp.runtimeconfig.json
+/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8-linux/bin/Debug/net8.0/MyApp.dll
+/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8-linux/bin/Debug/net8.0/MyApp.pdb
+/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8-linux/obj/Debug/net8.0/MyApp.GeneratedMSBuildEditorConfig.editorconfig
+/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8-linux/obj/Debug/net8.0/MyApp.AssemblyInfoInputs.cache
+/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8-linux/obj/Debug/net8.0/MyApp.AssemblyInfo.cs
+/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8-linux/obj/Debug/net8.0/MyApp.csproj.CoreCompileInputs.cache
+/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8-linux/obj/Debug/net8.0/MyApp.sourcelink.json
+/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8-linux/obj/Debug/net8.0/MyApp.dll
+/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8-linux/obj/Debug/net8.0/refint/MyApp.dll
+/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8-linux/obj/Debug/net8.0/MyApp.pdb
+/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8-linux/obj/Debug/net8.0/MyApp.genruntimeconfig.cache
+/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8-linux/obj/Debug/net8.0/ref/MyApp.dll

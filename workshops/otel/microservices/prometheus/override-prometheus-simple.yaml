@@ -1,0 +1,26 @@
+---
+global:
+  clusterName: slerner
+  domain: cx498.coralogix.com
+opentelemetry-cluster-collector:
+  config:
+    receivers:
+      prometheus/apps:
+        config:
+          scrape_configs:
+          - job_name: 'prometheus-client1'
+            scrape_interval: 5s
+            static_configs:
+              - targets: ['prometheus-client1:9090']
+          - job_name: 'prometheus-client2'
+            scrape_interval: 5s
+            static_configs:
+              - targets: ['prometheus-client2:9090']
+    service:
+      pipelines:
+        metrics:
+          receivers:
+          - otlp
+          - prometheus
+          - k8s_cluster
+          - prometheus/apps

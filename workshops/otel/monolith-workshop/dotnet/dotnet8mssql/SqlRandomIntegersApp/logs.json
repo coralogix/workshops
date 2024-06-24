@@ -1,0 +1,858 @@
+[
+  {
+    "Timestamp": "2024-06-24T20:08:51.4651951Z",
+    "Severity": "INFO",
+    "SqlStatement": "Connecting to SQL Server",
+    "Result": "Connection successful",
+    "ID": null,
+    "Number": null
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:51.564447Z",
+    "Severity": "INFO",
+    "SqlStatement": "IF DB_ID('TestDB') IS NOT NULL DROP DATABASE TestDB",
+    "Result": "Checked and dropped existing 'TestDB' if it existed",
+    "ID": null,
+    "Number": null
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.1156494Z",
+    "Severity": "INFO",
+    "SqlStatement": "CREATE DATABASE TestDB",
+    "Result": "Database 'TestDB' created successfully",
+    "ID": null,
+    "Number": null
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.1277837Z",
+    "Severity": "INFO",
+    "SqlStatement": "CREATE TABLE TestTable (ID INT PRIMARY KEY IDENTITY(1,1), Number INT)",
+    "Result": "Test table created successfully in TestDB",
+    "ID": null,
+    "Number": null
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6816017Z",
+    "Severity": "INFO",
+    "SqlStatement": "Inserting 100 random integers into TestTable",
+    "Result": "Inserted 100 random integers into TestTable",
+    "ID": null,
+    "Number": null
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6870105Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "1",
+    "Number": "1180554542"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6918099Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "2",
+    "Number": "818199154"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6918863Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "3",
+    "Number": "1426516927"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6919155Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "4",
+    "Number": "1589958835"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6919279Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "5",
+    "Number": "1450249333"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6919595Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "6",
+    "Number": "1238920280"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6919706Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "7",
+    "Number": "6466221"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6919991Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "8",
+    "Number": "115026807"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6920107Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "9",
+    "Number": "1920361636"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6920211Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "10",
+    "Number": "1913727790"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6920315Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "11",
+    "Number": "1551099509"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6920472Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "12",
+    "Number": "467029594"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6920652Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "13",
+    "Number": "2051983869"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6920756Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "14",
+    "Number": "1149598351"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6920855Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "15",
+    "Number": "1374651456"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6921224Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "16",
+    "Number": "957629127"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6921386Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "17",
+    "Number": "168259996"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6921536Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "18",
+    "Number": "1711451638"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6921694Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "19",
+    "Number": "1147307998"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6921886Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "20",
+    "Number": "1524752917"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6922036Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "21",
+    "Number": "1114903130"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6922192Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "22",
+    "Number": "2051941288"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6922343Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "23",
+    "Number": "1343185263"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6922541Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "24",
+    "Number": "133945428"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6922697Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "25",
+    "Number": "1975993117"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6922864Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "26",
+    "Number": "1686228179"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6923014Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "27",
+    "Number": "529185456"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6923573Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "28",
+    "Number": "499533409"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6923738Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "29",
+    "Number": "1764804638"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6923891Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "30",
+    "Number": "339537969"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6924049Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "31",
+    "Number": "1961447806"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6924263Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "32",
+    "Number": "1600673354"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6924405Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "33",
+    "Number": "2126741220"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6924558Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "34",
+    "Number": "1372975202"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6924781Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "35",
+    "Number": "1054723735"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6924957Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "36",
+    "Number": "324930618"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6925084Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "37",
+    "Number": "537227074"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6925216Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "38",
+    "Number": "255259386"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6925318Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "39",
+    "Number": "2142659273"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6925575Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "40",
+    "Number": "994775279"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6925799Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "41",
+    "Number": "1173134613"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6925953Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "42",
+    "Number": "508734055"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6926161Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "43",
+    "Number": "1850565220"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6926368Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "44",
+    "Number": "11468980"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6926566Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "45",
+    "Number": "812907558"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6926717Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "46",
+    "Number": "316875098"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6926924Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "47",
+    "Number": "592156153"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6927116Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "48",
+    "Number": "20587572"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6927324Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "49",
+    "Number": "1319101328"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6927474Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "50",
+    "Number": "1471068843"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6927675Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "51",
+    "Number": "1464590571"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6927865Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "52",
+    "Number": "624428122"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.692801Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "53",
+    "Number": "1952961133"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6928163Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "54",
+    "Number": "1545579649"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6928308Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "55",
+    "Number": "356664193"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6928501Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "56",
+    "Number": "481875717"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6928644Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "57",
+    "Number": "1693348671"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6928795Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "58",
+    "Number": "244313127"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6929006Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "59",
+    "Number": "24831616"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6929211Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "60",
+    "Number": "1288172853"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6929418Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "61",
+    "Number": "1813977592"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6929566Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "62",
+    "Number": "1341866487"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6929757Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "63",
+    "Number": "403846452"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6929914Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "64",
+    "Number": "1846677523"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6930123Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "65",
+    "Number": "330609477"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6930274Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "66",
+    "Number": "1526580483"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6930445Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "67",
+    "Number": "60283700"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6930601Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "68",
+    "Number": "1572425014"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6930742Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "69",
+    "Number": "1110996204"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6930891Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "70",
+    "Number": "540050913"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6931142Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "71",
+    "Number": "1572320129"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6931294Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "72",
+    "Number": "1845707163"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6931446Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "73",
+    "Number": "1170133817"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6931654Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "74",
+    "Number": "1951981868"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6931868Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "75",
+    "Number": "1962818671"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6932018Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "76",
+    "Number": "906056447"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6932167Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "77",
+    "Number": "1271151137"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6932316Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "78",
+    "Number": "1010843324"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.693247Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "79",
+    "Number": "240791309"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6932573Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "80",
+    "Number": "1598099536"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6932727Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "81",
+    "Number": "1249702752"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.693295Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "82",
+    "Number": "217705872"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6933147Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "83",
+    "Number": "1380835040"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.69333Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "84",
+    "Number": "592436008"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6933426Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "85",
+    "Number": "1032870458"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6933572Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "86",
+    "Number": "1147563818"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6933757Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "87",
+    "Number": "15775903"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6933906Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "88",
+    "Number": "1781923003"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6934058Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "89",
+    "Number": "2023826951"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6934204Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "90",
+    "Number": "2044024654"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6934405Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "91",
+    "Number": "651512101"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6934558Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "92",
+    "Number": "1288871674"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6934706Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "93",
+    "Number": "1824957204"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6934853Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "94",
+    "Number": "2023309825"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6935246Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "95",
+    "Number": "416580335"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6935406Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "96",
+    "Number": "1190801257"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6935553Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "97",
+    "Number": "301313777"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6935696Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "98",
+    "Number": "568112253"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6935867Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "99",
+    "Number": "2058637790"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.6936092Z",
+    "Severity": "INFO",
+    "SqlStatement": "SELECT * FROM TestTable",
+    "Result": "Query result",
+    "ID": "100",
+    "Number": "523745458"
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.7044772Z",
+    "Severity": "INFO",
+    "SqlStatement": "DELETE FROM TestTable",
+    "Result": "Deleted all integers from TestTable",
+    "ID": null,
+    "Number": null
+  },
+  {
+    "Timestamp": "2024-06-24T20:08:52.760069Z",
+    "Severity": "INFO",
+    "SqlStatement": "DROP DATABASE TestDB",
+    "Result": "Database 'TestDB' deleted successfully",
+    "ID": null,
+    "Number": null
+  }
+]

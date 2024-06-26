@@ -1,7 +1,6 @@
 import logging
 import json
 import requests
-import boto3
 
 # Custom JSON formatter for logging
 class JsonFormatter(logging.Formatter):
@@ -42,19 +41,12 @@ def make_github_request():
     response = requests.get("https://api.github.com")
     return response
 
-# Function to list S3 buckets
-def list_s3_buckets():
-    s3 = boto3.client('s3')
-    response = s3.list_buckets()
-    return [bucket['Name'] for bucket in response['Buckets']]
-
 # Lambda handler function
 def lambda_handler(event, context):
     setup_logging()
     logger = logging.getLogger(__name__)
     
     responses = []
-    s3_bucket_lists = []
     try:
         for _ in range(10):
             response = make_github_request()
@@ -63,23 +55,15 @@ def lambda_handler(event, context):
                 "Successfully made a request to GitHub API",
                 extra={"statusCode": response.status_code, "url": response.url}
             )
-        
-        # List S3 buckets 5 times
-        for _ in range(5):
-            buckets = list_s3_buckets()
-            s3_bucket_lists.append(buckets)
-            logger.info("List of S3 buckets", extra={"buckets": buckets})
-            print(json.dumps(buckets, indent=2))
 
         return {
             'statusCode': 200,
             'body': json.dumps({
-                "requests": responses,
-                "buckets": s3_bucket_lists
+                "requests": responses
             })
         }
     except Exception as e:
-        logger.error("Error making requests to GitHub API or listing S3 buckets", exc_info=True)
+        logger.error("Error making requests to GitHub API", exc_info=True)
         return {
             'statusCode': 500,
             'body': json.dumps({'error': str(e)})
@@ -91,7 +75,6 @@ if __name__ == '__main__':
     logger = logging.getLogger(__name__)
 
     responses = []
-    s3_bucket_lists = []
     try:
         for _ in range(10):
             response = make_github_request()
@@ -101,13 +84,7 @@ if __name__ == '__main__':
                 extra={"statusCode": response.status_code, "url": response.url}
             )
             print(json.dumps({"statusCode": response.status_code, "url": response.url}, indent=2))
-        
-        # List S3 buckets 5 times
-        for _ in range(5):
-            buckets = list_s3_buckets()
-            s3_bucket_lists.append(buckets)
-            logger.info("List of S3 buckets", extra={"buckets": buckets})
-            print(json.dumps(buckets, indent=2))
+
     except Exception as e:
-        logger.error("Error making requests to GitHub API or listing S3 buckets", exc_info=True)
+        logger.error("Error making requests to GitHub API", exc_info=True)
         print({'error': str(e)})

@@ -1,0 +1,1 @@
+sudo docker run -d --entrypoint /bin/bash --name lambda-container-instance lambda-container-python -c "while true; do sleep 1000; done"

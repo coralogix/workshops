@@ -28,11 +28,12 @@ spec:
         - name: OTEL_RESOURCE_ATTRIBUTES
           value: cx.application.name=cx-java-autogen,cx.subsystem.name=cx-java-autogen
         - name: OTEL_EXPORTER_OTLP_ENDPOINT
-          value: http://$(OTEL_IP):4317
+          value: http://$(OTEL_IP):4318
         - name: JAVA_TEST_URL
           value: https://api.github.com
-        # command: ["/bin/sh"]
-        # args: ["-c", "/home/code/entrypoint.sh"]
-        # # Uncomment for testing if needed
+        # - name: OTEL_METRICS_EXPORTER
+        #   value: none
+        - name: OTEL_LOGS_EXPORTER
+          value: none
         # command: [ "/bin/bash", "-c", "--" ]
         # args: [ "while true; do sleep 30; done;" ]

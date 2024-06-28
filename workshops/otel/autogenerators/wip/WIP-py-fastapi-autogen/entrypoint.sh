@@ -1,1 +1,0 @@
-opentelemetry-instrument uvicorn app:app --reload

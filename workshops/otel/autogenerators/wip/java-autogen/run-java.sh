@@ -1,1 +1,0 @@
-java -DtargetURL=https://www.bing.com -jar target/java-app-1.0-SNAPSHOT.jar

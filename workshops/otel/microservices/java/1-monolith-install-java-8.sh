@@ -1,3 +1,4 @@
+# follow steps below to install open source jdk8
 sudo apt update
 sudo apt install -y wget
 sudo rm -rf Open*
@@ -9,5 +10,5 @@ sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/jdk8u412-b0
 sudo update-alternatives --config java
 sudo update-alternatives --config javac
 #add to .bashrc
-export JAVA_HOME=/usr/lib/jvm/jdk8u292-b10
+export JAVA_HOME=/usr/lib/jvm/jdk8u412-b08
 export PATH=$JAVA_HOME/bin:$PATH

@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: cx-java-autogen
-        image: public.ecr.aws/w3s4j9x9/microservices-demo:java
+        image: public.ecr.aws/w3s4j9x9/microservices-demo:java-autogen
         imagePullPolicy: Always
         workingDir: /home/code
         env:
@@ -30,9 +30,9 @@ spec:
         - name: OTEL_EXPORTER_OTLP_ENDPOINT
           value: http://$(OTEL_IP):4317
         - name: JAVA_TEST_URL
-          value: https://www.bing.com
-        command: ["/bin/sh"]
-        args: ["run-client.sh"]
-        # test if needed
+          value: https://api.github.com
+        # command: ["/bin/sh"]
+        # args: ["-c", "/home/code/entrypoint.sh"]
+        # # Uncomment for testing if needed
         # command: [ "/bin/bash", "-c", "--" ]
         # args: [ "while true; do sleep 30; done;" ]

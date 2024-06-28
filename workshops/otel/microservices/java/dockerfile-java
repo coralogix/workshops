@@ -1,6 +1,0 @@
-FROM eclipse-temurin:8-jdk-jammy
-RUN apt-get update && \
-    apt-get -y install curl && \
-    mkdir /home/code
-WORKDIR /home/code
-COPY . /home/code/

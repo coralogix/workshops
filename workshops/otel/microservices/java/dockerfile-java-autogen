@@ -1,8 +1,0 @@
-FROM eclipse-temurin:8-jdk-jammy
-RUN apt-get update && \
-    apt-get -y install curl && \
-    mkdir /home/code
-WORKDIR /home/code
-COPY . /home/code/
-RUN ["chmod", "+x", "./manual-inst/run-java-manual-inst-k8s.sh"]
-ENTRYPOINT /bin/sh ./manual-inst/run-java-manual-inst-k8s.sh

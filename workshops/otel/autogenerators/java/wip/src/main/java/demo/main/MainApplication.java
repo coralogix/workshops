@@ -11,6 +11,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @SpringBootApplication
 public class MainApplication {
@@ -41,24 +43,26 @@ public class MainApplication {
 
     private void startClientLoop(String targetUrl) {
         while (true) {
+            String uuid = UUID.randomUUID().toString();
             String okhttpResponse;
             try {
-                okhttpResponse = run(targetUrl);
-                log("INFO", targetUrl, okhttpResponse);
+                okhttpResponse = run(targetUrl, uuid);
+                log("INFO", targetUrl, okhttpResponse, uuid);
             } catch (IOException e) {
-                log("ERROR", targetUrl, e.getMessage());
+                log("ERROR", targetUrl, e.getMessage(), uuid);
             }
             wait(500);
         }
     }
 
-    private String run(String url) throws IOException {
-        Request request = new Request.Builder().url(url).build();
+    private String run(String url, String uuid) throws IOException {
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("UUID", uuid)
+                .build();
         try (Response response = client.newCall(request).execute()) {
-            // Log the request and response
-            logger.info("OkHttp Request: {}", request);
             String responseBody = response.body().string();
-            logger.info("OkHttp Response: {}", responseBody);
+            logger.info("OkHttp Request UUID: {}, Request: {}, Response: {}", uuid, request, responseBody);
             return responseBody;
         }
     }
@@ -71,12 +75,13 @@ public class MainApplication {
         }
     }
 
-    private static void log(String severity, String request, String response) {
+    private static void log(String severity, String request, String response, String uuid) {
         Map<String, String> logMap = new HashMap<>();
         logMap.put("timestamp", sdf.format(new Date()));
         logMap.put("severity", severity);
         logMap.put("request", request);
         logMap.put("response", response);
+        logMap.put("uuid", uuid);
 
         try {
             String jsonLog = objectMapper.writeValueAsString(logMap);
@@ -92,9 +97,9 @@ public class MainApplication {
         private static final Logger logger = LogManager.getLogger(ApiController.class);
 
         @GetMapping("/data")
-        public String getData() {
+        public String getData(@RequestHeader("UUID") String uuid) {
             String response = "Hello from Spring Boot!";
-            logger.info("Spring Response: {}", response);
+            logger.info("Spring Response UUID: {}, Response: {}", uuid, response);
             return response;
         }
     }

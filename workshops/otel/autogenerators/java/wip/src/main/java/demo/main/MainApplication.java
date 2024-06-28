@@ -22,17 +22,25 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * Main application class that starts the Spring Boot server and the OkHttp client.
+ */
 @SpringBootApplication
 public class MainApplication {
     private final OkHttpClient client = new OkHttpClient();
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-    private static final Logger logger = LogManager.getLogger(MainApplication.class);
+    private static final Logger logger = LogManager.getLogger(ApiController.class); // Focus logging on ApiController
 
     public static void main(String[] args) {
         SpringApplication.run(MainApplication.class, args);
     }
 
+    /**
+     * CommandLineRunner to start the OkHttp client loop after the Spring Boot application has started.
+     *
+     * @return the CommandLineRunner bean
+     */
     @Bean
     public CommandLineRunner runClient() {
         return args -> {
@@ -41,32 +49,46 @@ public class MainApplication {
         };
     }
 
+    /**
+     * Starts the client loop that fetches data from the specified URL every 500 milliseconds.
+     *
+     * @param targetUrl the URL to fetch data from
+     */
     private void startClientLoop(String targetUrl) {
         while (true) {
             String uuid = UUID.randomUUID().toString();
-            String okhttpResponse;
             try {
-                okhttpResponse = run(targetUrl, uuid);
-                log("INFO", targetUrl, okhttpResponse, uuid);
+                run(targetUrl, uuid);
             } catch (IOException e) {
-                log("ERROR", targetUrl, e.getMessage(), uuid);
+                logger.error("OkHttp Error UUID: {}, Error: {}", uuid, e.getMessage());
             }
             wait(500);
         }
     }
 
+    /**
+     * Makes a GET request to the specified URL and returns the response as a string.
+     *
+     * @param url  the URL to fetch data from
+     * @param uuid the UUID for correlating request and response logs
+     * @return the response from the URL as a string
+     * @throws IOException if an I/O error occurs
+     */
     private String run(String url, String uuid) throws IOException {
         Request request = new Request.Builder()
                 .url(url)
                 .addHeader("UUID", uuid)
                 .build();
         try (Response response = client.newCall(request).execute()) {
-            String responseBody = response.body().string();
-            logger.info("OkHttp Request UUID: {}, Request: {}, Response: {}", uuid, request, responseBody);
-            return responseBody;
+            return response.body().string();
         }
     }
 
+    /**
+     * Pauses the current thread for the specified amount of time.
+     *
+     * @param ms the amount of time to wait in milliseconds
+     */
     private static void wait(int ms) {
         try {
             Thread.sleep(ms);
@@ -75,27 +97,20 @@ public class MainApplication {
         }
     }
 
-    private static void log(String severity, String request, String response, String uuid) {
-        Map<String, String> logMap = new HashMap<>();
-        logMap.put("timestamp", sdf.format(new Date()));
-        logMap.put("severity", severity);
-        logMap.put("request", request);
-        logMap.put("response", response);
-        logMap.put("uuid", uuid);
-
-        try {
-            String jsonLog = objectMapper.writeValueAsString(logMap);
-            logger.info(jsonLog);
-        } catch (IOException e) {
-            logger.error("Error creating JSON log", e);
-        }
-    }
-
+    /**
+     * Spring Boot REST controller that provides the /api/data endpoint.
+     */
     @RestController
     @RequestMapping("/api")
     public static class ApiController {
         private static final Logger logger = LogManager.getLogger(ApiController.class);
 
+        /**
+         * Handles GET requests to /api/data and returns a simple message.
+         *
+         * @param uuid the UUID for correlating request and response logs
+         * @return a simple message
+         */
         @GetMapping("/data")
         public String getData(@RequestHeader("UUID") String uuid) {
             String response = "Hello from Spring Boot!";

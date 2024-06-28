@@ -1,0 +1,1 @@
+Java examples are here: `/workshops/workshops/otel/autogenerators`

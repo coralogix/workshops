@@ -41,7 +41,7 @@ After completing the Microservices Workshop: OpenTelemetry Collector Configurati
 - Example app container/task  
 
 ### APM - OpenTelemetry Tracing Instrumentation References
-Autogenerators: tracing reference projects for k8s and monoliths
+Autogenerators: tracing reference projects for k8s and monoliths  
 - [Autogenerators](otel/autogenerators/index.md)   
 
 ### APM - Monolith

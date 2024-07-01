@@ -57,3 +57,9 @@ cd workshops/workshops/otel/autogenerators
 - Generates looping requests of a self running Spring server  
 - Trace and span ID log auto-injection using `log4j2`  
 - Requires Coralogix parsing `Body` field that contains Trace and Span IDs
+
+`node`
+- Container example  
+- Generates looping requests of a self running Express server  
+- Trace and span ID log injection using `Pino`  
+- Does not require parsing for Trace and span IDs

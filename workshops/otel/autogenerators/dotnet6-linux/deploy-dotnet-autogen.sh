@@ -1,1 +1,1 @@
-kubectl apply -f deploy-autogen-dotnet.yaml
+kubectl apply -f deploy-autogen-dotnet6.yaml

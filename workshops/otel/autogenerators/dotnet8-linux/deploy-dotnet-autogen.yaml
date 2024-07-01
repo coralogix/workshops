@@ -1,4 +1,3 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -44,7 +43,7 @@ spec:
         - name: OTEL_DOTNET_AUTO_HOME
           value: "/otel-dotnet-auto"
         command: ["/bin/sh"]
-        args: ["/App/run-client.sh"]
+        args: ["/App/entrypoint.sh"]
         # test if needed
         # command: [ "/bin/bash", "-c", "--" ]
         # args: [ "while true; do sleep 30; done;" ]

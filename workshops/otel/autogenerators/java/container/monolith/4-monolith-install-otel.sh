@@ -1,0 +1,2 @@
+sudo curl -L https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent.jar -o /opt/opentelemetry-javaagent.jar
+sudo chmod 755 /opt/opentelemetry-javaagent.jar

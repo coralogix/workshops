@@ -55,5 +55,5 @@ cd workshops/workshops/otel/autogenerators
 `java`
 - Java examples for container and monolith built with Maven   
 - Generates looping requests of a self running Spring server  
-- Monolith logs trace and span IDs using `log4j2`  
-- Includes `pom.xml` for auto-injection of trace and span IDS  
+- Trace and span ID log auto-injection using `log4j2`  
+- Requires Coralogix parsing `Body` field that contains Trace and Span IDs

@@ -5,9 +5,9 @@
 
 ## About
 
-An `autogenerator` is a reference implementation of OpenTelemetry that can run, alone, as a application and emits interesting telemetry (metrics/traces/logs) to use as a 'how-to' template for your own OpenTelemetry use.  
+An `autogenerator` is a reference implementation of OpenTelemetry that can run as a ***standalone*** single deployment application and emits interesting telemetry (metrics/traces/logs) to use as a 'how-to' template for your own OpenTelemetry use.  
 
-The goal of a reference implementation is to answer the question "how do I instrument my app for OpenTelemetry?" Via showing a simple live example app that you can try yourself and then refer to for your own projects.  
+The goal of a reference implementation is to answer the question "how do I instrument my app for OpenTelemetry?" via showing a simple live example app that you can try yourself and then refer to for your own projects.  
 
 
 ## Instructions  

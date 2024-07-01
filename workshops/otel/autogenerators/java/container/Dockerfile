@@ -13,4 +13,4 @@ COPY ./entrypoint.sh /home/code/
 COPY ./src/main/resources/log4j2.xml /home/code/
 RUN chmod +x /home/code/entrypoint.sh
 
-ENTRYPOINT ["/bin/sh", "-c", "/home/code/entrypoint.sh"]
+ENTRYPOINT ["/bin/sh", "/home/code/entrypoint.sh"]

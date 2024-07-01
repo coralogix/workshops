@@ -12,4 +12,4 @@ COPY entrypoint.sh /App
 
 # Set the entrypoint to the entrypoint.sh script
 RUN chmod +x /App/entrypoint.sh
-ENTRYPOINT ["/bin/sh", "-c", "/App/entrypoint.sh"]
+ENTRYPOINT ["/bin/sh", "/App/entrypoint.sh"]

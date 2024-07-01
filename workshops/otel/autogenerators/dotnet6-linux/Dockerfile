@@ -1,6 +1,6 @@
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
 
-# install OpenTelemetry .NET Automatic Instrumentation
+# Install OpenTelemetry .NET Automatic Instrumentation
 ARG OTEL_VERSION=0.7.0
 ADD https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation/releases/download/v${OTEL_VERSION}/otel-dotnet-auto-install.sh otel-dotnet-auto-install.sh
 RUN apt -y update && apt install -y curl unzip
@@ -11,4 +11,5 @@ COPY bin/Debug/net6.0/publish/ /App
 COPY entrypoint.sh /App
 
 # Set the entrypoint to the entrypoint.sh script
-ENTRYPOINT ["/App/entrypoint.sh"]
+RUN chmod +x /App/entrypoint.sh
+ENTRYPOINT ["/bin/sh", "-c", "/App/entrypoint.sh"]

@@ -32,7 +32,6 @@ These examples are under frequent revision so please open an issue with any bug 
 
 ## The Autogenerators
 
-
 ### Step 1 - Clone Repo
 ```
 git clone https://github.com/coralogix/workshops
@@ -52,3 +51,9 @@ cd workshops/workshops/otel/autogenerators
 - .NET 8 app on Linux container  
 - Generates looping requests of `api.github.com`
 - Makes error spans
+
+`java`
+- Java examples for container and monolith built with Maven   
+- Generates looping requests of a self running Spring server  
+- Monolith logs trace and span IDs using `log4j2`  
+- Includes `pom.xml` for auto-injection of trace and span IDS  

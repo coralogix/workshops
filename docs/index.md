@@ -39,7 +39,11 @@ After completing the Microservices Workshop: OpenTelemetry Collector Configurati
 [AWS ECS EC2 (Python)](otel/ecs-ec2/index.md)  
 - OpenTelemetry collector container  
 - Example app container/task  
-  
+
+### APM - OpenTelemetry Tracing Instrumentation References
+Autogenerators: tracing reference projects for k8s and monoliths
+- [Autogenerators](otel/autogenerators/index.md)   
+
 ### APM - Monolith
 Monolith Opentelemetry Collector and tracing instrumentation  
 - [Python / Linux](otel/monolith/python.md)   

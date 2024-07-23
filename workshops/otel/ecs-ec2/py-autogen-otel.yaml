@@ -1,0 +1,41 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  ClusterName: { Type: String }
+  NodeImage: { Type: String, Default: public.ecr.aws/w3s4j9x9/microservices-demo:py-autogen }
+  NodeMemory: { Type: Number, Default: 512 }
+  NodeCPU: { Type: Number, Default: 256 }
+
+Resources:
+  NodeAutoGenTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: cx-ecs-otel-py
+      NetworkMode: host
+      RequiresCompatibilities: [EC2]
+      Cpu: !Ref NodeCPU
+      Memory: !Ref NodeMemory
+      ContainerDefinitions:
+        - Name: cx-ecs-otel-py
+          Image: !Ref NodeImage
+          Memory: !Ref NodeMemory
+          Cpu: !Ref NodeCPU
+          Environment:
+            - { Name: OTEL_EXPORTER_OTLP_ENDPOINT, Value: http://localhost:4317 }
+            - { Name: OTEL_SERVICE_NAME, Value: cx-ecs-otel-py }
+          EntryPoint: ["sh", "-c", "sh entrypoint.sh"]
+          HealthCheck:
+            Command: ["CMD-SHELL", "echo 'Health check passed.'"]
+            Interval: 30
+            Timeout: 5
+            Retries: 3
+
+  NodeAutoGenService:
+    Type: 'AWS::ECS::Service'
+    Properties:
+      Cluster: !Ref ClusterName
+      LaunchType: EC2
+      ServiceName: cx-ecs-otel-py
+      SchedulingStrategy: DAEMON
+      DeploymentConfiguration: { MaximumPercent: 100, MinimumHealthyPercent: 0 }
+      TaskDefinition: !Ref NodeAutoGenTaskDefinition

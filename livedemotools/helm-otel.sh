@@ -1,0 +1,2 @@
+helm repo update
+helm upgrade --install otel-coralogix-integration coralogix/otel-integration --version=0.0.79 --render-subchart-notes --set global.domain="eu2.coralogix.com" --set global.clusterName="slerner-cluster"

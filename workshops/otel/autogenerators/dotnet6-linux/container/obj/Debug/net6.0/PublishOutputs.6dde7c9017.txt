@@ -1,0 +1,5 @@
+/home/ubuntu/MyApp/bin/Debug/net6.0/publish/MyApp
+/home/ubuntu/MyApp/bin/Debug/net6.0/publish/MyApp.dll
+/home/ubuntu/MyApp/bin/Debug/net6.0/publish/MyApp.deps.json
+/home/ubuntu/MyApp/bin/Debug/net6.0/publish/MyApp.runtimeconfig.json
+/home/ubuntu/MyApp/bin/Debug/net6.0/publish/MyApp.pdb

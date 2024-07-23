@@ -1,0 +1,91 @@
+---
+### Prometheus-client1 Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus-client1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus-client1
+  template:
+    metadata:
+      labels:
+        app: prometheus-client1
+      annotations:
+        prometheus.io/scrape: "true"
+    spec:
+      containers:
+      - name: prometheus-client1
+        image: public.ecr.aws/w3s4j9x9/microservices-demo:python
+        ports:
+        - name: http
+          containerPort: 9090
+        imagePullPolicy: Always
+        workingDir: /home/code
+        env:
+        - name: GAUGE_NAME
+          value: prom1
+        command: ["/bin/sh"]
+        args: ["start-prometheus.sh"]
+
+---
+### Prometheus-client1 Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-client1
+spec:
+  selector:
+    app: prometheus-client1
+  ports:
+  - protocol: TCP
+    port: 9090
+    targetPort: 9090
+
+---
+### Prometheus-client2 Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus-client2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus-client2
+  template:
+    metadata:
+      labels:
+        app: prometheus-client2
+      annotations:
+        prometheus.io/scrape: "true"
+    spec:
+      containers:
+      - name: prometheus-client2
+        image: public.ecr.aws/w3s4j9x9/microservices-demo:python
+        ports:
+        - name: http
+          containerPort: 9090
+        imagePullPolicy: Always
+        workingDir: /home/code
+        env:
+        - name: GAUGE_NAME
+          value: prom2
+        command: ["/bin/sh"]
+        args: ["start-prometheus.sh"]
+
+---
+### Prometheus-client2 Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-client2
+spec:
+  selector:
+    app: prometheus-client2
+  ports:
+  - protocol: TCP
+    port: 9090
+    targetPort: 9090

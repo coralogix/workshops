@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coralogix RUM</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .form-container {
+      margin-top: 20px;
+    }
+    #greeting {
+      margin-top: 20px;
+      font-size: 1.2em;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h1>Welcome to Coralogix RUM Demo!</h1>
+    <div class="form-container">
+      <form id="nameForm">
+        <label for="nameInput">Enter your name:</label>
+        <input type="text" id="nameInput" required>
+        <button type="submit">Submit</button>
+      </form>
+      <div id="greeting"></div>
+    </div>
+  </div>
+  <script src="bundle.js"></script>
+  <script>
+    document.getElementById('nameForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const name = document.getElementById('nameInput').value;
+      document.getElementById('greeting').innerText = 'Hello, ' + name + '! Welcome to Coralogix RUM Demo!';
+    });
+  </script>
+</body>
+</html>

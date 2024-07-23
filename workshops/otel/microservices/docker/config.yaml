@@ -1,0 +1,39 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+  filelog:
+    start_at: beginning
+    include:
+      - /tmp/log/docker.log
+    include_file_path: true
+    multiline: {line_start_pattern: "\\n"}
+  hostmetrics:
+      collection_interval: 30s
+      scrapers:
+        cpu:
+        memory:
+exporters:
+  coralogix:
+    # The Coralogix domain
+    domain: "cx498.coralogix.com"
+    # Your Coralogix private key is sensitive
+    private_key: ""
+    application_name: "docker"
+    subsystem_name: "docker"
+    timeout: 30s
+
+service:
+  pipelines:
+    logs:
+      receivers: [ filelog ]
+      exporters: [ coralogix ]
+    metrics:
+      receivers: [ hostmetrics ]
+      exporters: [ coralogix ]
+    traces:
+      receivers: [ otlp ]
+      exporters: [ coralogix ]

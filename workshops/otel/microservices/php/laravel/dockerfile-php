@@ -1,0 +1,46 @@
+# Use PHP FPM Alpine as base image
+FROM php:8.2-fpm-alpine3.17
+
+# Set working directory
+WORKDIR /var/www
+
+# Allow Composer to run as root
+ENV COMPOSER_ALLOW_SUPERUSER 1
+
+# Copy Composer from official image
+COPY --from=composer:2.5 /usr/bin/composer /usr/bin/composer
+
+# Copy RoadRunner
+COPY --from=ghcr.io/roadrunner-server/roadrunner:2.12.3 /usr/bin/rr /usr/local/bin/rr
+
+# Install necessary packages
+RUN apk update && apk add zip && rm -rf /var/cache/apk/*
+
+# Copy PHP extension installer
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+
+# Create Laravel project
+RUN composer create-project laravel/laravel hello-world
+
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+WORKDIR /var/www/hello-world
+
+# Install OpenTelemetry and other necessary PHP extensions
+RUN install-php-extensions opentelemetry
+# RUN install-php-extensions opentelemetry grpc protobuf
+# Execute `php -m` and verify that the extension is installed
+
+# Install OpenTelemetry PHP SDK, Laravel auto-instrumentation, OTLP exporter, and gRPC transport
+RUN composer require open-telemetry/opentelemetry \
+    open-telemetry/opentelemetry-auto-laravel \
+    open-telemetry/exporter-otlp \
+    open-telemetry/sdk
+    # open-telemetry/transport-grpc
+
+# Add additional configuration for FPM, RoadRunner, etc. here
+
+# Expose necessary ports (if needed)
+
+# Set command to start FPM, RoadRunner, or your application

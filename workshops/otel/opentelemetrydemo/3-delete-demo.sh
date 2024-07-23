@@ -1,0 +1,1 @@
+helm delete my-otel-demo

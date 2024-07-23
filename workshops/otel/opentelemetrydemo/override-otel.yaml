@@ -1,0 +1,7 @@
+---
+global:
+  clusterName: slerner-cluster
+  domain: eu2.coralogix.com
+opentelemetry-agent:
+  fullnameOverride: my-otel-demo-otelcol
+  mode: deployment

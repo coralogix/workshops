@@ -1,0 +1,7 @@
+requests
+redis
+ipaddr
+flask
+prometheus-client
+pymysql
+cryptography

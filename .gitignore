@@ -1,0 +1,11 @@
+.DS_Store
+.github
+site
+env
+venv
+*.rdb
+target
+.vs*
+package-lock.json
+package.json
+node_modules

@@ -1,0 +1,143 @@
+{
+  "id": "rRXxbcCndASY7X4vvTlsN",
+  "name": "PromDemo",
+  "layout": {
+    "sections": [
+      {
+        "id": {
+          "value": "aa7fb3ae-370f-5998-8c11-79af940f3766"
+        },
+        "rows": [
+          {
+            "id": {
+              "value": "3912a8b5-4bfc-f26b-b5fe-c8e8ce1bd2b1"
+            },
+            "appearance": {
+              "height": 19
+            },
+            "widgets": [
+              {
+                "id": {
+                  "value": "0d3c470a-eb64-4881-b02f-7de82b6c5a3e"
+                },
+                "title": "New line chart",
+                "definition": {
+                  "lineChart": {
+                    "legend": {
+                      "isVisible": true,
+                      "columns": [],
+                      "groupByQuery": true
+                    },
+                    "tooltip": {
+                      "showLabels": false,
+                      "type": "TOOLTIP_TYPE_ALL"
+                    },
+                    "queryDefinitions": [
+                      {
+                        "id": "e509cdb5-20cd-7dde-a447-34f36bd76265",
+                        "query": {
+                          "metrics": {
+                            "promqlQuery": {
+                              "value": "prom1"
+                            },
+                            "filters": []
+                          }
+                        },
+                        "seriesCountLimit": "20",
+                        "unit": "UNIT_UNSPECIFIED",
+                        "scaleType": "SCALE_TYPE_LINEAR",
+                        "name": "Query 1",
+                        "isVisible": true,
+                        "colorScheme": "classic",
+                        "resolution": {
+                          "bucketsPresented": 96
+                        },
+                        "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED"
+                      },
+                      {
+                        "id": "dcc0e424-abff-fe3a-b75d-d3e4712f6960",
+                        "query": {
+                          "metrics": {
+                            "promqlQuery": {
+                              "value": "prom2"
+                            },
+                            "filters": []
+                          }
+                        },
+                        "seriesCountLimit": "20",
+                        "unit": "UNIT_UNSPECIFIED",
+                        "scaleType": "SCALE_TYPE_LINEAR",
+                        "isVisible": true,
+                        "colorScheme": "classic",
+                        "resolution": {
+                          "bucketsPresented": 96
+                        },
+                        "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED"
+                      }
+                    ],
+                    "stackedLine": "STACKED_LINE_UNSPECIFIED"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "options": {
+          "internal": {}
+        }
+      }
+    ]
+  },
+  "variables": [],
+  "filters": [
+    {
+      "source": {
+        "logs": {
+          "operator": {
+            "equals": {
+              "selection": {
+                "list": {
+                  "values": []
+                }
+              }
+            }
+          },
+          "observationField": {
+            "keypath": [
+              "applicationname"
+            ],
+            "scope": "DATASET_SCOPE_LABEL"
+          }
+        }
+      },
+      "enabled": true,
+      "collapsed": false
+    },
+    {
+      "source": {
+        "logs": {
+          "operator": {
+            "equals": {
+              "selection": {
+                "list": {
+                  "values": []
+                }
+              }
+            }
+          },
+          "observationField": {
+            "keypath": [
+              "subsystemname"
+            ],
+            "scope": "DATASET_SCOPE_LABEL"
+          }
+        }
+      },
+      "enabled": true,
+      "collapsed": false
+    }
+  ],
+  "relativeTimeFrame": "120s",
+  "annotations": [],
+  "off": {}
+}

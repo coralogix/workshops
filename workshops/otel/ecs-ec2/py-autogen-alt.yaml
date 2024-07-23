@@ -1,0 +1,45 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  ClusterName: { Type: String }
+  NodeImage: { Type: String, Default: public.ecr.aws/w3s4j9x9/microservices-demo:py-autogen-dd }
+  NodeMemory: { Type: Number, Default: 512 }
+  NodeCPU: { Type: Number, Default: 256 }
+
+Resources:
+  AutoGenTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: cx-ecs-otel-dd
+      NetworkMode: host
+      RequiresCompatibilities: [EC2]
+      Cpu: !Ref NodeCPU
+      Memory: !Ref NodeMemory
+      ContainerDefinitions:
+        - Name: cx-ecs-otel-dd
+          Image: !Ref NodeImage
+          Memory: !Ref NodeMemory
+          Cpu: !Ref NodeCPU
+          PortMappings:
+            - ContainerPort: 5000
+              HostPort: 5000
+              protocol: tcp
+
+          Environment:
+            - { Name: DD_TRACE_AGENT_URL, Value: http://localhost:8127 }
+          EntryPoint: ["sh", "-c", "sh entrypoint.sh"]
+          # HealthCheck:
+          #   Command: ["CMD-SHELL", "echo 'Health check passed.'"]
+          #   Interval: 30
+          #   Timeout: 5
+          #   Retries: 3
+
+  AutoGenService:
+    Type: 'AWS::ECS::Service'
+    Properties:
+      Cluster: !Ref ClusterName
+      LaunchType: EC2
+      ServiceName: cx-ecs-otel-dd-service
+      SchedulingStrategy: DAEMON
+      DeploymentConfiguration: { MaximumPercent: 100, MinimumHealthyPercent: 0 }
+      TaskDefinition: !Ref AutoGenTaskDefinition

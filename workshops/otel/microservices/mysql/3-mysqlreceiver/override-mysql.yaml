@@ -1,0 +1,25 @@
+---
+global:
+  clusterName: slerner
+  domain: eu2.coralogix.com
+opentelemetry-cluster-collector:
+  config:
+    receivers:
+      mysql:
+        endpoint: cx-mysql:3306
+        username: root
+        password: rootpassword
+        database: testdb
+        collection_interval: 10s
+        initial_delay: 1s
+        statement_events:
+          digest_text_limit: 120
+          time_limit: 24h
+          limit: 250
+    service:
+      pipelines:
+        metrics/mysql:
+          receivers:
+            - mysql
+          exporters:
+            - coralogix

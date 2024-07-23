@@ -1,0 +1,1 @@
+aws ecs delete-service --cluster slerner-cluster --service fargate-demo --force

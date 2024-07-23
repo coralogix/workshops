@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cx-mysql-query
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cx-mysql-query
+  template:
+    metadata:
+      labels:
+        app: cx-mysql-query
+    spec:
+      containers:
+      - name: cx-mysql-query
+        image: public.ecr.aws/w3s4j9x9/microservices-demo:python  # Replace with your actual image path
+        imagePullPolicy: Always
+        env:
+        - name: MYSQL_HOST
+          value: cx-mysql  # Ensure this matches the name of your MySQL service in Kubernetes
+        - name: MYSQL_USER
+          value: testuser
+        - name: MYSQL_PASSWORD
+          value: testpassword
+        - name: MYSQL_DB
+          value: testdb
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: "service.name=cx-mysqlquery,application.name=cx-mysqlquery,api.name=cx-mysqlquery,cx.application.name=cx-mysqlquery,cx.subsystem.name=cx-mysqlquery"
+        - name: OTEL_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: OTEL_TRACES_EXPORTER
+          value: otlp
+        - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
+          value: http://$(OTEL_IP):4317
+        command: ["/bin/sh"]
+        args: ["start-mysqlquery.sh"]
+        # test if needed
+        # command: [ "/bin/bash", "-c", "--" ]
+        # args: [ "while true; do sleep 30; done;" ]

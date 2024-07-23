@@ -1,0 +1,19 @@
+---
+opentelemetry-agent:
+  config:
+    processors:
+      attributes/example-upsert:
+        actions:
+          - key: env
+            value: dev
+            action: upsert
+    service:
+      pipelines:
+        metrics:
+          processors:
+          - attributes/example-upsert
+          - k8sattributes
+          - resourcedetection/env
+          - resourcedetection/region
+          - memory_limiter
+          - batch

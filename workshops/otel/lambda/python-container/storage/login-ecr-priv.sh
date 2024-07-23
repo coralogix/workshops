@@ -1,0 +1,1 @@
+aws ecr get-login-password --region us-west-2 | sudo docker login --username AWS --password-stdin 104013952213.dkr.ecr.us-west-2.amazonaws.com

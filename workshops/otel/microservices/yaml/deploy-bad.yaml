@@ -1,0 +1,57 @@
+---
+# Flask Server Deployment (Bad Deployment Simulation)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cx-payment-gateway-flask
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: cx-payment-gateway-flask
+  template:
+    metadata:
+      labels:
+        name: cx-payment-gateway-flask
+    spec:
+      containers:
+      - name: cx-payment-gateway-flask
+        image: public.ecr.aws/w3s4j9x9/microservices-demo:python
+        imagePullPolicy: Always
+        workingDir: /home/code
+        ports:
+          - name: http
+            containerPort: 5000
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "250m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        env:
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: service.name=cx-payment-gateway-flask, application.name=cx-payment-gateway-flask,api.name=cx-payment-gateway-flask,cx.application.name=cx-payment-gateway-flask,cx.subsystem.name=cx-payment-gateway-flask
+        - name: OTEL_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: OTEL_TRACES_EXPORTER
+          value: otlp
+        - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
+          value: http://$(OTEL_IP):4317
+        - name: OTEL_METRICS_EXPORTER
+          value: none
+        - name: PYTHON_TEST_URLGOOD
+          value: "BAD"
+        - name: REDIS_SERVICE_HOST
+          value: cx-redis
+        command: ["/bin/sh"]
+        args: ["start-flask-redis-otel.sh"]

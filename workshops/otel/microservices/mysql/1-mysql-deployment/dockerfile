@@ -1,0 +1,17 @@
+# Use the official MySQL image
+FROM mysql
+
+# Set environment variables for MySQL setup
+ENV MYSQL_ROOT_PASSWORD=rootpassword
+ENV MYSQL_DATABASE=testdb
+ENV MYSQL_USER=testuser
+ENV MYSQL_PASSWORD=testpassword
+
+# Add custom configuration (optional)
+COPY custom.cnf /etc/mysql/conf.d/
+
+# Initialize the database and populate it
+COPY populate_db.sh /docker-entrypoint-initdb.d/
+
+# Expose the MySQL port
+EXPOSE 3306

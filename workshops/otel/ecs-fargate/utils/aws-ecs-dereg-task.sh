@@ -1,0 +1,1 @@
+aws ecs deregister-task-definition --task-definition $1

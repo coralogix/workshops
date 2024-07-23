@@ -1,0 +1,1 @@
+aws lambda update-function-code --function-name slerner-python --zip-file fileb://function.zip

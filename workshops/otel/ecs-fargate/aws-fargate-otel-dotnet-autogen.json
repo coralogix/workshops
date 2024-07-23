@@ -1,0 +1,170 @@
+{
+    "family": "fargate-demo",
+    "networkMode": "awsvpc",
+    "taskRoleArn": "<your ecsTaskExecutionRole i.e. arn:aws:iam::104013952213:role/ecsTaskExecutionRole>",
+    "executionRoleArn": "<your ecsTaskExecutionRole i.e. arn:aws:iam::104013952213:role/ecsTaskExecutionRole>", 
+    "containerDefinitions": [
+        {
+            "name": "dotnet-autogen",
+            "image": "public.ecr.aws/w3s4j9x9/microservices-demo:dotnet",
+            "workingDirectory": "/home/code",
+            "essential": true,
+            "entryPoint": [
+                "sh",
+                "-c"
+            ],
+            "command": [
+                "/bin/sh /App/run-client.sh"
+            ],
+            "logConfiguration": {
+                "logDriver": "awsfirelens",
+                "options": {
+                    "Format": "json_lines",
+                    "Header": "Authorization Bearer <your privatekey>",
+                    "Host": "<your ingress i.e. ingress.<your domain i.e. coralogix.us>>",
+                    "Name": "http",
+                    "Port": "443",
+                    "Retry_Limit": "10",
+                    "TLS": "On",
+                    "URI": "/logs/v1/singles",
+                    "compress": "gzip"
+                }
+            },
+            "environment": [
+                {
+                    "name": "OTEL_SERVICE_NAME",
+                    "value": "dotnet-autogen"
+                },
+                {
+                    "name": "OTEL_RESOURCE_ATTRIBUTES",
+                    "value": "cx.application.name=dotnet-autogen,cx.subsystem.name=dotnet-autogen"
+                },
+                {
+                    "name": "OTEL_EXPORTER_OTLP_TRACES_ENDPOINT",
+                    "value": "http://localhost:4318"
+                },
+                {
+                    "name": "CORECLR_ENABLE_PROFILING",
+                    "value": "1"
+                },
+                {
+                    "name": "CORECLR_PROFILER",
+                    "value": "{918728DD-259F-4A6A-AC2B-B85E1B658318}"
+                },
+                {
+                    "name": "CORECLR_PROFILER_PATH",
+                    "value": "/otel-dotnet-auto/linux-x64/OpenTelemetry.AutoInstrumentation.Native.so"
+                },
+                {
+                    "name": "DOTNET_ADDITIONAL_DEPS",
+                    "value": "/otel-dotnet-auto/AdditionalDeps"
+                },
+                {
+                    "name": "DOTNET_SHARED_STORE",
+                    "value": "/otel-dotnet-auto/store"
+                },
+                {
+                    "name": "DOTNET_STARTUP_HOOKS",
+                    "value": "/otel-dotnet-auto/net/OpenTelemetry.AutoInstrumentation.StartupHook.dll"
+                },
+                {
+                    "name": "OTEL_DOTNET_AUTO_HOME",
+                    "value": "/otel-dotnet-auto"
+                }
+            ]
+        },
+        {
+            "name": "otel-collector",
+            "image": "public.ecr.aws/aws-observability/aws-otel-collector",
+            "cpu": 0,
+            "portMappings": [
+                {
+                    "name": "otel-collector-4317-tcp",
+                    "containerPort": 4317,
+                    "hostPort": 4317,
+                    "protocol": "tcp",
+                    "appProtocol": "grpc"
+                },
+                {
+                    "name": "otel-collector-4318-tcp",
+                    "containerPort": 4318,
+                    "hostPort": 4318,
+                    "protocol": "tcp",
+                    "appProtocol": "grpc"
+                }
+            ],
+            "essential": false,
+            "environment": [
+                {
+                    "name": "PRIVATE_KEY",
+                    "value": "<your privatekey>"
+                },
+                {
+                    "name": "CORALOGIX_DOMAIN",
+                    "value": "<your domain i.e. coralogix.us>"
+                }
+            ],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "secrets": [
+                {
+                    "name": "AOT_CONFIG_CONTENT",
+                    "valueFrom": "<your parameter store otel config i.e. coralogix-otel-col-config>"
+                }
+            ],
+            "logConfiguration": {
+                "logDriver": "awsfirelens",
+                "options": {
+                    "Format": "json_lines",
+                    "Header": "Authorization Bearer <your privatekey>",
+                    "Host": "<your ingress i.e. ingress.<your domain i.e. coralogix.us>>",
+                    "Name": "http",
+                    "Port": "443",
+                    "Retry_Limit": "10",
+                    "TLS": "On",
+                    "URI": "/logs/v1/singles",
+                    "compress": "gzip"
+                }
+            }
+        },
+        {
+            "name": "log_router",
+            "image": "public.ecr.aws/aws-observability/aws-for-fluent-bit:init-2.31.12",
+            "cpu": 0,
+            "portMappings": [],
+            "essential": false,
+            "environment": [
+                {
+                    "name": "aws_fluent_bit_init_s3_1",
+                    "value": "arn:aws:s3:::sri-fargate-conf/base_filters.conf"
+                }
+            ],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "user": "0",
+            "firelensConfiguration": {
+                "type": "fluentbit",
+                "options": {}
+            },
+            "logConfiguration": {
+                "logDriver": "awsfirelens",
+                "options": {
+                    "Format": "json_lines",
+                    "Header": "Authorization Bearer <your privatekey>",
+                    "Host": "<your ingress i.e. ingress.<your domain i.e. coralogix.us>>",
+                    "Name": "http",
+                    "Port": "443",
+                    "Retry_Limit": "10",
+                    "TLS": "On",
+                    "URI": "/logs/v1/singles",
+                    "compress": "gzip"
+                }
+            }
+        }
+    ],
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "256",
+    "memory": "512"
+}

@@ -1,0 +1,27 @@
+FROM python:slim
+
+# Create and set the working directory
+RUN mkdir /home/code
+WORKDIR /home/code
+
+# Copy application code and scripts
+COPY ./apps/*.py /home/code/
+COPY ./k8s/*.sh /home/code/
+COPY ./setup/requirements.txt /home/code/
+
+# Install dependencies and clean up
+RUN apt-get update -y && \
+    apt-get install -y --no-install-recommends curl dnsutils util-linux coreutils && \
+    pip install --upgrade pip && \
+    pip install -r requirements.txt && \
+    pip install opentelemetry-distro \
+                opentelemetry-instrumentation \
+                opentelemetry-exporter-otlp \
+                opentelemetry-instrumentation-logging && \
+    opentelemetry-bootstrap -a install && \
+    apt-get autoremove -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Expose the application's port
+EXPOSE 5000

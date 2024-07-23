@@ -1,0 +1,22 @@
+---
+global:
+  clusterName: slerner
+  domain: cx498.coralogix.com
+opentelemetry-agent:
+  config:
+    connectors:
+      spanmetrics:
+        # namespace: span.metrics
+    service:
+      pipelines:
+        metrics:
+          receivers:
+          - otlp
+          - prometheus
+          - hostmetrics
+          - statsd
+          - spanmetrics
+        traces:
+          exporters:
+          - coralogix
+          - spanmetrics

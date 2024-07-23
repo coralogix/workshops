@@ -1,0 +1,28 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: py-autogen-dd
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      name: py-autogen-dd
+  template:
+    metadata:
+      labels:
+        name: py-autogen-dd
+    spec:
+      containers:
+      - name: py-autogen-dd
+        image: public.ecr.aws/w3s4j9x9/microservices-demo:py-autogen-dd
+        imagePullPolicy: Always
+        env:
+        - name: NODE
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: DD_TRACE_AGENT_URL
+          value: "http://$(NODE):8127"
+        command: ["/bin/sh"]
+        args: ["entrypoint.sh"]

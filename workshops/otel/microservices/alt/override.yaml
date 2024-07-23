@@ -1,0 +1,43 @@
+---
+global:
+  clusterName: sl-cluster
+  domain: coralogix.us
+
+opentelemetry-agent:
+  config:
+    receivers:
+      datadog:
+        endpoint: 0.0.0.0:8127 # Custom Port to avoid conflict with DD Agent
+        read_timeout: 60s
+    processors:
+      transform/ddtrace:
+        error_mode: ignore
+        trace_statements:
+          - context: span
+            statements:
+              - set(resource.attributes["service.name"], attributes["service.name"])
+    # exporters:
+    #   datadog:
+    #     api:
+    #       site: "us5.datadoghq.com"
+    #       # # Apply your datadog site.
+    #       key: "YOURDDKEYHERE"
+    #       # # Apply your datadog API key.
+    service:
+      pipelines:
+        traces:
+          receivers:
+          - otlp
+          - zipkin
+          - jaeger
+          - datadog
+          processors:
+          - k8sattributes
+          - resourcedetection/env
+          - resourcedetection/region
+          - transform/ddtrace
+          - memory_limiter
+          - batch
+          exporters:
+          - coralogix
+          # - datadog

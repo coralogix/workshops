@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cx-dotnet-autogen6
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      name: cx-dotnet-autogen6
+  template:
+    metadata:
+      labels:
+        name: cx-dotnet-autogen6
+    spec:
+      containers:
+      - name: cx-dotnet-autogen6
+        image: public.ecr.aws/w3s4j9x9/microservices-demo:dotnet6
+        imagePullPolicy: Always
+        workingDir: /home/code
+        env:
+        - name: OTEL_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: OTEL_SERVICE_NAME
+          value: cx-dotnet-autogen6
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: application.name=cx-dotnet-autogen6,api.name=cx-dotnet-autogen6,cx.application.name=cx-dotnet-autogen6,cx.subsystem.name=cx-dotnet-autogen6
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: http://$(OTEL_IP):4318
+        - name: CORECLR_ENABLE_PROFILING
+          value: "1"
+        - name: CORECLR_PROFILER
+          value: '{918728DD-259F-4A6A-AC2B-B85E1B658318}'
+        - name: CORECLR_PROFILER_PATH
+          value: "/otel-dotnet-auto/linux-x64/OpenTelemetry.AutoInstrumentation.Native.so"
+        - name: DOTNET_ADDITIONAL_DEPS
+          value: "/otel-dotnet-auto/AdditionalDeps"
+        - name: DOTNET_SHARED_STORE
+          value: "/otel-dotnet-auto/store"
+        - name: DOTNET_STARTUP_HOOKS
+          value: "/otel-dotnet-auto/net/OpenTelemetry.AutoInstrumentation.StartupHook.dll"
+        - name: OTEL_DOTNET_AUTO_HOME
+          value: "/otel-dotnet-auto"
+        command: ["/bin/sh"]
+        args: ["/App/entrypoint.sh"]

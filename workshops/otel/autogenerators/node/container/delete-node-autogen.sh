@@ -1,0 +1,1 @@
+kubectl delete deployment cx-node-autogen

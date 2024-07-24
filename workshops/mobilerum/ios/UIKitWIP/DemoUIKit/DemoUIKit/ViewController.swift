@@ -19,7 +19,7 @@ class ViewController: UIViewController {
             publicKey: "",
             ignoreUrls: [],
             ignoreErrors: [],
-            customDomainUrl: "",
+            customDomainUrl: nil,
             labels: ["test": "example"],
             debug: true
         )

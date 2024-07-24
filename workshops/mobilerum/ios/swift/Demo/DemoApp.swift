@@ -19,7 +19,7 @@ struct DemoAppApp: App {
             publicKey: "", // Public key for authentication
             ignoreUrls: [],                       // List of URLs to ignore
             ignoreErrors: [],                     // List of errors to ignore
-            customDomainUrl: "",                  // Custom domain URL (if any)
+            customDomainUrl: nil,                  // Custom domain URL (if any)
             labels: ["test": "example"],          // Additional labels for the RUM data
             debug: true                          // Debug mode disabled
         )

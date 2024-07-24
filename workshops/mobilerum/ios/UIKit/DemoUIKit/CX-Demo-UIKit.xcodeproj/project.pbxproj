@@ -16,7 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		736825872C4FEE5400E4010C /* DemoUIKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DemoUIKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		736825872C4FEE5400E4010C /* CX-Demo-UIKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CX-Demo-UIKit.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7368258A2C4FEE5400E4010C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7368258C2C4FEE5400E4010C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		7368258E2C4FEE5400E4010C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -40,7 +40,7 @@
 		7368257E2C4FEE5400E4010C = {
 			isa = PBXGroup;
 			children = (
-				736825892C4FEE5400E4010C /* DemoUIKit */,
+				736825892C4FEE5400E4010C /* CX-Demo-UIKit */,
 				736825882C4FEE5400E4010C /* Products */,
 			);
 			sourceTree = "<group>";
@@ -48,12 +48,12 @@
 		736825882C4FEE5400E4010C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				736825872C4FEE5400E4010C /* DemoUIKit.app */,
+				736825872C4FEE5400E4010C /* CX-Demo-UIKit.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		736825892C4FEE5400E4010C /* DemoUIKit */ = {
+		736825892C4FEE5400E4010C /* CX-Demo-UIKit */ = {
 			isa = PBXGroup;
 			children = (
 				7368258A2C4FEE5400E4010C /* AppDelegate.swift */,
@@ -63,15 +63,15 @@
 				736825952C4FEE5500E4010C /* LaunchScreen.storyboard */,
 				736825982C4FEE5500E4010C /* Info.plist */,
 			);
-			path = DemoUIKit;
+			path = "CX-Demo-UIKit";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		736825862C4FEE5400E4010C /* DemoUIKit */ = {
+		736825862C4FEE5400E4010C /* CX-Demo-UIKit */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7368259B2C4FEE5500E4010C /* Build configuration list for PBXNativeTarget "DemoUIKit" */;
+			buildConfigurationList = 7368259B2C4FEE5500E4010C /* Build configuration list for PBXNativeTarget "CX-Demo-UIKit" */;
 			buildPhases = (
 				736825832C4FEE5400E4010C /* Sources */,
 				736825842C4FEE5400E4010C /* Frameworks */,
@@ -81,12 +81,12 @@
 			);
 			dependencies = (
 			);
-			name = DemoUIKit;
+			name = "CX-Demo-UIKit";
 			packageProductDependencies = (
 				7368259F2C4FEEF100E4010C /* Coralogix */,
 			);
 			productName = DemoUIKit;
-			productReference = 736825872C4FEE5400E4010C /* DemoUIKit.app */;
+			productReference = 736825872C4FEE5400E4010C /* CX-Demo-UIKit.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -104,7 +104,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 736825822C4FEE5400E4010C /* Build configuration list for PBXProject "DemoUIKit" */;
+			buildConfigurationList = 736825822C4FEE5400E4010C /* Build configuration list for PBXProject "CX-Demo-UIKit" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -120,7 +120,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				736825862C4FEE5400E4010C /* DemoUIKit */,
+				736825862C4FEE5400E4010C /* CX-Demo-UIKit */,
 			);
 		};
 /* End PBXProject section */
@@ -289,22 +289,26 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = DemoUIKit/Info.plist;
+				INFOPLIST_FILE = "CX-Demo-UIkit/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = DemoApp.DemoUIKit;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.coralogix.CX-Demo-UIKit";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -316,29 +320,33 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = DemoUIKit/Info.plist;
+				INFOPLIST_FILE = "CX-Demo-UIkit/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = DemoApp.DemoUIKit;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.coralogix.CX-Demo-UIKit";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		736825822C4FEE5400E4010C /* Build configuration list for PBXProject "DemoUIKit" */ = {
+		736825822C4FEE5400E4010C /* Build configuration list for PBXProject "CX-Demo-UIKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				736825992C4FEE5500E4010C /* Debug */,
@@ -347,7 +355,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7368259B2C4FEE5500E4010C /* Build configuration list for PBXNativeTarget "DemoUIKit" */ = {
+		7368259B2C4FEE5500E4010C /* Build configuration list for PBXNativeTarget "CX-Demo-UIKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7368259C2C4FEE5500E4010C /* Debug */,

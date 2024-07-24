@@ -14,7 +14,7 @@ struct DemoAppApp: App {
             coralogixDomain: CoralogixDomain.US2, // Set the Coralogix domain
             userContext: nil,                     // No user context provided
             environment: "PROD",                  // Environment set to production
-            application: "DemoApp-iOS-swiftUI",   // Name of the application
+            application: "CX-Demo-Swift",   // Name of the application
             version: "1",                         // Application version
             publicKey: "", // Public key for authentication
             ignoreUrls: [],                       // List of URLs to ignore

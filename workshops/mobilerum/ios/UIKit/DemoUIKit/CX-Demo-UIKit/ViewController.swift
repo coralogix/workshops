@@ -14,7 +14,7 @@ class ViewController: UIViewController {
             coralogixDomain: CoralogixDomain.US2,
             userContext: nil,
             environment: "PROD",
-            application: "DemoApp-iOS-UIKit",
+            application: "CX-Demo-UIKit",
             version: "1",
             publicKey: "",
             ignoreUrls: [],

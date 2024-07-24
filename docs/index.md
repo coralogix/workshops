@@ -42,13 +42,13 @@ Coralogix uses open standard telemetry shippers and infrastructure/application m
 - OpenTelemetry collector container  
 - Example app container/task  
 
-### APM - OpenTelemetry Tracing Instrumentation Reference Projects for Containers and Monoliths   
+### APM - Autogenerators: OpenTelemetry Tracing Instrumentation Demo Apps   
 Autogenerators: reference projects with live container/monolith examples  
 - [Autogenerators](otel/autogenerators/index.md)   
   
 ### Real User Monitoring (RUM)
 Visualize user experience metrics  
-- [Real User Monitoring (RUM)](rum/index.md) - requires only a web browser
+- [Real User Monitoring (RUM)](rum/index.md) - for browsers and mobile apps
 
 ### Official OpenTelemetry Demo
 Try out the comprehensive demo materials from the OpenTelemetry Project  

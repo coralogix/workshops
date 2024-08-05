@@ -22,7 +22,7 @@
       
       
       <link rel="icon" href="../images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.30">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.31">
     
     
       
@@ -581,18 +581,18 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#step-2-change-to-workshop-dir" class="md-nav__link">
+  <a href="#step-2-change-to-the-workshop-directory" class="md-nav__link">
     <span class="md-ellipsis">
-      Step 2 - Change to workshop dir
+      Step 2 - Change to the workshop directory
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#step-3-execute-workshop" class="md-nav__link">
+  <a href="#step-3-execute-the-workshop" class="md-nav__link">
     <span class="md-ellipsis">
-      Step 3 - Execute workshop
+      Step 3 - Execute the workshop
     </span>
   </a>
   
@@ -623,9 +623,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#step-2-change-to-workshop-dir_1" class="md-nav__link">
+  <a href="#step-2-change-to-the-workshop-directory_1" class="md-nav__link">
     <span class="md-ellipsis">
-      Step 2 - Change to workshop dir
+      Step 2 - Change to the workshop directory
     </span>
   </a>
   
@@ -641,9 +641,27 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#ios" class="md-nav__link">
+    <span class="md-ellipsis">
+      iOS
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#step-4-using-the-demo-app" class="md-nav__link">
     <span class="md-ellipsis">
       Step 4 - Using the Demo App
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#react" class="md-nav__link">
+    <span class="md-ellipsis">
+      React
     </span>
   </a>
   
@@ -712,81 +730,100 @@
 <h1 id="real-user-monitoring-browsermobile">Real User Monitoring: Browser/Mobile</h1>
 <h2 id="browser">Browser</h2>
 <h3 id="step-1-setup">Step 1 - Setup</h3>
-<p>Clone repo:</p>
-<pre><code>git clone https://github.com/coralogix/workshops
+<p>Clone the repository:</p>
+<pre><code class="language-bash">git clone https://github.com/coralogix/workshops
 </code></pre>
-<h3 id="step-2-change-to-workshop-dir">Step 2 - Change to workshop dir</h3>
-<p>Change to the proper directory for workshop example:  </p>
-<pre><code>cd ./workshops/workshops/rum
+<h3 id="step-2-change-to-the-workshop-directory">Step 2 - Change to the workshop directory</h3>
+<p>Navigate to the proper directory for the workshop example:</p>
+<pre><code class="language-bash">cd ./workshops/workshops/rum
 </code></pre>
-<h3 id="step-3-execute-workshop">Step 3 - Execute workshop</h3>
-<ul>
-<li>Current Node.js must be installed</li>
-<li>Add Coralogix RUM integration <code>Browser SDK</code> and <code>User Context and Labels</code> to a new file called <code>src/index.js</code>  </li>
-<li>Set up node packages:</li>
-</ul>
-<pre><code>source 1-setup-node.sh
-</code></pre>
-<ul>
-<li>Run webpack to package the files in <code>dist</code> into a single <code>dist/main.js</code> file</li>
-</ul>
-<pre><code>source 2-webpack.sh
-</code></pre>
-<ul>
-<li>Edit this file and add your sourcemap key and region. This key is available in the RUM Integration-&gt;SourceMap setup   </li>
-<li>Run this command to upload sourcemap  </li>
-</ul>
-<pre><code>source 3-sourcemap.sh
-</code></pre>
-<ul>
-<li>Run the app.js node app. This will run the node Express web server in the terminal- leave it running.</li>
-</ul>
-<pre><code>source 4-node.sh
-</code></pre>
-<ul>
-<li>Open a browser to <code>http://localhost:3000</code> to load the app served by Node. Refresh a few times  </li>
-<li>Study RUM results in Coralogix  </li>
-<li><code>ctrl-c</code> to stop Express server</li>
-<li>Optional: <code>source 5-cleanup.sh</code> removes all Node packages and webpack artifacts  </li>
-</ul>
+<h3 id="step-3-execute-the-workshop">Step 3 - Execute the workshop</h3>
+<ol>
+<li>
+<p><strong>Ensure Node.js is installed.</strong></p>
+</li>
+<li>
+<p><strong>Add Coralogix RUM integration:</strong></p>
+</li>
+<li>
+<p>Create a new file called <code>src/index.js</code> and integrate the Coralogix RUM <code>Browser SDK</code> and <code>User Context and Labels</code>.</p>
+</li>
+<li>
+<p><strong>Set up node packages:</strong>
+   <code>bash
+   source 1-setup-node.sh</code></p>
+</li>
+<li>
+<p><strong>Package files using webpack:</strong>
+   <code>bash
+   source 2-webpack.sh</code></p>
+</li>
+<li>
+<p><strong>Edit the file to add your sourcemap key and region:</strong></p>
+</li>
+<li>
+<p>This key is available in the RUM Integration -&gt; SourceMap setup.</p>
+</li>
+<li>
+<p><strong>Upload the sourcemap:</strong>
+   <code>bash
+   source 3-sourcemap.sh</code></p>
+</li>
+<li>
+<p><strong>Run the Node Express web server:</strong>
+   <code>bash
+   source 4-node.sh</code></p>
+</li>
+<li>Open a browser to <code>http://localhost:3000</code> to load the app served by Node. Refresh a few times.</li>
+<li>Study the RUM results in Coralogix.</li>
+<li>
+<p>To stop the Express server, use <code>ctrl-c</code>.</p>
+</li>
+<li>
+<p><strong>Optional: Clean up Node packages and webpack artifacts:</strong>
+   <code>bash
+   source 5-cleanup.sh</code></p>
+</li>
+</ol>
 <h2 id="mobile">Mobile</h2>
 <h3 id="step-1-setup_1">Step 1 - Setup</h3>
-<p>Clone repo:</p>
-<pre><code>git clone https://github.com/coralogix/workshops
+<p>Clone the repository:</p>
+<pre><code class="language-bash">git clone https://github.com/coralogix/workshops
 </code></pre>
-<h3 id="step-2-change-to-workshop-dir_1">Step 2 - Change to workshop dir</h3>
-<p>Change to the proper directory for workshop example:  </p>
-<pre><code>cd ./workshops/workshops/mobilerum
+<h3 id="step-2-change-to-the-workshop-directory_1">Step 2 - Change to the workshop directory</h3>
+<p>Navigate to the proper directory for the workshop example:</p>
+<pre><code class="language-bash">cd ./workshops/workshops/mobilerum
 </code></pre>
 <h3 id="step-3-the-workshops">Step 3 - The Workshops</h3>
-<p>The following examples are currently available:</p>
-<p><strong>iOS:</strong><br />
-Swift  <br />
-UIKit</p>
-<p>Each work the same way- follow the <a href="https://coralogix.com/docs/rum-ios-monitoring-setup/">Coralogix SDK instructions here</a>  </p>
-<p>and then update the environment variable stanza according to your environment:</p>
-<pre><code>        let options = CoralogixExporterOptions(
-            coralogixDomain: CoralogixDomain.US2, // Set the Coralogix domain
-            userContext: nil,                     // No user context provided
-            environment: &quot;PROD&quot;,                  // Environment set to production
-            application: &quot;CX-Demo-Swift&quot;,   // Name of the application
-            version: &quot;1&quot;,                         // Application version
-            publicKey: &quot;&quot;, // Public key for authentication
-            ignoreUrls: [],                       // List of URLs to ignore
-            ignoreErrors: [],                     // List of errors to ignore
-            customDomainUrl: nil,                  // Custom domain URL (if any)
-            labels: [&quot;test&quot;: &quot;example&quot;],          // Additional labels for the RUM data
-            debug: true                          // Debug mode disabled
-        )
+<p>The following examples are currently available:
+- <strong>React</strong>
+- <strong>iOS</strong>
+  - Swift
+  - UIKit</p>
+<h3 id="ios">iOS</h3>
+<p>Follow the <a href="https://coralogix.com/docs/rum-ios-monitoring-setup/">Coralogix SDK instructions</a> and update the environment variable stanza according to your environment:</p>
+<pre><code class="language-swift">let options = CoralogixExporterOptions(
+    coralogixDomain: CoralogixDomain.US2, // Set the Coralogix domain
+    userContext: nil,                     // No user context provided
+    environment: &quot;PROD&quot;,                  // Environment set to production
+    application: &quot;CX-Demo-Swift&quot;,         // Name of the application
+    version: &quot;1&quot;,                         // Application version
+    publicKey: &quot;&quot;,                        // Public key for authentication
+    ignoreUrls: [],                       // List of URLs to ignore
+    ignoreErrors: [],                     // List of errors to ignore
+    customDomainUrl: nil,                 // Custom domain URL (if any)
+    labels: [&quot;test&quot;: &quot;example&quot;],          // Additional labels for the RUM data
+    debug: true                           // Debug mode enabled
+)
 </code></pre>
-<p>Each project should build and run on an iPhone emulator (15 Pro Max was tested) and emit telemetry to the Coralogix RUM platform.  </p>
+<p>Each project should build and run on an iPhone emulator (15 Pro Max was tested) and emit telemetry to the Coralogix RUM platform.</p>
 <h3 id="step-4-using-the-demo-app">Step 4 - Using the Demo App</h3>
-<p>There are three current example tests on the demo app:</p>
-<ul>
-<li>Network requests will send user session data while app is running  </li>
-<li>Exception- will crash the app with an exception. Stop Xcode and then run app in emulator so app restarts and instrumentation sends crash analytics to Coralogix</li>
-<li>Crash- like exception above- crahes app, stop Xcode, re-run app to send analytics  </li>
-</ul>
+<p>There are three current example tests on the demo app:
+- <strong>Network requests:</strong> Will send user session data while the app is running.
+- <strong>Exception:</strong> Will crash the app with an exception. Stop Xcode and then run the app in the emulator so the app restarts and instrumentation sends crash analytics to Coralogix.
+- <strong>Crash:</strong> Similar to the exception above - crashes the app, stop Xcode, re-run the app to send analytics.</p>
+<h3 id="react">React</h3>
+<p>Follow the instructions in the repo directory: <a href="https://github.com/coralogix/workshops/tree/master/workshops/mobilerum/react">https://github.com/coralogix/workshops/tree/master/workshops/mobilerum/react</a></p>
 
 
 

@@ -93,7 +93,8 @@ Follow the React setup guide to ensure Ruby/React is installed:
 
 4. **Copy contents of App.tsx**
   
-   Copy the contents of the premade 'App.tsx' overwriting the existing template in 'CXDemoReact'.
+   Copy the contents of the premade 'App.tsx' overwriting the existing template in 'CXDemoReact'.  
+   Update the Coralogix public key from the RUM Integration and the Coralogix domain in the instrumentation stanza at the beginning of 'App.tsx'  
   
 
 ## iOS Setup
@@ -126,3 +127,6 @@ Follow the React setup guide to ensure Ruby/React is installed:
    ```sh
    npx react-native run-android
    ```
+
+![Emulators](emulators.png)    
+![Coralogix RUM](cx-rum.png)

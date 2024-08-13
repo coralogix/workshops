@@ -41,5 +41,6 @@ nav:
     - AWS ECS Fargate (Python): otel/ecs-fargate/index.md
     - AWS ECS EC2 (Python): otel/ecs-ec2/index.md
     - Autogenerators - Instrumentation References: otel/autogenerators/index.md
+    - Tail Sampling: otel/tailsampling/index.md
     - Real User Monitoring (RUM) Browser/Mobile: rum/index.md
     - Official OpenTelemetry Demo: otel/opentelemetrydemo/index.md

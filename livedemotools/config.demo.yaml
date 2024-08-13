@@ -146,7 +146,7 @@ exporters:
     # The Coralogix domain
     domain: "eu2.coralogix.com"
     # Your Coralogix private key is sensitive
-    private_key: "cxtp_RT5YHZsFvuEsXt2VOK5ILXq2Xi2sIH"
+    private_key: ""
 
     # (Optional) Ordered list of Resource attributes that are used for Coralogix
     # AppName and SubSystem values. The first non-empty Resource attribute is used.

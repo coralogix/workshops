@@ -10,7 +10,7 @@ Complete the Microservices Workshop or install the OpenTelemetry Collector on yo
 - Configure `.yaml` with your globals  
 - Deploy the Python autogenerator  
 ```
-source deploy-autogen.py.sh 
+source deploy-autogen-py.sh 
 ```   
 ### Step 2 - Configure and Deploy Tail Sampling Example
 

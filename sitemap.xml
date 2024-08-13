@@ -76,6 +76,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>http://coralogix.github.io/otel/tailsampling/</loc>
+         <lastmod>2024-08-13</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>http://coralogix.github.io/rum/</loc>
          <lastmod>2024-08-13</lastmod>
          <changefreq>daily</changefreq>

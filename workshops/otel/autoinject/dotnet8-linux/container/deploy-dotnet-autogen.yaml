@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cx-dotnet-autogen8
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      name: cx-dotnet-autogen8
+  template:
+    metadata:
+      labels:
+        name: cx-dotnet-autogen8
+    spec:
+      containers:
+      - name: cx-dotnet-autogen8
+        image: public.ecr.aws/w3s4j9x9/autoinject-demo:dotnet8
+        imagePullPolicy: Always
+        workingDir: /home/code
+        env:
+                ports:
+        - containerPort: 7080
+        command: ["/bin/sh"]
+        args: ["/App/entrypoint.sh"]

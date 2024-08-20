@@ -1,0 +1,23 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cx-node-autogen
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      name: cx-node-autogen
+  template:
+    metadata:
+      labels:
+        name: cx-node-autogen
+    spec:
+      containers:
+      - name: cx-node-autogen
+        image: public.ecr.aws/w3s4j9x9/autoinject-demo:node
+        imagePullPolicy: Always
+        workingDir: /home/code
+        env:
+        # command: [ "/bin/bash", "-c", "--" ]
+        # args: [ "while true; do sleep 30; done;" ]

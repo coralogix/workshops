@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8-linux/MyApp.csproj": {}
+    "/home/ubuntu/workshops/workshops/otel/autoinject/dotnet8-linux/container/MyApp.csproj": {}
   },
   "projects": {
-    "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8-linux/MyApp.csproj": {
+    "/home/ubuntu/workshops/workshops/otel/autoinject/dotnet8-linux/container/MyApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8-linux/MyApp.csproj",
+        "projectUniqueName": "/home/ubuntu/workshops/workshops/otel/autoinject/dotnet8-linux/container/MyApp.csproj",
         "projectName": "MyApp",
-        "projectPath": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8-linux/MyApp.csproj",
+        "projectPath": "/home/ubuntu/workshops/workshops/otel/autoinject/dotnet8-linux/container/MyApp.csproj",
         "packagesPath": "/home/ubuntu/.nuget/packages/",
-        "outputPath": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8-linux/obj/",
+        "outputPath": "/home/ubuntu/workshops/workshops/otel/autoinject/dotnet8-linux/container/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/ubuntu/.nuget/NuGet/NuGet.Config"
@@ -66,7 +66,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.105/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.108/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

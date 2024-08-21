@@ -1,6 +1,12 @@
 **Autoinjection WIP- updated 2024-08-21**  
 
 This is work in process!  
+Each example contains a non instrumented tracing app autogenerator.  
+
+```
+git clone https://github.com/coralogix/workshops
+cd ./workshops/workshops/otel/autoinject/
+```
   
 Cluster prep after Coralogix k8s integration installed:  
    

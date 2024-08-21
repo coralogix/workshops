@@ -11,13 +11,11 @@ spec:
     type: parentbased_traceidratio
     argument: "1"
   env:
-    - name: OTEL_IP
-      valueFrom:
-        fieldRef:
-          fieldPath: status.hostIP
-    - name: OTEL_EXPORTER_OTLP_ENDPOINT
-      value: http://$OTEL_IP:4318
-  java:    
+  - name: OTEL_IP
+    valueFrom:
+      fieldRef:
+        fieldPath: status.hostIP
+  java:
     env:
-      - name: OTEL_EXPORTER_OTLP_ENDPOINT
-        value: http://$OTEL_IP:4317
+    - name: OTEL_EXPORTER_OTLP_ENDPOINT
+      value: "http://$(OTEL_IP):4317"

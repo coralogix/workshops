@@ -1,1 +1,1 @@
-kubectl delete deployment cx-java-autogen
+kubectl delete deployment cx-java-autoinject

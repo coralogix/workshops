@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cx-java-autogen
+  name: cx-java-autoinject
   namespace: default
 spec:
   selector:
     matchLabels:
-      name: cx-java-autogen
+      name: cx-java-autoinject
   template:
     metadata:
       labels:
-        name: cx-java-autogen
+        name: cx-java-autoinject
     spec:
       containers:
-      - name: cx-java-autogen
-        image: public.ecr.aws/w3s4j9x9/autoinject-demo:java-autogen
+      - name: cx-java-autoinject
+        image: public.ecr.aws/w3s4j9x9/autoinject-demo:java-autoinject
         imagePullPolicy: Always
         workingDir: /home/code
         env:

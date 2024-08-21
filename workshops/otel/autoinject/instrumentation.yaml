@@ -1,7 +1,7 @@
 apiVersion: opentelemetry.io/v1alpha1
 kind: Instrumentation
 metadata:
-  name: demo-instrumentation
+  name: java-instrumentation
 spec:
   propagators:
     - tracecontext
@@ -10,11 +10,13 @@ spec:
   sampler:
     type: parentbased_traceidratio
     argument: "1"
-  env:
-  - name: OTEL_IP
-    valueFrom:
-      fieldRef:
-        fieldPath: status.hostIP
-  java:    
-  exporter:
-    endpoint: "http://$(OTEL_IP):4317"
+  java:
+    env:
+      - name: OTEL_IP
+        valueFrom:
+          fieldRef:
+            fieldPath: status.hostIP
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: "http://$(OTEL_IP):4317"
+      - name: OTEL_RESOURCE_ATTRIBUTES
+        value: "service.name=cx-autoinject-java"

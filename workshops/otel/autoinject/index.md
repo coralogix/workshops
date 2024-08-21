@@ -1,3 +1,7 @@
+**Autoinjection WIP- updated 2024-08-21**  
+
+This is work in process!  
+  
 Cluster prep after Coralogix k8s integration installed:  
    
 These steps:  
@@ -25,4 +29,6 @@ App deployments must have an *annotation* to ensure that they will have instrume
         name: cx-autoinject-java
       annotations:
         instrumentation.opentelemetry.io/inject-java: "true"
-```
+``` 
+
+2024-08-21: JAVA is tested and working!  

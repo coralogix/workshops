@@ -38,5 +38,5 @@ spec:
             fieldRef:
               fieldPath: status.hostIP
         # test if needed
-        command: [ "/bin/bash", "-c", "--" ]
-        args: [ "while true; do sleep 30; done;" ]
+        # command: [ "/bin/bash", "-c", "--" ]
+        # args: [ "while true; do sleep 30; done;" ]

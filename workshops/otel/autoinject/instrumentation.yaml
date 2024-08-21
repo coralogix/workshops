@@ -15,7 +15,6 @@ spec:
     valueFrom:
       fieldRef:
         fieldPath: status.hostIP
-  java:
-    env:
-    - name: OTEL_EXPORTER_OTLP_ENDPOINT
-      value: "http://$(OTEL_IP):4317"
+  java:    
+  exporter:
+    endpoint: "http://$(OTEL_IP):4317"

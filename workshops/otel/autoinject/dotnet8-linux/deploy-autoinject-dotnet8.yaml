@@ -1,31 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cx-dotnet-autogen8
+  name: cx-autoinject-dotnet8
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: cx-dotnet-autogen8
+      name: cx-autoinject-dotnet8
   template:
     metadata:
       labels:
-        name: cx-dotnet-autogen8
+        name: cx-autoinject-dotnet8
+      annotations:
         instrumentation.opentelemetry.io/inject-dotnet: "true"
     spec:
       containers:
-      - name: cx-dotnet-autogen8
+      - name: cx-autoinject-dotnet8
         image: public.ecr.aws/w3s4j9x9/autoinject-demo:dotnet8
         imagePullPolicy: Always
         workingDir: /home/code
-        env:
-        - name: OTEL_IP
-          valueFrom:
-            fieldRef:
-              fieldPath: status.hostIP
-        - name: OTEL_EXPORTER_OTLP_ENDPOINT
-          value: http://$(OTEL_IP):4318
         ports:
         - containerPort: 7080
           protocol: TCP

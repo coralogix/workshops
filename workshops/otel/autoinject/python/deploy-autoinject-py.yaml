@@ -23,6 +23,8 @@ spec:
     metadata:
       labels:
         name: cx-autoinject-py
+      annotations:
+        instrumentation.opentelemetry.io/inject-python: "true"
     spec:
       containers:
       - name: cx-autoinject-py

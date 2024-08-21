@@ -7,20 +7,8 @@ import requests
 import time
 import uuid
 
-# Import OpenTelemetry libraries for tracing and logging instrumentation
-from opentelemetry import trace
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.instrumentation.logging import LoggingInstrumentor
-
 # Initialize the Flask application
 app = Flask(__name__)
-
-# Set up the tracer provider for collecting traces
-trace.set_tracer_provider(TracerProvider())
-tracer_provider = trace.get_tracer_provider()
-
-# Enable logging instrumentation to attach trace context to logs
-LoggingInstrumentor().instrument(set_logging_format=True)
 
 # Define the home route
 @app.route('/')
@@ -45,8 +33,7 @@ class JsonFormatter(logging.Formatter):
             "name": record.name,
             "level": record.levelname,
             "body": record.getMessage(),
-            "trace_id": getattr(record, "otelTraceID", "N/A"),
-            "span_id": getattr(record, "otelSpanID", "N/A"),
+            "request_id": getattr(record, "requestID", "N/A"),
             "response_body": getattr(record, "responseBody", "N/A"),
         }
         if record.exc_info:
@@ -91,8 +78,11 @@ if __name__ == '__main__':
             request_id = str(uuid.uuid4())
             # Send a GET request to the Flask server with the unique request ID
             response = requests.get("http://127.0.0.1:5000", headers={'X-Request-ID': request_id})
-            # Log the response using the custom logger, including the response text
-            logger.debug(f"Received response: {response.text}", extra={'responseBody': response.text})
+            # Log the response using the custom logger, including the response text and request ID
+            logger.debug(
+                f"Received response: {response.text}", 
+                extra={'responseBody': response.text, 'requestID': request_id}
+            )
             # Wait for a short period before sending the next request
             time.sleep(0.3)
     except KeyboardInterrupt:

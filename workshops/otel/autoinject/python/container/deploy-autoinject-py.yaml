@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cx-autoinject-py
+spec:
+  selector:
+    name: cx-autoinject-py
+  ports:
+  - protocol: TCP
+    port: 5000
+    targetPort: 5000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cx-autoinject-py
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      name: cx-autoinject-py
+  template:
+    metadata:
+      labels:
+        name: cx-autoinject-py
+    spec:
+      containers:
+      - name: cx-autoinject-py
+        image: public.ecr.aws/w3s4j9x9/autoinject-demo:py-autoinject
+        imagePullPolicy: Always
+        workingDir: /home/code
+        ports:
+          - name: http
+            containerPort: 5000
+        env:
+        - name: OTEL_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        # test if needed
+        command: [ "/bin/bash", "-c", "--" ]
+        args: [ "while true; do sleep 30; done;" ]

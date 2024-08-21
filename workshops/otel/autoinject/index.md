@@ -26,6 +26,7 @@ Then the OpenTelemetry Operator instrumentation can be applied:
 kubectl apply -f instrumentation.yaml
 ```  
 One applied, annotated deployments must be restarted.  
+Each directory has a `deployment.yaml` and a script to deploy and delete it.    
 
 App deployments must have an *annotation* to ensure that they will have instrumentation injected i.e.  
 ```
@@ -37,4 +38,4 @@ App deployments must have an *annotation* to ensure that they will have instrume
         instrumentation.opentelemetry.io/inject-java: "true"
 ``` 
 
-2024-08-21: JAVA is tested and working!  
+2024-08-21: Java, Python, .NET tested and working

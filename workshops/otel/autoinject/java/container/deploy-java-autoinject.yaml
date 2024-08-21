@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cx-java-autoinject
+  name: cx-autoinject-java
   namespace: default
 spec:
   selector:
     matchLabels:
-      name: cx-java-autoinject
+      name: cx-autoinject-java
   template:
     metadata:
       labels:
-        name: cx-java-autoinject
+        name: cx-autoinject-java
       annotations:
         instrumentation.opentelemetry.io/inject-java: "true"
     spec:
       containers:
-      - name: cx-java-autoinject
+      - name: cx-autoinject-java
         image: public.ecr.aws/w3s4j9x9/autoinject-demo:java-autoinject
         imagePullPolicy: Always
         workingDir: /home/code

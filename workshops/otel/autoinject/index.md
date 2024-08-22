@@ -35,7 +35,12 @@ One applied, start all the example services- node, python, java, dotnet8:
 ```
 source deploy-all-examples.sh
 ```
-
+Cleanup:  
+```
+source delete-all-examples.sh
+source delete-instrumentation.sh
+```
+  
 Each directory has a `deployment.yaml` and a script to deploy and delete it.    
 
 App deployments must have an *annotation* to ensure that they will have instrumentation injected i.e.  

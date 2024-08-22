@@ -17,7 +17,7 @@ spec:
           fieldRef:
             fieldPath: status.hostIP
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
-        value: "http://$(OTEL_IP):4317"
+        value: "http://$(OTEL_IP):4318"
   python:
     env:
       - name: OTEL_IP
@@ -34,3 +34,11 @@ spec:
             fieldPath: status.hostIP
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
         value: "http://$(OTEL_IP):4318"
+  nodejs:
+    env:
+      - name: OTEL_IP
+        valueFrom:
+          fieldRef:
+            fieldPath: status.hostIP
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: "http://$(OTEL_IP):4317"

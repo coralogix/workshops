@@ -2,20 +2,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cx-node-autogen
+  name: cx-autoinject-node
   namespace: default
 spec:
   selector:
     matchLabels:
-      name: cx-node-autogen
+      name: cx-autoinject-node
   template:
     metadata:
       labels:
-        name: cx-node-autogen
+        name: cx-autoinject-node
+      annotations:
+        instrumentation.opentelemetry.io/inject-nodejs: "true"
     spec:
       containers:
-      - name: cx-node-autogen
-        image: public.ecr.aws/w3s4j9x9/autoinject-demo:node
+      - name: cx-autoinject-node
+        image: public.ecr.aws/w3s4j9x9/autoinject-demo:node-autoinject
         imagePullPolicy: Always
         workingDir: /home/code
         env:

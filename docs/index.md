@@ -44,9 +44,13 @@ Learn more about the [OpenTelemetry Overview and Value Proposition](otel/about-o
 - OpenTelemetry collector container  
 - Example app container/task  
 
-### APM - Autogenerators: OpenTelemetry Tracing Instrumentation Demo Apps  
+### APM - Autogenerators: Otel Tracing Instrumentation Demo Apps  
 Autogenerators: reference projects with live container/monolith examples  
 - [Autogenerators](otel/autogenerators/index.md)  
+
+### APM - Autoinjection: Otel Tracing on K8S With Auto Instrumentation Injection
+Automatically inject instrumentation into deployments with no code changes   
+- [Autogenerators](otel/autoinjection/index.md)  
 
 ### Real User Monitoring (RUM)  
 Visualize user experience metrics  

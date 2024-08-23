@@ -1,4 +1,4 @@
-# Autogenerators
+# Autoinjection  
 
 ## Requirements  
 - Prerequisites [here](https://coralogix.github.io/workshops/prereqs/)  

@@ -50,7 +50,7 @@ Autogenerators: reference projects with live container/monolith examples
 
 ### APM - Autoinjection: Otel Tracing on K8S With Auto Instrumentation Injection
 Automatically inject instrumentation into deployments with no code changes   
-- [Autogenerators](otel/autoinjection/index.md)  
+- [Autoinjection](otel/autoinjection/index.md)  
 
 ### Real User Monitoring (RUM)  
 Visualize user experience metrics  

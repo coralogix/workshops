@@ -12,6 +12,7 @@ Requirements for these workshops include:
 - Direct internet access on the workshop computer, without needing a VPN.
 - Unrestricted access on computer and in cloud to GitHub, Helm, and the ability to use open source software.
 - Users should understand the programming languages being used (for example Python) if asking questions about OpenTelemetry for Python.
+- All k8s examples should be tested in cloud or production grade k8s... local personal computers are not supported for testing due to the derived nature of k8s on local machines
   
 - A unique [Coralogix API Key](https://coralogix.com/docs/send-your-data-api-key/) should be ready for the workshop that will be discarded after.  
   
@@ -20,5 +21,3 @@ Requirements for these workshops include:
 The bulk of the workshop is designed for Kubernetes. If you have an existing Kubernetes cluster that can be used as a sandbox, you only need to make sure you have the following installed:
 - [Helm](https://helm.sh/docs/intro/install/)
 - [k9s](https://k9scli.io/)
-
-If you do not have a Kubernetes sandbox, follow the instructions below, you can run this workshop on any modern Linux host with [k3s](https://k3s.io/) Kubernetes on it.

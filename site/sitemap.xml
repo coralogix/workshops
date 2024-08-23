@@ -2,87 +2,92 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>http://coralogix.github.io/</loc>
-         <lastmod>2024-08-13</lastmod>
+         <lastmod>2024-08-23</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://coralogix.github.io/prereqs/</loc>
-         <lastmod>2024-08-13</lastmod>
+         <lastmod>2024-08-23</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://coralogix.github.io/otel/about-opentelemetry/</loc>
-         <lastmod>2024-08-13</lastmod>
+         <lastmod>2024-08-23</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://coralogix.github.io/otel/autogenerators/</loc>
-         <lastmod>2024-08-13</lastmod>
+         <lastmod>2024-08-23</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>http://coralogix.github.io/otel/autoinjection/</loc>
+         <lastmod>2024-08-23</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://coralogix.github.io/otel/ecs-ec2/</loc>
-         <lastmod>2024-08-13</lastmod>
+         <lastmod>2024-08-23</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://coralogix.github.io/otel/ecs-fargate/</loc>
-         <lastmod>2024-08-13</lastmod>
+         <lastmod>2024-08-23</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://coralogix.github.io/otel/logparsing/logparsing/</loc>
-         <lastmod>2024-08-13</lastmod>
+         <lastmod>2024-08-23</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://coralogix.github.io/otel/microservices/</loc>
-         <lastmod>2024-08-13</lastmod>
+         <lastmod>2024-08-23</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://coralogix.github.io/otel/monolith/node/</loc>
-         <lastmod>2024-08-13</lastmod>
+         <lastmod>2024-08-23</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://coralogix.github.io/otel/monolith/python/</loc>
-         <lastmod>2024-08-13</lastmod>
+         <lastmod>2024-08-23</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://coralogix.github.io/otel/monolith/windows/</loc>
-         <lastmod>2024-08-13</lastmod>
+         <lastmod>2024-08-23</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://coralogix.github.io/otel/mysql/</loc>
-         <lastmod>2024-08-13</lastmod>
+         <lastmod>2024-08-23</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://coralogix.github.io/otel/opentelemetrydemo/</loc>
-         <lastmod>2024-08-13</lastmod>
+         <lastmod>2024-08-23</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://coralogix.github.io/otel/prometheus/</loc>
-         <lastmod>2024-08-13</lastmod>
+         <lastmod>2024-08-23</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://coralogix.github.io/otel/redis/</loc>
-         <lastmod>2024-08-13</lastmod>
+         <lastmod>2024-08-23</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://coralogix.github.io/otel/tailsampling/</loc>
-         <lastmod>2024-08-13</lastmod>
+         <lastmod>2024-08-23</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://coralogix.github.io/rum/</loc>
-         <lastmod>2024-08-13</lastmod>
+         <lastmod>2024-08-23</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>

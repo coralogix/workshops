@@ -4,7 +4,7 @@
 
 Requirements:  
 - [These prerequisites](https://coralogix.github.io/workshops/prereqs/)  
-- A Kubernetes cluster i.e. EKS or GKE for a sandbox environment. If you cannot procure EKS or GKE **See Appendix at the end of this page for a Kubernetes sandbox environment setup.**
+- A Kubernetes cluster i.e. EKS/GKE/AKS for a sandbox environment. Localized k8s on a personal computer is not supported.  
 
 ### Step 1 - Install the OpenTelemetry Collector on your k8s cluster  
    
@@ -84,15 +84,3 @@ To remove all the deployments/services/pods from the example from your k8s clust
 ```
 source delete-all.sh
 ```
-  
-## Appendix - Quick Kubernetes Sandbox Setup  
-- AWS EC2 t2.2xl VM with 24GB of storage w/ Ubuntu Linux or equivalent other cloud provider  
-- A quick k8s platform is k3s minimal Dockerless Kubernetes- use script top right of homepage: [https://k3s.io/](https://k3s.io/) 
-- Every time you open a new shell, to use k3s for helm, kubectl, etc you must set the appropriate env variable:  
-    ```
-    sudo chmod 644 /etc/rancher/k3s/k3s.yaml && export KUBECONFIG=/etc/rancher/k3s/k3s.yaml  
-    ```  
-    This script is included in the workshop in the k3s folder: `source ./k3s/k3s.sh`  
-- Install helm- use bash script: [https://helm.sh/docs/intro/install/](https://helm.sh/docs/intro/install/)  
-- Install k9s kubernetes monitor: [https://k9scli.io/](https://k9scli.io/) 
-    - Download appropriate release and gunzip / tar -xf the release [https://github.com/derailed/k9s/releases](https://github.com/derailed/k9s/releases)

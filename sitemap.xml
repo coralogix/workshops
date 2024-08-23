@@ -21,6 +21,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>http://coralogix.github.io/otel/autoinjection/</loc>
+         <lastmod>2024-08-23</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>http://coralogix.github.io/otel/ecs-ec2/</loc>
          <lastmod>2024-08-23</lastmod>
          <changefreq>daily</changefreq>

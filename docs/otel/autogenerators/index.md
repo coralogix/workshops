@@ -1,7 +1,7 @@
 # Autogenerators
 
 ## Requirements  
-- Prerequisites [here](https://coralogix.github.io/workshops/prereqs/)  
+Prerequisites [here](https://coralogix.github.io/workshops/prereqs/)  
 
 ## What Is An Autogenerator?  
 

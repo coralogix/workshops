@@ -1,7 +1,7 @@
 ---
 global:
   clusterName: slerner
-  domain: eu2.coralogix.com
+  domain: cx498.coralogix.com
 opentelemetry-cluster-collector:
   config:
     receivers:

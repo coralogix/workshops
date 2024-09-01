@@ -1,6 +1,6 @@
 global:
   clusterName: slerner-cluster
-  domain: eu2.coralogix.com
+  domain: cx498.coralogix.com
 
 opentelemetry-agent:
   enabled: true

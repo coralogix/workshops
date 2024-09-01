@@ -3,7 +3,7 @@
 ## Requirements  
 Prerequisites [here](https://coralogix.github.io/workshops/prereqs/)  
 
-## What Is An Autoinjecton?  
+## What Is Autoinjecton?  
 
 OpenTelemetry has an operator that can inject zero code tracing instrumentation into deployments that use Java, Nodejs, Go, .NET, and Python.  
 
@@ -53,8 +53,7 @@ source deploy-all-examples.sh
 ```  
 
 Study the traces in Coralogix.  
-
-
+  
 Cleanup:  
 ```
 source delete-all-examples.sh
@@ -63,8 +62,10 @@ source delete-instrumentation.sh
 
 ### Step 5 - Study Examples
   
-Each directory has a `deployment.yaml` and a script to deploy and delete it.    
+The main `autoinjection` directory has an `instrumentation.yaml` file that the Otel Operator uses to configure autoinjection. The `apply-instrumentation.sh` script applies this operator config. Note that there is a difference in the java port using `4317` vs official otel docs which state to use `4318`. `4317` is currently observed as the correct method until further notice.   
 
+The `deploy-all-examples.sh` script deploys all the autogenerators at the same time. To study each: each directory has a `deployment.yaml` and a script to deploy and delete it.    
+  
 App deployments must have an *annotation* to ensure that they will have instrumentation injected i.e.  
 ```
   template:

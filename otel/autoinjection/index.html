@@ -571,13 +571,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#what-is-an-autoinjecton" class="md-nav__link">
+  <a href="#what-is-autoinjecton" class="md-nav__link">
     <span class="md-ellipsis">
-      What Is An Autoinjecton?
+      What Is Autoinjecton?
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="What Is An Autoinjecton?">
+    <nav class="md-nav" aria-label="What Is Autoinjecton?">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -730,7 +730,7 @@
 <h1 id="autoinjection">Autoinjection</h1>
 <h2 id="requirements">Requirements</h2>
 <p>Prerequisites <a href="https://coralogix.github.io/workshops/prereqs/">here</a>  </p>
-<h2 id="what-is-an-autoinjecton">What Is An Autoinjecton?</h2>
+<h2 id="what-is-autoinjecton">What Is Autoinjecton?</h2>
 <p>OpenTelemetry has an operator that can inject zero code tracing instrumentation into deployments that use Java, Nodejs, Go, .NET, and Python.  </p>
 <p>This is a great way to easily deploy tracing at scale without changing any code. Further instrumentation configuration can be done via each app's <code>deployment.yaml</code> if desired but this is not necessary.  </p>
 <p>Official documentation is here: <a href="https://opentelemetry.io/docs/kubernetes/operator/automatic/">https://opentelemetry.io/docs/kubernetes/operator/automatic/</a>  </p>
@@ -767,7 +767,8 @@ helm install opentelemetry-operator open-telemetry/opentelemetry-operator --set 
 source delete-instrumentation.sh
 </code></pre>
 <h3 id="step-5-study-examples">Step 5 - Study Examples</h3>
-<p>Each directory has a <code>deployment.yaml</code> and a script to deploy and delete it.    </p>
+<p>The main <code>autoinjection</code> directory has an <code>instrumentation.yaml</code> file that the Otel Operator uses to configure autoinjection. The <code>apply-instrumentation.sh</code> script applies this operator config. Note that there is a difference in the java port using <code>4317</code> vs official otel docs which state to use <code>4318</code>. <code>4317</code> is currently observed as the correct method until further notice.   </p>
+<p>The <code>deploy-all-examples.sh</code> script deploys all the autogenerators at the same time. To study each: each directory has a <code>deployment.yaml</code> and a script to deploy and delete it.    </p>
 <p>App deployments must have an <em>annotation</em> to ensure that they will have instrumentation injected i.e.  </p>
 <pre><code>  template:
     metadata:

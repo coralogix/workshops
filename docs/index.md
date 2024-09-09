@@ -3,10 +3,10 @@
 These workshops are crafted to help you learn and practice OpenTelemetry and integrate it with the Coralogix platform.  
 Each workshop includes easy-to-deploy reference implementations, making it simple to study and apply the concepts.
 
-Unless specified otherwise, these workshops are designed to run on an Ubuntu host environment or Kubernetes.
+These workshops are designed to run on a cloud Ubuntu host environment or production grade cloud Kubernetes.  
+They are not designed to run on a desktop or laptop machine regardless of Kubernetes/docker method of installation.  
 
-Please note, these workshops are not a substitute for official Coralogix documentation.  
-For detailed documentation, visit [Coralogix Docs](https://coralogix.com/docs/).  
+These workshops are not a substitute for official [Coralogix Docs](https://coralogix.com/docs/).  
 
 ## Workshop Prerequisites
 

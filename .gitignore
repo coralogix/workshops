@@ -12,7 +12,7 @@ venv
 *.rdb
 
 # Build directories
-target
+# target
 
 # Visual Studio Code settings
 .vscode/

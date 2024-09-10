@@ -1,0 +1,641 @@
+{
+  "id": "wERugDbgqUVWthhNTKVLo",
+  "name": "JVM Metrics",
+  "layout": {
+    "sections": [
+      {
+        "id": {
+          "value": "66f408dc-e68a-b171-21d4-1aa59c99c562"
+        },
+        "rows": [
+          {
+            "id": {
+              "value": "4d1b212d-5f43-cdea-0777-cc043d72aa36"
+            },
+            "appearance": {
+              "height": 19
+            },
+            "widgets": [
+              {
+                "id": {
+                  "value": "dee58c19-5a6e-d51d-eb56-c6a4394a7226"
+                },
+                "title": "JVM CPU utilization",
+                "definition": {
+                  "lineChart": {
+                    "legend": {
+                      "isVisible": true,
+                      "columns": [
+                        "LEGEND_COLUMN_AVG"
+                      ],
+                      "groupByQuery": true
+                    },
+                    "tooltip": {
+                      "showLabels": false,
+                      "type": "TOOLTIP_TYPE_ALL"
+                    },
+                    "queryDefinitions": [
+                      {
+                        "id": "e080fabf-24b5-6155-1766-c917ac4a0ded",
+                        "query": {
+                          "metrics": {
+                            "promqlQuery": {
+                              "value": "sum by (host_name, job) (jvm_cpu_recent_utilization_1{env=~\"{{env}}\"})"
+                            },
+                            "filters": [],
+                            "editorMode": "METRICS_QUERY_EDITOR_MODE_TEXT"
+                          }
+                        },
+                        "seriesCountLimit": "20",
+                        "unit": "UNIT_UNSPECIFIED",
+                        "scaleType": "SCALE_TYPE_LOGARITHMIC",
+                        "name": "Query 1",
+                        "isVisible": true,
+                        "colorScheme": "classic",
+                        "resolution": {
+                          "bucketsPresented": 96
+                        },
+                        "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED",
+                        "customUnit": ""
+                      }
+                    ],
+                    "stackedLine": "STACKED_LINE_ABSOLUTE"
+                  }
+                }
+              },
+              {
+                "id": {
+                  "value": "ffd54dd7-1e42-2791-61a4-7ea0268e8b8e"
+                },
+                "title": "Total JVM CPU time in seconds",
+                "definition": {
+                  "lineChart": {
+                    "legend": {
+                      "isVisible": true,
+                      "columns": [
+                        "LEGEND_COLUMN_AVG"
+                      ],
+                      "groupByQuery": true
+                    },
+                    "tooltip": {
+                      "showLabels": false,
+                      "type": "TOOLTIP_TYPE_ALL"
+                    },
+                    "queryDefinitions": [
+                      {
+                        "id": "e020a55f-4c07-e771-0600-c13551383528",
+                        "query": {
+                          "metrics": {
+                            "promqlQuery": {
+                              "value": "sum by (host_name, job) (irate(jvm_cpu_time_s_total{env=~\"{{env}}\"}))"
+                            },
+                            "filters": [],
+                            "editorMode": "METRICS_QUERY_EDITOR_MODE_TEXT"
+                          }
+                        },
+                        "seriesCountLimit": "20",
+                        "unit": "UNIT_SECONDS",
+                        "scaleType": "SCALE_TYPE_LOGARITHMIC",
+                        "name": "Query 1",
+                        "isVisible": true,
+                        "colorScheme": "classic",
+                        "resolution": {
+                          "bucketsPresented": 96
+                        },
+                        "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED",
+                        "customUnit": ""
+                      }
+                    ],
+                    "stackedLine": "STACKED_LINE_ABSOLUTE"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "id": {
+              "value": "346c3689-0ab4-914f-9edf-daa412b4c644"
+            },
+            "appearance": {
+              "height": 19
+            },
+            "widgets": [
+              {
+                "id": {
+                  "value": "d030dd65-1a14-23af-ec78-8891e7cd2de0"
+                },
+                "title": "Heap memory used / commited / max",
+                "definition": {
+                  "lineChart": {
+                    "legend": {
+                      "isVisible": true,
+                      "columns": [
+                        "LEGEND_COLUMN_AVG"
+                      ],
+                      "groupByQuery": true
+                    },
+                    "tooltip": {
+                      "showLabels": false,
+                      "type": "TOOLTIP_TYPE_ALL"
+                    },
+                    "queryDefinitions": [
+                      {
+                        "id": "6d439e17-8e3f-f6d5-c93e-6e9ea6269b8a",
+                        "query": {
+                          "metrics": {
+                            "promqlQuery": {
+                              "value": "sum by (jvm_memory_pool_name,host_name) (jvm_memory_used_By{env=~\"{{env}}\",jvm_memory_type=\"heap\"})"
+                            },
+                            "filters": [],
+                            "editorMode": "METRICS_QUERY_EDITOR_MODE_TEXT"
+                          }
+                        },
+                        "seriesCountLimit": "20",
+                        "unit": "UNIT_SECONDS",
+                        "scaleType": "SCALE_TYPE_LOGARITHMIC",
+                        "name": "Query 1",
+                        "isVisible": true,
+                        "colorScheme": "classic",
+                        "resolution": {
+                          "bucketsPresented": 96
+                        },
+                        "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED",
+                        "customUnit": ""
+                      }
+                    ],
+                    "stackedLine": "STACKED_LINE_ABSOLUTE"
+                  }
+                }
+              },
+              {
+                "id": {
+                  "value": "246522a8-c111-3ad7-cd0d-c4b3e66ece5c"
+                },
+                "title": "Non heap memory used / commited / max",
+                "definition": {
+                  "lineChart": {
+                    "legend": {
+                      "isVisible": true,
+                      "columns": [
+                        "LEGEND_COLUMN_AVG"
+                      ],
+                      "groupByQuery": true
+                    },
+                    "tooltip": {
+                      "showLabels": false,
+                      "type": "TOOLTIP_TYPE_ALL"
+                    },
+                    "queryDefinitions": [
+                      {
+                        "id": "1527c6bc-1e01-0cdc-b740-f7f2eea47734",
+                        "query": {
+                          "metrics": {
+                            "promqlQuery": {
+                              "value": "sum by (jvm_memory_pool_name, host_name) (jvm_memory_used_By{env=~\"{{env}}\",jvm_memory_type=\"non_heap\"})"
+                            },
+                            "filters": [],
+                            "editorMode": "METRICS_QUERY_EDITOR_MODE_TEXT"
+                          }
+                        },
+                        "seriesCountLimit": "20",
+                        "unit": "UNIT_SECONDS",
+                        "scaleType": "SCALE_TYPE_LOGARITHMIC",
+                        "name": "Query 1",
+                        "isVisible": true,
+                        "colorScheme": "classic",
+                        "resolution": {
+                          "bucketsPresented": 96
+                        },
+                        "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED",
+                        "customUnit": ""
+                      }
+                    ],
+                    "stackedLine": "STACKED_LINE_ABSOLUTE"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "id": {
+              "value": "d208d7ca-6709-bc97-5deb-cfcc7c1b3333"
+            },
+            "appearance": {
+              "height": 19
+            },
+            "widgets": [
+              {
+                "id": {
+                  "value": "6e8b126a-10f3-2811-ee3a-bb6bdcc3d25e"
+                },
+                "title": "Number of executing thread by JVM thread daemon",
+                "definition": {
+                  "pieChart": {
+                    "query": {
+                      "metrics": {
+                        "promqlQuery": {
+                          "value": "sum by (jvm_thread_daemon) (jvm_thread_count__thread_{env=~\"{{env}}\"})"
+                        },
+                        "filters": [],
+                        "groupNames": [
+                          "jvm_thread_daemon"
+                        ],
+                        "editorMode": "METRICS_QUERY_EDITOR_MODE_TEXT"
+                      }
+                    },
+                    "maxSlicesPerChart": 8,
+                    "minSlicePercentage": 1,
+                    "stackDefinition": {
+                      "maxSlicesPerStack": 4
+                    },
+                    "labelDefinition": {
+                      "labelSource": "LABEL_SOURCE_INNER",
+                      "isVisible": true,
+                      "showName": true,
+                      "showValue": true,
+                      "showPercentage": true
+                    },
+                    "showLegend": true,
+                    "unit": "UNIT_UNSPECIFIED",
+                    "colorScheme": "classic",
+                    "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED"
+                  }
+                }
+              },
+              {
+                "id": {
+                  "value": "033f27ca-2760-d640-7c94-197d2b9a7b4b"
+                },
+                "title": "Number of executing thread by JVM thread state",
+                "definition": {
+                  "pieChart": {
+                    "query": {
+                      "metrics": {
+                        "promqlQuery": {
+                          "value": "sum by (jvm_thread_state) (jvm_thread_count__thread_{env=~\"{{env}}\"})"
+                        },
+                        "filters": [],
+                        "groupNames": [
+                          "jvm_thread_state"
+                        ],
+                        "editorMode": "METRICS_QUERY_EDITOR_MODE_TEXT"
+                      }
+                    },
+                    "maxSlicesPerChart": 8,
+                    "minSlicePercentage": 1,
+                    "stackDefinition": {
+                      "maxSlicesPerStack": 8
+                    },
+                    "labelDefinition": {
+                      "labelSource": "LABEL_SOURCE_INNER",
+                      "isVisible": true,
+                      "showName": true,
+                      "showValue": true,
+                      "showPercentage": true
+                    },
+                    "showLegend": true,
+                    "unit": "UNIT_UNSPECIFIED",
+                    "colorScheme": "severity",
+                    "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "id": {
+              "value": "3593c4c7-52ac-fc59-8d43-cf8349513588"
+            },
+            "appearance": {
+              "height": 19
+            },
+            "widgets": [
+              {
+                "id": {
+                  "value": "a92969a5-5dea-aeac-4c21-125df53372ab"
+                },
+                "title": "JVM garbage collection duration",
+                "definition": {
+                  "lineChart": {
+                    "legend": {
+                      "isVisible": true,
+                      "columns": [],
+                      "groupByQuery": true
+                    },
+                    "tooltip": {
+                      "showLabels": false,
+                      "type": "TOOLTIP_TYPE_ALL"
+                    },
+                    "queryDefinitions": [
+                      {
+                        "id": "bf021bc5-d515-79fb-235d-5f677446fd20",
+                        "query": {
+                          "metrics": {
+                            "promqlQuery": {
+                              "value": "sum(round(rate(jvm_gc_duration_s_count{env=~\"{{env}}\"}[${__range}]) * ${__range_ms}/ 1000)) by (job,le)\n"
+                            },
+                            "filters": [],
+                            "editorMode": "METRICS_QUERY_EDITOR_MODE_TEXT"
+                          }
+                        },
+                        "seriesCountLimit": "20",
+                        "unit": "UNIT_UNSPECIFIED",
+                        "scaleType": "SCALE_TYPE_LOGARITHMIC",
+                        "name": "Query 1",
+                        "isVisible": true,
+                        "colorScheme": "classic",
+                        "resolution": {
+                          "bucketsPresented": 96
+                        },
+                        "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED",
+                        "customUnit": ""
+                      }
+                    ],
+                    "stackedLine": "STACKED_LINE_ABSOLUTE"
+                  }
+                }
+              },
+              {
+                "id": {
+                  "value": "882545d7-6fe7-b62d-e13b-d2dc9214efad"
+                },
+                "title": "JVM garbage collection duration - end of minor GC",
+                "definition": {
+                  "lineChart": {
+                    "legend": {
+                      "isVisible": true,
+                      "columns": [],
+                      "groupByQuery": true
+                    },
+                    "tooltip": {
+                      "showLabels": false,
+                      "type": "TOOLTIP_TYPE_ALL"
+                    },
+                    "queryDefinitions": [
+                      {
+                        "id": "e9ddbd97-3361-200c-eeaf-45117a7b871c",
+                        "query": {
+                          "metrics": {
+                            "promqlQuery": {
+                              "value": "sum(round(rate(jvm_gc_duration_s_bucket{env=~\"{{env}}\",jvm_gc_action=\"end of minor GC\"}[${__range}]) * ${__range_ms}/ 1000)) by (job,le)\n"
+                            },
+                            "filters": [],
+                            "editorMode": "METRICS_QUERY_EDITOR_MODE_TEXT"
+                          }
+                        },
+                        "seriesCountLimit": "20",
+                        "unit": "UNIT_SECONDS",
+                        "scaleType": "SCALE_TYPE_LOGARITHMIC",
+                        "name": "Query 1",
+                        "isVisible": true,
+                        "colorScheme": "classic",
+                        "resolution": {
+                          "bucketsPresented": 96
+                        },
+                        "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED",
+                        "customUnit": ""
+                      }
+                    ],
+                    "stackedLine": "STACKED_LINE_ABSOLUTE"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "id": {
+              "value": "69762789-e626-8413-cbca-f03ac8b848fa"
+            },
+            "appearance": {
+              "height": 19
+            },
+            "widgets": [
+              {
+                "id": {
+                  "value": "bf893803-2432-bb68-dcb6-aa7ce5e0f29f"
+                },
+                "title": "JVM Memory Used/Commited/Limited",
+                "definition": {
+                  "lineChart": {
+                    "legend": {
+                      "isVisible": true,
+                      "columns": [
+                        "LEGEND_COLUMN_AVG"
+                      ],
+                      "groupByQuery": true
+                    },
+                    "tooltip": {
+                      "showLabels": false,
+                      "type": "TOOLTIP_TYPE_ALL"
+                    },
+                    "queryDefinitions": [
+                      {
+                        "id": "6cdacaeb-805f-4dab-0b2d-c9d37dd54591",
+                        "query": {
+                          "metrics": {
+                            "promqlQuery": {
+                              "value": "sum by (host_name) (jvm_memory_used_By{env=~\"{{env}}\"})\n"
+                            },
+                            "filters": [],
+                            "editorMode": "METRICS_QUERY_EDITOR_MODE_TEXT"
+                          }
+                        },
+                        "seriesNameTemplate": "Mem Used",
+                        "seriesCountLimit": "20",
+                        "unit": "UNIT_UNSPECIFIED",
+                        "scaleType": "SCALE_TYPE_LOGARITHMIC",
+                        "name": "Query 1",
+                        "isVisible": true,
+                        "colorScheme": "classic",
+                        "resolution": {
+                          "bucketsPresented": 96
+                        },
+                        "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED",
+                        "customUnit": ""
+                      },
+                      {
+                        "id": "e567719e-b6c4-3fba-b8a4-51672860a726",
+                        "query": {
+                          "metrics": {
+                            "promqlQuery": {
+                              "value": "sum by (host_name) (jvm_memory_committed_By{env=~\"{{env}}\"})"
+                            },
+                            "filters": [],
+                            "editorMode": "METRICS_QUERY_EDITOR_MODE_TEXT"
+                          }
+                        },
+                        "seriesNameTemplate": "Mem Committed",
+                        "seriesCountLimit": "20",
+                        "unit": "UNIT_UNSPECIFIED",
+                        "scaleType": "SCALE_TYPE_LOGARITHMIC",
+                        "isVisible": true,
+                        "colorScheme": "classic",
+                        "resolution": {
+                          "bucketsPresented": 96
+                        },
+                        "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED",
+                        "customUnit": ""
+                      },
+                      {
+                        "id": "a97f6b21-70ef-508b-a890-65d67e5e2602",
+                        "query": {
+                          "metrics": {
+                            "promqlQuery": {
+                              "value": "sum by (host_name) (jvm_memory_limit_By{env=~\"{{env}}\"})"
+                            },
+                            "filters": [],
+                            "editorMode": "METRICS_QUERY_EDITOR_MODE_TEXT"
+                          }
+                        },
+                        "seriesNameTemplate": "Mem Limited",
+                        "seriesCountLimit": "20",
+                        "unit": "UNIT_UNSPECIFIED",
+                        "scaleType": "SCALE_TYPE_LINEAR",
+                        "isVisible": true,
+                        "colorScheme": "classic",
+                        "resolution": {
+                          "bucketsPresented": 96
+                        },
+                        "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED",
+                        "customUnit": ""
+                      }
+                    ],
+                    "stackedLine": "STACKED_LINE_ABSOLUTE"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "id": {
+              "value": "59f43ac9-a4e3-5d8d-0b01-869e009f1e60"
+            },
+            "appearance": {
+              "height": 19
+            },
+            "widgets": [
+              {
+                "id": {
+                  "value": "d9fcd6d6-b719-2411-d770-a6dd51d64924"
+                },
+                "title": "JVM garbage collection duration",
+                "definition": {
+                  "lineChart": {
+                    "legend": {
+                      "isVisible": true,
+                      "columns": [
+                        "LEGEND_COLUMN_AVG"
+                      ],
+                      "groupByQuery": true
+                    },
+                    "tooltip": {
+                      "showLabels": false,
+                      "type": "TOOLTIP_TYPE_ALL"
+                    },
+                    "queryDefinitions": [
+                      {
+                        "id": "153968b6-7757-8e3e-2ee3-e736261ce2dc",
+                        "query": {
+                          "metrics": {
+                            "promqlQuery": {
+                              "value": "sum by (host_name) (jvm_class_loaded__class__total{env=~\"{{env}}\"})\n"
+                            },
+                            "filters": [],
+                            "editorMode": "METRICS_QUERY_EDITOR_MODE_TEXT"
+                          }
+                        },
+                        "seriesNameTemplate": "Loaded - {{host_name}}",
+                        "seriesCountLimit": "20",
+                        "unit": "UNIT_UNSPECIFIED",
+                        "scaleType": "SCALE_TYPE_LOGARITHMIC",
+                        "name": "Query 1",
+                        "isVisible": true,
+                        "colorScheme": "classic",
+                        "resolution": {
+                          "bucketsPresented": 96
+                        },
+                        "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED",
+                        "customUnit": ""
+                      },
+                      {
+                        "id": "ece5ab8e-952c-4723-54a6-a5d5440a34d4",
+                        "query": {
+                          "metrics": {
+                            "promqlQuery": {
+                              "value": "sum by (host_name) (jvm_class_unloaded__class__total{env=~\"{{env}}\"})"
+                            },
+                            "filters": [],
+                            "editorMode": "METRICS_QUERY_EDITOR_MODE_TEXT"
+                          }
+                        },
+                        "seriesNameTemplate": "Unloaded - {{host_name}}",
+                        "seriesCountLimit": "20",
+                        "unit": "UNIT_UNSPECIFIED",
+                        "scaleType": "SCALE_TYPE_LOGARITHMIC",
+                        "isVisible": true,
+                        "colorScheme": "classic",
+                        "resolution": {
+                          "bucketsPresented": 96
+                        },
+                        "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED",
+                        "customUnit": ""
+                      }
+                    ],
+                    "stackedLine": "STACKED_LINE_ABSOLUTE"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "options": {
+          "internal": {}
+        }
+      }
+    ]
+  },
+  "variables": [
+    {
+      "name": "env",
+      "definition": {
+        "multiSelect": {
+          "selected": [],
+          "source": {
+            "query": {
+              "query": {
+                "metricsQuery": {
+                  "type": {
+                    "labelValue": {
+                      "metricName": {
+                        "stringValue": "jvm_memory_used_By"
+                      },
+                      "labelName": {
+                        "stringValue": "env"
+                      },
+                      "labelFilters": []
+                    }
+                  }
+                }
+              },
+              "refreshStrategy": "REFRESH_STRATEGY_UNSPECIFIED",
+              "valueDisplayOptions": {}
+            }
+          },
+          "selection": {
+            "all": {}
+          },
+          "valuesOrderDirection": "ORDER_DIRECTION_ASC",
+          "selectionOptions": {
+            "selectionType": "SELECTION_TYPE_MULTI_ALL"
+          }
+        }
+      },
+      "displayName": "Environment",
+      "displayType": "VARIABLE_DISPLAY_TYPE_UNSPECIFIED"
+    }
+  ],
+  "filters": [],
+  "relativeTimeFrame": "3600s",
+  "annotations": [],
+  "off": {}
+}

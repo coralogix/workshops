@@ -1,6 +1,6 @@
 kubectl create namespace cx-eks-fargate-otel
 export CORALOGIX_DOMAIN=cx498.coralogix.com
-export PRIVATE_KEY=
+export PRIVATE_KEY=YOURKEYHERE
 export NAMESPACE=default
 kubectl delete secret coralogix-keys -n $NAMESPACE
 kubectl create secret generic coralogix-keys -n $NAMESPACE \

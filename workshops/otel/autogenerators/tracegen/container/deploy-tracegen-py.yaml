@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cx-tracegen-py
+spec:
+  selector:
+    name: cx-tracegen-py
+  ports:
+  - protocol: TCP
+    port: 5000
+    targetPort: 5000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cx-tracegen-py
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      name: cx-tracegen-py
+  template:
+    metadata:
+      labels:
+        name: cx-tracegen-py
+    spec:
+      containers:
+      - name: cx-tracegen-py
+        image: public.ecr.aws/w3s4j9x9/microservices-demo:py-tracegen
+        imagePullPolicy: Always
+        workingDir: /home/code
+        ports:
+          - name: http
+            containerPort: 5000
+        env:
+        - name: OTEL_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: OTEL_SERVICE_NAME
+          value: cx-tracegen-py
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: cx.application.name=cx-tracegen-py,cx.subsystem.name=cx-tracegen-py
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: http://$(OTEL_IP):4317
+        # test if needed
+        # command: [ "/bin/bash", "-c", "--" ]
+        # args: [ "while true; do sleep 30; done;" ]

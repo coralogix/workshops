@@ -80,6 +80,7 @@ data:
         auth_type: serviceAccount
         observe_pods: true
         observe_nodes: true
+      host_observer:
       health_check:
 
     receivers:
@@ -109,12 +110,35 @@ data:
               - pod
               - node
             rule: type == "k8s.node" && name contains "fargate" && name != "${env:K8S_NODE_NAME}"
-
+      receiver_creator/prometheus-auto:
+        # Name of the extensions to watch for endpoints to start and stop.
+        watch_observers: [k8s_observer]
+        receivers:
+          prometheus_simple:
+            # Configure prometheus scraping if standard prometheus annotations are set on the pod.
+            rule: type == "pod" && annotations["prometheus.io/scrape"] == "true"
+            config:
+              metrics_path: '`"prometheus.io/path" in annotations ? annotations["prometheus.io/path"] : "/metrics"`'
+              endpoint: '`endpoint`:`"prometheus.io/port" in annotations ? annotations["prometheus.io/port"] : 9090`'
+            resource_attributes:
+              an.attribute: a.value
+              # Dynamic configuration values
+              app.version: '`labels["app_version"]`'
+        resource_attributes:
+          # Dynamic configuration values, overwriting default attributes`
+          pod:
+            service.name: '`labels["service_name"]`'
+            app: '`labels["app"]`'
+          port:
+            service.name: '`pod.labels["service_name"]`'
+            app: '`pod.labels["app"]`'
       # gRPC endoint for traces and metrics submission by cluster applications
       otlp:
         protocols:
           grpc:
             endpoint: 0.0.0.0:4317
+          http: 
+            endpoint: 0.0.0.0:4318
     
     processors:
       # add cluster name from env variable and EKS metadata
@@ -172,8 +196,12 @@ data:
           receivers: [receiver_creator]
           processors: [resourcedetection, batch]
           exporters: [coralogix]
+        metrics/receivercreator:
+          receivers: [receiver_creator/prometheus-auto]
+          processors: [resourcedetection, batch]
+          exporters: [coralogix]
 
-      extensions: [health_check, k8s_observer]
+      extensions: [health_check, k8s_observer, host_observer]
 
 # configure the service and the collector as a StatefulSet
 ---

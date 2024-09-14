@@ -27,4 +27,4 @@ eksctl create iamserviceaccount \
 kubectl get serviceaccount $SERVICE_ACCOUNT_NAME -n $SERVICE_ACCOUNT_NAMESPACE
 
 # Validate IAM Role creation  
-aws iam get-role --role-name $SERVICE_ACCOUNT_IAM_ROLE
+# aws iam get-role --role-name $SERVICE_ACCOUNT_IAM_ROLE

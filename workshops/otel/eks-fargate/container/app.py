@@ -2,24 +2,21 @@ import os
 import time
 from opentelemetry import trace
 from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import BatchSpanProcessor, ConsoleSpanExporter
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 
 # Set the OTEL service name
 os.environ["OTEL_SERVICE_NAME"] = "tracegen"
 
-# Set up the tracer provider and exporter
+# Get OTLP endpoint from environment variable, or default to localhost:4317
+otlp_endpoint = os.getenv("OTEL_EXPORTER_OTLP_ENDPOINT", "http://localhost:4317")
+
+# Set up the tracer provider and OTLP exporter
 provider = TracerProvider()
+otlp_exporter = OTLPSpanExporter(endpoint=otlp_endpoint, insecure=True)
 
-# OTLP exporter for sending traces to OTEL collector
-otlp_exporter = OTLPSpanExporter(endpoint="http://localhost:4317", insecure=True)
-
-# Console exporter for printing traces to the console
-console_exporter = ConsoleSpanExporter()
-
-# Set up batch processors for both exporters
+# Set up batch processor for the OTLP exporter
 provider.add_span_processor(BatchSpanProcessor(otlp_exporter))
-provider.add_span_processor(BatchSpanProcessor(console_exporter))
 
 trace.set_tracer_provider(provider)
 

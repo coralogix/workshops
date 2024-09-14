@@ -1,5 +1,5 @@
 global:
-  clusterName: slerner
+  clusterName: "dev-us-east-1"
   domain: cx498.coralogix.com
 opentelemetry-cluster-collector:
   config:

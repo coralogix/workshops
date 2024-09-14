@@ -1,0 +1,1 @@
+kubectl apply -f cx-eks-fargate-otel-self-monitoring.yaml

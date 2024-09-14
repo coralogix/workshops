@@ -70,7 +70,7 @@ exporters:
 
   coralogix:
     domain: "cx498.coralogix.com"
-    private_key: ""
+    private_key: "cxtp_sIgP6mAHVL9MbM6ZfCjljTd5JMcMRN"
     application_name_attributes:
     - "service.namespace"
     subsystem_name_attributes:

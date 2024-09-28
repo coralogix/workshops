@@ -12,28 +12,24 @@
         <meta name="author" content="Coralogix">
       
       
-        <link rel="canonical" href="http://coralogix.github.io/otel/ecs-fargate/">
+        <link rel="canonical" href="http://coralogix.github.io/otel/monolithdeprecated/python/">
       
       
-        <link rel="prev" href="../microservices/">
       
       
-        <link rel="next" href="../ecs-ec2/">
-      
-      
-      <link rel="icon" href="../../images/favicon.png">
+      <link rel="icon" href="../../../images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.21">
     
     
       
-        <title>AWS ECS Fargate (Python) - Coralogix Workshops</title>
+        <title>OpenTelemetry for Python / Monolith - Coralogix Workshops</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.66ac8b77.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.66ac8b77.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -52,9 +48,9 @@
       
     
     
-      <link rel="stylesheet" href="../../stylesheets/extra.css">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -78,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#opentelemetry-for-aws-ecs-fargate" class="md-skip">
+        <a href="#opentelemetry-for-python-monolith" class="md-skip">
           Skip to content
         </a>
       
@@ -94,9 +90,9 @@
 
 <header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="Coralogix Workshops" class="md-header__button md-logo" aria-label="Coralogix Workshops" data-md-component="logo">
+    <a href="../../.." title="Coralogix Workshops" class="md-header__button md-logo" aria-label="Coralogix Workshops" data-md-component="logo">
       
-  <img src="../../images/horizontal.png" alt="logo">
+  <img src="../../../images/horizontal.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -113,7 +109,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              AWS ECS Fargate (Python)
+              OpenTelemetry for Python / Monolith
             
           </span>
         </div>
@@ -188,7 +184,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../.." class="md-tabs__link">
+      <a href="../../.." class="md-tabs__link">
         
   
     
@@ -207,7 +203,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../about-opentelemetry/" class="md-tabs__link">
+        <a href="../../about-opentelemetry/" class="md-tabs__link">
           
   
   OpenTelemetry Info
@@ -221,13 +217,11 @@
         
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../microservices/" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../microservices/" class="md-tabs__link">
           
   
   Workshops
@@ -268,9 +262,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="Coralogix Workshops" class="md-nav__button md-logo" aria-label="Coralogix Workshops" data-md-component="logo">
+    <a href="../../.." title="Coralogix Workshops" class="md-nav__button md-logo" aria-label="Coralogix Workshops" data-md-component="logo">
       
-  <img src="../../images/horizontal.png" alt="logo">
+  <img src="../../../images/horizontal.png" alt="logo">
 
     </a>
     Coralogix Workshops
@@ -297,7 +291,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href="../../.." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -359,7 +353,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../about-opentelemetry/" class="md-nav__link">
+      <a href="../../about-opentelemetry/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -384,30 +378,27 @@
       
   
   
-    
   
   
-  
     
     
     
-      
-        
-        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -418,7 +409,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             Workshops
@@ -432,7 +423,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../microservices/" class="md-nav__link">
+      <a href="../../microservices/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -450,30 +441,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    AWS ECS Fargate (Python)
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../ecs-fargate/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -482,95 +453,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#instructions" class="md-nav__link">
-    <span class="md-ellipsis">
-      Instructions
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Instructions">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#step-1-setup" class="md-nav__link">
-    <span class="md-ellipsis">
-      Step 1 - Setup
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-2-change-to-workshop-dir" class="md-nav__link">
-    <span class="md-ellipsis">
-      Step 2 - Change to workshop dir
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-3-prep-requirements-and-deploy-script" class="md-nav__link">
-    <span class="md-ellipsis">
-      Step 3: Prep Requirements and deploy script
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-4-deploy-cloudformation-to-set-up-fargate-components" class="md-nav__link">
-    <span class="md-ellipsis">
-      Step 4: Deploy Cloudformation to set up Fargate components
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-5-launch-task" class="md-nav__link">
-    <span class="md-ellipsis">
-      Step 5: Launch Task
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-6-study-results-in-coralogix-portal" class="md-nav__link">
-    <span class="md-ellipsis">
-      Step 6 - Study results in Coralogix portal
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -583,7 +465,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../ecs-ec2/" class="md-nav__link">
+      <a href="../../ecs-ec2/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -604,7 +486,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../autogenerators/" class="md-nav__link">
+      <a href="../../autogenerators/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -625,7 +507,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../autoinjection/" class="md-nav__link">
+      <a href="../../autoinjection/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -646,7 +528,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tailsampling/" class="md-nav__link">
+      <a href="../../tailsampling/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -667,7 +549,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../rum/" class="md-nav__link">
+      <a href="../../../rum/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -688,7 +570,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../opentelemetrydemo/" class="md-nav__link">
+      <a href="../../opentelemetrydemo/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -727,34 +609,55 @@
   
 
 
-<h1 id="opentelemetry-for-aws-ecs-fargate">OpenTelemetry for AWS ECS-Fargate</h1>
+<h1 id="opentelemetry-for-python-monolith">OpenTelemetry for Python / Monolith</h1>
 <h2 id="instructions">Instructions</h2>
-<p>Additional Requirements:<br />
-- AWS Account
-- Intermediate to Advanced skill with ECS-Fargate<br />
-- Sufficient permissions to configure AWS  </p>
+<p>This example is for basic study only and is not documentation.  <br />
+Full documentation: <a href="https://coralogix.com/docs/">https://coralogix.com/docs/</a><br />
+Requirements:<br />
+- Coralogix acccount<br />
+- Cloud Linux host (Debian is preferred- workshop instructions are for Debian Linux but if RPM is preferred instructions can be modified)<br />
+- Current versions and sufficient permissions for installing open source software<br />
+- Current versons (&gt;3.10) of <code>python</code> and <code>pip</code> installed 
+- Proper IDE i.e. Visual Studio Code  </p>
 <h3 id="step-1-setup">Step 1 - Setup</h3>
 <p>Clone repo:</p>
 <pre><code>git clone https://github.com/coralogix/workshops
 </code></pre>
 <h3 id="step-2-change-to-workshop-dir">Step 2 - Change to workshop dir</h3>
 <p>Change to the proper directory for workshop example:  </p>
-<pre><code>cd ./workshops/workshops/otel/ecs-fargate
+<pre><code>cd ./workshops/workshops/otel/monolith-workshop/python/
 </code></pre>
-<h3 id="step-3-prep-requirements-and-deploy-script">Step 3: Prep Requirements and deploy script</h3>
-<p>Study Coralogix <a href="https://github.com/coralogix/telemetry-shippers/tree/master/otel-ecs-fargate">OpenTelemetry ECS Fargate Example</a><br />
-Update the <code>deploy-cf.sh</code> script with your API key and Coralogix Region  </p>
-<h3 id="step-4-deploy-cloudformation-to-set-up-fargate-components">Step 4: Deploy Cloudformation to set up Fargate components</h3>
-<pre><code>source deploy-cf.sh
+<h3 id="step-3-set-up-otel-collector-on-a-linux-host">Step 3 - Set up Otel Collector on a Linux host</h3>
+<p>Download and install latest CONTRIB release version from here:<br />
+<a href="https://github.com/open-telemetry/opentelemetry-collector-releases/releases">https://github.com/open-telemetry/opentelemetry-collector-releases/releases</a>  </p>
+<p>Collector <code>config.yaml</code> must be configured with Coralogix Exporter. See the "Send Data to Coralogix" section for determining telemetry endpoint and and API key: <a href="https://coralogix.com/docs/guide-first-steps-coralogix/">https://coralogix.com/docs/guide-first-steps-coralogix/</a>    </p>
+<p>See the <code>config.yaml</code> example in <code>./workshops/workshops/otel/monolith-workshop/</code> and configure this for your system / Coralogix account.<br />
+This file can be updated in <code>/etc/otelcol-contrib/config.yaml</code> - make a backup of the default version first.    </p>
+<p>Manage the collector using <code>systemctl</code> i.e. <code>sudo systemctl restart otelcol-contrib.service</code><br />
+More info is here: <a href="https://coralogix.com/docs/guide-first-steps-coralogix/">https://coralogix.com/docs/guide-first-steps-coralogix/</a>  </p>
+<p>You can check Collector status with these status URLS:<br />
+<code>http://localhost:55679/debug/tracez</code><br />
+<code>http://localhost:55679/debug/pipelinez</code>  <br />
+For more info: <a href="https://github.com/open-telemetry/opentelemetry-collector/blob/main/extension/zpagesextension/README.md">zpages docs</a>  </p>
+<h3 id="step-4-run-python-app">Step 4 - Run Python App</h3>
+<h4 id="pre-requisites">Pre-requisites</h4>
+<ul>
+<li>For ubuntu Run <code>sudo apt upgrade</code> to upgrde already installed packages. If you receive a message to reboot your server do so before moving on to the next steps.</li>
+<li>Run <code>python3 --version</code> to check you have python3 installed. If not follow the python3 installation document for your linux distribution. For ubuntu follow</li>
+<li>Ensure python venv is installed  </li>
+<li>Run <code>pip3 --version</code> to check pip3 is installed. If not follow the pip3 installation documentation for your linux distribution. For ubuntu use command <code>sudo apt-get install python3-pip</code></li>
+</ul>
+<h4 id="run-python-app">Run Python App</h4>
+<p>This application creates a client and Flask server on the host and makes requests of it.  </p>
+<p>Run following scripts found under <code>./python</code>:</p>
+<pre><code>source 1-setup-python.sh
+source 2-setup-python-env.sh
+source 3-start-python.sh
 </code></pre>
-<h3 id="step-5-launch-task">Step 5: Launch Task</h3>
-<p>Launch according to your standard procedure.<br />
-Ensure the security group can allow for port 5000 requests.  </p>
-<p>The task creates the following containers:<br />
-- Coralogix Python autogenerator<br />
-- OpenTelemetry Collector  </p>
-<p>The microservice container create a Python HTTP client and server that will generate spans and logs and send to Coralogix.  </p>
-<h3 id="step-6-study-results-in-coralogix-portal">Step 6 - Study results in Coralogix portal</h3>
+<p><strong>Note</strong>: Running <code>source setup-python.sh</code> would output long list of packages and with messages like Successfully installed <em>opentelemetry-instrumentation-some-package</em>.<br />
+To exit the running app, use <code>ctrl-c</code> and you will be in the <em>venv</em> shell- exit with <code>deactivate</code>  </p>
+<h3 id="step-5-study-results-in-coralogix-portal">Step 5 - Study results in Coralogix portal</h3>
+<p>Logs with span/trace IDs, and a complete client/server service will be available.  </p>
 
 
 
@@ -811,10 +714,10 @@ Ensure the security group can allow for port 5000 requests.  </p>
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.instant", "navigation.sections", "navigation.expand", "navigation.top", "navigation.tracking", "toc.integrate", "toc.follow"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.instant", "navigation.sections", "navigation.expand", "navigation.top", "navigation.tracking", "toc.integrate", "toc.follow"], "search": "../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.a7c05c9e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.a7c05c9e.min.js"></script>
       
     
   </body>

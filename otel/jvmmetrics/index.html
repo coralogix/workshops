@@ -12,24 +12,24 @@
         <meta name="author" content="Coralogix">
       
       
-        <link rel="canonical" href="http://coralogix.github.io/otel/monolith/node/">
+        <link rel="canonical" href="http://coralogix.github.io/otel/jvmmetrics/">
       
       
       
       
-      <link rel="icon" href="../../../images/favicon.png">
+      <link rel="icon" href="../../images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.21">
     
     
       
-        <title>OpenTelemetry for Node.js / Monolith - Coralogix Workshops</title>
+        <title>JVM Metrics - Coralogix Workshops</title>
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.66ac8b77.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.66ac8b77.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -48,9 +48,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#opentelemetry-for-nodejs-monolith" class="md-skip">
+        <a href="#jvm-metrics" class="md-skip">
           Skip to content
         </a>
       
@@ -90,9 +90,9 @@
 
 <header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../../.." title="Coralogix Workshops" class="md-header__button md-logo" aria-label="Coralogix Workshops" data-md-component="logo">
+    <a href="../.." title="Coralogix Workshops" class="md-header__button md-logo" aria-label="Coralogix Workshops" data-md-component="logo">
       
-  <img src="../../../images/horizontal.png" alt="logo">
+  <img src="../../images/horizontal.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -109,7 +109,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              OpenTelemetry for Node.js / Monolith
+              JVM Metrics
             
           </span>
         </div>
@@ -184,7 +184,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../.." class="md-tabs__link">
+      <a href="../.." class="md-tabs__link">
         
   
     
@@ -203,7 +203,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../about-opentelemetry/" class="md-tabs__link">
+        <a href="../about-opentelemetry/" class="md-tabs__link">
           
   
   OpenTelemetry Info
@@ -221,7 +221,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../microservices/" class="md-tabs__link">
+        <a href="../microservices/" class="md-tabs__link">
           
   
   Workshops
@@ -262,9 +262,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../.." title="Coralogix Workshops" class="md-nav__button md-logo" aria-label="Coralogix Workshops" data-md-component="logo">
+    <a href="../.." title="Coralogix Workshops" class="md-nav__button md-logo" aria-label="Coralogix Workshops" data-md-component="logo">
       
-  <img src="../../../images/horizontal.png" alt="logo">
+  <img src="../../images/horizontal.png" alt="logo">
 
     </a>
     Coralogix Workshops
@@ -291,7 +291,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../.." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -353,7 +353,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../about-opentelemetry/" class="md-nav__link">
+      <a href="../about-opentelemetry/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -423,7 +423,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../microservices/" class="md-nav__link">
+      <a href="../microservices/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -444,7 +444,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../ecs-fargate/" class="md-nav__link">
+      <a href="../ecs-fargate/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -465,7 +465,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../ecs-ec2/" class="md-nav__link">
+      <a href="../ecs-ec2/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -486,7 +486,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../autogenerators/" class="md-nav__link">
+      <a href="../autogenerators/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -507,7 +507,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../autoinjection/" class="md-nav__link">
+      <a href="../autoinjection/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -528,7 +528,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../tailsampling/" class="md-nav__link">
+      <a href="../tailsampling/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -549,7 +549,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../rum/" class="md-nav__link">
+      <a href="../../rum/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -570,7 +570,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../opentelemetrydemo/" class="md-nav__link">
+      <a href="../opentelemetrydemo/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -609,54 +609,38 @@
   
 
 
-<h1 id="opentelemetry-for-nodejs-monolith">OpenTelemetry for Node.js / Monolith</h1>
-<h2 id="instructions">Instructions</h2>
-<p>This example is for basic study only and is not documentation.  <br />
-Full documentation: <a href="https://coralogix.com/docs/">https://coralogix.com/docs/</a><br />
-Requirements:<br />
-- Coralogix acccount<br />
-- Cloud Linux host (Debian is preferred- workshop instructions are for Debian Linux but if RPM is preferred instructions can be modified)<br />
-- Updated versions and sufficient permissions for installing open source software<br />
-- Current verson of <code>node</code> and <code>npm</code> installed <a href="https://nodejs.org/">https://nodejs.org/</a><br />
-- Ensure that the Node version is current (20 or higher).  See <a href="https://deb.nodesource.com/">https://deb.nodesource.com/</a> for Ubuntu installation instructions<br />
-- Proper IDE i.e. Visual Studio Code </p>
+<h1 id="jvm-metrics">JVM Metrics</h1>
+<h2 id="requirements">Requirements</h2>
+<p>Prerequisites <a href="https://coralogix.github.io/workshops/prereqs/">here</a>  </p>
+<h2 id="jvm-metrics-in-opentelemetry">JVM Metrics in OpenTelemetry</h2>
+<p>OpenTelemetry can gather JVM metrics in multiple ways:
+- OpenTelemetry Collector Receiver for JMX Metrics
+- Direct receipt of metrics from OpenTelemetry Java tracing instrumentation</p>
+<p>In either case, a metrics dashboard provided in this workshop will be used to visualize these metrics.</p>
 <h3 id="step-1-setup">Step 1 - Setup</h3>
 <p>Clone repo:</p>
 <pre><code>git clone https://github.com/coralogix/workshops
 </code></pre>
 <h3 id="step-2-change-to-workshop-dir">Step 2 - Change to workshop dir</h3>
 <p>Change to the proper directory for workshop example:  </p>
-<pre><code>cd ./workshops/workshops/otel/monolith-workshop/node/
+<pre><code>cd ./workshops/workshops/otel/autogenerators/java/monolith
 </code></pre>
 <h3 id="step-3-set-up-otel-collector-on-a-linux-host">Step 3 - Set up Otel Collector on a Linux host</h3>
-<p>Download and install latest CONTRIB release version from here:<br />
-<a href="https://github.com/open-telemetry/opentelemetry-collector-releases/releases">https://github.com/open-telemetry/opentelemetry-collector-releases/releases</a>  </p>
-<p>Collector <code>config.yaml</code> must be configured with Coralogix Exporter. See the "Send Data to Coralogix" section for determining telemetry endpoint and and API key: <a href="https://coralogix.com/docs/guide-first-steps-coralogix/">https://coralogix.com/docs/guide-first-steps-coralogix/</a>    </p>
-<p>See the <code>config.yaml</code> example in <code>./workshops/workshops/otel/monolith-workshop/node/otelcol</code><br />
-This file can be updated in <code>/etc/otelcol/contrib/config.yaml</code> - make a backup of the default version first.    </p>
-<p>Manage the collector using <code>systemctl</code> i.e. <code>sudo systemctl restart otelcol</code><br />
-More info is here: <a href="https://coralogix.com/docs/guide-first-steps-coralogix/">https://coralogix.com/docs/guide-first-steps-coralogix/</a>  </p>
-<p>You can check Collector status with these status URLS:<br />
-<code>http://localhost:55679/debug/tracez</code><br />
-<code>http://localhost:55679/debug/pipelinez</code>  <br />
-For more info: <a href="https://github.com/open-telemetry/opentelemetry-collector/blob/main/extension/zpagesextension/README.md">zpages docs</a>  </p>
-<h3 id="step-4-run-node-client-in-new-terminal">Step 4 - Run Node client in new terminal</h3>
-<p>Demo app will make requests of <code>https://api.github.com</code> and require `ctrl-c`` to exit.</p>
-<p>in <code>./workshops/workshops/otel/monolith-workshop/node/</code> </p>
-<p>Install node.js OpenTelemetry Instrumentation:  </p>
-<pre><code>setup-node.sh
+<ul>
+<li>update Coralogix exporter with region and key <code>config-demo-jmx.yaml</code>  </li>
+<li>download current release of otel collector: <a href="https://github.com/open-telemetry/opentelemetry-collector-releases/releases">https://github.com/open-telemetry/opentelemetry-collector-releases/releases</a></li>
+<li>update install script with downloaded version of otel collector and run script</li>
+</ul>
+<pre><code>source jmx-otel-config-setup.sh
 </code></pre>
-<p>Setup environment variables for OpenTelemetry:</p>
-<pre><code>setup-node-env.sh
+<h3 id="step-4-add-jvm-dashboard-to-custom-dashbords">Step 4 - Add jvm dashboard to Custom Dashbords</h3>
+<pre><code>jvm_metrics.json
 </code></pre>
-<p>Start demo app:  </p>
-<pre><code>start-node.sh
+<h3 id="step-5-add-jvm-dashboard-to-custom-dashbords">Step 5 - Add jvm dashboard to Custom Dashbords</h3>
+<p>Run the included Java app example  </p>
+<pre><code>source 4-monolith-install-otel.sh
+source 5-monolith-run-app.sh
 </code></pre>
-<p>Stop app with <code>ctrl-c</code> when ready.</p>
-<h3 id="step-5-study-results-in-coralogix-portal">Step 5 - Study results in Coralogix portal</h3>
-<p>The shell scripts show how a monolith is set up and instrumented for OpenTelemetry.<br />
-Traces can be found in <code>Explore-&gt;Tracing</code><br />
-Additionally, host metrics are available via Coralogix's metrics observability tools.  </p>
 
 
 
@@ -713,10 +697,10 @@ Additionally, host metrics are available via Coralogix's metrics observability t
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.instant", "navigation.sections", "navigation.expand", "navigation.top", "navigation.tracking", "toc.integrate", "toc.follow"], "search": "../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.instant", "navigation.sections", "navigation.expand", "navigation.top", "navigation.tracking", "toc.integrate", "toc.follow"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.a7c05c9e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.a7c05c9e.min.js"></script>
       
     
   </body>

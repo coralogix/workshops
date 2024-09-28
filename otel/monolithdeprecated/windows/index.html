@@ -12,7 +12,7 @@
         <meta name="author" content="Coralogix">
       
       
-        <link rel="canonical" href="http://coralogix.github.io/otel/monolith/python/">
+        <link rel="canonical" href="http://coralogix.github.io/otel/monolithdeprecated/windows/">
       
       
       
@@ -22,7 +22,7 @@
     
     
       
-        <title>OpenTelemetry for Python / Monolith - Coralogix Workshops</title>
+        <title>OpenTelemetry for .NET / Monolith - Coralogix Workshops</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#opentelemetry-for-python-monolith" class="md-skip">
+        <a href="#opentelemetry-for-net-monolith" class="md-skip">
           Skip to content
         </a>
       
@@ -109,7 +109,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              OpenTelemetry for Python / Monolith
+              OpenTelemetry for .NET / Monolith
             
           </span>
         </div>
@@ -609,55 +609,106 @@
   
 
 
-<h1 id="opentelemetry-for-python-monolith">OpenTelemetry for Python / Monolith</h1>
+<h1 id="opentelemetry-for-net-monolith">OpenTelemetry for .NET / Monolith</h1>
 <h2 id="instructions">Instructions</h2>
 <p>This example is for basic study only and is not documentation.  <br />
 Full documentation: <a href="https://coralogix.com/docs/">https://coralogix.com/docs/</a><br />
 Requirements:<br />
-- Coralogix acccount<br />
-- Cloud Linux host (Debian is preferred- workshop instructions are for Debian Linux but if RPM is preferred instructions can be modified)<br />
-- Current versions and sufficient permissions for installing open source software<br />
-- Current versons (&gt;3.10) of <code>python</code> and <code>pip</code> installed 
-- Proper IDE i.e. Visual Studio Code  </p>
+- Windows Server 2019 or newer  <br />
+- Updated versions and sufficient permissions for downloading and installing software and no restrictions on GitHub domain  <br />
+- .NET Framework version supported by OpenTelemetry: <a href="https://opentelemetry.io/docs/languages/net/automatic/">check here</a>
+- PowerShell 5.1 or higher<br />
+- Proper IDE i.e. Visual Studio Code </p>
+<h3 id="about-opentelemetry-for-net">About OpenTelemetry For .NET</h3>
+<p>You can find the complete instruction for .NET OpenTelemetry Agent Instrumentation is in <a href="https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation">.NET OpenTelemetry GitHub Repository</a>. </p>
+<p>There are three key steps to sending traces from a .NET application on Windows:<br />
+- Install the OpenTelemetry collector<br />
+- Install OpenTelemetry .NET instrumentation<br />
+- Run a sample .NET application to test traces  </p>
 <h3 id="step-1-setup">Step 1 - Setup</h3>
 <p>Clone repo:</p>
 <pre><code>git clone https://github.com/coralogix/workshops
 </code></pre>
-<h3 id="step-2-change-to-workshop-dir">Step 2 - Change to workshop dir</h3>
-<p>Change to the proper directory for workshop example:  </p>
-<pre><code>cd ./workshops/workshops/otel/monolith-workshop/python/
-</code></pre>
-<h3 id="step-3-set-up-otel-collector-on-a-linux-host">Step 3 - Set up Otel Collector on a Linux host</h3>
+<h3 id="step-2-otel-collector-installation">Step 2 - OTEL Collector Installation</h3>
 <p>Download and install latest CONTRIB release version from here:<br />
 <a href="https://github.com/open-telemetry/opentelemetry-collector-releases/releases">https://github.com/open-telemetry/opentelemetry-collector-releases/releases</a>  </p>
-<p>Collector <code>config.yaml</code> must be configured with Coralogix Exporter. See the "Send Data to Coralogix" section for determining telemetry endpoint and and API key: <a href="https://coralogix.com/docs/guide-first-steps-coralogix/">https://coralogix.com/docs/guide-first-steps-coralogix/</a>    </p>
-<p>See the <code>config.yaml</code> example in <code>./workshops/workshops/otel/monolith-workshop/</code> and configure this for your system / Coralogix account.<br />
-This file can be updated in <code>/etc/otelcol-contrib/config.yaml</code> - make a backup of the default version first.    </p>
-<p>Manage the collector using <code>systemctl</code> i.e. <code>sudo systemctl restart otelcol-contrib.service</code><br />
-More info is here: <a href="https://coralogix.com/docs/guide-first-steps-coralogix/">https://coralogix.com/docs/guide-first-steps-coralogix/</a>  </p>
-<p>You can check Collector status with these status URLS:<br />
-<code>http://localhost:55679/debug/tracez</code><br />
-<code>http://localhost:55679/debug/pipelinez</code>  <br />
-For more info: <a href="https://github.com/open-telemetry/opentelemetry-collector/blob/main/extension/zpagesextension/README.md">zpages docs</a>  </p>
-<h3 id="step-4-run-python-app">Step 4 - Run Python App</h3>
-<h4 id="pre-requisites">Pre-requisites</h4>
-<ul>
-<li>For ubuntu Run <code>sudo apt upgrade</code> to upgrde already installed packages. If you receive a message to reboot your server do so before moving on to the next steps.</li>
-<li>Run <code>python3 --version</code> to check you have python3 installed. If not follow the python3 installation document for your linux distribution. For ubuntu follow</li>
-<li>Ensure python venv is installed  </li>
-<li>Run <code>pip3 --version</code> to check pip3 is installed. If not follow the pip3 installation documentation for your linux distribution. For ubuntu use command <code>sudo apt-get install python3-pip</code></li>
-</ul>
-<h4 id="run-python-app">Run Python App</h4>
-<p>This application creates a client and Flask server on the host and makes requests of it.  </p>
-<p>Run following scripts found under <code>./python</code>:</p>
-<pre><code>source 1-setup-python.sh
-source 2-setup-python-env.sh
-source 3-start-python.sh
+<p>Use the following example from this repo a template for the OTEL collector config:<br />
+<code>/workshops/workshops/otel/monolith-workshop/dotnet-windows/otelcol/config.yaml</code>  </p>
+<p>In <code>config.yaml</code> adjust the domains and your Coralogix private key shown in the snippet below. Also define your application &amp; subsystem name tags.</p>
+<p>References:<br />
+- <a href="https://coralogix.com/docs/coralogix-endpoints/">Coralogix Endpoints</a><br />
+- <a href="https://coralogix.com/docs/private-key/">Coralogix Private Key</a><br />
+- <a href="https://coralogix.com/docs/application-and-subsystem-names/">Application &amp; Subsystem Names</a></p>
+<pre><code class="language-yaml">#config.yaml
+
+exporters:
+  logging:
+    verbosity: detailed
+  coralogix:
+  coralogix:
+    # The Coralogix domain
+    domain: &quot;yourdomain&quot;
+    # Your Coralogix private key is sensitive
+    private_key: &quot;yourkey&quot;
+
+    # (Optional) Ordered list of Resource attributes that are used for Coralogix
+    # AppName and SubSystem values. The first non-empty Resource attribute is used.
+    # Example: application_name_attributes: [&quot;k8s.namespace.name&quot;, &quot;service.namespace&quot;]
+    # Example: subsystem_name_attributes: [&quot;k8s.deployment.name&quot;, &quot;k8s.daemonset.name&quot;, &quot;service.name&quot;]
+    application_name_attributes:
+    - &quot;service.namespace&quot;
+    subsystem_name_attributes:
+    - &quot;service.name&quot;
+
+    # Traces, Metrics and Logs emitted by this OpenTelemetry exporter 
+    # are tagged in Coralogix with the default application and subsystem constants.
+    application_name: &quot;workshop&quot;
+    subsystem_name: &quot;monolith&quot;
+
+    # (Optional) Timeout is the timeout for every attempt to send data to the backend.
+    timeout: 30s
 </code></pre>
-<p><strong>Note</strong>: Running <code>source setup-python.sh</code> would output long list of packages and with messages like Successfully installed <em>opentelemetry-instrumentation-some-package</em>.<br />
-To exit the running app, use <code>ctrl-c</code> and you will be in the <em>venv</em> shell- exit with <code>deactivate</code>  </p>
-<h3 id="step-5-study-results-in-coralogix-portal">Step 5 - Study results in Coralogix portal</h3>
-<p>Logs with span/trace IDs, and a complete client/server service will be available.  </p>
+<p>Next: run the collector using the command</p>
+<pre><code class="language-powershell">otelcol-contrib.exe --config=config.yaml
+</code></pre>
+<h3 id="step-3-install-net-instrumentation">Step 3 - Install .NET Instrumentation</h3>
+<p>You can find the complete instructions for .NET OpenTelemetry Agent Instrumentation is in <a href="https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation">.NET OpenTelemetry GitHub Repository</a>.  </p>
+<p>Below is a shortcut set of instructions but these may be updated in the official documentation above, so we recommend following the officical set.  </p>
+<h4 id="quick-start">Quick start</h4>
+<p>The official Otel instrumentation guide shows the following:<br />
+Run the commands below in your PowerShell. Update the <code>"MyServiceDisplayName"</code> with the name of your application.  </p>
+<pre><code class="language-powershell"># Download the module
+$module_url = &quot;https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation/releases/latest/download/OpenTelemetry.DotNet.Auto.psm1&quot;
+$download_path = Join-Path $env:temp &quot;OpenTelemetry.DotNet.Auto.psm1&quot;
+Invoke-WebRequest -Uri $module_url -OutFile $download_path -UseBasicParsing
+
+# Import the module to use its functions
+Import-Module $download_path
+
+# Install core files
+Install-OpenTelemetryCore
+
+# Set up the instrumentation for the current PowerShell session
+Register-OpenTelemetryForCurrentSession -OTelServiceName &quot;MyServiceDisplayName&quot;
+</code></pre>
+<p>Next, configure the follwing Environment Variables</p>
+<pre><code class="language-powershell">$env:OTEL_RESOURCE_ATTRIBUTES='service.name=dotnetsvc,application.name=dotnetapp cx.application.name=dotnetappcx,cx.subsystem.name=dotnetsubcx'
+$env:OTEL_EXPORTER_OTLP_TRACES_ENDPOINT='localhost:4317'
+$env:OTEL_EXPORTER_OTLP_TRACES_PROTOCOL='grpc'
+</code></pre>
+<p>Finally, run your dotnet application with</p>
+<pre><code class="language-powershell">dotnet run
+</code></pre>
+<h3 id="step-4-example-application">Step 4 - Example Application</h3>
+<p>You can download &amp; instrument the example application:<br />
+<code>./workshops/workshops/otel/monolith-workshop/dotnet-windows/ExampleApp/</code><br />
+provided in this repository for testing.  </p>
+<p>The example sends traces of <code>http get</code> requests of a public URL. <br />
+Use <code>dotnet run</code> to start the application.  </p>
+<p>You may want to open it first in Visual Studio 2022 or higher to ensure dependencies are installed first and then run from the Visual Studio 2022 console.</p>
+<h3 id="aspnet">ASP.NET</h3>
+<p>IIS / ASP.NET follows a different instruction path for instrumentation and is shown here:<br />
+<a href="https://opentelemetry.io/docs/instrumentation/net/automatic/">https://opentelemetry.io/docs/instrumentation/net/automatic/</a></p>
 
 
 

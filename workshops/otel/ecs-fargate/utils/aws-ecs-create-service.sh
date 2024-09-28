@@ -1,6 +1,8 @@
-aws ecs create-service --cluster slerner-cluster \
- --task-definition fargate-demo:9 \
- --service-name fargate-demo \
- --desired-count 1 --launch-type "FARGATE" \
- --network-configuration "awsvpcConfiguration={subnets=[subnet-0517e5c4de64acc2b], securityGroups=[sg-0d178e26b0da1164d], assignPublicIp=ENABLED}" \
- --enable-execute-command
+aws ecs create-service \
+  --cluster slerner-cluster \
+  --task-definition Coralogix-observability:3 \
+  --service-name coralogix-fargate-service \
+  --desired-count 1 \
+  --launch-type "FARGATE" \
+  --network-configuration "awsvpcConfiguration={subnets=[subnet-037378fd5035994fd],securityGroups=[sg-032d218698f31d86f],assignPublicIp=ENABLED}" \
+  --enable-execute-command

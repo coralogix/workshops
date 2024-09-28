@@ -1,0 +1,288 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  CoralogixRegion:
+    Type: String
+    Description: The Coralogix location region [EU1, EU2, AP1, AP2, AP3, US1, US2]
+    AllowedValues:
+      - EU1
+      - EU2
+      - AP1
+      - AP2
+      - AP3
+      - US1
+      - US2
+  PrivateKey:
+    Type: String
+    Description: The Coralogix Send-Your-Data API Key which is used to validate your authenticity
+    NoEcho: true
+
+Mappings:
+  CoralogixRegionMap:
+    EU1:
+      Endpoint: ingress.coralogix.com
+      Domain: coralogix.com
+    EU2:
+      Endpoint: ingress.eu2.coralogix.com
+      Domain: eu2.coralogix.com
+    AP1:
+      Endpoint: ingress.coralogix.in
+      Domain: coralogix.in
+    AP2:
+      Endpoint: ingress.coralogixsg.com
+      Domain: coralogixsg.com
+    AP3:
+      Endpoint: ingress.ap3.coralogix.com
+      Domain: ap3.coralogix.com
+    US1:
+      Endpoint: ingress.coralogix.us
+      Domain: coralogix.us
+    US2:
+      Endpoint: ingress.cx498-aws-us-west-2.coralogix.com
+      Domain: cx498.coralogix.com
+
+Resources:
+  OTELConfigParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: /CX_OTEL/config.yaml
+      Description: Configuration parameter for Coralogix OTEL Collector
+      Type: String
+      Value: |
+        exporters:
+          coralogix:
+            application_name: 'otel'
+            application_name_attributes:
+            - aws.ecs.task.family
+            - service.namespace
+            domain: ${CORALOGIX_DOMAIN}
+            logs:
+              headers:
+                X-Coralogix-Distribution: ecs-fargate-integration/0.0.1
+            metrics:
+              headers:
+                X-Coralogix-Distribution: ecs-fargate-integration/0.0.1
+            private_key: ${PRIVATE_KEY}
+            subsystem_name: 'integration'
+            subsystem_name_attributes:
+            - service.name
+            - aws.ecs.docker.name
+            - container_name
+            timeout: 30s
+            traces:
+              headers:
+                X-Coralogix-Distribution: ecs-fargate-integration/0.0.1
+        processors:
+          transform/firelens:
+            log_statements:
+              - context: log
+                statements:
+                  # parse json logs
+                  - merge_maps(cache, ParseJSON(body), "insert") where IsMatch(body, "^\\{")
+                  # set message
+                  - set(body, cache["message"]) where cache["message"] != nil
+
+                  # set trace/span id
+                  - set(trace_id.string, cache["trace_id"]) where cache["trace_id"] != nil
+                  - set(span_id.string, cache["span_id"]) where cache["span_id"] != nil
+
+                  # set severity when available
+                  - set(severity_number, SEVERITY_NUMBER_INFO) where IsMatch(cache["level"], "(?i)info")
+                  - set(severity_number, SEVERITY_NUMBER_WARN) where IsMatch(cache["level"], "(?i)warn")
+                  - set(severity_number, SEVERITY_NUMBER_ERROR) where IsMatch(cache["level"], "(?i)err")
+                  - set(severity_number, SEVERITY_NUMBER_DEBUG) where IsMatch(cache["level"], "(?i)debug")
+                  - set(severity_number, SEVERITY_NUMBER_TRACE) where IsMatch(cache["level"], "(?i)trace")
+                  - set(severity_number, cache["severity_number"])  where cache["severity_number"] != nil
+
+                  # move log_record attributes to resource
+                  - set(resource.attributes["container_name"], attributes["container_name"])
+                  - set(resource.attributes["container_id"], attributes["container_id"])
+                  - delete_key(attributes, "container_id")
+                  - delete_key(attributes, "container_name")
+
+                  - delete_matching_keys(cache, "^(message|trace_id|span_id|severity_number)$")
+
+                  - merge_maps(attributes,cache, "insert")
+          batch:
+            send_batch_max_size: 2048
+            send_batch_size: 1024
+            timeout: 1s
+          resource/metadata:
+            attributes:
+            - action: upsert
+              key: cx.otel_integration.name
+              value: coralogix-integration-ecs-fargate
+          resourcedetection:
+            detectors:
+            - env
+            - ec2
+            - ecs
+            override: true
+            timeout: 2s
+        receivers:
+          fluentforward/socket:
+            # ECS will send logs to this socket
+            endpoint: unix:///var/run/fluent.sock
+          awsecscontainermetrics:
+            collection_interval: 10s
+          otlp:
+            protocols:
+              grpc:
+                endpoint: 0.0.0.0:4317
+              http:
+                endpoint: 0.0.0.0:4318
+          prometheus:
+            config:
+              scrape_configs:
+              - job_name: opentelemetry-collector
+                scrape_interval: 30s
+                static_configs:
+                - targets:
+                  - 127.0.0.1:8888
+        service:
+          pipelines:
+            logs:
+              exporters:
+              - coralogix
+              processors:
+              - transform/firelens
+              - resource/metadata
+              - resourcedetection
+              - batch
+              receivers:
+              - fluentforward/socket
+            metrics:
+              exporters:
+              - coralogix
+              processors:
+              - resource/metadata
+              - resourcedetection
+              - batch
+              receivers:
+              - otlp
+              - awsecscontainermetrics
+            traces:
+              exporters:
+              - coralogix
+              processors:
+              - resource/metadata
+              - resourcedetection
+              - batch
+              receivers:
+              - otlp
+          telemetry:
+            logs:
+              level: "warn"
+              encoding: json
+            metrics:
+              address: 0.0.0.0:8888
+        
+      Tier: Standard
+
+  ECSTaskDefinition:
+    Type: 'AWS::ECS::TaskDefinition'
+    Properties:
+      Family: Coralogix-observability
+      TaskRoleArn: !GetAtt ECSTaskRole.Arn
+      ExecutionRoleArn: !GetAtt ECSExecutionRole.Arn
+      NetworkMode: awsvpc
+      ContainerDefinitions:
+        - Name: cx-autogen-py
+          Image: public.ecr.aws/w3s4j9x9/microservices-demo:py-autogen
+          Cpu: 0
+          PortMappings:
+            - ContainerPort: 5000
+              HostPort: 5000
+              Protocol: tcp
+          Essential: true
+          Environment:
+            - name: OTEL_SERVICE_NAME
+              value: cx-autogen-py
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: cx.application.name=cx-autogen-py,cx.subsystem.name=cx-autogen-py
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: http://localhost:4317
+          MountPoints: []
+          VolumesFrom: []
+          LogConfiguration:
+            LogDriver: awsfirelens
+            Options:
+              Name: OpenTelemetry
+        - Name: otel-collector
+          Image: otel/opentelemetry-collector-contrib
+          Cpu: 0
+          PortMappings:
+            - ContainerPort: 4317
+              HostPort: 4317
+              Protocol: tcp
+            - ContainerPort: 4318
+              HostPort: 4318
+              Protocol: tcp
+          Essential: false
+          Command: ["--config", "env:SSM_CONFIG"]
+          Environment:
+            - Name: PRIVATE_KEY
+              Value: !Ref PrivateKey
+            - Name: CORALOGIX_DOMAIN
+              Value: !FindInMap [CoralogixRegionMap, !Ref CoralogixRegion, Domain]
+          MountPoints: []
+          VolumesFrom: []
+          Secrets:
+            - Name: SSM_CONFIG
+              ValueFrom: /CX_OTEL/config.yaml
+          LogConfiguration:
+            LogDriver: awsfirelens
+            Options:
+              Name: OpenTelemetry
+          FirelensConfiguration:
+            Type: fluentbit
+
+      RequiresCompatibilities:
+        - FARGATE
+      Cpu: '1024'
+      Memory: '2048'
+
+  ECSTaskRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      Description: Allows ECS tasks to call AWS services on your behalf.
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: ''
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action: 'sts:AssumeRole'
+      Policies:
+        - PolicyName: AWSOpenTelemetryPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'logs:PutLogEvents'
+                  - 'logs:CreateLogGroup'
+                  - 's3:GetObject'
+                  - 's3:GetBucketLocation'
+                Resource: '*'
+      RoleName: AWSOTelRole
+
+  ECSExecutionRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      Description: >-
+        Allows ECS container agent makes calls to the Amazon ECS API on your
+        behalf.
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: ''
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action: 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy'
+        - 'arn:aws:iam::aws:policy/CloudWatchLogsFullAccess'
+        - 'arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess'
+      RoleName: AWSOTelExecutionRole

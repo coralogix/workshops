@@ -24,6 +24,7 @@ cd ./workshops/workshops/otel/ecs-fargate
   
 Study Coralogix [OpenTelemetry ECS Fargate Example](https://github.com/coralogix/telemetry-shippers/tree/master/otel-ecs-fargate)  
 Update the `deploy-cf.sh` script with your API key and Coralogix Region  
+Notice the environment variables in the container definition- ECS Fargate uses a `localhost` network space for sending traces  
 
 ### Step 4: Deploy Cloudformation to set up Fargate components 
 
@@ -31,15 +32,15 @@ Update the `deploy-cf.sh` script with your API key and Coralogix Region
 source deploy-cf.sh
 ```
 
-### Step 5: Launch Task
+### Step 5: Launch Task  
 
-Launch according to your standard procedure.  
-Ensure the security group can allow for port 5000 requests.  
+Launch according to your standard procedure  
+Ensure the security group can allow for port 5000 requests  
 
 The task creates the following containers:  
 - Coralogix Python autogenerator  
 - OpenTelemetry Collector  
 
-The microservice container create a Python HTTP client and server that will generate spans and logs and send to Coralogix.  
+The microservice container create a Python HTTP client and server that will generate spans and logs and send to Coralogix  
 
 ### Step 6 - Study results in Coralogix portal  

@@ -37,7 +37,7 @@ Learn more about the [OpenTelemetry Overview and Value Proposition](otel/about-o
 ### Other Containerized Environments
 
 [AWS ECS Fargate (Python)](otel/ecs-fargate/index.md)  
-- 2x container microservice, OpenTelemetry Collector, Firelens log router  
+- Microservice container, OpenTelemetry Collector
 - Complete Fargate task and ECS config instructions  
 
 [AWS ECS EC2 (Python)](otel/ecs-ec2/index.md)  

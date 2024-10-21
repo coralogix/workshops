@@ -1,1 +1,1 @@
-python3 app.py
+opentelemetry-instrument python3 app.py

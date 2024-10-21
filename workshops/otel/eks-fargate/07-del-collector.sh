@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # Set the namespace variable
-NAMESPACE=${NAMESPACE:-cx-eks-fargate-otel}
 
 echo "Deleting StatefulSet..."
 kubectl delete statefulset cx-otel-collector -n $NAMESPACE

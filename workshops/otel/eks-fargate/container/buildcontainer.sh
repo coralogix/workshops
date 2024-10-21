@@ -1,4 +1,4 @@
 # requires dockerhub login
-sudo docker build . -t python-tracegen
-sudo docker tag python-tracegen public.ecr.aws/w3s4j9x9/microservices-demo:py-tracegen
-sudo docker push public.ecr.aws/w3s4j9x9/microservices-demo:py-tracegen
+sudo docker build . -t python-autogen
+sudo docker tag python-autogen public.ecr.aws/w3s4j9x9/microservices-demo:py-autogen
+sudo docker push public.ecr.aws/w3s4j9x9/microservices-demo:py-autogen

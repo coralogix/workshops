@@ -35,7 +35,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: cx-otel-collector
-    namespace: default
+    namespace: cx-eks-fargate-otel
 roleRef:
   kind: ClusterRole
   name: cx-otel-collector-admin-role
@@ -46,22 +46,23 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: label-node-script
-  namespace: default
+  namespace: cx-eks-fargate-otel
   labels:
     app: eks-fargate-otel
     component: cx-otel-collector-config
 data:
   label-node-script: |
     #!/bin/bash
-
+    set +x
     # Download kubectl
     # If the latest stable version is not compatible with your cluster, adjust accordingly.
-    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+    curl -LOs "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 
     # Give execute permissions to kubectl
     chmod +x kubectl
 
-    # Run the command to label nodes
+    # Remove any prior label from other nodes. Label only the current node as the single OTEL-collector-node.
+    ./kubectl label nodes --all OTEL-collector-node-
     ./kubectl label nodes $K8S_NODE_NAME OTEL-collector-node=true
 ---
 # ConfigMap for OTEL collector instance
@@ -69,7 +70,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: cx-otel-collector-config
-  namespace: default
+  namespace: cx-eks-fargate-otel
   labels:
     app: eks-fargate-otel
     component: cx-otel-collector-config
@@ -80,7 +81,6 @@ data:
         auth_type: serviceAccount
         observe_pods: true
         observe_nodes: true
-      host_observer:
       health_check:
 
     receivers:
@@ -110,34 +110,13 @@ data:
               - pod
               - node
             rule: type == "k8s.node" && name contains "fargate" && name != "${env:K8S_NODE_NAME}"
-      receiver_creator/prometheus-auto:
-        # Name of the extensions to watch for endpoints to start and stop.
-        watch_observers: [k8s_observer]
-        receivers:
-          prometheus_simple:
-            # Configure prometheus scraping if standard prometheus annotations are set on the pod.
-            rule: type == "pod" && annotations["prometheus.io/scrape"] == "true"
-            config:
-              metrics_path: '`"prometheus.io/path" in annotations ? annotations["prometheus.io/path"] : "/metrics"`'
-              endpoint: '`endpoint`:`"prometheus.io/port" in annotations ? annotations["prometheus.io/port"] : 9090`'
-            resource_attributes:
-              an.attribute: a.value
-              # Dynamic configuration values
-              app.version: '`labels["app_version"]`'
-        resource_attributes:
-          # Dynamic configuration values, overwriting default attributes`
-          pod:
-            service.name: '`labels["service_name"]`'
-            app: '`labels["app"]`'
-          port:
-            service.name: '`pod.labels["service_name"]`'
-            app: '`pod.labels["app"]`'
+
       # gRPC endoint for traces and metrics submission by cluster applications
       otlp:
         protocols:
           grpc:
             endpoint: 0.0.0.0:4317
-          http: 
+          http:
             endpoint: 0.0.0.0:4318
     
     processors:
@@ -175,8 +154,8 @@ data:
         application_name: "${CX_APPLICATION}"
         subsystem_name: "${CX_SUBSYSTEM}"
 
-      logging:
-        verbosity: detailed
+      # logging:
+      #   verbosity: detailed
 
     service:
       pipelines:
@@ -196,12 +175,8 @@ data:
           receivers: [receiver_creator]
           processors: [resourcedetection, batch]
           exporters: [coralogix]
-        metrics/receivercreator:
-          receivers: [receiver_creator/prometheus-auto]
-          processors: [resourcedetection, batch]
-          exporters: [coralogix]
 
-      extensions: [health_check, k8s_observer, host_observer]
+      extensions: [health_check, k8s_observer]
 
 # configure the service and the collector as a StatefulSet
 ---
@@ -209,7 +184,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: cx-otel-collector-service
-  namespace: default
+  namespace: cx-eks-fargate-otel
   labels:
     app: eks-fargate-otel
     component: cx-otel-collector
@@ -219,6 +194,8 @@ spec:
       port: 8888
     - name: traces
       port: 4317
+    - name: traces-http
+      port: 4318
   selector:
     component: cx-otel-collector
   type: ClusterIP
@@ -228,7 +205,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: cx-otel-collector
-  namespace: default
+  namespace: cx-eks-fargate-otel
   labels:
     app: eks-fargate-otel
     component: cx-otel-collector
@@ -272,12 +249,9 @@ spec:
                 fieldRef:
                   fieldPath: spec.nodeName
             - name: OTEL_RESOURCE_ATTRIBUTES
-              value: "ClusterName=fargate-lab"
+              value: "ClusterName=slerner-eks-fargate"
             - name: CORALOGIX_DOMAIN
-              valueFrom:
-                secretKeyRef:
-                  name: coralogix-keys
-                  key: CORALOGIX_DOMAIN
+              value: "cx498.coralogix.com"
             - name: CX_APPLICATION
               value: "EKS"
             - name: CX_SUBSYSTEM
@@ -311,3 +285,6 @@ spec:
               - key: label-node-script
                 path: label_node.sh
                 mode: 0555
+      nodeSelector:
+        eks.amazonaws.com/compute-type: fargate
+        kubernetes.io/os: linux

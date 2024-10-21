@@ -44,5 +44,5 @@ spec:
         - name: OTEL_EXPORTER_OTLP_ENDPOINT
           value: "http://cx-otel-collector-service.cx-eks-fargate-otel.svc.cluster.local:4317"
         # test if needed
-        command: [ "/bin/bash", "-c", "--" ]
-        args: [ "while true; do sleep 30; done;" ]
+        # command: [ "/bin/bash", "-c", "--" ]
+        # args: [ "while true; do sleep 30; done;" ]

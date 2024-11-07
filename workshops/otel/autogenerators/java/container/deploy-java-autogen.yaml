@@ -25,7 +25,7 @@ spec:
         - name: OTEL_SERVICE_NAME
           value: cx-java-autogen
         - name: OTEL_RESOURCE_ATTRIBUTES
-          value: cx.application.name=cx-java-autogen,cx.subsystem.name=cx-java-autogen
+          value: cx.application.name=cx-java-autogen,cx.subsystem.name=cx-java-autogen,mycustomtag=mycustomvalue
         - name: OTEL_EXPORTER_OTLP_ENDPOINT
           value: http://$(OTEL_IP):4318
         - name: OTEL_LOGS_EXPORTER

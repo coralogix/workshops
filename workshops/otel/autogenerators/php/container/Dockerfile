@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM debian:trixie-slim
 
 # Create working directory
 RUN mkdir -p /home/code
@@ -6,7 +6,6 @@ RUN mkdir -p /home/code
 # Copy application and entrypoint script
 COPY index.php /home/code/
 COPY entrypoint.sh /home/code/
-COPY php.ini /home/code/
 
 # Set working directory
 WORKDIR /home/code
@@ -32,6 +31,8 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&
 
 # Install required Composer packages
 RUN composer require \
+    nyholm/psr7 \
+    http-interop/http-factory-guzzle \
     open-telemetry/sdk \
     open-telemetry/opentelemetry-auto-slim \
     open-telemetry/exporter-otlp \
@@ -40,7 +41,8 @@ RUN composer require \
 
 # Clean up unnecessary packages and cache
 RUN apt-get autoremove -y && \
-    apt-get autoclean -y
+    apt-get autoclean -y && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Ensure entrypoint.sh is executable
 RUN chmod +x /home/code/entrypoint.sh

@@ -18,7 +18,6 @@ RUN apt-get install -y gcc make autoconf php-pear php-dev php-cli unzip curl
 
 # Install the OpenTelemetry PHP extension
 RUN pecl install opentelemetry
-RUN pecl install grpc
 
 # Append the OpenTelemetry extension to the active php.ini file
 RUN php_ini_path=$(php -i | grep "Loaded Configuration File" | awk '{print $NF}') && \
@@ -36,7 +35,6 @@ RUN composer require \
     http-interop/http-factory-guzzle \
     open-telemetry/sdk \
     open-telemetry/opentelemetry-auto-slim \
-    open-telemetry/transport-grpc \
     open-telemetry/exporter-otlp \
     php-http/guzzle7-adapter \
     --no-interaction --quiet

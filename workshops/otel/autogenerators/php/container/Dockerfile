@@ -14,7 +14,7 @@ WORKDIR /home/code
 RUN apt-get update -y
 
 # Install necessary packages and dependencies
-RUN apt-get install -y gcc make autoconf php-pear php-dev php-cli unzip curl
+RUN apt-get install -y gcc make autoconf php-pear php-dev php-cli php-curl unzip curl
 
 # Install the OpenTelemetry PHP extension
 RUN pecl install opentelemetry

@@ -32,13 +32,13 @@ spec:
           limits:
             memory: "512Mi"
             cpu: "200m"
-        livenessProbe:
-          exec:
-            command: ["pg_isready", "-U", "my_user"]
-          initialDelaySeconds: 30
-          periodSeconds: 10
-        readinessProbe:
-          exec:
-            command: ["pg_isready", "-U", "my_user"]
-          initialDelaySeconds: 10
-          periodSeconds: 5
+        # livenessProbe:
+        #   exec:
+        #     command: ["pg_isready", "-U", "my_user"]
+        #   initialDelaySeconds: 30
+        #   periodSeconds: 10
+        # readinessProbe:
+        #   exec:
+        #     command: ["pg_isready", "-U", "my_user"]
+        #   initialDelaySeconds: 10
+        #   periodSeconds: 5

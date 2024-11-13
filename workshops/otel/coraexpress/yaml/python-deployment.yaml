@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: coraexp-py
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: coraexp-py
+  template:
+    metadata:
+      labels:
+        app: coraexp-py
+    spec:
+      containers:
+      - name: coraexp-py
+        image: public.ecr.aws/w3s4j9x9/microservices-demo:coraxp-python  # Replace with your Docker image
+        imagePullPolicy: Always
+        env:
+        - name: POSTGRES_HOST
+          value: "coraexp-postgres"      # PostgreSQL service name
+        - name: MONGO_HOST
+          value: "coraexp-mongo"         # MongoDB service name
+        - name: REDIS_HOST
+          value: "coraexp-redis"         # Redis service name
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"

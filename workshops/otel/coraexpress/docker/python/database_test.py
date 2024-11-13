@@ -5,6 +5,7 @@ from pymongo import MongoClient
 import redis
 import json
 import datetime
+import time
 
 def log_message(severity, db, query, result=None, error=None):
     """Logs a structured JSON message to stdout."""
@@ -101,6 +102,8 @@ def write_to_redis():
         log_message("ERROR", "Redis", "N/A", error=e)
 
 if __name__ == "__main__":
-    write_to_postgres()
-    write_to_mongo()
-    write_to_redis()
+    while True:
+        write_to_postgres()
+        write_to_mongo()
+        write_to_redis()
+        time.sleep(2)

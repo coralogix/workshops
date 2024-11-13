@@ -1,0 +1,41 @@
+# redis-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: coraexp-redis
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: coraexp-redis
+  template:
+    metadata:
+      labels:
+        app: coraexp-redis
+    spec:
+      containers:
+      - name: redis
+        image: public.ecr.aws/w3s4j9x9/microservices-demo:coraexp-redis
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 6379
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
+        livenessProbe:
+          exec:
+            command: ["redis-cli", "ping"]
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          exec:
+            command: ["redis-cli", "ping"]
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        # Specify the command to use the custom configuration file
+        command: ["redis-server", "/usr/local/etc/redis/redis.conf"]

@@ -4,17 +4,16 @@ FROM debian:trixie-slim
 RUN mkdir -p /home/code
 
 # Copy application files and entrypoint scripts
-COPY *.php /home/code/
-COPY entrypoint* /home/code/
+COPY index.php /home/code/
+COPY client.php /home/code/
+COPY entrypoint.sh /home/code/
 
 # Set working directory
 WORKDIR /home/code
 
-# Update package lists
-RUN apt-get update -y
-
-# Install necessary packages and dependencies
-RUN apt-get install -y gcc make autoconf php-pear php-dev php-cli php-curl unzip curl
+# Update package lists and install necessary packages and dependencies
+RUN apt-get update -y && \
+    apt-get install -y gcc make autoconf php-pear php-dev php-cli php-curl unzip curl
 
 # Install the OpenTelemetry PHP extension
 RUN pecl install opentelemetry
@@ -29,8 +28,10 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&
     php -r "unlink('composer-setup.php');" && \
     mv composer.phar /usr/local/bin/composer
 
-# Install required Composer packages
+# Install required Composer packages, including Guzzle
 RUN composer require \
+    symfony/http-client \
+    guzzlehttp/guzzle \
     nyholm/psr7 \
     http-interop/http-factory-guzzle \
     open-telemetry/sdk \
@@ -45,7 +46,7 @@ RUN apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Ensure entrypoint scripts are executable
-RUN chmod +x /home/code/entrypoint.sh /home/code/entrypointmainapp.sh
+RUN chmod +x /home/code/*.sh
 
 # Set default entrypoint
 ENTRYPOINT ["/bin/sh", "/home/code/entrypoint.sh"]

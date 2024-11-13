@@ -4,12 +4,14 @@
 deployments=(
   "coraexp-redis"
   "coraexp-mongo"
+  "coraexp-postgres"
 )
 
 # Define an array of services to delete
 services=(
   "coraexp-redis"
   "coraexp-mongo"
+  "coraexp-postgres"
 )
 
 # Function to delete deployments

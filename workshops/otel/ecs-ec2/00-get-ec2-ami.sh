@@ -1,0 +1,1 @@
+aws ssm get-parameters --names /aws/service/ecs/optimized-ami/amazon-linux-2/recommended/image_id --region us-west-2 --query "Parameters[0].Value" --output text

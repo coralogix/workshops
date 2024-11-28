@@ -1,1 +1,0 @@
-aws cloudformation delete-stack --stack-name py-autogen-stack-otel --region YOURREGIONHERE

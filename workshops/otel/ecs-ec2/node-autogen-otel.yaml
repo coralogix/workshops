@@ -1,0 +1,45 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  ClusterName: { Type: String }
+  NodeImage: { Type: String, Default: public.ecr.aws/w3s4j9x9/microservices-demo:node }
+  NodeMemory: { Type: Number, Default: 512 }
+  NodeCPU: { Type: Number, Default: 256 }
+
+Resources:
+  NodeAutoGenTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: cx-ecs-otel-node
+      NetworkMode: host
+      RequiresCompatibilities: [EC2]
+      Cpu: !Ref NodeCPU
+      Memory: !Ref NodeMemory
+      ContainerDefinitions:
+        - Name: cx-ecs-otel-node
+          Image: !Ref NodeImage
+          Memory: !Ref NodeMemory
+          Cpu: !Ref NodeCPU
+          Environment:
+            - { Name: OTEL_EXPORTER_OTLP_ENDPOINT, Value: http://localhost:4318 }
+            - { Name: OTEL_SERVICE_NAME, Value: cx-ecs-otel-node }
+            - { Name: OTEL_TRACES_EXPORTER, Value: otlp }
+            - { Name: OTEL_METRICS_EXPORTER, Value: otlp }
+            - { Name: OTEL_NODE_RESOURCE_DETECTORS, Value: "env,host,os" }
+            - { Name: NODE_OPTIONS, Value: "--require @opentelemetry/auto-instrumentations-node/register" }
+          EntryPoint: ["sh", "-c", "sh entrypoint.sh"]
+          HealthCheck:
+            Command: ["CMD-SHELL", "echo 'Health check passed.'"]
+            Interval: 30
+            Timeout: 5
+            Retries: 3
+
+  NodeAutoGenService:
+    Type: 'AWS::ECS::Service'
+    Properties:
+      Cluster: !Ref ClusterName
+      LaunchType: EC2
+      ServiceName: cx-ecs-otel-node
+      SchedulingStrategy: DAEMON
+      DeploymentConfiguration: { MaximumPercent: 100, MinimumHealthyPercent: 0 }
+      TaskDefinition: !Ref NodeAutoGenTaskDefinition

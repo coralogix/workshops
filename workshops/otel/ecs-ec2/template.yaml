@@ -45,7 +45,6 @@ Parameters:
         - India
         - Singapore
         - US
-        - US2
 
   DefaultApplicationName:
     Type: String
@@ -66,13 +65,6 @@ Parameters:
     NoEcho: true
     AllowedPattern: ".+"
     ConstraintDescription: "API Key required."
-
-  PrivateKey:
-    Type: String
-    Description: "Deprecated. Do not use. Hard-replaced by \"CoralogixApiKey\". Formerly: The Coralogix private key which is used to validate your authenticity."
-    Default: "DO-NOT-USE"
-    AllowedPattern: "^DO-NOT-USE$" # hard-deprecate.
-    NoEcho: true
 
   Metrics:
     Type: String
@@ -127,24 +119,35 @@ Mappings:
             include_file_path: true
             # add log.file.path to resource attributes
             operators:
+              - type: router
+                id: docker_log_json_parser
+                routes:
+                  - output: json_parser
+                    expr: 'body matches "^\\{\"log\".*\\}"'
+                default: move_log_file_path
+
               - type: json_parser
                 parse_from: body
                 parse_to: body
+                output: recombine
                 timestamp:
                   parse_from: body.time
                   layout: '%Y-%m-%dT%H:%M:%S.%fZ'
+                default: move_log_file_path
 
               # handle logs split by docker
               - type: recombine
                 id: recombine
+                output: move_log_file_path
                 combine_field: body.log
                 source_identifier: attributes["log.file.path"]
                 is_last_entry: body.log endsWith "\n"
                 force_flush_period: 10s	
-                on_error: drop
+                on_error: send
                 combine_with: ""
 
               - type: move
+                id: move_log_file_path
                 from: attributes["log.file.path"]
                 to: resource["log.file.path"]
 
@@ -182,13 +185,11 @@ Mappings:
             override: false
 
         exporters:
-          logging:
-            verbosity: detailed
           coralogix:
-            domain: "$CORALOGIX_DOMAIN"
-            private_key: "$PRIVATE_KEY"
-            application_name: "$APP_NAME"
-            subsystem_name: "$SUB_SYS"
+            domain: "${CORALOGIX_DOMAIN}"
+            private_key: "${PRIVATE_KEY}"
+            application_name: "${APP_NAME}"
+            subsystem_name: "${SUB_SYS}"
             application_name_attributes:
             - "aws.ecs.cluster"
             - "aws.ecs.cluster.name"
@@ -268,28 +269,38 @@ Mappings:
             include_file_path: true
             # add log.file.path to resource attributes
             operators:
+              - type: router
+                id: docker_log_json_parser
+                routes:
+                  - output: json_parser
+                    expr: 'body matches "^\\{\"log\".*\\}"'
+                default: move_log_file_path
+
               - type: json_parser
                 parse_from: body
                 parse_to: body
+                output: recombine
                 timestamp:
                   parse_from: body.time
                   layout: '%Y-%m-%dT%H:%M:%S.%fZ'
+                default: move_log_file_path
 
               # handle logs split by docker
               - type: recombine
                 id: recombine
+                output: move_log_file_path
                 combine_field: body.log
                 source_identifier: attributes["log.file.path"]
                 is_last_entry: body.log endsWith "\n"
                 force_flush_period: 10s	
-                on_error: drop
+                on_error: send
                 combine_with: ""
 
               - type: move
+                id: move_log_file_path
                 from: attributes["log.file.path"]
                 to: resource["log.file.path"]
-
-          # add metrics
+                
           awsecscontainermetricsd:
 
         processors:
@@ -326,12 +337,11 @@ Mappings:
             override: false
 
         exporters:
-          logging:
           coralogix:
-            domain: "$CORALOGIX_DOMAIN"
-            private_key: "$PRIVATE_KEY"
-            application_name: "$APP_NAME"
-            subsystem_name: "$SUB_SYS"
+            domain: "${CORALOGIX_DOMAIN}"
+            private_key: "${PRIVATE_KEY}"
+            application_name: "${APP_NAME}"
+            subsystem_name: "${SUB_SYS}"
             application_name_attributes:
             - "aws.ecs.cluster"
             - "aws.ecs.cluster.name"
@@ -413,7 +423,7 @@ Mappings:
       Endpoint: ingress.coralogix.us:443
       Domain: coralogix.us
     US2:
-      Endpoint: ingress.cx498-aws-us-west-2.coralogix.com:443
+      Endpoint: ingress.cx498.coralogix.com:443
       Domain: cx498.coralogix.com
     Europe:
       Endpoint: ingress.coralogix.com:443
@@ -430,9 +440,6 @@ Mappings:
     US:
       Endpoint: ingress.coralogix.us:443
       Domain: coralogix.us
-    US2:
-      Endpoint: ingress.cx498-aws-us-west-2.coralogix.com:443
-      Domain: cx498.coralogix.com
 
 
 Resources:
@@ -457,6 +464,7 @@ Resources:
         - Name: coralogix-otel-agent
           Cpu: 0
           Memory: !Ref Memory
+          Command: ["--config", "env:OTEL_CONFIG"]
           Image: !If
             - UseImage
             - !Ref Image
@@ -509,7 +517,7 @@ Resources:
             - Name: SUB_SYS
               Value: !If
                 - UseDefaultSubsystemName
-                - !Sub "${AWS::AccountId}"
+                - !Sub "account-${AWS::AccountId}"
                 - !Ref DefaultSubsystemName
 
             - Name: OTEL_CONFIG
@@ -539,6 +547,7 @@ Resources:
         - Name: coralogix-otel-agent
           Cpu: 0
           Memory: !Ref Memory
+          Command: ["--config", "env:OTEL_CONFIG"]
           Image: !If
             - UseImage
             - !Ref Image
@@ -582,7 +591,7 @@ Resources:
             - Name: SUB_SYS
               Value: !If
                 - UseDefaultSubsystemName
-                - !Sub "${AWS::AccountId}"
+                - !Sub "account-${AWS::AccountId}"
                 - !Ref DefaultSubsystemName
 
             - Name: OTEL_CONFIG

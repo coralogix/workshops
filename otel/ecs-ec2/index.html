@@ -733,6 +733,7 @@
 Full documentation: <a href="https://coralogix.com/docs/">https://coralogix.com/docs/</a><br />
 Requirements:<br />
 - AWS Account
+- AWS CLI
 - Intermediate to Advanced skill with ECS-EC2
 - Sufficient permissions to configure AWS<br />
 - Proper IDE i.e. Visual Studio Code </p>
@@ -745,35 +746,15 @@ Requirements:<br />
 <pre><code>cd ./workshops/workshops/otel/ecs-ec2
 </code></pre>
 <h3 id="step-3-prep-requirements">Step 3 - Prep requirements</h3>
-<p>1 - Example ECS EC2 setup scripts to bring up and down an ECS cluster are included: <code>ecs-cli-up.sh</code> and <code>ecs-cli-down.sh</code><br />
+<p>1 - There are Cloudformation scripts in order used to deploy the examples- change all obvious variables like AWS regions and VARIABLESINCAPS related to Coralogix or your environment`<br />
 2 - Identify Coralogix Distro for OpenTelemetry container version <a href="https://hub.docker.com/r/coralogixrepo/coralogix-otel-collector/tags">here before starting</a><br />
-3 - REQUIRED! Review all scripts and update variables IN CAPS 
-4 - Study official documentation here: <a href="https://github.com/coralogix/cloudformation-coralogix-aws/tree/master/opentelemetry/ecs-ec2">https://github.com/coralogix/cloudformation-coralogix-aws/tree/master/opentelemetry/ecs-ec2</a></p>
+3 - Study official documentation here: <a href="https://github.com/coralogix/cloudformation-coralogix-aws/tree/master/opentelemetry/ecs-ec2">https://github.com/coralogix/cloudformation-coralogix-aws/tree/master/opentelemetry/ecs-ec2</a></p>
 <p>These two policies should be tuned for your own production security needs when going into production.   </p>
 <h3 id="step-4-execute-workshop">Step 4 - Execute workshop</h3>
-<ul>
-<li>Deploy Coralogix Otel Collector stack in ECS EC2 Cluster</li>
-</ul>
-<pre><code>source 1-ecs-deploy-otel.sh
-</code></pre>
-<ul>
-<li>Deploy example Python application stack that will generate traces and logs  </li>
-<li>The <code>template.yaml</code> included in this repo from the <a href="https://github.com/coralogix/cloudformation-coralogix-aws/tree/master/opentelemetry/ecs-ec2">source repo</a> may change over time and if there are issues use the <code>template.yaml</code> from source repo instead.</li>
-</ul>
-<pre><code>source 2-ecs-createstack-autogen-otel.sh
-</code></pre>
+<p>Deploy the steps in order- but note that there are two examples- a Python and Node example branches as 04 and 04a and 05 and 05a... pick one or the other- although you can do both too!</p>
 <h3 id="step-5-study-results-in-coralogix-portal">Step 5 - Study results in Coralogix portal</h3>
 <h3 id="cleanup">Cleanup</h3>
-<ul>
-<li>Delete Python application stack   </li>
-</ul>
-<pre><code>source 3-ecs-deletestack-autogen-otel.sh  
-</code></pre>
-<ul>
-<li>Delete Coralogix Otel Collector stack in ECS EC2 Cluster  </li>
-</ul>
-<pre><code>source 4-ecs-deletestack-otel.sh
-</code></pre>
+<p>Use the delete scripts to clean up.</p>
 
 
 

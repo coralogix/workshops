@@ -5,11 +5,11 @@
 This example is for basic study only and is not documentation.    
 Full documentation: [https://coralogix.com/docs/](https://coralogix.com/docs/)  
 Requirements:  
-- AWS Account
-- AWS CLI
-- Intermediate to Advanced skill with ECS-EC2
+- AWS Account  
+- AWS CLI  
+- Intermediate to Advanced skill with ECS-EC2  
 - Sufficient permissions to configure AWS  
-- Proper IDE i.e. Visual Studio Code 
+- Proper IDE i.e. Visual Studio Code   
 
 ### Step 1 - Setup
 Clone repo:

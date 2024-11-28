@@ -40,9 +40,9 @@ Learn more about the [OpenTelemetry Overview and Value Proposition](otel/about-o
 - Microservice container, OpenTelemetry Collector  
 - Complete Fargate task and ECS config instructions  
 
-[AWS ECS EC2 (Python)](otel/ecs-ec2/index.md)  
+[AWS ECS EC2 (Python/node)](otel/ecs-ec2/index.md)  
 - OpenTelemetry collector container  
-- Example app container/task  
+- Example app container/task and Cloudformation stack
 
 ### APM - Autogenerators: Otel Tracing Instrumentation Demo Apps  
 Autogenerators: reference projects with live container/monolith examples  

@@ -67,8 +67,8 @@ if __name__ == '__main__':
     # Define the Java app server endpoint
     SERVER_URL = "http://ec2-54-188-235-183.us-west-2.compute.amazonaws.com:8080/api/data"
 
-    try:
-        while True:
+    while True:
+        try:
             # Generate a UUID for the request
             request_id = str(uuid.uuid4())
 
@@ -76,7 +76,7 @@ if __name__ == '__main__':
             logger.debug(f"Sending request to {SERVER_URL} with UUID: {request_id}")
 
             # Send the GET request with the UUID header
-            response = requests.get(SERVER_URL, headers={'UUID': request_id})
+            response = requests.get(SERVER_URL, headers={'UUID': request_id}, timeout=10)
 
             # Log the received response
             logger.debug(
@@ -86,7 +86,12 @@ if __name__ == '__main__':
                 }
             )
 
-            # Delay before sending the next request
-            time.sleep(0.3)
-    except KeyboardInterrupt:
-        logger.debug("Application stopped.")
+        except requests.exceptions.Timeout:
+            logger.warning("Request timed out. Retrying...")
+        except requests.exceptions.ConnectionError as e:
+            logger.warning(f"Connection error occurred: {e}. Retrying...")
+        except Exception as e:
+            logger.error(f"An unexpected error occurred: {e}", exc_info=True)
+
+        # Delay before sending the next request
+        time.sleep(0.3)

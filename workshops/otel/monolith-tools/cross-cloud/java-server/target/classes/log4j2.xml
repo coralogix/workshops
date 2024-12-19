@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="debug">
+    <Appenders>
+        <!-- Console Appender -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg trace_id=%X{trace_id} span_id=%X{span_id} uuid=%X{uuid}%n"/>
+        </Console>
+
+        <!-- File Appender for JSON Logs -->
+        <File name="JsonFile" fileName="/var/log/cx/application.log" append="true">
+            <JsonLayout compact="true" eventEol="true">
+                <KeyValuePair key="timestamp" value="$${date:yyyy-MM-dd'T'HH:mm:ss.SSSZ}"/>
+                <KeyValuePair key="severity" value="%level"/>
+                <KeyValuePair key="trace_id" value="%X{trace_id}"/>
+                <KeyValuePair key="span_id" value="%X{span_id}"/>
+                <KeyValuePair key="uuid" value="%X{uuid}"/>
+                <KeyValuePair key="message" value="%message"/>
+            </JsonLayout>
+        </File>
+    </Appenders>
+
+    <Loggers>
+        <!-- Root Logger -->
+        <Root level="info">
+            <AppenderRef ref="Console"/> <!-- Restores console logging -->
+            <AppenderRef ref="JsonFile"/> <!-- Maintains file logging -->
+        </Root>
+    </Loggers>
+</Configuration>

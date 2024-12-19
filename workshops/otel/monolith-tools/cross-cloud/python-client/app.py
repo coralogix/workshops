@@ -23,9 +23,9 @@ class JsonFormatter(logging.Formatter):
             "time": self.formatTime(record, self.datefmt),
             "name": record.name,
             "level": record.levelname,
-            "body": record.getMessage(),
-            "trace_id": getattr(record, "otelTraceID", "N/A"),
-            "span_id": getattr(record, "otelSpanID", "N/A"),
+            "message": record.getMessage(),
+            "traceId": getattr(record, "otelTraceID", "N/A"),
+            "spanId": getattr(record, "otelSpanID", "N/A"),
             "response_body": getattr(record, "responseBody", "N/A"),
         }
         if record.exc_info:

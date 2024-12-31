@@ -3,10 +3,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: cx-payment-gateway-flask
+  name: cx-server-payments
 spec:
   selector:
-    app: cx-payment-gateway-flask
+    app: cx-server-payments
   ports:
   - protocol: TCP
     port: 5000
@@ -16,20 +16,20 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cx-payment-gateway-flask
+  name: cx-server-payments
   namespace: default
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: cx-payment-gateway-flask
+      app: cx-server-payments
   template:
     metadata:
       labels:
-        app: cx-payment-gateway-flask
+        app: cx-server-payments
     spec:
       containers:
-      - name: cx-payment-gateway-flask
+      - name: cx-server-payments
         image: public.ecr.aws/w3s4j9x9/microservices-demo:python
         imagePullPolicy: Always
         workingDir: /home/code
@@ -52,15 +52,13 @@ spec:
           timeoutSeconds: 5
         env:
         - name: OTEL_SERVICE_NAME
-          value: cx-payment-gateway-flask
+          value: cx-server-payments
         - name: OTEL_RESOURCE_ATTRIBUTES
-          value: cx.application.name=cx-payment-gateway-flask,cx.subsystem.name=cx-payment-gateway-flask
+          value: cx.application.name=cx-server-payments,cx.subsystem.name=cx-server-payments
         - name: OTEL_IP
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
-        - name: OTEL_TRACES_EXPORTER
-          value: otlp
         - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
           value: http://$(OTEL_IP):4317
         - name: OTEL_METRICS_EXPORTER
@@ -72,7 +70,7 @@ spec:
         - name: REDIS_PASSWORD
           value: ""
         command: ["/bin/sh"]
-        args: ["start-flask-redis-otel.sh"]
+        args: ["entrypoint-server-payment.sh"]
 ---
 # Redis Service
 apiVersion: v1
@@ -132,20 +130,20 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cx-shopping-cart-reqs
+  name: cx-client-shopping-cart
   namespace: default
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: cx-shopping-cart-reqs
+      app: cx-client-shopping-cart
   template:
     metadata:
       labels:
-        app: cx-shopping-cart-reqs
+        app: cx-client-shopping-cart
     spec:
       containers:
-      - name: cx-shopping-cart-reqs
+      - name: cx-client-shopping-cart
         image: public.ecr.aws/w3s4j9x9/microservices-demo:python
         imagePullPolicy: Always
         workingDir: /home/code
@@ -167,14 +165,14 @@ spec:
           periodSeconds: 10
           timeoutSeconds: 5
         env:
+        - name: OTEL_SERVICE_NAME
+          value: cx-client-shopping-cart
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: cx.application.name=cx-client-shopping-cart,cx.subsystem.name=cx-client-shopping-cart
         - name: OTEL_IP
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
-        - name: OTEL_SERVICE_NAME
-          value: cx-shopping-cart-reqs
-        - name: OTEL_RESOURCE_ATTRIBUTES
-          value: cx.application.name=cx-shopping-cart-reqs,cx.subsystem.name=cx-shopping-cart-reqs
         - name: OTEL_EXPORTER_OTLP_ENDPOINT
           value: http://$(OTEL_IP):4317
         - name: OTEL_METRICS_EXPORTER
@@ -182,8 +180,8 @@ spec:
         - name: PYTHON_TEST_URLGOOD
           value: "GOOD"
         - name: PYTHON_TEST_URL
-          value: http://cx-payment-gateway-flask:5000
+          value: http://cx-server-payments:5000
         - name: REDIS_PASSWORD
           value: ""
         command: ["/bin/sh"]
-        args: ["start-reqs-envurl-otel.sh"]
+        args: ["entrypoint-client-reqs.sh"]

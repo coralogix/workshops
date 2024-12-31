@@ -14,10 +14,6 @@ RUN apt-get update -y && \
     apt-get install -y --no-install-recommends curl dnsutils util-linux coreutils && \
     pip install --upgrade pip && \
     pip install -r requirements.txt && \
-    pip install opentelemetry-distro \
-                opentelemetry-instrumentation \
-                opentelemetry-exporter-otlp \
-                opentelemetry-instrumentation-logging && \
     opentelemetry-bootstrap -a install && \
     apt-get autoremove -y && \
     apt-get clean && \

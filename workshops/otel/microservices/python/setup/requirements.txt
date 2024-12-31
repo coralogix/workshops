@@ -1,7 +1,12 @@
 requests
+httpx
+flask
 redis
 ipaddr
-flask
 prometheus-client
 pymysql
 cryptography
+opentelemetry-distro
+opentelemetry-instrumentation
+opentelemetry-exporter-otlp
+opentelemetry-instrumentation-logging

@@ -1,1 +1,0 @@
-opentelemetry-instrument python python-reqs.py

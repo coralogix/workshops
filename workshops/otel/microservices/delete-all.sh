@@ -3,6 +3,8 @@
 # Define an array of deployments to delete
 deployments=(
   "cx-payment-gateway-flask"
+  "cx-client-shopping-cart"
+  "cx-server-payments"
   "cx-redis"
   "cx-shopping-cart-reqs"
   "cx-inventory-java-reqs"

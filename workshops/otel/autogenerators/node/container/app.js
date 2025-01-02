@@ -1,37 +1,56 @@
+// Import required modules
 const http = require('http');
 const { v4: uuidv4 } = require('uuid');
 const pino = require('pino');
 
+// Configuration
 const PORT = 3000;
-let requestCount = 0; // Initialize request counter
 const logger = pino(); // Initialize Pino logger
+let requestCount = 0; // Request counter
 
+// Start the HTTP server
 function startServer() {
     const server = http.createServer((req, res) => {
-        const requestId = uuidv4();
-        const responseBody = { message: 'Hello from the Node server!', requestId };
+        try {
+            // Generate a unique ID for each request
+            const requestId = uuidv4();
+            const responseBody = { message: 'Hello from the Node server!', requestId };
 
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify(responseBody));
+            // Send response
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify(responseBody));
 
-        // Log the request and response details using Pino
-        logger.info({
-            timestamp: new Date().toISOString(),
-            requestId,
-            method: req.method,
-            path: req.url,
-            statusCode: res.statusCode,
-            responseBody
-        }, 'Request processed');
+            // Log request details
+            logger.info({
+                timestamp: new Date().toISOString(),
+                requestId,
+                method: req.method,
+                path: req.url,
+                statusCode: res.statusCode,
+                responseBody,
+            }, 'Request processed');
+        } catch (err) {
+            // Handle unexpected errors
+            logger.error({ error: err.message }, 'Error processing request');
+            res.statusCode = 500;
+            res.end(JSON.stringify({ error: 'Internal Server Error' }));
+        }
     });
 
+    // Handle server errors
+    server.on('error', (err) => {
+        logger.error({ error: err.message }, 'Server encountered an error');
+    });
+
+    // Start listening on the configured port
     server.listen(PORT, () => {
         logger.info(`Server listening on port ${PORT}`);
     });
 }
 
-function httpGetLocalServer() {
+// HTTP client function with retry and timeout
+function httpGetLocalServer(retries = 3) {
     if (requestCount >= 200) {
         logger.info('Completed 200 requests. Exiting application.');
         process.exit(); // Exit the application after 200 requests
@@ -44,9 +63,8 @@ function httpGetLocalServer() {
         port: PORT,
         path: '/',
         method: 'GET',
-        headers: {
-            'X-Request-ID': requestId,
-        },
+        headers: { 'X-Request-ID': requestId },
+        timeout: 5000, // Set a timeout of 5 seconds
     };
 
     const req = http.request(options, (res) => {
@@ -55,28 +73,45 @@ function httpGetLocalServer() {
             data += chunk;
         });
         res.on('end', () => {
-            const responseBody = JSON.parse(data);
-            // Log the request and response details using Pino
-            logger.info({
-                timestamp: new Date().toISOString(),
-                requestId,
-                method: 'GET',
-                path: options.path,
-                statusCode: res.statusCode,
-                responseBody
-            }, 'Request received and processed');
+            try {
+                const responseBody = JSON.parse(data);
+                logger.info({
+                    timestamp: new Date().toISOString(),
+                    requestId,
+                    method: 'GET',
+                    path: options.path,
+                    statusCode: res.statusCode,
+                    responseBody,
+                }, 'Request received and processed');
 
-            // Recursively make the next request with a slight delay
-            setTimeout(httpGetLocalServer, 300);
+                // Recursively make the next request with a slight delay
+                setTimeout(httpGetLocalServer, 100 + Math.random() * 500);
+            } catch (err) {
+                logger.error({ error: err.message }, 'Error parsing response');
+            }
         });
     });
 
+    // Handle request errors
     req.on('error', (error) => {
-        logger.error(error);
+        logger.error({ error: error.message }, 'Request failed');
+        if (retries > 0) {
+            logger.info(`Retrying... Attempts left: ${retries}`);
+            setTimeout(() => httpGetLocalServer(retries - 1), 500);
+        } else {
+            logger.error('Max retries reached. Skipping request.');
+        }
+    });
+
+    // Handle request timeout
+    req.setTimeout(5000, () => {
+        logger.warn({ requestId }, 'Request timed out');
+        req.destroy();
     });
 
     req.end();
 }
 
+// Start the server and initiate requests
 startServer();
 setTimeout(httpGetLocalServer, 100); // Start the requesting loop with a slight delay

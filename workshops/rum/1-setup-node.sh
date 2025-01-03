@@ -1,4 +1,4 @@
-npm cache clean
+npm cache clean --force
 npm init -y
 npm i @coralogix/browser@1.4.6 --force
 # npm i @coralogix/browser@latest

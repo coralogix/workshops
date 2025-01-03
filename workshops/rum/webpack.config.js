@@ -2,28 +2,21 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  // Set the mode to 'development' or 'production'
-  mode: 'development', // or 'production'
-
-  // Entry point of your application
+  mode: 'development',
   entry: './src/index.js',
-
-  // Output configuration
   output: {
-    // Output directory as an absolute path
     path: path.resolve(__dirname, 'dist'),
-    // Name of the output bundle
-    filename: 'bundle.js'
+    filename: 'bundle.js',
+    clean: true,
   },
-
-  // Generate a source map for debugging
-  devtool: 'source-map',
-
-  // Plugins
+  resolve: {
+    extensions: ['.js'], // Automatically resolve JS extensions
+    fullySpecified: false, // Resolve import paths without explicit extensions
+  },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/index.html', // Source HTML file
-      filename: 'index.html'        // Output HTML file
-    })
+      template: './src/index.html',
+      filename: 'index.html',
+    }),
   ],
 };

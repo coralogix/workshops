@@ -12,7 +12,11 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring.boot.version>2.5.2</spring.boot.version>
+        <spring.boot.version>2.7.12</spring.boot.version>
+        <log4j.version>2.24.3</log4j.version>
+        <okhttp.version>4.11.0</okhttp.version>
+        <jackson.version>2.15.2</jackson.version>
+        <opentelemetry.version>2.11.0-alpha</opentelemetry.version>
     </properties>
 
     <dependencies>
@@ -47,31 +51,31 @@
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.23.1</version>
+            <version>${log4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
-            <version>2.23.1</version>
+            <version>${log4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j-impl</artifactId>
-            <version>2.23.1</version>
+            <version>${log4j.version}</version>
         </dependency>
 
         <!-- OkHttp dependency -->
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
-            <version>4.11.0</version>
+            <version>${okhttp.version}</version>
         </dependency>
 
         <!-- Jackson Databind dependency -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.13.3</version>
+            <version>${jackson.version}</version>
         </dependency>
 
         <!-- Spring Boot Web Starter dependency -->
@@ -85,7 +89,7 @@
         <dependency>
             <groupId>io.opentelemetry.instrumentation</groupId>
             <artifactId>opentelemetry-log4j-context-data-2.17-autoconfigure</artifactId>
-            <version>2.5.0-alpha</version>
+            <version>${opentelemetry.version}</version>
         </dependency>
     </dependencies>
 
@@ -106,6 +110,3 @@
         </plugins>
     </build>
 </project>
-
-
-

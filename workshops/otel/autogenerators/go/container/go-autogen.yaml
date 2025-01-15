@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cx-go
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      name: cx-go
+  template:
+    metadata:
+      labels:
+        name: cx-go
+    spec:
+      containers:
+      - name: cx-go
+        image: public.ecr.aws/w3s4j9x9/microservices-demo:go
+        imagePullPolicy: Always
+        env:
+        - name: OTEL_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: OTEL_SERVICE_NAME
+          value: cx-go
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: cx.application.name=cx-go,cx.subsystem.name=cx-go
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: http://$(OTEL_IP):4317
+        ports:
+        - containerPort: 8080

@@ -1,0 +1,29 @@
+#!/bin/sh
+set -euo pipefail
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/var/task/lambda_runtime/lib
+
+# Main runtime loop
+while true; do
+  # Fetch the next event from the Runtime API
+  HEADERS=$(mktemp)
+  EVENT=$(curl -sS -LD "$HEADERS" "http://${AWS_LAMBDA_RUNTIME_API}/2018-06-01/runtime/invocation/next")
+
+  # Extract the Request ID from headers
+  REQUEST_ID=$(grep -Fi Lambda-Runtime-Aws-Request-Id "$HEADERS" | tr -d '[:space:]' | cut -d: -f2)
+
+  # Execute the Slim app using the handler.php script
+  RESPONSE=$(/var/task/lambda_runtime/bin/php -c /var/task/lambda_runtime/php.ini /var/task/handler.php <<< "$EVENT")
+
+  # Check if the handler executed successfully
+  if [ $? -ne 0 ]; then
+    # Send an error to the Runtime API if the handler failed
+    curl -sS -X POST "http://${AWS_LAMBDA_RUNTIME_API}/2018-06-01/runtime/invocation/$REQUEST_ID/error" \
+      -d '{"errorMessage": "Handler failed"}'
+    continue
+  fi
+
+  # Send the successful response to the Runtime API
+  curl -sS -X POST "http://${AWS_LAMBDA_RUNTIME_API}/2018-06-01/runtime/invocation/$REQUEST_ID/response" \
+    -d "$RESPONSE"
+done

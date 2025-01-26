@@ -1,0 +1,16 @@
+{
+  "Variables": {
+    "CX_API_KEY": "",
+    "CX_DOMAIN": "cx498.coralogix.com",
+    "CX_REPORTING_STRATEGY": "LOW_OVERHEAD",
+    "OTEL_EXPORTER_OTLP_PROTOCOL": "http/protobuf",
+    "OTEL_EXPORTER_OTLP_ENDPOINT": "http://127.0.0.1:4318",
+    "OTEL_LOG_LEVEL": "debug",
+    "OTEL_METRICS_EXPORTER": "none",
+    "OTEL_PHP_AUTOLOAD_ENABLED": "true",
+    "OTEL_PROPAGATORS": "baggage,tracecontext",
+    "OTEL_RESOURCE_ATTRIBUTES": "cx.application.name=cx-lambda-php,cx.subsystem.name=cx-lambda-php",
+    "OTEL_SERVICE_NAME": "cx-lambda-php",
+    "OTEL_TRACES_EXPORTER": "otlp"
+  }
+}

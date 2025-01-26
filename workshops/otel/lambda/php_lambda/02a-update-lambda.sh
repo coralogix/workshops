@@ -27,5 +27,4 @@ fi
 # Update the Lambda function environment variables
 echo "Updating environment variables for Lambda function: $FUNCTION_NAME..."
 aws lambda update-function-configuration \
-  --function-name "$FUNCTION_NAME" \
-  --environmen=file://$ENV_FILE
+  --function-name "$FUNCTION_NAME" 

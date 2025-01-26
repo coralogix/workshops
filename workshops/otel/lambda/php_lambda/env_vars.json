@@ -1,6 +1,6 @@
 {
   "Variables": {
-    "CX_API_KEY": "",
+    "CX_API_KEY": "cxtp_vGElMp0eEI8K9XIgZ1TrYyYNGDkzAC",
     "CX_DOMAIN": "cx498.coralogix.com",
     "CX_REPORTING_STRATEGY": "LOW_OVERHEAD",
     "OTEL_EXPORTER_OTLP_PROTOCOL": "http/protobuf",

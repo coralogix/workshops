@@ -99,10 +99,10 @@ Each project should build and run on an iPhone emulator (15 Pro Max was tested) 
 ### Step 4 - Using the Demo App
 
 There are three current example tests on the demo app:
-- **Network requests:** Will send user session data while the app is running.
-- **Exception:** Will crash the app with an exception. Stop Xcode and then run the app in the emulator so the app restarts and instrumentation sends crash analytics to Coralogix.
-- **Crash:** Similar to the exception above - crashes the app, stop Xcode, re-run the app to send analytics.
-
+- **Network requests:** Will send user session data while the app is running.  
+- **Exception:** Will crash the app with an exception. Stop Xcode and then run the app in the emulator so the app restarts and instrumentation sends crash analytics to Coralogix.  
+- **Crash:** Similar to the exception above - crashes the app, stop Xcode, re-run the app to send analytics.  
+  
 ### React
 
 Follow the instructions in the repo directory: [https://github.com/coralogix/workshops/tree/master/workshops/mobilerum/react](https://github.com/coralogix/workshops/tree/master/workshops/mobilerum/react)

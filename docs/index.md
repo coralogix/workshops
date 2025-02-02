@@ -1,12 +1,13 @@
 # Coralogix Workshops
 
-These workshops are crafted to help you learn and practice OpenTelemetry and integrate it with the Coralogix platform.  
-Each workshop includes easy-to-deploy reference implementations, making it simple to study and apply the concepts.
+Goal: help learn and practice OpenTelemetry and Coralogix RUM integrations  
+Each workshop includes easy-to-deploy reference implementations to see exactly how these integrations work.  
+  
+These are designed to run on production grade cloud environments except for the RUM workshop which runs on a Mac development environment.   
+Except for the RUM workshop, these are **not designed to run on a desktop or laptop machine regardless of Kubernetes/docker method of installation.**  
 
-These workshops are designed to run on a cloud Ubuntu host environment or production grade cloud Kubernetes.  
-They are not designed to run on a desktop or laptop machine regardless of Kubernetes/docker method of installation.  
-
-These workshops are not a substitute for official [Coralogix Docs](https://coralogix.com/docs/).  
+Before beginning please  [Coralogix Docs](https://coralogix.com/docs/).  
+The workshops are not official documentation for the Coralogix platform.  
 
 ## Workshop Prerequisites
 
@@ -45,11 +46,11 @@ Learn more about the [OpenTelemetry Overview and Value Proposition](otel/about-o
 - Example app container/task and Cloudformation stack
 
 ### APM - Autogenerators: Otel Tracing Instrumentation Demo Apps  
-Autogenerators: reference projects with live container/monolith examples  
+Autogenerators: reference projects with live container/monolith examples for .NET, Node, Java, and Python  
 - [Autogenerators](otel/autogenerators/index.md)  
 
 ### APM - Autoinjection: Otel Tracing on K8S With Auto Instrumentation Injection
-Automatically inject instrumentation into deployments with no code changes   
+Automatically inject instrumentation into deployments with no code or containerization changes for .NET, Node, Java, and Python  
 - [Autoinjection](otel/autoinjection/index.md)  
 
 ### Real User Monitoring (RUM)  

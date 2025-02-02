@@ -1,1 +1,1 @@
-source buildtools/mkdocs-deploy.sh
+source mkdocs-tools/mkdocs-deploy.sh

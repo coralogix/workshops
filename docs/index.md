@@ -6,7 +6,7 @@ Each workshop includes easy-to-deploy reference implementations to see exactly h
 These are designed to run on production grade cloud environments except for the RUM workshop which runs on a Mac development environment.   
 Except for the RUM workshop, these are **not designed to run on a desktop or laptop machine regardless of Kubernetes/docker method of installation.**  
 
-Before beginning please  [Coralogix Docs](https://coralogix.com/docs/).  
+Before beginning please consult  [Coralogix Docs](https://coralogix.com/docs/) for any topic of interest.  
 The workshops are not official documentation for the Coralogix platform.  
 
 ## Workshop Prerequisites

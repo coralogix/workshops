@@ -52,6 +52,10 @@ Autogenerators: reference projects with live container/monolith examples for .NE
 ### APM - Autoinjection: Otel Tracing on K8S With Auto Instrumentation Injection
 Automatically inject instrumentation into deployments with no code or containerization changes for .NET, Node, Java, and Python  
 - [Autoinjection](otel/autoinjection/index.md)  
+  
+### APM - eBPF: Otel APM Without Any Instrumentation - uses Linux Kernel Software based on eBPF  
+Automatically generate APM spans and dashboards without any instrumentation- features demo apps in .NET, Node, Java, and Python  
+- [eBPF](otel/ebpf/index.md)  
 
 ### Real User Monitoring (RUM)  
 Visualize user experience metrics  

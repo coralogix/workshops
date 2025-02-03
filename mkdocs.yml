@@ -42,6 +42,7 @@ nav:
     - AWS ECS EC2 (Python): otel/ecs-ec2/index.md
     - Autogenerators - Instrumentation References: otel/autogenerators/index.md
     - Auto Tracing Injection: otel/autoinjection/index.md
+    - eBPF: otel/ebpf/index.md
     - Tail Sampling: otel/tailsampling/index.md
     - Real User Monitoring (RUM) Browser/Mobile: rum/index.md
     - Official OpenTelemetry Demo: otel/opentelemetrydemo/index.md

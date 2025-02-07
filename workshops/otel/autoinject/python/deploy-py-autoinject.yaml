@@ -24,7 +24,7 @@ spec:
       labels:
         name: cx-autoinject-py
       annotations:
-        instrumentation.opentelemetry.io/inject-python: "true"
+        instrumentation.opentelemetry.io/inject-python: "default/instrumentation"
     spec:
       containers:
       - name: cx-autoinject-py

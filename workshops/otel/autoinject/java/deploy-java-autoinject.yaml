@@ -12,7 +12,7 @@ spec:
       labels:
         name: cx-autoinject-java
       annotations:
-        instrumentation.opentelemetry.io/inject-java: "true"
+        instrumentation.opentelemetry.io/inject-java: "default/instrumentation"
     spec:
       containers:
       - name: cx-autoinject-java

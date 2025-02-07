@@ -28,13 +28,13 @@ cd workshops/workshops/otel/autoinject
 ### Step 3 - Prep Kubernetes Cluster
 
 Cluster prep after Coralogix k8s integration installed:  
-- Install cert manager to enable https endpoints within the cluster  
+- Install cert manager to enable https endpoints within the cluster- make sure to check and update version of Cert Manager if needed [link here](https://github.com/cert-manager/cert-manager)  
 - Install the OpenTelemetry operator  
 
 ```
 helm repo add jetstack https://charts.jetstack.io --force-update
 
-helm install cert-manager jetstack/cert-manager   --namespace cert-manager   --create-namespace   --version v1.15.3   --set crds.enabled=true
+helm install cert-manager jetstack/cert-manager   --namespace cert-manager   --create-namespace   --version v1.17.0  --set crds.enabled=true
 
 helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
 

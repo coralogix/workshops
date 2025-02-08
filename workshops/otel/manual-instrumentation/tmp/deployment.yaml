@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cx-ruby-autogen-direct
+  labels:
+    app: cx-ruby-autogen-direct
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cx-ruby-autogen-direct
+  template:
+    metadata:
+      labels:
+        app: cx-ruby-autogen-direct
+    spec:
+      containers:
+        - name: cx-ruby-autogen-direct
+          image: public.ecr.aws/w3s4j9x9/microservices-demo:cx-ruby-logs-metrics
+          imagePullPolicy: Always
+          env:
+          - name: OTEL_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.hostIP
+          - name: OTEL_SERVICE_NAME
+            value: cx-ruby-autogen-direct
+          - name: OTEL_RESOURCE_ATTRIBUTES
+            value: cx.application.name=cx-ruby-autogen-direct,cx.subsystem.name=cx-ruby-autogen-direct
+          - name: OTEL_EXPORTER_OTLP_ENDPOINT
+            value: http://$(OTEL_IP):4318
+          - name: OTEL_EXPORTER_OTLP_PROTOCOL
+            value: http/protobuf

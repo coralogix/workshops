@@ -1,0 +1,1 @@
+kubectl delete deploy cx-ruby-autogen-direct

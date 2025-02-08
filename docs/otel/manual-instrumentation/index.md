@@ -50,13 +50,16 @@ cd workshops/workshops/otel/manual-instrumentation
 `python`  
 - Generates metrics and exports directly to an OpenTelemetry collector    
 - Example is for host deployment- see the other examples for how to containerize   
+- Metric generated is: `latest_random_number`  
 
 `go-logs-metrics`  
 - Golang app  
 - Generates metrics and logs directly to an OpenTelemetry collector
 - Can be run on host and has k8s deployment example as well
+- Metric generated is: `random-metrics-app`  
 
 `ruby-logs-metrics`  
-- Golang app  
+- Ruby app 
 - Generates metrics and logs directly to an OpenTelemetry collector
-- Can be run on host and has k8s deployment example as well
+- Can be run on host and has k8s deployment example as well  
+- Metric generated is: `operation_duration_seconds`  

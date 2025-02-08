@@ -63,7 +63,7 @@ Examples of Otel APIs/SDKs to export telemetry directly from an application
 
 ### Real User Monitoring (RUM)  
 Visualize user experience metrics  
-- [Real User Monitoring (RUM)](rum/index.md) - for browsers and mobile apps  
+- [Real User Monitoring (RUM)](rum/index.md) for browsers and mobile apps  
 
 ### Coralogix Live Demo Scripts  
 Scripts to install the Collector on a host or Kubernetes  

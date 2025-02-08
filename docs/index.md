@@ -46,16 +46,20 @@ Learn more about the [OpenTelemetry Overview and Value Proposition](otel/about-o
 - Example app container/task and Cloudformation stack
 
 ### APM - Autogenerators: Otel Tracing Instrumentation Demo Apps  
-Autogenerators: reference projects with live container/monolith examples for .NET, Node, Java, and Python  
+Tracing examples for container/monolith: demos for .NET, Node, Java, and Python  
 - [Autogenerators](otel/autogenerators/index.md)  
 
 ### APM - Autoinjection: Otel Tracing on K8S With Auto Instrumentation Injection
-Automatically inject instrumentation into deployments with no code or containerization changes for .NET, Node, Java, and Python  
+Automatically inject traciong instrumentation in k8s: demos for .NET, Node, Java, and Python  
 - [Autoinjection](otel/autoinjection/index.md)  
   
 ### APM - eBPF: Otel APM Without Any Instrumentation - uses Linux Kernel Software based on eBPF  
-Automatically generate APM spans and dashboards without any instrumentation- features demo apps in .NET, Node, Java, and Python  
+Automatically generate APM spans and dashboards without any instrumentation- demos for .NET, Node, Java, and Python  
 - [eBPF](otel/ebpf/index.md)  
+
+### OpenTelmetry Manual Instrumentation   
+Examples of Otel APIs/SDKs to export telemetry directly from an application   
+- [Otel Manual Instrumentation](otel/manual-instrumentation/index.md)  
 
 ### Real User Monitoring (RUM)  
 Visualize user experience metrics  

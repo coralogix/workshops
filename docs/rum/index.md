@@ -68,13 +68,13 @@ cd ./workshops/workshops/mobilerum
 ```
 
 ### Step 3 - The Workshops
-The following examples are currently available:
-- **React**  
+The following examples are currently available:  
+- **React Native**  
 - **iOS**  
   - Swift  
   - UIKit  
 
-### iOS
+### iOS Workshop
   
 When using this workshop, ensure that the `Coralogix Package Dependencies` are updated: right click on them and select `update`
   
@@ -105,6 +105,6 @@ There are three current example tests on the demo app:
 - **Exception:** Will crash the app with an exception. Stop Xcode and then run the app in the emulator so the app restarts and instrumentation sends crash analytics to Coralogix.  
 - **Crash:** Similar to the exception above - crashes the app, stop Xcode, re-run the app to send analytics.  
   
-### React
+### React Native Workshop
 
 Follow the instructions in the repo directory: [https://github.com/coralogix/workshops/tree/master/workshops/mobilerum/react](https://github.com/coralogix/workshops/tree/master/workshops/mobilerum/react)

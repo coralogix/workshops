@@ -69,13 +69,15 @@ cd ./workshops/workshops/mobilerum
 
 ### Step 3 - The Workshops
 The following examples are currently available:
-- **React**
-- **iOS**
-  - Swift
-  - UIKit
+- **React**  
+- **iOS**  
+  - Swift  
+  - UIKit  
 
 ### iOS
-
+  
+When using this workshop, ensure that the `Coralogix Package Dependencies` are updated: right click on them and select `update`
+  
 Follow the [Coralogix SDK instructions](https://coralogix.com/docs/rum-ios-monitoring-setup/) and update the environment variable stanza according to your environment:
 
 ```swift

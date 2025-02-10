@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/coralogix/cx-ios-sdk",
       "state" : {
-        "revision" : "8b5b70dbeb42b6a578947163e71b32b54236ee3a",
-        "version" : "1.0.9"
+        "revision" : "6840bf439dbac23f436ddbc96632df92edb0ee99",
+        "version" : "1.0.13"
       }
     }
   ],

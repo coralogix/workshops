@@ -69,11 +69,9 @@ cd ./workshops/workshops/mobilerum
 
 ### Step 3 - The Workshops
 The following examples are currently available:  
-- **React Native**  
-- **iOS**  
-  - Swift  
-  - UIKit  
-
+- React Native  
+- iOS: Swift, UIKit  
+  
 ### iOS Workshop
   
 When using this workshop, ensure that the `Coralogix Package Dependencies` are updated: right click on them and select `update`

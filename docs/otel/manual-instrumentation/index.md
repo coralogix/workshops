@@ -1,7 +1,7 @@
 # Manual Instrumentation
 
 ## Requirements  
-Prerequisites [here](https://coralogix.github.io/workshops/prereqs/)  
+Prerequisites [here](https://coralogix.github.io/workshops/prereqs/)    
 
 ## OpenTelemetry Manual Instrumentation 
 
@@ -54,12 +54,12 @@ cd workshops/workshops/otel/manual-instrumentation
 
 `go-logs-metrics`  
 - Golang app  
-- Generates metrics and logs directly to an OpenTelemetry collector
-- Can be run on host and has k8s deployment example as well
+- Generates metrics and logs directly to an OpenTelemetry collector  
+- Can be run on host and has k8s deployment example as well  
 - Metric generated is: `random-metrics-app`  
 
-`ruby-logs-metrics`  
-- Ruby app 
-- Generates metrics and logs directly to an OpenTelemetry collector
-- Can be run on host and has k8s deployment example as well  
+`ruby-logs-metrics`   
+- Ruby app  
+- Generates metrics and logs directly to an OpenTelemetry collector  
+- Can be run on host and has k8s deployment example as well   
 - Metric generated is: `operation_duration_seconds`  

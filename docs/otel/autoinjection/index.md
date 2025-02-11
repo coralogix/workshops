@@ -73,5 +73,5 @@ App deployments must have an *annotation* to ensure that they will have instrume
       labels:
         name: cx-autoinject-java
       annotations:
-        instrumentation.opentelemetry.io/inject-java: "true"
+        instrumentation.opentelemetry.io/inject-java: "default/instrumentation"
 ```

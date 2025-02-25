@@ -1,6 +1,6 @@
 java \
 -javaagent:/opt/opentelemetry-javaagent.jar \
--javaagent:/opt/jmx_prometheus_javaagent-1.1.0.jar=9090:jmx_exporter_config.yaml \
+-javaagent:/opt/jmx_prometheus_javaagent-1.1.0.jar=9090:/opt/jmx_exporter_config.yaml \
 -Dlog4j.configurationFile=classpath:log4j2.xml \
 -Dcom.sun.management.jmxremote \
 -Dcom.sun.management.jmxremote.port=9999 \

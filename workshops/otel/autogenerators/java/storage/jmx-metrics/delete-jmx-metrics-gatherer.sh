@@ -1,1 +1,0 @@
-kubectl delete deployment otel-jmx-gatherer

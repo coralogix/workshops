@@ -1,0 +1,1 @@
+helm upgrade otel-coralogix-integration coralogix/otel-integration --values jmx-metrics.yaml

@@ -1,0 +1,51 @@
+---
+global:
+  clusterName: slerner-cluster
+  domain: cx498.coralogix.com
+
+opentelemetry-cluster-collector:
+  config:
+    receivers:
+      jmx:
+        jar_path: /shared/opentelemetry-java-contrib-jmx-metrics.jar  # Updated path to match otel-jmx-gatherer
+        endpoint: cx-java-autogen:9999
+        target_system: jvm
+        # collection_interval: 5s
+        # initial_delay: 1s
+        # optional: the same as specifying OTLP receiver endpoint.
+        otlp:
+          endpoint: OTEL_IP:4317
+        username: test
+        password: test
+    service:
+      pipelines:
+        metrics:
+          receivers:
+            - otlp
+            - prometheus
+            - jmx
+
+  extraVolumes:
+    - name: shared-jar
+      persistentVolumeClaim:
+        claimName: jmx-metrics-pvc  # Mount the same PVC used in otel-jmx-gatherer
+
+  extraVolumeMounts:
+    - name: shared-jar
+      mountPath: /shared  # Ensure it matches the volume mount in otel-jmx-gatherer
+
+  extraEnvs:
+    - name: CORALOGIX_PRIVATE_KEY
+      valueFrom:
+        secretKeyRef:
+          key: PRIVATE_KEY
+          name: coralogix-keys
+    - name: KUBE_NODE_NAME
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: spec.nodeName
+    - name: OTEL_IP
+      valueFrom:
+        fieldRef:
+          fieldPath: status.hostIP

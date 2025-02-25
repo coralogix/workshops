@@ -13,7 +13,7 @@ WORKDIR /home/code
 # Copy application files
 COPY ./target/java-app-1.0-SNAPSHOT.jar /home/code/
 COPY ./entrypoint.sh /home/code/
-COPY ./jmx_exporter_config.yaml /opt/
+COPY ./jmx_exporter_config.yaml /home/code/
 COPY ./src/main/resources/log4j2.xml /home/code/
 
 # Create JMX authentication files inside the container

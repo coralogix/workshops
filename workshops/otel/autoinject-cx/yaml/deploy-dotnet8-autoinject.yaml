@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cx-autoinject-dotnet8
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: cx-autoinject-dotnet8
+  template:
+    metadata:
+      labels:
+        name: cx-autoinject-dotnet8
+      annotations:
+        instrumentation.opentelemetry.io/inject-dotnet: "default/instrumentation"
+    spec:
+      containers:
+      - name: cx-autoinject-dotnet8
+        image: public.ecr.aws/w3s4j9x9/autoinject-demo:dotnet8
+        imagePullPolicy: Always
+        workingDir: /home/code
+        ports:
+        - containerPort: 7080
+          protocol: TCP
+        command: ["/bin/sh"]
+        args: ["/App/entrypoint.sh"]

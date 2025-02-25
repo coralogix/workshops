@@ -1,0 +1,1 @@
+helm delete otel-coralogix-integration --namespace coralogix

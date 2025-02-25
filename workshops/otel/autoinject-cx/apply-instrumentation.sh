@@ -1,0 +1,1 @@
+kubectl apply -f instrumentation.yaml -n coralogix

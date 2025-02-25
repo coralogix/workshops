@@ -43,5 +43,4 @@ opentelemetry-cluster-collector:
           receivers:
           - otlp
           - prometheus
-          - k8s_cluster
           - receiver_creator/prometheus-auto

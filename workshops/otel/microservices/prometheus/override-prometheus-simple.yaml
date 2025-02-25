@@ -22,5 +22,4 @@ opentelemetry-cluster-collector:
           receivers:
           - otlp
           - prometheus
-          - k8s_cluster
           - prometheus/apps

@@ -5,15 +5,16 @@ RUN apt-get update && \
     apt-get -y install curl && \
     mkdir /home/code && \
     curl -L https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent.jar -o /opt/opentelemetry-javaagent.jar && \
-    curl -L https://github.com/open-telemetry/opentelemetry-java-contrib/releases/download/v1.44.0/opentelemetry-jmx-metrics.jar -o /opt/opentelemetry-java-contrib-jmx-metrics.jar && \
-    chmod 755 /opt/opentelemetry-javaagent.jar && \
-    chmod 755 /opt/opentelemetry-java-contrib-jmx-metrics.jar
+    curl -L https://github.com/prometheus/jmx_exporter/releases/download/1.1.0/jmx_prometheus_javaagent-1.1.0.jar -o /opt/jmx_prometheus_javaagent-1.1.0.jar && \
+    chmod 755 /opt/*.jar
 
 WORKDIR /home/code
 
 # Copy application files
 COPY ./target/java-app-1.0-SNAPSHOT.jar /home/code/
 COPY ./entrypoint.sh /home/code/
+COPY ./jmx_exporter_config.yaml /home/code/
+COPY ./jmx_exporter_config.yaml /opt
 COPY ./src/main/resources/log4j2.xml /home/code/
 
 # Create JMX authentication files inside the container

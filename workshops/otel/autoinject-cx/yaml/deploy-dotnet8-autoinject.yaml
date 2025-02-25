@@ -13,7 +13,7 @@ spec:
       labels:
         name: cx-autoinject-dotnet8
       annotations:
-        instrumentation.opentelemetry.io/inject-dotnet: "default/instrumentation"
+        instrumentation.opentelemetry.io/inject-dotnet: "coralogix/instrumentation"
     spec:
       containers:
       - name: cx-autoinject-dotnet8

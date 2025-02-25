@@ -13,7 +13,7 @@ spec:
       labels:
         name: cx-autoinject-node
       annotations:
-        instrumentation.opentelemetry.io/inject-nodejs: "default/instrumentation"
+        instrumentation.opentelemetry.io/inject-nodejs: "coralogix/instrumentation"
     spec:
       containers:
       - name: cx-autoinject-node

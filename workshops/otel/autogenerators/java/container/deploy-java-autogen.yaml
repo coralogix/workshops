@@ -30,8 +30,8 @@ spec:
           value: http://$(OTEL_IP):4318
         - name: OTEL_LOGS_EXPORTER
           value: none
-        - name: OTEL_METRIC_EXPORTER
-          value: none
+        # - name: OTEL_METRIC_EXPORTER
+        #   value: none
         ports:
         - containerPort: 8080
           name: http

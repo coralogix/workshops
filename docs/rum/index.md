@@ -1,7 +1,16 @@
 
 # Real User Monitoring: Browser/Mobile
 
-## Browser
+## Browser  
+
+This example shows a front->back end tracing example app running on a Mac (can be run on Windows)  
+A front end Javascript app will send RUM telemetry (logs) as well as opt-in trace spans directly to Coralogix  
+Also the locally hosted Node back end app will trace spans through the localhost OpenTelemetry collector  
+
+### Step 0 - Install an OpenTelemetry Collector on your Mac (Can work for Windows as well)  
+
+Download a current release of the contrib OpenTelmetry Collector for your Mac (Apple Silicon are the `darwin_arm` releases)  
+[https://github.com/open-telemetry/opentelemetry-collector-releases/releases](https://github.com/open-telemetry/opentelemetry-collector-releases/releases)  
 
 ### Step 1 - Setup
 Clone the repository:
@@ -17,40 +26,66 @@ cd ./workshops/workshops/rum
 
 ### Step 3 - Execute the workshop
 
-1. **Ensure Node.js is installed.**
+0. Configure the Coralogix Exporter in `otelcol/otel-config.yaml` with your Coralogix key and domain  
+Run the collector with in a **dedicated terminal**:  
+```
+./otel-contrib --config otel-config.yaml
+```  
+  
+1. **Start a new terminal**
 
-2. **Add Coralogix RUM integration:**
-   - Create a new file called `src/index.js` and integrate the Coralogix RUM `Browser SDK` and `User Context and Labels`.
+2. **Ensure Node.js is installed.**
 
-3. **Set up node packages:**
+3. **Add Coralogix RUM integration:**
+   - In`src/index.js` add the Coralogix RUM `Browser SDK` and `User Context and Labels` at the top and make sure to include the commented trace capturing stanza such that it looks like:
+
+   ```
+   CoralogixRum.init({
+      public_key: 'YOURKEY',
+      application: 'YOURAPPNAME',
+      version: 'YOURVERSION',
+      coralogixDomain: 'YOURCORALOGIXDOMAIN',
+      traceParentInHeader: {
+         enabled: true,
+         options: {
+            propagateTraceHeaderCorsUrls: [new RegExp('http://localhost.*')],
+         },
+      },
+   });
+   ```  
+
+4. **Set up node packages:**
    ```bash
    source 1-setup-node.sh
    ```
 
-4. **Package files using webpack:**
+5. **Package files using webpack:**
    ```bash
    source 2-webpack.sh
    ```
 
-5. **Edit the file to add your sourcemap key and region:**
+6. **Edit the file to add your sourcemap key and region:**
    - This key is available in the RUM Integration -> SourceMap setup.
 
-6. **Upload the sourcemap:**
+7. **Upload the sourcemap:**
    ```bash
    source 3-sourcemap.sh
    ```
-
-7. **Run the Node Express web server:**
+8. **Setup the env variables for OpenTelemetry zero-code instrumentation of Node:**
    ```bash
-   source 4-node.sh
+   source 4-setup-otel-env-var.sh
    ```
-   - Open a browser to `http://localhost:3000` to load the app served by Node. Refresh a few times.
-   - Study the RUM results in Coralogix.
-   - To stop the Express server, use `ctrl-c`.
-
-8. **Optional: Clean up Node packages and webpack artifacts:**
+9. **Run the Node Express web server:**
    ```bash
-   source 5-cleanup.sh
+   source 5-node.sh
+   ```
+   - Open a browser to `http://localhost:3000` to load the app served by Node. Refresh a few times  
+   - Study the RUM results in Coralogix including RUM logs, front/back end traces, APM of the Node back end, and RUM dashboards  
+   - To stop the Express server and OpenTelmetry Collector, use `ctrl-c`  
+  
+10. **Optional: Clean up Node packages and webpack artifacts:**
+   ```bash
+   source 6-cleanup.sh
    ```
 
 ## Mobile

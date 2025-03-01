@@ -1,0 +1,65 @@
+extensions:
+  zpages:
+    endpoint: localhost:55679
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: localhost:4317
+      http:
+        endpoint: localhost:4318
+
+processors:
+  batch:
+  memory_limiter:
+    # 75% of maximum memory up to 2G
+    limit_mib: 1536
+    # 25% of limit up to 2G
+    spike_limit_mib: 512
+    check_interval: 5s
+
+exporters:
+  debug:
+    verbosity: detailed
+
+  coralogix:
+    # The Coralogix domain
+    domain: YOURCORALGIXDOMAINHERE
+    # Your Coralogix private key is sensitive
+    private_key: "YOURCORALOGIXAPIKEYHERE"
+
+    # (Optional) Ordered list of Resource attributes that are used for Coralogix
+    # AppName and SubSystem values. The first non-empty Resource attribute is used.
+    # Example: application_name_attributes: ["k8s.namespace.name", "service.namespace"]
+    # Example: subsystem_name_attributes: ["k8s.deployment.name", "k8s.daemonset.name", "service.name"]
+    application_name_attributes:
+    - "service.namespace"
+    subsystem_name_attributes:
+    - "service.name"
+
+    # Traces, Metrics and Logs emitted by this OpenTelemetry exporter 
+    # are tagged in Coralogix with the default application and subsystem constants.
+    application_name: "RumDemo"
+    subsystem_name: "RumDemo"
+
+    # (Optional) Timeout is the timeout for every attempt to send data to the backend.
+    timeout: 30s
+
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, batch]
+      exporters: [debug, coralogix]
+    metrics:
+      receivers: [otlp]
+      processors: [memory_limiter, batch]
+      exporters: [debug, coralogix]
+    logs:
+      receivers: [otlp]
+      processors: [memory_limiter, batch]
+      exporters: [debug, coralogix]
+
+  extensions: [zpages]

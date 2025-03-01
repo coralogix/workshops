@@ -10,6 +10,21 @@ import { CoralogixRum } from '@coralogix/browser';
 //     propagateTraceHeaderCorsUrls: [new RegExp('http://localhost.*')],
 //   },
 
+// Example from Coralogix RUM Integration:
+// CoralogixRum.init({
+//   public_key: 'yourkeyhere',
+//   application: 'yourappnamehere',
+//   version: 'yourversionhere',
+//   coralogixDomain: 'coralogixdomainhere',
+//   traceParentInHeader: {
+//     enabled: true,
+//     options: {
+//       propagateTraceHeaderCorsUrls: [new RegExp('http://localhost.*')],
+//     },
+//   },
+// });
+
+
 console.log('JavaScript file loaded.');
 
 document.addEventListener('DOMContentLoaded', () => {

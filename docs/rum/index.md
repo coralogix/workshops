@@ -1,36 +1,35 @@
 
-# Real User Monitoring: Browser/Mobile
+# Real User Monitoring
 
-## Browser  
+## Browser RUM Workshop
 
 This example shows a front->back end tracing example app running on a Mac (can be run on Windows)  
 A front end Javascript app will send RUM telemetry (logs) as well as opt-in trace spans directly to Coralogix  
-Also the locally hosted Node back end app will trace spans through the localhost OpenTelemetry collector  
-
-### Step 0 - Install an OpenTelemetry Collector on your Mac (Can work for Windows as well)  
-
-Download a current release of the contrib OpenTelmetry Collector for your Mac (Apple Silicon are the `darwin_arm` releases)  
-[https://github.com/open-telemetry/opentelemetry-collector-releases/releases](https://github.com/open-telemetry/opentelemetry-collector-releases/releases)  
+Also the locally hosted Node back end app will trace spans through the localhost OpenTelemetry collector   
 
 ### Step 1 - Setup
 Clone the repository:
 ```bash
 git clone https://github.com/coralogix/workshops
 ```
-
-### Step 2 - Change to the workshop directory
-Navigate to the proper directory for the workshop example:
+  
+### Step 2 - Install and run an OpenTelemetry Collector on your Mac (Can work for Windows as well)  
+  
+Navigate to the `otelcol` directory
 ```bash
-cd ./workshops/workshops/rum
+cd ./workshops/workshops/rum/otelcol
 ```
-
-### Step 3 - Execute the workshop
-
-0. Configure the Coralogix Exporter in `otelcol/otel-config.yaml` with your Coralogix key and domain  
+  
+Download a current release of the contrib OpenTelmetry Collector for your Mac (Apple Silicon are the `darwin_arm` releases)  
+[https://github.com/open-telemetry/opentelemetry-collector-releases/releases](https://github.com/open-telemetry/opentelemetry-collector-releases/releases) 
+  
+Configure the Coralogix Exporter in `otel-config.yaml` with your Coralogix key and domain  
 Run the collector with in a **dedicated terminal**:  
 ```
 ./otel-contrib --config otel-config.yaml
 ```  
+  
+### Step 3 - Execute the RUM workshop
   
 1. **Start a new terminal**
 
@@ -107,7 +106,7 @@ The following examples are currently available:
 - React Native  
 - iOS: Swift, UIKit  
   
-### iOS Workshop
+### Mobile RUM Workshop: iOS  
   
 When using this workshop, ensure that the `Coralogix Package Dependencies` are updated: right click on them and select `update`
   

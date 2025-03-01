@@ -1,7 +1,14 @@
 import { CoralogixRum } from '@coralogix/browser';
 
+// This example assumes running on a mac with localhost mac otel collector to collect app spans
 // Initialize Coralogix RUM first
 // copy Coralogix RUM SDK from Integration here
+// make sure to add the trace capturing at end of SDK stanza
+// traceParentInHeader: {
+//   enabled: true,
+//   options: {
+//     propagateTraceHeaderCorsUrls: [new RegExp('http://localhost.*')],
+//   },
 
 console.log('JavaScript file loaded.');
 

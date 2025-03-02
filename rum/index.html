@@ -808,39 +808,40 @@
 <h1 id="real-user-monitoring">Real User Monitoring</h1>
 <h2 id="browser-rum-workshop">Browser RUM Workshop</h2>
 <ul>
-<li>This example shows a browser-&gt;front-&gt;back end tracing example app running on a Mac (can be run on Windows)  </li>
-<li>The browser will call a <code>frontend</code> service which then calls a <code>backend gateway</code> service and the RUM session trace ID will be propagated showing front-to-back tracing       </li>
-<li>The browser sesesion RUM trace will be sent directly to Coralogix and the locally hosted Node frontend/backend apps will send trace spans through the localhost OpenTelemetry collector to Coralogix  </li>
-<li>Logs will be printed to the console and not collected by the collector in this example- the focus is on tracing  </li>
+<li>This example shows a browser-&gt;front-&gt;back end tracing example app running on a Mac (can be run on Windows).  </li>
+<li>The browser will call a <code>frontend</code> service which then calls a <code>backend gateway</code> service, and the RUM session trace ID will be propagated, showing front-to-back tracing.       </li>
+<li>The browser session RUM trace will be sent directly to Coralogix, and the locally hosted Node frontend/backend apps will send trace spans through the localhost OpenTelemetry collector to Coralogix.  </li>
+<li>Logs will be printed to the console and not collected by the collector in this example—the focus is on tracing.  </li>
 </ul>
 <h3 id="step-1-setup">Step 1 - Setup</h3>
-<p>Clone the repository:
-   <code>bash
-   git clone https://github.com/coralogix/workshops</code></p>
+<p>Clone the repository:</p>
+<pre><code class="language-bash">git clone https://github.com/coralogix/workshops
+</code></pre>
 <h3 id="step-2-install-and-run-an-opentelemetry-collector-on-your-mac-can-work-for-windows-as-well">Step 2 - Install and run an OpenTelemetry Collector on your Mac (Can work for Windows as well)</h3>
-<p><strong>Start a new terminal</strong>- this must be run in a dedicated terminal (see screenshot below)    <br />
-Navigate to the <code>otelcol</code> directory
-   <code>bash
-   cd ./workshops/workshops/rum/otelcol</code></p>
-<p>Download a current release of the contrib OpenTelmetry Collector for your Mac (Apple Silicon are the <code>darwin_arm</code> releases)<br />
-<a href="https://github.com/open-telemetry/opentelemetry-collector-releases/releases">https://github.com/open-telemetry/opentelemetry-collector-releases/releases</a> </p>
-<p>Configure the Coralogix Exporter in <code>otel-config.yaml</code> with your Coralogix key and domain<br />
-<code>bash
-   ./otel-contrib --config otel-config.yaml</code>  </p>
+<p><strong>Start a new terminal</strong> - this must be run in a dedicated terminal (see screenshot below).      </p>
+<p>Navigate to the <code>otelcol</code> directory:</p>
+<pre><code class="language-bash">cd ./workshops/workshops/rum/otelcol
+</code></pre>
+<p>Download a current release of the contrib OpenTelemetry Collector for your Mac (Apple Silicon are the <code>darwin_arm</code> releases):<br />
+<a href="https://github.com/open-telemetry/opentelemetry-collector-releases/releases">https://github.com/open-telemetry/opentelemetry-collector-releases/releases</a></p>
+<p>Configure the Coralogix Exporter in <code>otel-config.yaml</code> with your Coralogix key and domain:</p>
+<pre><code class="language-bash">./otel-contrib --config otel-config.yaml
+</code></pre>
 <h3 id="step-3-execute-the-rum-workshop">Step 3 - Execute the RUM workshop</h3>
 <ol>
 <li>
-<p><strong>Start a new terminal</strong>- this must be run in a dedicated terminal (see screenshot below)   </p>
+<p><strong>Start a new terminal</strong> - this must be run in a dedicated terminal (see screenshot below).</p>
 </li>
 <li>
-<p><strong>Ensure current Node.js and npm are installed</strong>  </p>
+<p><strong>Ensure current Node.js and npm are installed</strong>.</p>
 </li>
 <li>
 <p><strong>Add Coralogix RUM integration:</strong></p>
 </li>
-<li>In<code>src/index.js</code> add the Coralogix RUM <code>Browser SDK</code> and <code>User Context and Labels</code> at the top and make sure to include the commented trace capturing stanza such that it looks like:</li>
+<li>In <code>src/index.js</code>, add the Coralogix RUM <code>Browser SDK</code> and <code>User Context and Labels</code> at the top, and make sure to include the commented trace capturing stanza such that it looks like:</li>
 </ol>
-<pre><code class="language-bash">   CoralogixRum.init({
+<p><code>javascript
+   CoralogixRum.init({
       public_key: 'YOURKEY',
       application: 'YOURAPPNAME',
       version: 'YOURVERSION',
@@ -851,47 +852,55 @@ Navigate to the <code>otelcol</code> directory
             propagateTraceHeaderCorsUrls: [new RegExp('.*')],
          },
       },
-   });
-</code></pre>
+   });</code></p>
 <ol>
 <li>
-<p><strong>Set up node packages:</strong><br />
-<code>bash
+<p><strong>Set up node packages:</strong>
+   <code>bash
    source 1-setup-node.sh</code></p>
 </li>
 <li>
-<p><strong>Package files using webpack:</strong><br />
-<code>bash
+<p><strong>Package files using webpack:</strong>
+   <code>bash
    source 2-webpack.sh</code></p>
 </li>
-<li><strong>Start the node backend gateway service</strong><br />
-<code>bash
-   source 3-node-backend.sh</code></li>
-<li><strong>Start the node frontend service</strong><br />
-<code>bash
-   source 4-node-frontend.sh</code></li>
-</ol>
-<p>Your screen should now look like the screenshot below- with Otel Collector in one terminal, back end in another, and frontend in another:<br />
-<img src="https://coralogix.github.io/workshops/images/rum/rum-vsc.png" width=800>    </p>
-<ol>
 <li>
-<p><strong>Open web browser to exercise RUM sesions</strong><br />
-Open browser to <code>http://localhost:3000</code><br />
-Try each option on the page to exercise RUM trace examples  </p>
+<p><strong>Start the node backend gateway service</strong><br />
+<code>bash
+   source 3-node-backend.sh</code></p>
 </li>
 <li>
-<p><strong>Study the results in Coralogix</strong><br />
-Web browser RUM trace- notice the traceID:<br />
-<img src="https://coralogix.github.io/workshops/images/rum/rum-frontend-trace.png" width=800>     </p>
+<p><strong>Start the node frontend service</strong><br />
+<code>bash
+   source 4-node-frontend.sh</code></p>
 </li>
 </ol>
-<p>Backend gateway service- the traceID is the same as the web browser RUM session ID- this demonstrates front-&gt;back tracing:<br />
-<img src="https://coralogix.github.io/workshops/images/rum/rum-backend-trace.png" width=800>   </p>
+<p>Your screen should now look like the screenshot below, with the OpenTelemetry Collector in one terminal, the backend in another, and the frontend in another:<br />
+<img alt="RUM Workshop Terminal Setup" src="https://coralogix.github.io/workshops/images/rum/rum-vsc.png" /></p>
 <ol>
-<li><strong>Optional: Clean up Node packages and webpack artifacts:</strong><br />
-<code>bash
-   source 6-cleanup.sh</code></li>
+<li><strong>Open web browser to exercise RUM sessions</strong>  </li>
+<li>Open a browser to <code>http://localhost:3000</code>.  </li>
+<li>
+<p>Try each option on the page to exercise RUM trace examples.</p>
+</li>
+<li>
+<p><strong>Study the results in Coralogix</strong>  </p>
+</li>
+<li>
+<p>Web browser RUM trace - notice the traceID:<br />
+<img alt="Frontend Trace" src="https://coralogix.github.io/workshops/images/rum/rum-frontend-trace.png" /></p>
+</li>
+<li>
+<p>Backend gateway service - the traceID is the same as the web browser RUM session ID, demonstrating front-to-back tracing:<br />
+<img alt="Backend Trace" src="https://coralogix.github.io/workshops/images/rum/rum-backend-trace.png" /></p>
+</li>
+<li>
+<p><strong>Optional: Clean up Node packages and webpack artifacts:</strong>
+    <code>bash
+    source 6-cleanup.sh</code></p>
+</li>
 </ol>
+<hr />
 <h2 id="mobile">Mobile</h2>
 <h3 id="step-1-setup_1">Step 1 - Setup</h3>
 <p>Clone the repository:</p>
@@ -906,7 +915,7 @@ Web browser RUM trace- notice the traceID:<br />
 - React Native<br />
 - iOS: Swift, UIKit  </p>
 <h3 id="mobile-rum-workshop-ios">Mobile RUM Workshop: iOS</h3>
-<p>When using this workshop, ensure that the <code>Coralogix Package Dependencies</code> are updated: right click on them and select <code>update</code></p>
+<p>When using this workshop, ensure that the <code>Coralogix Package Dependencies</code> are updated: right-click on them and select <code>update</code>.</p>
 <p>Follow the <a href="https://coralogix.com/docs/rum-ios-monitoring-setup/">Coralogix SDK instructions</a> and update the environment variable stanza according to your environment:</p>
 <pre><code class="language-swift">let options = CoralogixExporterOptions(
     coralogixDomain: CoralogixDomain.US2, // Set the Coralogix domain
@@ -925,11 +934,12 @@ Web browser RUM trace- notice the traceID:<br />
 <p>Each project should build and run on an iPhone emulator (15 Pro Max was tested) and emit telemetry to the Coralogix RUM platform.</p>
 <h3 id="step-4-using-the-demo-app">Step 4 - Using the Demo App</h3>
 <p>There are three current example tests on the demo app:<br />
-- <strong>Network requests:</strong> Will send user session data while the app is running<br />
+- <strong>Network requests:</strong> Will send user session data while the app is running.<br />
 - <strong>Exception:</strong> Will crash the app with an exception. Stop Xcode and then run the app in the emulator so the app restarts and instrumentation sends crash analytics to Coralogix.<br />
-- <strong>Crash:</strong> Similar to the exception above - crashes the app, stop Xcode, re-run the app to send analytics  </p>
+- <strong>Crash:</strong> Similar to the exception above—crashes the app, stop Xcode, and re-run the app to send analytics.  </p>
 <h3 id="react-native-workshop">React Native Workshop</h3>
-<p>Follow the instructions in the repo directory: <a href="https://github.com/coralogix/workshops/tree/master/workshops/mobilerum/react">https://github.com/coralogix/workshops/tree/master/workshops/mobilerum/react</a></p>
+<p>Follow the instructions in the repo directory:<br />
+<a href="https://github.com/coralogix/workshops/tree/master/workshops/mobilerum/react">https://github.com/coralogix/workshops/tree/master/workshops/mobilerum/react</a></p>
 
 
 

@@ -32,6 +32,19 @@ theme:
 extra_css:
   - stylesheets/extra.css
 
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - pymdownx.superfences  # Ensures proper rendering of nested code blocks in lists
+  - pymdownx.tabbed  # Enables tabbed code examples
+  - pymdownx.highlight  # Improves syntax highlighting
+  - pymdownx.snippets
+  - pymdownx.emoji
+  - pymdownx.details  # Enables collapsible sections
+  - pymdownx.tasklist  # Improves checklists
+  - pymdownx.tilde  # Enables strikethrough formatting
+
 nav:
   - Home: index.md
   - OpenTelemetry Info:

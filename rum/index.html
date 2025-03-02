@@ -814,19 +814,19 @@
 <li>Logs will be printed to the console and not collected by the collector in this example- the focus is on tracing  </li>
 </ul>
 <h3 id="step-1-setup">Step 1 - Setup</h3>
-<p>Clone the repository:</p>
-<pre><code class="language-bash">git clone https://github.com/coralogix/workshops
-</code></pre>
+<p>Clone the repository:
+   <code>bash
+   git clone https://github.com/coralogix/workshops</code></p>
 <h3 id="step-2-install-and-run-an-opentelemetry-collector-on-your-mac-can-work-for-windows-as-well">Step 2 - Install and run an OpenTelemetry Collector on your Mac (Can work for Windows as well)</h3>
 <p><strong>Start a new terminal</strong>- this must be run in a dedicated terminal (see screenshot below)    <br />
-Navigate to the <code>otelcol</code> directory</p>
-<pre><code class="language-bash">cd ./workshops/workshops/rum/otelcol
-</code></pre>
+Navigate to the <code>otelcol</code> directory
+   <code>bash
+   cd ./workshops/workshops/rum/otelcol</code></p>
 <p>Download a current release of the contrib OpenTelmetry Collector for your Mac (Apple Silicon are the <code>darwin_arm</code> releases)<br />
 <a href="https://github.com/open-telemetry/opentelemetry-collector-releases/releases">https://github.com/open-telemetry/opentelemetry-collector-releases/releases</a> </p>
-<p>Configure the Coralogix Exporter in <code>otel-config.yaml</code> with your Coralogix key and domain  </p>
-<pre><code class="language-bash">./otel-contrib --config otel-config.yaml
-</code></pre>
+<p>Configure the Coralogix Exporter in <code>otel-config.yaml</code> with your Coralogix key and domain<br />
+<code>bash
+   ./otel-contrib --config otel-config.yaml</code>  </p>
 <h3 id="step-3-execute-the-rum-workshop">Step 3 - Execute the RUM workshop</h3>
 <ol>
 <li>
@@ -886,10 +886,10 @@ Web browser RUM trace- notice the traceID:<br />
 </li>
 </ol>
 <p>Backend gateway service- the traceID is the same as the web browser RUM session ID- this demonstrates front-&gt;back tracing:<br />
-<img src="https://coralogix.github.io/workshops/images/rum/rum-frontend-trace.png" width=800>   </p>
+<img src="https://coralogix.github.io/workshops/images/rum/rum-backend-trace.png" width=800>   </p>
 <ol>
-<li><strong>Optional: Clean up Node packages and webpack artifacts:</strong>
-   <code>bash
+<li><strong>Optional: Clean up Node packages and webpack artifacts:</strong><br />
+<code>bash
    source 6-cleanup.sh</code></li>
 </ol>
 <h2 id="mobile">Mobile</h2>

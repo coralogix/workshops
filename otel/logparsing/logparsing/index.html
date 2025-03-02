@@ -654,13 +654,13 @@ Requirements:<br />
 - Updated versions and sufficient permissions for installing software<br />
 - Proper IDE i.e. Visual Studio Code </p>
 <h3 id="step-1-setup">Step 1 - Setup</h3>
-<p>Clone repo:</p>
-<pre><code>git clone https://github.com/coralogix/workshops
-</code></pre>
+<p>Clone repo:
+<div class="highlight"><pre><span></span><code>git clone https://github.com/coralogix/workshops
+</code></pre></div></p>
 <h3 id="step-2-change-to-workshop-dir">Step 2 - Change to workshop dir</h3>
 <p>Change to the proper directory for workshop example:  </p>
-<pre><code>cd ./workshops/workshops/otel/logparsing/
-</code></pre>
+<div class="highlight"><pre><span></span><code>cd ./workshops/workshops/otel/logparsing/
+</code></pre></div>
 <h3 id="step-3-set-up-otel-collector-on-a-linux-host">Step 3 - Set up Otel Collector on a Linux host</h3>
 <p>Download and install latest CONTRIB release version from here:<br />
 <a href="https://github.com/open-telemetry/opentelemetry-collector-releases/releases">https://github.com/open-telemetry/opentelemetry-collector-releases/releases</a>  </p>
@@ -680,30 +680,24 @@ For more info: <a href="https://github.com/open-telemetry/opentelemetry-collecto
 </ul>
 <h3 id="step-5-update-collector-with-log-receiver">Step 5 - Update Collector with Log Receiver</h3>
 <ul>
-<li>Add the following receiver to <code>/etc/otelcol/config.yaml</code>  </li>
-</ul>
-<pre><code>receivers:
+<li>Add the following receiver to <code>/etc/otelcol/config.yaml</code><br />
+<div class="highlight"><pre><span></span><code>receivers:
   filelog:
     include: [ /tmp/cx/LOG.log ]
-</code></pre>
-<ul>
-<li>Add the following pipeline to <code>/etc/otelcol/config.yaml</code>  </li>
-</ul>
-<pre><code>service:  
+</code></pre></div></li>
+<li>Add the following pipeline to <code>/etc/otelcol/config.yaml</code><br />
+<div class="highlight"><pre><span></span><code>service:  
   pipelines:
     logs:
       receivers: [otlp, filelog]
-</code></pre>
-<ul>
-<li>Restart the collector:</li>
+</code></pre></div></li>
+<li>Restart the collector:
+<div class="highlight"><pre><span></span><code>sudo systemctl restart otelcol-contrib.service 
+</code></pre></div></li>
+<li>Check collector status:
+<div class="highlight"><pre><span></span><code>sudo systemctl status otelcol-contrib.service 
+</code></pre></div></li>
 </ul>
-<pre><code>sudo systemctl restart otelcol-contrib.service 
-</code></pre>
-<ul>
-<li>Check collector status:</li>
-</ul>
-<pre><code>sudo systemctl status otelcol-contrib.service 
-</code></pre>
 <h3 id="step-5-study-logs-in-coralogix">Step 5 - Study Logs in Coralogix</h3>
 <p>The <code>Explore-&gt;Logs</code> option now will show the integrated logs.  </p>
 

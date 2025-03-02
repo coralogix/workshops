@@ -656,13 +656,13 @@ Requirements:<br />
 - Ensure that the Node version is current (20 or higher).  See <a href="https://deb.nodesource.com/">https://deb.nodesource.com/</a> for Ubuntu installation instructions<br />
 - Proper IDE i.e. Visual Studio Code </p>
 <h3 id="step-1-setup">Step 1 - Setup</h3>
-<p>Clone repo:</p>
-<pre><code>git clone https://github.com/coralogix/workshops
-</code></pre>
+<p>Clone repo:
+<div class="highlight"><pre><span></span><code>git clone https://github.com/coralogix/workshops
+</code></pre></div></p>
 <h3 id="step-2-change-to-workshop-dir">Step 2 - Change to workshop dir</h3>
 <p>Change to the proper directory for workshop example:  </p>
-<pre><code>cd ./workshops/workshops/otel/monolith-workshop/node/
-</code></pre>
+<div class="highlight"><pre><span></span><code>cd ./workshops/workshops/otel/monolith-workshop/node/
+</code></pre></div>
 <h3 id="step-3-set-up-otel-collector-on-a-linux-host">Step 3 - Set up Otel Collector on a Linux host</h3>
 <p>Download and install latest CONTRIB release version from here:<br />
 <a href="https://github.com/open-telemetry/opentelemetry-collector-releases/releases">https://github.com/open-telemetry/opentelemetry-collector-releases/releases</a>  </p>
@@ -678,15 +678,15 @@ For more info: <a href="https://github.com/open-telemetry/opentelemetry-collecto
 <h3 id="step-4-run-node-client-in-new-terminal">Step 4 - Run Node client in new terminal</h3>
 <p>Demo app will make requests of <code>https://api.github.com</code> and require `ctrl-c`` to exit.</p>
 <p>in <code>./workshops/workshops/otel/monolith-workshop/node/</code> </p>
-<p>Install node.js OpenTelemetry Instrumentation:  </p>
-<pre><code>setup-node.sh
-</code></pre>
-<p>Setup environment variables for OpenTelemetry:</p>
-<pre><code>setup-node-env.sh
-</code></pre>
-<p>Start demo app:  </p>
-<pre><code>start-node.sh
-</code></pre>
+<p>Install node.js OpenTelemetry Instrumentation:<br />
+<div class="highlight"><pre><span></span><code>setup-node.sh
+</code></pre></div></p>
+<p>Setup environment variables for OpenTelemetry:
+<div class="highlight"><pre><span></span><code>setup-node-env.sh
+</code></pre></div></p>
+<p>Start demo app:<br />
+<div class="highlight"><pre><span></span><code>start-node.sh
+</code></pre></div></p>
 <p>Stop app with <code>ctrl-c</code> when ready.</p>
 <h3 id="step-5-study-results-in-coralogix-portal">Step 5 - Study results in Coralogix portal</h3>
 <p>The shell scripts show how a monolith is set up and instrumented for OpenTelemetry.<br />

@@ -773,46 +773,46 @@
 <p>The autoinjection examples in this workshop all have Dockerfiles, deploy/delete scripts, app code, and everything else needed to easily try this capability.  </p>
 <p>Note that if a k8s cluster is configured with autoinjection applied to running deployments, they must be restarted with their annotations for the tracing to begin.  </p>
 <h3 id="step-1-clone-repo">Step 1 - Clone Repo</h3>
-<pre><code>git clone https://github.com/coralogix/workshops
-</code></pre>
+<div class="highlight"><pre><span></span><code>git clone https://github.com/coralogix/workshops
+</code></pre></div>
 <h3 id="step-2-change-to-autoinject-directory">Step 2 - Change to Autoinject Directory</h3>
-<pre><code>cd workshops/workshops/otel/autoinject
-</code></pre>
+<div class="highlight"><pre><span></span><code>cd workshops/workshops/otel/autoinject
+</code></pre></div>
 <h3 id="step-3-prep-kubernetes-cluster">Step 3 - Prep Kubernetes Cluster</h3>
 <p>Cluster prep after Coralogix k8s integration installed:<br />
 - Install cert manager to enable https endpoints within the cluster- make sure to check and update version of Cert Manager if needed <a href="https://github.com/cert-manager/cert-manager">link here</a><br />
 - Install the OpenTelemetry operator  </p>
-<pre><code>helm repo add jetstack https://charts.jetstack.io --force-update
+<div class="highlight"><pre><span></span><code>helm repo add jetstack https://charts.jetstack.io --force-update
 
 helm install cert-manager jetstack/cert-manager   --namespace cert-manager   --create-namespace   --version v1.17.0  --set crds.enabled=true
 
 helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
 
 helm install opentelemetry-operator open-telemetry/opentelemetry-operator --set &quot;manager.collectorImage.repository=otel/opentelemetry-collector-k8s&quot;
-</code></pre>
-<p>Next apply OpenTelemetry Operator instrumentation:  </p>
-<pre><code>source apply-instrumentation.sh
-</code></pre>
+</code></pre></div>
+<p>Next apply OpenTelemetry Operator instrumentation:<br />
+<div class="highlight"><pre><span></span><code>source apply-instrumentation.sh
+</code></pre></div></p>
 <h3 id="step-4-deploy-examples">Step 4 - Deploy Examples</h3>
-<p>Single command deploys examples in Java, .NET 8, Node, and Python  </p>
-<pre><code>source deploy-all-examples.sh
-</code></pre>
+<p>Single command deploys examples in Java, .NET 8, Node, and Python<br />
+<div class="highlight"><pre><span></span><code>source deploy-all-examples.sh
+</code></pre></div></p>
 <p>Study the traces in Coralogix.  </p>
-<p>Cleanup:  </p>
-<pre><code>source delete-all-examples.sh
+<p>Cleanup:<br />
+<div class="highlight"><pre><span></span><code>source delete-all-examples.sh
 source delete-instrumentation.sh
-</code></pre>
+</code></pre></div></p>
 <h3 id="step-5-study-examples">Step 5 - Study Examples</h3>
 <p>The main <code>autoinjection</code> directory has an <code>instrumentation.yaml</code> file that the Otel Operator uses to configure autoinjection. The <code>apply-instrumentation.sh</code> script applies this operator config. Note that there is a difference in the java port using <code>4317</code> vs official otel docs which state to use <code>4318</code>. <code>4317</code> is currently observed as the correct method until further notice.   </p>
 <p>The <code>deploy-all-examples.sh</code> script deploys all the autogenerators at the same time. To study each: each directory has a <code>deployment.yaml</code> and a script to deploy and delete it.    </p>
-<p>App deployments must have an <em>annotation</em> to ensure that they will have instrumentation injected i.e.  </p>
-<pre><code>  template:
+<p>App deployments must have an <em>annotation</em> to ensure that they will have instrumentation injected i.e.<br />
+<div class="highlight"><pre><span></span><code>  template:
     metadata:
       labels:
         name: cx-autoinject-java
       annotations:
         instrumentation.opentelemetry.io/inject-java: &quot;default/instrumentation&quot;
-</code></pre>
+</code></pre></div></p>
 
 
 

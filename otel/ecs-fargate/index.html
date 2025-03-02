@@ -770,20 +770,20 @@
 - Intermediate to Advanced skill with ECS-Fargate<br />
 - Sufficient permissions to configure AWS  </p>
 <h3 id="step-1-setup">Step 1 - Setup</h3>
-<p>Clone repo:</p>
-<pre><code>git clone https://github.com/coralogix/workshops
-</code></pre>
+<p>Clone repo:
+<div class="highlight"><pre><span></span><code>git clone https://github.com/coralogix/workshops
+</code></pre></div></p>
 <h3 id="step-2-change-to-workshop-dir">Step 2 - Change to workshop dir</h3>
 <p>Change to the proper directory for workshop example:  </p>
-<pre><code>cd ./workshops/workshops/otel/ecs-fargate
-</code></pre>
+<div class="highlight"><pre><span></span><code>cd ./workshops/workshops/otel/ecs-fargate
+</code></pre></div>
 <h3 id="step-3-prep-requirements-and-deploy-script">Step 3: Prep Requirements and deploy script</h3>
 <p>Study Coralogix <a href="https://github.com/coralogix/telemetry-shippers/tree/master/otel-ecs-fargate">OpenTelemetry ECS Fargate Example</a><br />
 Update the <code>deploy-cf.sh</code> script with your API key and Coralogix Region<br />
 Notice the environment variables in the container definition- ECS Fargate uses a <code>localhost</code> network space for sending traces  </p>
 <h3 id="step-4-deploy-cloudformation-to-set-up-fargate-components">Step 4: Deploy Cloudformation to set up Fargate components</h3>
-<pre><code>source deploy-cf.sh
-</code></pre>
+<div class="highlight"><pre><span></span><code>source deploy-cf.sh
+</code></pre></div>
 <h3 id="step-5-launch-task">Step 5: Launch Task</h3>
 <p>Launch according to your standard procedure<br />
 Ensure the security group can allow for port 5000 requests  </p>

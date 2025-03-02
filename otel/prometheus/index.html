@@ -649,50 +649,44 @@
 <p>Complete the Microservices Workshop or install the OpenTelemetry Collector on your k8s cluster  </p>
 <p><a href="https://coralogix.com/docs/otel-collector-for-k8s/">Easy Coralogix instructions for Complete Observability are here</a>  </p>
 <h3 id="step-1-deploy-the-prometheus-example-metric-generators">Step 1 - Deploy the Prometheus example metric generators</h3>
-<p>From <code>/workshops/workshops/otel/microservices/prometheus</code> directory in repo:  </p>
-<pre><code>source deploy-prom-app.sh 
-</code></pre>
-<p>Two deployments appear each generating random number gauges with metric names: <code>prom1</code> and <code>prom2</code>  </p>
+<p>From <code>/workshops/workshops/otel/microservices/prometheus</code> directory in repo:<br />
+<div class="highlight"><pre><span></span><code>source deploy-prom-app.sh 
+</code></pre></div>
+Two deployments appear each generating random number gauges with metric names: <code>prom1</code> and <code>prom2</code>  </p>
 <h3 id="step-2-prometheus-simple-receiver">Step 2 - Prometheus Simple Receiver</h3>
 <ul>
 <li>(<a href="https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/simpleprometheusreceiver">Prometheus Simple Receiver Docs</a>) declares explicit targts for scraping metrics  </li>
 <li>Study the override file called <code>override-prometheus-simple.yaml</code> to understand how it works  </li>
-<li>Update the <code>Cluster</code> name and <code>Domain</code> to match your stack and deploy:    </li>
-</ul>
-<pre><code>source deploy-prom-simple.sh
-</code></pre>
-<ul>
+<li>Update the <code>Cluster</code> name and <code>Domain</code> to match your stack and deploy:  <br />
+<div class="highlight"><pre><span></span><code>source deploy-prom-simple.sh
+</code></pre></div></li>
 <li>You can now see metrics in Coralogix portal called <code>prom1</code> and <code>prom2</code>  </li>
-<li>To restore original OpenTelemetry Collector config:  </li>
+<li>To restore original OpenTelemetry Collector config:<br />
+<div class="highlight"><pre><span></span><code>helm rollback otel-coralogix-integration 1 (or your previous helm version)
+</code></pre></div></li>
 </ul>
-<pre><code>helm rollback otel-coralogix-integration 1 (or your previous helm version)
-</code></pre>
 <h3 id="step-3-prometheus-autodiscovery-receivercreator">Step 3 - Prometheus Autodiscovery ReceiverCreator</h3>
 <ul>
 <li>(<a href="https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/receivercreator">Prometheus Auto ReceiverCreator Docs</a>) uses various features of OpenTelmetry collector to create an autodiscovery set of receivers based on watching for changes in deployments. This will find all self declared Prometheus endpoints in deployments.    </li>
 <li>Study the override file called <code>override-prometheus-auto.yaml</code> to understand how it works  </li>
-<li>Update the <code>Cluster</code> name and <code>Domain</code> to match your stack and deploy:    </li>
-</ul>
-<pre><code>source deploy-prom-auto.sh
-</code></pre>
-<ul>
+<li>Update the <code>Cluster</code> name and <code>Domain</code> to match your stack and deploy:  <br />
+<div class="highlight"><pre><span></span><code>source deploy-prom-auto.sh
+</code></pre></div></li>
 <li>You can now see metrics in Coralogix portal called <code>prom1</code> and <code>prom2</code>  </li>
-<li>To restore original OpenTelemetry Collector config:  </li>
+<li>To restore original OpenTelemetry Collector config:<br />
+<div class="highlight"><pre><span></span><code>helm rollback otel-coralogix-integration 1 (or your previous helm version)
+</code></pre></div></li>
+<li>To delete the Prometheus metrics deployment:
+<div class="highlight"><pre><span></span><code>source delete-prom-app.sh
+</code></pre></div></li>
 </ul>
-<pre><code>helm rollback otel-coralogix-integration 1 (or your previous helm version)
-</code></pre>
-<ul>
-<li>To delete the Prometheus metrics deployment:</li>
-</ul>
-<pre><code>source delete-prom-app.sh
-</code></pre>
 <h2 id="cleanup">Cleanup</h2>
-<p>Roll back to original Collector config:  </p>
-<pre><code>helm rollback otel-coralogix-integration 1 (or your previous helm version)
-</code></pre>
-<p>From: <code>/workshops/workshops/otel/microservices/prometheus</code>  </p>
-<pre><code>source delete-all.sh
-</code></pre>
+<p>Roll back to original Collector config:<br />
+<div class="highlight"><pre><span></span><code>helm rollback otel-coralogix-integration 1 (or your previous helm version)
+</code></pre></div></p>
+<p>From: <code>/workshops/workshops/otel/microservices/prometheus</code><br />
+<div class="highlight"><pre><span></span><code>source delete-all.sh
+</code></pre></div></p>
 
 
 

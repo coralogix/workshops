@@ -813,27 +813,27 @@ eBPF in this context only runs on Kubernetes with modern Linux kernel based cont
 <h3 id="step-1-install-the-opentelemetry-collector-on-your-k8s-cluster">Step 1 - Install the OpenTelemetry Collector on your k8s cluster</h3>
 <p><a href="https://coralogix.com/docs/otel-collector-for-k8s/">Easy Coralogix instructions for Complete Observability are here</a>  </p>
 <h3 id="step-2-clone-repo">Step 2 - Clone Repo</h3>
-<pre><code>git clone https://github.com/coralogix/workshops
-</code></pre>
+<div class="highlight"><pre><span></span><code>git clone https://github.com/coralogix/workshops
+</code></pre></div>
 <h3 id="step-3-change-to-ebpf-directory">Step 3 - Change to eBPF Directory</h3>
-<pre><code>cd workshops/workshops/otel/ebpf
-</code></pre>
+<div class="highlight"><pre><span></span><code>cd workshops/workshops/otel/ebpf
+</code></pre></div>
 <h3 id="step-4-override-the-opentelemetry-helm-chart-to-add-the-ebpf-agent">Step 4 - Override the OpenTelemetry Helm Chart to add the eBPF Agent</h3>
-<p>Edit <code>ebpf.yaml</code> and update the globals for your domain and cluster name then:  </p>
-<pre><code>source deploy-ebpf.sh
-</code></pre>
+<p>Edit <code>ebpf.yaml</code> and update the globals for your domain and cluster name then:<br />
+<div class="highlight"><pre><span></span><code>source deploy-ebpf.sh
+</code></pre></div></p>
 <h3 id="step-5-deploy-example-applications">Step 5 - Deploy Example Applications</h3>
-<pre><code>source deploy-all-examples.sh
-</code></pre>
+<div class="highlight"><pre><span></span><code>source deploy-all-examples.sh
+</code></pre></div>
 <h3 id="step-6-study-the-results">Step 6 - Study The Results</h3>
 <p>Note in <code>Coralogix-&gt;Explore-&gt;Traces</code> that the requests are only one span deep, and that the TraceID is not truly utilized for connecting spans. Also note the <code>otel.library.name</code> of <code>coralogix-ebpf-agent</code>.  </p>
 <p>Coralogix-&gt;APM shows the working service catalog.  </p>
 <p>Other parts of the Kubernetes system are being traced as well- these can be filtered following instructions in the documentation above.</p>
 <h3 id="step-7-cleanup">Step 7 - Cleanup</h3>
-<pre><code>source delete-all-examples.sh
-</code></pre>
-<pre><code>helm rollback otel-coralogix-integration
-</code></pre>
+<p><div class="highlight"><pre><span></span><code>source delete-all-examples.sh
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>helm rollback otel-coralogix-integration
+</code></pre></div></p>
 
 
 

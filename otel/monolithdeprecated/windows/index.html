@@ -661,9 +661,9 @@ Requirements:<br />
 - Install OpenTelemetry .NET instrumentation<br />
 - Run a sample .NET application to test traces  </p>
 <h3 id="step-1-setup">Step 1 - Setup</h3>
-<p>Clone repo:</p>
-<pre><code>git clone https://github.com/coralogix/workshops
-</code></pre>
+<p>Clone repo:
+<div class="highlight"><pre><span></span><code>git clone https://github.com/coralogix/workshops
+</code></pre></div></p>
 <h3 id="step-2-otel-collector-installation">Step 2 - OTEL Collector Installation</h3>
 <p>Download and install latest CONTRIB release version from here:<br />
 <a href="https://github.com/open-telemetry/opentelemetry-collector-releases/releases">https://github.com/open-telemetry/opentelemetry-collector-releases/releases</a>  </p>
@@ -674,66 +674,66 @@ Requirements:<br />
 - <a href="https://coralogix.com/docs/coralogix-endpoints/">Coralogix Endpoints</a><br />
 - <a href="https://coralogix.com/docs/private-key/">Coralogix Private Key</a><br />
 - <a href="https://coralogix.com/docs/application-and-subsystem-names/">Application &amp; Subsystem Names</a></p>
-<pre><code class="language-yaml">#config.yaml
+<div class="highlight"><pre><span></span><code><span class="c1">#config.yaml</span>
 
-exporters:
-  logging:
-    verbosity: detailed
-  coralogix:
-  coralogix:
-    # The Coralogix domain
-    domain: &quot;yourdomain&quot;
-    # Your Coralogix private key is sensitive
-    private_key: &quot;yourkey&quot;
+<span class="nt">exporters</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">logging</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">verbosity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">detailed</span>
+<span class="w">  </span><span class="nt">coralogix</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">coralogix</span><span class="p">:</span>
+<span class="w">    </span><span class="c1"># The Coralogix domain</span>
+<span class="w">    </span><span class="nt">domain</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;yourdomain&quot;</span>
+<span class="w">    </span><span class="c1"># Your Coralogix private key is sensitive</span>
+<span class="w">    </span><span class="nt">private_key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;yourkey&quot;</span>
 
-    # (Optional) Ordered list of Resource attributes that are used for Coralogix
-    # AppName and SubSystem values. The first non-empty Resource attribute is used.
-    # Example: application_name_attributes: [&quot;k8s.namespace.name&quot;, &quot;service.namespace&quot;]
-    # Example: subsystem_name_attributes: [&quot;k8s.deployment.name&quot;, &quot;k8s.daemonset.name&quot;, &quot;service.name&quot;]
-    application_name_attributes:
-    - &quot;service.namespace&quot;
-    subsystem_name_attributes:
-    - &quot;service.name&quot;
+<span class="w">    </span><span class="c1"># (Optional) Ordered list of Resource attributes that are used for Coralogix</span>
+<span class="w">    </span><span class="c1"># AppName and SubSystem values. The first non-empty Resource attribute is used.</span>
+<span class="w">    </span><span class="c1"># Example: application_name_attributes: [&quot;k8s.namespace.name&quot;, &quot;service.namespace&quot;]</span>
+<span class="w">    </span><span class="c1"># Example: subsystem_name_attributes: [&quot;k8s.deployment.name&quot;, &quot;k8s.daemonset.name&quot;, &quot;service.name&quot;]</span>
+<span class="w">    </span><span class="nt">application_name_attributes</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;service.namespace&quot;</span>
+<span class="w">    </span><span class="nt">subsystem_name_attributes</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;service.name&quot;</span>
 
-    # Traces, Metrics and Logs emitted by this OpenTelemetry exporter 
-    # are tagged in Coralogix with the default application and subsystem constants.
-    application_name: &quot;workshop&quot;
-    subsystem_name: &quot;monolith&quot;
+<span class="w">    </span><span class="c1"># Traces, Metrics and Logs emitted by this OpenTelemetry exporter </span>
+<span class="w">    </span><span class="c1"># are tagged in Coralogix with the default application and subsystem constants.</span>
+<span class="w">    </span><span class="nt">application_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;workshop&quot;</span>
+<span class="w">    </span><span class="nt">subsystem_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;monolith&quot;</span>
 
-    # (Optional) Timeout is the timeout for every attempt to send data to the backend.
-    timeout: 30s
-</code></pre>
+<span class="w">    </span><span class="c1"># (Optional) Timeout is the timeout for every attempt to send data to the backend.</span>
+<span class="w">    </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30s</span>
+</code></pre></div>
 <p>Next: run the collector using the command</p>
-<pre><code class="language-powershell">otelcol-contrib.exe --config=config.yaml
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="n">otelcol-contrib</span><span class="p">.</span><span class="n">exe</span> <span class="p">-</span><span class="n">-config</span><span class="p">=</span><span class="n">config</span><span class="p">.</span><span class="n">yaml</span>
+</code></pre></div>
 <h3 id="step-3-install-net-instrumentation">Step 3 - Install .NET Instrumentation</h3>
 <p>You can find the complete instructions for .NET OpenTelemetry Agent Instrumentation is in <a href="https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation">.NET OpenTelemetry GitHub Repository</a>.  </p>
 <p>Below is a shortcut set of instructions but these may be updated in the official documentation above, so we recommend following the officical set.  </p>
 <h4 id="quick-start">Quick start</h4>
 <p>The official Otel instrumentation guide shows the following:<br />
 Run the commands below in your PowerShell. Update the <code>"MyServiceDisplayName"</code> with the name of your application.  </p>
-<pre><code class="language-powershell"># Download the module
-$module_url = &quot;https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation/releases/latest/download/OpenTelemetry.DotNet.Auto.psm1&quot;
-$download_path = Join-Path $env:temp &quot;OpenTelemetry.DotNet.Auto.psm1&quot;
-Invoke-WebRequest -Uri $module_url -OutFile $download_path -UseBasicParsing
+<div class="highlight"><pre><span></span><code><span class="c"># Download the module</span>
+<span class="nv">$module_url</span> <span class="p">=</span> <span class="s2">&quot;https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation/releases/latest/download/OpenTelemetry.DotNet.Auto.psm1&quot;</span>
+<span class="nv">$download_path</span> <span class="p">=</span> <span class="nb">Join-Path</span> <span class="nv">$env:temp</span> <span class="s2">&quot;OpenTelemetry.DotNet.Auto.psm1&quot;</span>
+<span class="nb">Invoke-WebRequest</span> <span class="n">-Uri</span> <span class="nv">$module_url</span> <span class="n">-OutFile</span> <span class="nv">$download_path</span> <span class="n">-UseBasicParsing</span>
 
-# Import the module to use its functions
-Import-Module $download_path
+<span class="c"># Import the module to use its functions</span>
+<span class="nb">Import-Module</span> <span class="nv">$download_path</span>
 
-# Install core files
-Install-OpenTelemetryCore
+<span class="c"># Install core files</span>
+<span class="nb">Install-OpenTelemetryCore</span>
 
-# Set up the instrumentation for the current PowerShell session
-Register-OpenTelemetryForCurrentSession -OTelServiceName &quot;MyServiceDisplayName&quot;
-</code></pre>
+<span class="c"># Set up the instrumentation for the current PowerShell session</span>
+<span class="nb">Register-OpenTelemetryForCurrentSession</span> <span class="n">-OTelServiceName</span> <span class="s2">&quot;MyServiceDisplayName&quot;</span>
+</code></pre></div>
 <p>Next, configure the follwing Environment Variables</p>
-<pre><code class="language-powershell">$env:OTEL_RESOURCE_ATTRIBUTES='service.name=dotnetsvc,application.name=dotnetapp cx.application.name=dotnetappcx,cx.subsystem.name=dotnetsubcx'
-$env:OTEL_EXPORTER_OTLP_TRACES_ENDPOINT='localhost:4317'
-$env:OTEL_EXPORTER_OTLP_TRACES_PROTOCOL='grpc'
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="nv">$env:OTEL_RESOURCE_ATTRIBUTES</span><span class="p">=</span><span class="s1">&#39;service.name=dotnetsvc,application.name=dotnetapp cx.application.name=dotnetappcx,cx.subsystem.name=dotnetsubcx&#39;</span>
+<span class="nv">$env:OTEL_EXPORTER_OTLP_TRACES_ENDPOINT</span><span class="p">=</span><span class="s1">&#39;localhost:4317&#39;</span>
+<span class="nv">$env:OTEL_EXPORTER_OTLP_TRACES_PROTOCOL</span><span class="p">=</span><span class="s1">&#39;grpc&#39;</span>
+</code></pre></div>
 <p>Finally, run your dotnet application with</p>
-<pre><code class="language-powershell">dotnet run
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="n">dotnet</span> <span class="n">run</span>
+</code></pre></div>
 <h3 id="step-4-example-application">Step 4 - Example Application</h3>
 <p>You can download &amp; instrument the example application:<br />
 <code>./workshops/workshops/otel/monolith-workshop/dotnet-windows/ExampleApp/</code><br />

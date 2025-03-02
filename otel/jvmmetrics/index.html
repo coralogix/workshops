@@ -653,29 +653,29 @@
 - Direct receipt of metrics from OpenTelemetry Java tracing instrumentation</p>
 <p>In either case, a metrics dashboard provided in this workshop will be used to visualize these metrics.</p>
 <h3 id="step-1-setup">Step 1 - Setup</h3>
-<p>Clone repo:</p>
-<pre><code>git clone https://github.com/coralogix/workshops
-</code></pre>
+<p>Clone repo:
+<div class="highlight"><pre><span></span><code>git clone https://github.com/coralogix/workshops
+</code></pre></div></p>
 <h3 id="step-2-change-to-workshop-dir">Step 2 - Change to workshop dir</h3>
 <p>Change to the proper directory for workshop example:  </p>
-<pre><code>cd ./workshops/workshops/otel/autogenerators/java/monolith
-</code></pre>
+<div class="highlight"><pre><span></span><code>cd ./workshops/workshops/otel/autogenerators/java/monolith
+</code></pre></div>
 <h3 id="step-3-set-up-otel-collector-on-a-linux-host">Step 3 - Set up Otel Collector on a Linux host</h3>
 <ul>
 <li>update Coralogix exporter with region and key <code>config-demo-jmx.yaml</code>  </li>
 <li>download current release of otel collector: <a href="https://github.com/open-telemetry/opentelemetry-collector-releases/releases">https://github.com/open-telemetry/opentelemetry-collector-releases/releases</a></li>
-<li>update install script with downloaded version of otel collector and run script</li>
+<li>update install script with downloaded version of otel collector and run script
+<div class="highlight"><pre><span></span><code>source jmx-otel-config-setup.sh
+</code></pre></div></li>
 </ul>
-<pre><code>source jmx-otel-config-setup.sh
-</code></pre>
 <h3 id="step-4-add-jvm-dashboard-to-custom-dashbords">Step 4 - Add jvm dashboard to Custom Dashbords</h3>
-<pre><code>jvm_metrics.json
-</code></pre>
+<div class="highlight"><pre><span></span><code>jvm_metrics.json
+</code></pre></div>
 <h3 id="step-5-add-jvm-dashboard-to-custom-dashbords">Step 5 - Add jvm dashboard to Custom Dashbords</h3>
 <p>Run the included Java app example  </p>
-<pre><code>source 4-monolith-install-otel.sh
+<div class="highlight"><pre><span></span><code>source 4-monolith-install-otel.sh
 source 5-monolith-run-app.sh
-</code></pre>
+</code></pre></div>
 
 
 

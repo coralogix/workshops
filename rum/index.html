@@ -815,77 +815,81 @@
 </ul>
 <h3 id="step-1-setup">Step 1 - Setup</h3>
 <p>Clone the repository:</p>
-<pre><code class="language-bash">git clone https://github.com/coralogix/workshops
-</code></pre>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/coralogix/workshops
+</code></pre></div>
 <h3 id="step-2-install-and-run-an-opentelemetry-collector-on-your-mac-can-work-for-windows-as-well">Step 2 - Install and run an OpenTelemetry Collector on your Mac (Can work for Windows as well)</h3>
 <p><strong>Start a new terminal</strong> - this must be run in a dedicated terminal (see screenshot below).      </p>
 <p>Navigate to the <code>otelcol</code> directory:</p>
-<pre><code class="language-bash">cd ./workshops/workshops/rum/otelcol
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>./workshops/workshops/rum/otelcol
+</code></pre></div>
 <p>Download a current release of the contrib OpenTelemetry Collector for your Mac (Apple Silicon are the <code>darwin_arm</code> releases):<br />
-<a href="https://github.com/open-telemetry/opentelemetry-collector-releases/releases">https://github.com/open-telemetry/opentelemetry-collector-releases/releases</a></p>
+<a href="https://github.com/open-telemetry/opentelemetry-collector-releases/releases">Download OpenTelemetry Collector</a></p>
 <p>Configure the Coralogix Exporter in <code>otel-config.yaml</code> with your Coralogix key and domain:</p>
-<pre><code class="language-bash">./otel-contrib --config otel-config.yaml
-</code></pre>
+<div class="highlight"><pre><span></span><code>./otel-contrib<span class="w"> </span>--config<span class="w"> </span>otel-config.yaml
+</code></pre></div>
 <h3 id="step-3-execute-the-rum-workshop">Step 3 - Execute the RUM workshop</h3>
 <ol>
 <li>
 <p><strong>Start a new terminal</strong> - this must be run in a dedicated terminal (see screenshot below).</p>
 </li>
 <li>
-<p><strong>Ensure current Node.js and npm are installed</strong>.</p>
+<p><strong>Ensure current Node.js and npm are installed.</strong></p>
 </li>
 <li>
 <p><strong>Add Coralogix RUM integration:</strong></p>
+<ul>
+<li>
+<p>Modify <code>src/index.js</code> and add:</p>
+<div class="highlight"><pre><span></span><code><span class="nx">CoralogixRum</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+<span class="w">   </span><span class="nx">public_key</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;YOURKEY&#39;</span><span class="p">,</span>
+<span class="w">   </span><span class="nx">application</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;YOURAPPNAME&#39;</span><span class="p">,</span>
+<span class="w">   </span><span class="nx">version</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;YOURVERSION&#39;</span><span class="p">,</span>
+<span class="w">   </span><span class="nx">coralogixDomain</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;YOURCORALOGIXDOMAIN&#39;</span><span class="p">,</span>
+<span class="w">   </span><span class="nx">traceParentInHeader</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">enabled</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">options</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">         </span><span class="nx">propagateTraceHeaderCorsUrls</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="ow">new</span><span class="w"> </span><span class="nb">RegExp</span><span class="p">(</span><span class="s1">&#39;.*&#39;</span><span class="p">)],</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">   </span><span class="p">},</span>
+<span class="p">});</span>
+</code></pre></div>
 </li>
-<li>In <code>src/index.js</code>, add the Coralogix RUM <code>Browser SDK</code> and <code>User Context and Labels</code> at the top, and make sure to include the commented trace capturing stanza such that it looks like:</li>
+</ul>
+</li>
+<li>
+<p><strong>Set up node packages:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="nb">source</span><span class="w"> </span><span class="m">1</span>-setup-node.sh
+</code></pre></div>
+</li>
+<li>
+<p><strong>Package files using webpack:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="nb">source</span><span class="w"> </span><span class="m">2</span>-webpack.sh
+</code></pre></div>
+</li>
+<li>
+<p><strong>Start the node backend gateway service:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="nb">source</span><span class="w"> </span><span class="m">3</span>-node-backend.sh
+</code></pre></div>
+</li>
+<li>
+<p><strong>Start the node frontend service:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="nb">source</span><span class="w"> </span><span class="m">4</span>-node-frontend.sh
+</code></pre></div>
+</li>
 </ol>
-<p><code>javascript
-   CoralogixRum.init({
-      public_key: 'YOURKEY',
-      application: 'YOURAPPNAME',
-      version: 'YOURVERSION',
-      coralogixDomain: 'YOURCORALOGIXDOMAIN',
-      traceParentInHeader: {
-         enabled: true,
-         options: {
-            propagateTraceHeaderCorsUrls: [new RegExp('.*')],
-         },
-      },
-   });</code></p>
+<p>Your screen should now look like the screenshot below, with the OpenTelemetry Collector in one terminal, the backend in another, and the frontend in another:  </p>
+<p><img alt="RUM Workshop Terminal Setup" src="https://coralogix.github.io/workshops/images/rum/rum-vsc.png" /></p>
 <ol>
 <li>
-<p><strong>Set up node packages:</strong>
-   <code>bash
-   source 1-setup-node.sh</code></p>
-</li>
-<li>
-<p><strong>Package files using webpack:</strong>
-   <code>bash
-   source 2-webpack.sh</code></p>
-</li>
-<li>
-<p><strong>Start the node backend gateway service</strong><br />
-<code>bash
-   source 3-node-backend.sh</code></p>
-</li>
-<li>
-<p><strong>Start the node frontend service</strong><br />
-<code>bash
-   source 4-node-frontend.sh</code></p>
-</li>
-</ol>
-<p>Your screen should now look like the screenshot below, with the OpenTelemetry Collector in one terminal, the backend in another, and the frontend in another:<br />
-<img alt="RUM Workshop Terminal Setup" src="https://coralogix.github.io/workshops/images/rum/rum-vsc.png" /></p>
-<ol>
-<li><strong>Open web browser to exercise RUM sessions</strong>  </li>
+<p><strong>Open web browser to exercise RUM sessions</strong>  </p>
+<ul>
 <li>Open a browser to <code>http://localhost:3000</code>.  </li>
-<li>
-<p>Try each option on the page to exercise RUM trace examples.</p>
+<li>Try each option on the page to exercise RUM trace examples.</li>
+</ul>
 </li>
 <li>
 <p><strong>Study the results in Coralogix</strong>  </p>
-</li>
+<ul>
 <li>
 <p>Web browser RUM trace - notice the traceID:<br />
 <img alt="Frontend Trace" src="https://coralogix.github.io/workshops/images/rum/rum-frontend-trace.png" /></p>
@@ -894,22 +898,24 @@
 <p>Backend gateway service - the traceID is the same as the web browser RUM session ID, demonstrating front-to-back tracing:<br />
 <img alt="Backend Trace" src="https://coralogix.github.io/workshops/images/rum/rum-backend-trace.png" /></p>
 </li>
+</ul>
+</li>
 <li>
-<p><strong>Optional: Clean up Node packages and webpack artifacts:</strong>
-    <code>bash
-    source 6-cleanup.sh</code></p>
+<p><strong>Optional: Clean up Node packages and webpack artifacts:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="nb">source</span><span class="w"> </span><span class="m">6</span>-cleanup.sh
+</code></pre></div>
 </li>
 </ol>
 <hr />
 <h2 id="mobile">Mobile</h2>
 <h3 id="step-1-setup_1">Step 1 - Setup</h3>
 <p>Clone the repository:</p>
-<pre><code class="language-bash">git clone https://github.com/coralogix/workshops
-</code></pre>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/coralogix/workshops
+</code></pre></div>
 <h3 id="step-2-change-to-the-workshop-directory">Step 2 - Change to the workshop directory</h3>
 <p>Navigate to the proper directory for the workshop example:</p>
-<pre><code class="language-bash">cd ./workshops/workshops/mobilerum
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>./workshops/workshops/mobilerum
+</code></pre></div>
 <h3 id="step-3-the-workshops">Step 3 - The Workshops</h3>
 <p>The following examples are currently available:<br />
 - React Native<br />
@@ -917,20 +923,20 @@
 <h3 id="mobile-rum-workshop-ios">Mobile RUM Workshop: iOS</h3>
 <p>When using this workshop, ensure that the <code>Coralogix Package Dependencies</code> are updated: right-click on them and select <code>update</code>.</p>
 <p>Follow the <a href="https://coralogix.com/docs/rum-ios-monitoring-setup/">Coralogix SDK instructions</a> and update the environment variable stanza according to your environment:</p>
-<pre><code class="language-swift">let options = CoralogixExporterOptions(
-    coralogixDomain: CoralogixDomain.US2, // Set the Coralogix domain
-    userContext: nil,                     // No user context provided
-    environment: &quot;PROD&quot;,                  // Environment set to production
-    application: &quot;CX-Demo-Swift&quot;,         // Name of the application
-    version: &quot;1&quot;,                         // Application version
-    publicKey: &quot;&quot;,                        // Public key for authentication
-    ignoreUrls: [],                       // List of URLs to ignore
-    ignoreErrors: [],                     // List of errors to ignore
-    customDomainUrl: nil,                 // Custom domain URL (if any)
-    labels: [&quot;test&quot;: &quot;example&quot;],          // Additional labels for the RUM data
-    debug: true                           // Debug mode enabled
-)
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="kd">let</span><span class="w"> </span><span class="nv">options</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">CoralogixExporterOptions</span><span class="p">(</span>
+<span class="w">    </span><span class="n">coralogixDomain</span><span class="p">:</span><span class="w"> </span><span class="n">CoralogixDomain</span><span class="p">.</span><span class="n">US2</span><span class="p">,</span><span class="w"> </span><span class="c1">// Set the Coralogix domain</span>
+<span class="w">    </span><span class="n">userContext</span><span class="p">:</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w">                     </span><span class="c1">// No user context provided</span>
+<span class="w">    </span><span class="n">environment</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;PROD&quot;</span><span class="p">,</span><span class="w">                  </span><span class="c1">// Environment set to production</span>
+<span class="w">    </span><span class="n">application</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;CX-Demo-Swift&quot;</span><span class="p">,</span><span class="w">         </span><span class="c1">// Name of the application</span>
+<span class="w">    </span><span class="n">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="p">,</span><span class="w">                         </span><span class="c1">// Application version</span>
+<span class="w">    </span><span class="n">publicKey</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="w">                        </span><span class="c1">// Public key for authentication</span>
+<span class="w">    </span><span class="n">ignoreUrls</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">                       </span><span class="c1">// List of URLs to ignore</span>
+<span class="w">    </span><span class="n">ignoreErrors</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">                     </span><span class="c1">// List of errors to ignore</span>
+<span class="w">    </span><span class="n">customDomainUrl</span><span class="p">:</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w">                 </span><span class="c1">// Custom domain URL (if any)</span>
+<span class="w">    </span><span class="n">labels</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;test&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;example&quot;</span><span class="p">],</span><span class="w">          </span><span class="c1">// Additional labels for the RUM data</span>
+<span class="w">    </span><span class="n">debug</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">                           </span><span class="c1">// Debug mode enabled</span>
+<span class="p">)</span>
+</code></pre></div>
 <p>Each project should build and run on an iPhone emulator (15 Pro Max was tested) and emit telemetry to the Coralogix RUM platform.</p>
 <h3 id="step-4-using-the-demo-app">Step 4 - Using the Demo App</h3>
 <p>There are three current example tests on the demo app:<br />
@@ -939,7 +945,7 @@
 - <strong>Crash:</strong> Similar to the exception above—crashes the app, stop Xcode, and re-run the app to send analytics.  </p>
 <h3 id="react-native-workshop">React Native Workshop</h3>
 <p>Follow the instructions in the repo directory:<br />
-<a href="https://github.com/coralogix/workshops/tree/master/workshops/mobilerum/react">https://github.com/coralogix/workshops/tree/master/workshops/mobilerum/react</a></p>
+<a href="https://github.com/coralogix/workshops/tree/master/workshops/mobilerum/react">React Native Workshop</a></p>
 
 
 

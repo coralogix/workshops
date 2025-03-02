@@ -655,13 +655,13 @@ Requirements:<br />
 - Current versons (&gt;3.10) of <code>python</code> and <code>pip</code> installed 
 - Proper IDE i.e. Visual Studio Code  </p>
 <h3 id="step-1-setup">Step 1 - Setup</h3>
-<p>Clone repo:</p>
-<pre><code>git clone https://github.com/coralogix/workshops
-</code></pre>
+<p>Clone repo:
+<div class="highlight"><pre><span></span><code>git clone https://github.com/coralogix/workshops
+</code></pre></div></p>
 <h3 id="step-2-change-to-workshop-dir">Step 2 - Change to workshop dir</h3>
 <p>Change to the proper directory for workshop example:  </p>
-<pre><code>cd ./workshops/workshops/otel/monolith-workshop/python/
-</code></pre>
+<div class="highlight"><pre><span></span><code>cd ./workshops/workshops/otel/monolith-workshop/python/
+</code></pre></div>
 <h3 id="step-3-set-up-otel-collector-on-a-linux-host">Step 3 - Set up Otel Collector on a Linux host</h3>
 <p>Download and install latest CONTRIB release version from here:<br />
 <a href="https://github.com/open-telemetry/opentelemetry-collector-releases/releases">https://github.com/open-telemetry/opentelemetry-collector-releases/releases</a>  </p>
@@ -684,12 +684,12 @@ For more info: <a href="https://github.com/open-telemetry/opentelemetry-collecto
 </ul>
 <h4 id="run-python-app">Run Python App</h4>
 <p>This application creates a client and Flask server on the host and makes requests of it.  </p>
-<p>Run following scripts found under <code>./python</code>:</p>
-<pre><code>source 1-setup-python.sh
+<p>Run following scripts found under <code>./python</code>:
+<div class="highlight"><pre><span></span><code>source 1-setup-python.sh
 source 2-setup-python-env.sh
 source 3-start-python.sh
-</code></pre>
-<p><strong>Note</strong>: Running <code>source setup-python.sh</code> would output long list of packages and with messages like Successfully installed <em>opentelemetry-instrumentation-some-package</em>.<br />
+</code></pre></div>
+<strong>Note</strong>: Running <code>source setup-python.sh</code> would output long list of packages and with messages like Successfully installed <em>opentelemetry-instrumentation-some-package</em>.<br />
 To exit the running app, use <code>ctrl-c</code> and you will be in the <em>venv</em> shell- exit with <code>deactivate</code>  </p>
 <h3 id="step-5-study-results-in-coralogix-portal">Step 5 - Study results in Coralogix portal</h3>
 <p>Logs with span/trace IDs, and a complete client/server service will be available.  </p>

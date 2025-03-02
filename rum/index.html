@@ -825,7 +825,7 @@ Navigate to the <code>otelcol</code> directory</p>
 <p>Download a current release of the contrib OpenTelmetry Collector for your Mac (Apple Silicon are the <code>darwin_arm</code> releases)<br />
 <a href="https://github.com/open-telemetry/opentelemetry-collector-releases/releases">https://github.com/open-telemetry/opentelemetry-collector-releases/releases</a> </p>
 <p>Configure the Coralogix Exporter in <code>otel-config.yaml</code> with your Coralogix key and domain  </p>
-<pre><code>./otel-contrib --config otel-config.yaml
+<pre><code class="language-bash">./otel-contrib --config otel-config.yaml
 </code></pre>
 <h3 id="step-3-execute-the-rum-workshop">Step 3 - Execute the RUM workshop</h3>
 <ol>
@@ -840,7 +840,7 @@ Navigate to the <code>otelcol</code> directory</p>
 </li>
 <li>In<code>src/index.js</code> add the Coralogix RUM <code>Browser SDK</code> and <code>User Context and Labels</code> at the top and make sure to include the commented trace capturing stanza such that it looks like:</li>
 </ol>
-<pre><code>   CoralogixRum.init({
+<pre><code class="language-bash">   CoralogixRum.init({
       public_key: 'YOURKEY',
       application: 'YOURAPPNAME',
       version: 'YOURVERSION',
@@ -855,38 +855,38 @@ Navigate to the <code>otelcol</code> directory</p>
 </code></pre>
 <ol>
 <li>
-<p><strong>Set up node packages:</strong>
-   <code>bash
+<p><strong>Set up node packages:</strong><br />
+<code>bash
    source 1-setup-node.sh</code></p>
 </li>
 <li>
-<p><strong>Package files using webpack:</strong>
-   <code>bash
+<p><strong>Package files using webpack:</strong><br />
+<code>bash
    source 2-webpack.sh</code></p>
 </li>
-<li><strong>Start the node backend gateway service</strong>
-   <code>bash
+<li><strong>Start the node backend gateway service</strong><br />
+<code>bash
    source 3-node-backend.sh</code></li>
+<li><strong>Start the node frontend service</strong><br />
+<code>bash
+   source 4-node-frontend.sh</code></li>
+</ol>
+<p>Your screen should now look like the screenshot below- with Otel Collector in one terminal, back end in another, and frontend in another:<br />
+<img src="https://coralogix.github.io/workshops/images/rum/rum-vsc.png" width=800>    </p>
+<ol>
 <li>
-<p><strong>Start the node frontend service</strong>
-   <code>bash
-   source 4-node-frontend.sh</code>
-Your screen should now look like the screenshot below- with Otel Collector in one terminal, back end in another, and frontend in another:<br />
-<img src="https://coralogix.github.io/workshops/images/rum/vsc.png" width=540>    </p>
-</li>
-<li>
-<p><strong>Open web browser to exercise RUM sesions</strong>
+<p><strong>Open web browser to exercise RUM sesions</strong><br />
 Open browser to <code>http://localhost:3000</code><br />
 Try each option on the page to exercise RUM trace examples  </p>
 </li>
 <li>
-<p><strong>Study the results in Coralogix</strong> 
+<p><strong>Study the results in Coralogix</strong><br />
 Web browser RUM trace- notice the traceID:<br />
-<img src="https://coralogix.github.io/workshops/images/rum/rum-frontend-trace.png" width=540>     </p>
+<img src="https://coralogix.github.io/workshops/images/rum/rum-frontend-trace.png" width=800>     </p>
 </li>
 </ol>
 <p>Backend gateway service- the traceID is the same as the web browser RUM session ID- this demonstrates front-&gt;back tracing:<br />
-<img src="https://coralogix.github.io/workshops/images/rum/rum-frontend-trace.png" width=540>   </p>
+<img src="https://coralogix.github.io/workshops/images/rum/rum-frontend-trace.png" width=800>   </p>
 <ol>
 <li><strong>Optional: Clean up Node packages and webpack artifacts:</strong>
    <code>bash

@@ -3,9 +3,10 @@
 
 ## Browser RUM Workshop
 
-This example shows a front->back end tracing example app running on a Mac (can be run on Windows)  
-A front end Javascript app will send RUM telemetry (logs) as well as opt-in trace spans directly to Coralogix  
-Also the locally hosted Node back end app will trace spans through the localhost OpenTelemetry collector   
+- This example shows a browser->front->back end tracing example app running on a Mac (can be run on Windows)  
+- The browser will call a `frontend` service which then calls a `backend gateway` service and the RUM session trace ID will be propagated showing front-to-back tracing       
+- The browser sesesion RUM trace will be sent directly to Coralogix and the locally hosted Node frontend/backend apps will send trace spans through the localhost OpenTelemetry collector to Coralogix  
+- Logs will be printed to the console and not collected by the collector in this example- the focus is on tracing  
 
 ### Step 1 - Setup
 Clone the repository:
@@ -14,7 +15,8 @@ git clone https://github.com/coralogix/workshops
 ```
   
 ### Step 2 - Install and run an OpenTelemetry Collector on your Mac (Can work for Windows as well)  
-  
+
+**Start a new terminal**- this must be run in a dedicated terminal (see screenshot below)      
 Navigate to the `otelcol` directory
 ```bash
 cd ./workshops/workshops/rum/otelcol
@@ -24,21 +26,20 @@ Download a current release of the contrib OpenTelmetry Collector for your Mac (A
 [https://github.com/open-telemetry/opentelemetry-collector-releases/releases](https://github.com/open-telemetry/opentelemetry-collector-releases/releases) 
   
 Configure the Coralogix Exporter in `otel-config.yaml` with your Coralogix key and domain  
-Run the collector with in a **dedicated terminal**:  
 ```
 ./otel-contrib --config otel-config.yaml
 ```  
   
 ### Step 3 - Execute the RUM workshop
   
-1. **Start a new terminal**
+1. **Start a new terminal**- this must be run in a dedicated terminal (see screenshot below)   
 
-2. **Ensure Node.js is installed.**
-
+2. **Ensure current Node.js and npm are installed**  
+  
 3. **Add Coralogix RUM integration:**
    - In`src/index.js` add the Coralogix RUM `Browser SDK` and `User Context and Labels` at the top and make sure to include the commented trace capturing stanza such that it looks like:
 
-   ```
+```
    CoralogixRum.init({
       public_key: 'YOURKEY',
       application: 'YOURAPPNAME',
@@ -47,40 +48,42 @@ Run the collector with in a **dedicated terminal**:
       traceParentInHeader: {
          enabled: true,
          options: {
-            propagateTraceHeaderCorsUrls: [new RegExp('http://localhost.*')],
+            propagateTraceHeaderCorsUrls: [new RegExp('.*')],
          },
       },
    });
-   ```  
-
+```  
+  
 4. **Set up node packages:**
    ```bash
    source 1-setup-node.sh
    ```
-
+  
 5. **Package files using webpack:**
    ```bash
    source 2-webpack.sh
    ```
-
-6. **Edit the file to add your sourcemap key and region:**
-   - This key is available in the RUM Integration -> SourceMap setup.
-
-7. **Upload the sourcemap:**
+6. **Start the node backend gateway service**
    ```bash
-   source 3-sourcemap.sh
+   source 3-node-backend.sh
    ```
-8. **Setup the env variables for OpenTelemetry zero-code instrumentation of Node:**
+7. **Start the node frontend service**
    ```bash
-   source 4-setup-otel-env-var.sh
+   source 4-node-frontend.sh
    ```
-9. **Run the Node Express web server:**
-   ```bash
-   source 5-node.sh
-   ```
-   - Open a browser to `http://localhost:3000` to load the app served by Node. Refresh a few times  
-   - Study the RUM results in Coralogix including RUM logs, front/back end traces, APM of the Node back end, and RUM dashboards  
-   - To stop the Express server and OpenTelmetry Collector, use `ctrl-c`  
+Your screen should now look like the screenshot below- with Otel Collector in one terminal, back end in another, and frontend in another:  
+<img src="https://coralogix.github.io/workshops/images/rum/vsc.png" width=540>    
+  
+8. **Open web browser to exercise RUM sesions**
+Open browser to `http://localhost:3000`  
+Try each option on the page to exercise RUM trace examples  
+  
+9. **Study the results in Coralogix** 
+Web browser RUM trace- notice the traceID:  
+<img src="https://coralogix.github.io/workshops/images/rum/rum-frontend-trace.png" width=540>     
+  
+Backend gateway service- the traceID is the same as the web browser RUM session ID- this demonstrates front->back tracing:  
+<img src="https://coralogix.github.io/workshops/images/rum/rum-frontend-trace.png" width=540>   
   
 10. **Optional: Clean up Node packages and webpack artifacts:**
    ```bash
@@ -133,9 +136,9 @@ Each project should build and run on an iPhone emulator (15 Pro Max was tested) 
 ### Step 4 - Using the Demo App
 
 There are three current example tests on the demo app:  
-- **Network requests:** Will send user session data while the app is running.  
+- **Network requests:** Will send user session data while the app is running  
 - **Exception:** Will crash the app with an exception. Stop Xcode and then run the app in the emulator so the app restarts and instrumentation sends crash analytics to Coralogix.  
-- **Crash:** Similar to the exception above - crashes the app, stop Xcode, re-run the app to send analytics.  
+- **Crash:** Similar to the exception above - crashes the app, stop Xcode, re-run the app to send analytics  
   
 ### React Native Workshop
 

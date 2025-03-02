@@ -1,5 +1,3 @@
-import { CoralogixRum } from '@coralogix/browser';
-
 // This example assumes running on a mac with localhost mac otel collector to collect app spans
 // Initialize Coralogix RUM first
 // copy Coralogix RUM SDK from Integration here
@@ -11,6 +9,8 @@ import { CoralogixRum } from '@coralogix/browser';
 //   },
 
 // Example from Coralogix RUM Integration:
+
+// import { CoralogixRum } from '@coralogix/browser';
 // CoralogixRum.init({
 //   public_key: 'yourkeyhere',
 //   application: 'yourappnamehere',
@@ -19,11 +19,23 @@ import { CoralogixRum } from '@coralogix/browser';
 //   traceParentInHeader: {
 //     enabled: true,
 //     options: {
-//       propagateTraceHeaderCorsUrls: [new RegExp('http://localhost.*')],
+//       propagateTraceHeaderCorsUrls: [new RegExp('.*')],
 //     },
 //   },
 // });
 
+// Import Coralogix RUM for monitoring
+import { CoralogixRum } from '@coralogix/browser';
+
+// Set user context and labels
+CoralogixRum.setUserContext({
+  user_id: '123',
+  user_name: 'name',
+  user_email: 'user@email.com',
+  user_metadata: { role: 'admin' }
+});
+
+CoralogixRum.setLabels({ paymentMethod: 'visa', userTheme: 'black' });
 
 console.log('JavaScript file loaded.');
 
@@ -36,65 +48,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // Inject styles dynamically
     const style = document.createElement('style');
     style.innerHTML = `
-      body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
-        background-color: #f4f4f4;
-      }
-      header {
-        background-color: #28a745;
-        color: white;
-        padding: 10px 20px;
-        margin-bottom: 20px;
-      }
-      .container {
-        background: white;
-        padding: 20px;
-        border-radius: 4px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      }
-      .section {
-        margin-top: 20px;
-      }
-      button {
-        padding: 10px 15px;
-        margin-right: 10px;
-        border: none;
-        background-color: #28a745;
-        color: white;
-        border-radius: 4px;
-        cursor: pointer;
-      }
-      button:hover {
-        background-color: #218838;
-      }
-      #greeting {
-        margin-top: 10px;
-        font-size: 1.2em;
-        color: #333;
-      }
-      #apiResponse, #errorStatus, #slowOpStatus {
-        margin-top: 10px;
-        font-family: monospace;
-        background: #eee;
-        padding: 10px;
-        border-radius: 4px;
-        max-height: 200px;
-        overflow-y: auto;
-      }
-      #errorStatus {
-        color: #28a745;
-      }
+      body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
+      header { background-color: #28a745; color: white; padding: 10px 20px; margin-bottom: 20px; }
+      .container { background: white; padding: 20px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+      .section { margin-top: 20px; }
+      button { padding: 10px 15px; margin-right: 10px; border: none; background-color: #28a745; color: white; border-radius: 4px; cursor: pointer; }
+      button:hover { background-color: #218838; }
+      #greeting, #apiResponse, #errorStatus, #slowOpStatus { margin-top: 10px; font-size: 1.2em; color: #333; }
+      #apiResponse, #errorStatus, #slowOpStatus { font-family: monospace; background: #eee; padding: 10px; border-radius: 4px; max-height: 200px; overflow-y: auto; }
+      #errorStatus { color: #28a745; }
     `;
     document.head.appendChild(style);
 
     // Inject HTML structure dynamically
     appDiv.innerHTML = `
-      <header>
-        <nav></nav>
-      </header>
+      <header><nav></nav></header>
       <div class="container">
-        <h1>Welcome to Coralogix RUM Demo!</h1>
+        <h1>Welcome to Coralogix RUM Microservices Demo!</h1>
 
         <div class="section">
           <h2>User Greeting</h2>
@@ -108,28 +78,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
         <div class="section">
           <h2>Error Simulation</h2>
-          <p>Click the button below to simulate a JavaScript error. This error will be sent to Coralogix RUM.</p>
+          <p>Click to simulate a JavaScript error (sent to Coralogix RUM).</p>
           <button id="errorButton">Simulate Error</button>
           <div id="errorStatus"></div>
         </div>
 
         <div class="section">
           <h2>Slow Operation Simulation</h2>
-          <p>Click the button to simulate a heavy computation (for performance monitoring):</p>
           <button id="slowOpButton">Simulate Slow Operation</button>
           <div id="slowOpStatus"></div>
         </div>
 
         <div class="section">
-          <h2>API Call Simulation</h2>
-          <p>Click the button to make an AJAX call (simulating a network request):</p>
+          <h2>API Call to Backend</h2>
           <button id="apiButton">Fetch API Data</button>
           <div id="apiResponse"></div>
         </div>
       </div>
     `;
 
-    console.log('UI injected successfully with styles.');
+    console.log('UI injected successfully.');
 
     // Get Coralogix RUM Tracer
     const customTracer = CoralogixRum.getCustomTracer();
@@ -139,11 +107,11 @@ document.addEventListener('DOMContentLoaded', () => {
       event.preventDefault();
       
       const globalSpan = customTracer.startGlobalSpan('greeting-span', { action: 'submit' });
-      
+
       globalSpan.withContext(() => {
         const customSpan = globalSpan.startCustomSpan('process-greeting', { action: 'submit' });
         const name = document.getElementById('nameInput').value;
-        document.getElementById('greeting').innerText = `Hello, ${name}! Welcome to Coralogix RUM Demo!`;
+        document.getElementById('greeting').innerText = `Hello, ${name}! Welcome to the Microservices Demo!`;
         customSpan.endSpan();
       });
 
@@ -156,10 +124,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
       globalSpan.withContext(() => {
         const customSpan = globalSpan.startCustomSpan('simulate-error', { errorType: 'manual' });
-        const errorStatus = document.getElementById('errorStatus');
-        errorStatus.innerText = 'Simulated error triggered...';
+        document.getElementById('errorStatus').innerText = 'Simulated error triggered...';
         setTimeout(() => {
-          nonExistentFunction();
+          nonExistentFunction(); // Simulated JS error
         }, 0);
         customSpan.endSpan();
       });
@@ -188,16 +155,16 @@ document.addEventListener('DOMContentLoaded', () => {
       globalSpan.endSpan();
     });
 
-    // API Call Simulation
+    // API Call Simulation (Talks to `app.js`, which forwards to `service.js`)
     document.getElementById('apiButton').addEventListener('click', () => {
       const globalSpan = customTracer.startGlobalSpan('api-call-span', { action: 'fetch-data' });
 
       globalSpan.withContext(() => {
-        const customSpan = globalSpan.startCustomSpan('fetch-api-data', { url: 'https://jsonplaceholder.typicode.com/posts/1' });
+        const customSpan = globalSpan.startCustomSpan('fetch-api-data', { url: 'http://localhost:3000/api/data' });
         const apiDiv = document.getElementById('apiResponse');
         apiDiv.innerText = 'Fetching data...';
 
-        fetch('https://jsonplaceholder.typicode.com/posts/1')
+        fetch('http://localhost:3000/api/data')
           .then((response) => response.json())
           .then((data) => {
             apiDiv.innerText = JSON.stringify(data, null, 2);

@@ -25,7 +25,7 @@ exporters:
 
   coralogix:
     # The Coralogix domain
-    domain: YOURCORALGIXDOMAINHERE
+    domain: YOURCORALOGIXDOMAINHERE
     # Your Coralogix private key is sensitive
     private_key: "YOURCORALOGIXAPIKEYHERE"
 

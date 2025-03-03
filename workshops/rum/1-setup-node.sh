@@ -1,7 +1,7 @@
 # Required to avoid npm issues
 unset NODE_OPTIONS
 
-npm init es6 -y
+npm init -y
 
 # Install OpenTelemetry dependencies
 npm install --save @opentelemetry/api

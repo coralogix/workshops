@@ -1,9 +1,7 @@
 # Required to avoid npm issues
 unset NODE_OPTIONS
 
-# Initialize package.json with "type": "module"
-echo '{ "type": "module" }' > package.json
-npm init -y
+npm init es6 -y
 
 # Install OpenTelemetry dependencies
 npm install --save @opentelemetry/api

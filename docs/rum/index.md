@@ -100,7 +100,7 @@ Your screen should now look like the screenshot below, with the OpenTelemetry Co
 10. **Optional: Clean up Node packages and webpack artifacts:**
 
     ```bash
-    source 6-cleanup.sh
+    source 5-cleanup.sh
     ```
 
 ---

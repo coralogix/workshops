@@ -1,0 +1,1 @@
+./otel-contrib --config otel-config.yaml

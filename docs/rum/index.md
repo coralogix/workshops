@@ -28,10 +28,10 @@ cd ./workshops/workshops/rum/otelcol
 Download a current release of the contrib OpenTelemetry Collector for your Mac (Apple Silicon are the `darwin_arm` releases):  
 [Download OpenTelemetry Collector](https://github.com/open-telemetry/opentelemetry-collector-releases/releases)
 
-Configure the Coralogix Exporter in `otel-config.yaml` with your Coralogix key and domain:
+Configure the Coralogix Exporter in `otel-config.yaml` with your Coralogix key and domain and then start the OpenTelemetry Collector:
 
 ```bash
-./otel-contrib --config otel-config.yaml
+./source start-otelcol.sh
 ```
 
 ### Step 3 - Execute the RUM workshop

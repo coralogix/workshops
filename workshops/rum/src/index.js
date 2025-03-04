@@ -25,17 +25,6 @@
 // });
 
 // Import Coralogix RUM for monitoring
-import { CoralogixRum } from '@coralogix/browser';
-
-// Set user context and labels
-CoralogixRum.setUserContext({
-  user_id: '123',
-  user_name: 'name',
-  user_email: 'user@email.com',
-  user_metadata: { role: 'admin' }
-});
-
-CoralogixRum.setLabels({ paymentMethod: 'visa', userTheme: 'black' });
 
 console.log('JavaScript file loaded.');
 

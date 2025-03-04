@@ -25,9 +25,9 @@ exporters:
 
   coralogix:
     # The Coralogix domain
-    domain: YOURCORALOGIXDOMAINHERE
+    domain: YOURDOMAINHERE
     # Your Coralogix private key is sensitive
-    private_key: "YOURCORALOGIXAPIKEYHERE"
+    private_key: "YOURKEYHERE"
 
     # (Optional) Ordered list of Resource attributes that are used for Coralogix
     # AppName and SubSystem values. The first non-empty Resource attribute is used.

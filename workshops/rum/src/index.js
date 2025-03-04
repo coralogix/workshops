@@ -26,6 +26,9 @@
 
 // Import Coralogix RUM for monitoring
 
+
+CoralogixRum.setLabels({ paymentMethod: 'visa', userTheme: 'black' });
+
 console.log('JavaScript file loaded.');
 
 document.addEventListener('DOMContentLoaded', () => {

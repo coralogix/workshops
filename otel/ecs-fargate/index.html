@@ -782,7 +782,8 @@
 Update the <code>deploy-cf.sh</code> script with your API key and Coralogix Region<br />
 Notice the environment variables in the container definition- ECS Fargate uses a <code>localhost</code> network space for sending traces  </p>
 <h3 id="step-4-deploy-cloudformation-to-set-up-fargate-components">Step 4: Deploy Cloudformation to set up Fargate components</h3>
-<p>Note rolename: <code>AWSphpOTelExecutionRole</code></p>
+<p>In line 47 update the ParameterStore name to something unique as it can conflict with other parameters in your region.<br />
+Note rolename: <code>AWSphpOTelExecutionRole</code>  </p>
 <div class="highlight"><pre><span></span><code>source deploy-cf.sh
 </code></pre></div>
 <h3 id="step-5-launch-task">Step 5: Launch Task</h3>

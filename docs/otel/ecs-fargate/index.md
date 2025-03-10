@@ -37,7 +37,7 @@ source deploy-cf.sh
 ### Step 5: Launch Task  
 
 Launch according to your standard procedure  
-Ensure the security group can allow for port 5000 requests  
+You may need a security group can allow for port 8080 requests  
 
 The task creates the following containers:  
 - Coralogix Python autogenerator  

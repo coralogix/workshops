@@ -51,7 +51,7 @@ nav:
     - Overview and Value Proposition: otel/about-opentelemetry.md
   - Workshops:
     - Kubernetes Microservices+Otel Collector: otel/microservices/index.md
-    - AWS ECS Fargate (Python): otel/ecs-fargate/index.md
+    - AWS ECS Fargate (php): otel/ecs-fargate/index.md
     - AWS ECS EC2 (Python): otel/ecs-ec2/index.md
     - Autogenerators - Instrumentation References: otel/autogenerators/index.md
     - Auto Tracing Injection: otel/autoinjection/index.md

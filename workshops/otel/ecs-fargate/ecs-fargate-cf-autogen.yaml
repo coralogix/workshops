@@ -44,7 +44,7 @@ Resources:
   OTELConfigParameter:
     Type: AWS::SSM::Parameter
     Properties:
-      Name: /CX_OTEL/config.yaml
+      Name: /CX_OTEL/phpconfigch.yaml
       Description: Configuration parameter for Coralogix OTEL Collector
       Type: String
       Value: |
@@ -181,26 +181,38 @@ Resources:
   ECSTaskDefinition:
     Type: 'AWS::ECS::TaskDefinition'
     Properties:
-      Family: Coralogix-observability
+      Family: Coralogix-Observability-php
       TaskRoleArn: !GetAtt ECSTaskRole.Arn
       ExecutionRoleArn: !GetAtt ECSExecutionRole.Arn
       NetworkMode: awsvpc
       ContainerDefinitions:
-        - Name: cx-autogen-py
-          Image: public.ecr.aws/w3s4j9x9/microservices-demo:py-autogen
+        - Name: cx-php-autogen
+          Image: public.ecr.aws/w3s4j9x9/microservices-demo:php-autogen-http
           Cpu: 0
           PortMappings:
-            - ContainerPort: 5000
-              HostPort: 5000
+            - ContainerPort: 8000
               Protocol: tcp
           Essential: true
+          workingDirectory: "/home/code"
           Environment:
+            - name: OTEL_PHP_AUTOLOAD_ENABLED
+              value: "true"
             - name: OTEL_SERVICE_NAME
-              value: cx-autogen-py
+              value: cx-php-autogen
+            - name: OTEL_TRACES_EXPORTER
+              value: "otlp"
             - name: OTEL_RESOURCE_ATTRIBUTES
-              value: cx.application.name=cx-autogen-py,cx.subsystem.name=cx-autogen-py
-            - name: OTEL_EXPORTER_OTLP_ENDPOINT
-              value: http://localhost:4317
+              value: cx.application.name=cx-php-autogen,cx.subsystem.name=cx-php-autogen
+            - name: OTEL_EXPORTER_OTLP_PROTOCOL
+              value: "http/protobuf"
+            - name: OTEL_PROPAGATORS
+              value: "baggage,tracecontext"
+            - name: OTEL_METRICS_EXPORTER
+              value: "none"
+            - name: OTEL_LOGS_EXPORTER
+              value: "none"
+          "entryPoint": ["/bin/sh"]
+          "command": ["/home/code/entrypoint.sh"]
           MountPoints: []
           VolumesFrom: []
           LogConfiguration:
@@ -265,7 +277,7 @@ Resources:
                   - 's3:GetObject'
                   - 's3:GetBucketLocation'
                 Resource: '*'
-      RoleName: AWSOTelRole
+      RoleName: AWSphpOTelRole
 
   ECSExecutionRole:
     Type: 'AWS::IAM::Role'
@@ -285,4 +297,4 @@ Resources:
         - 'arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy'
         - 'arn:aws:iam::aws:policy/CloudWatchLogsFullAccess'
         - 'arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess'
-      RoleName: AWSOTelExecutionRole
+      RoleName: AWSphpOTelExecutionRole

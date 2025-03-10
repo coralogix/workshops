@@ -28,7 +28,8 @@ Notice the environment variables in the container definition- ECS Fargate uses a
 
 ### Step 4: Deploy Cloudformation to set up Fargate components 
   
-Note rolename: `AWSphpOTelExecutionRole`
+In line 47 update the ParameterStore name to something unique as it can conflict with other parameters in your region.  
+Note rolename: `AWSphpOTelExecutionRole`  
   
 ```
 source deploy-cf.sh

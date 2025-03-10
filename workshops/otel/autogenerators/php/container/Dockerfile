@@ -5,7 +5,6 @@ RUN mkdir -p /home/code
 
 # Copy application files and entrypoint scripts
 COPY index.php /home/code/
-COPY client.php /home/code/
 COPY entrypoint.sh /home/code/
 
 # Set working directory

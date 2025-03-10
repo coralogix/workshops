@@ -2,10 +2,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: cx-php-server
+  name: cx-php-autogen
 spec:
   selector:
-    app: cx-php-server
+    app: cx-php-autogen
   ports:
     - protocol: TCP
       port: 8080
@@ -14,20 +14,20 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cx-php-server
+  name: cx-php-autogen
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: cx-php-server
+      app: cx-php-autogen
   template:
     metadata:
       labels:
-        app: cx-php-server
+        app: cx-php-autogen
     spec:
       containers:
-        - name: cx-php-server
+        - name: cx-php-autogen
           image: public.ecr.aws/w3s4j9x9/microservices-demo:php-autogen-http
           imagePullPolicy: Always
           workingDir: /home/code
@@ -40,9 +40,9 @@ spec:
                 fieldRef:
                   fieldPath: status.hostIP
             - name: OTEL_SERVICE_NAME
-              value: cx-php-server
+              value: cx-php-autogen
             - name: OTEL_RESOURCE_ATTRIBUTES
-              value: cx.application.name=cx-php-server,cx.subsystem.name=cx-php-server
+              value: cx.application.name=cx-php-autogen,cx.subsystem.name=cx-php-autogen
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
               value: http://$(OTEL_IP):4318
             - name: OTEL_PHP_AUTOLOAD_ENABLED
@@ -57,54 +57,3 @@ spec:
               value: "none"
             - name: OTEL_LOGS_EXPORTER
               value: "none"
-          command: ["php", "-S", "0.0.0.0:8080", "-t", "/home/code"]
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: cx-php-client
-  namespace: default
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: cx-php-client
-  template:
-    metadata:
-      labels:
-        app: cx-php-client
-    spec:
-      containers:
-      - name: cx-php-client
-        image: public.ecr.aws/w3s4j9x9/microservices-demo:php-autogen-http
-        imagePullPolicy: Always
-        workingDir: /home/code
-        ports:
-          - name: http
-            containerPort: 8080
-        env:
-        - name: OTEL_IP
-          valueFrom:
-            fieldRef:
-              fieldPath: status.hostIP
-        - name: OTEL_SERVICE_NAME
-          value: cx-php-client
-        - name: OTEL_RESOURCE_ATTRIBUTES
-          value: cx.application.name=cx-php-client,cx.subsystem.name=cx-php-client
-        - name: OTEL_EXPORTER_OTLP_ENDPOINT
-          value: http://$(OTEL_IP):4318
-        - name: OTEL_PHP_AUTOLOAD_ENABLED
-          value: "true"
-        - name: OTEL_TRACES_EXPORTER
-          value: "otlp"
-        - name: OTEL_EXPORTER_OTLP_PROTOCOL
-          value: "http/protobuf"
-        - name: OTEL_PROPAGATORS
-          value: "baggage,tracecontext"
-        - name: OTEL_METRICS_EXPORTER
-          value: "none"
-        - name: OTEL_LOGS_EXPORTER
-          value: "none"
-        # test if needed
-        command: [ "/bin/bash", "-c", "--" ]
-        args: [ "while true; do sleep 30; done;" ]

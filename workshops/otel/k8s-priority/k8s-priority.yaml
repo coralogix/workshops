@@ -1,0 +1,31 @@
+global:
+  clusterName: "your-cluster-name"
+  domain: "cx498.coralogix.com"
+
+opentelemetry-agent:
+  priorityClassName: "high-priority"
+  resources:
+    requests:
+      cpu: "500m"
+      memory: "512Mi"
+    limits:
+      cpu: "1"
+      memory: "1Gi"
+  presets:
+    metadata:
+      enabled: true
+      clusterName: "{{ .Values.global.clusterName }}"
+
+opentelemetry-cluster-collector:
+  priorityClassName: "high-priority"
+  resources:
+    requests:
+      cpu: "500m"
+      memory: "512Mi"
+    limits:
+      cpu: "1"
+      memory: "1Gi"
+  presets:
+    metadata:
+      enabled: true
+      clusterName: "{{ .Values.global.clusterName }}"

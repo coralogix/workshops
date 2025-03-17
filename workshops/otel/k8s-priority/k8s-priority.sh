@@ -1,0 +1,9 @@
+kubectl apply -f - <<EOF
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: high-priority
+value: 1000
+preemptionPolicy: PreemptLowerPriority
+description: "High priority class for OpenTelemetry components"
+EOF

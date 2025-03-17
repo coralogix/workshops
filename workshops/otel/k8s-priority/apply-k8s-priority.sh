@@ -1,0 +1,1 @@
+helm upgrade --install otel-coralogix-integration coralogix/otel-integration --values k8s-priority.yaml

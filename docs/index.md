@@ -9,8 +9,8 @@ Except for the RUM workshops, the workshops are **not designed to run on a deskt
 
 The workshops are community maintained only and are not official documentation for either OpenTelemetry or Coralogix  
 Official docs are here:  
-[Coralogix Docs](https://coralogix.com/docs/)  
-[OpenTelemetry](https://opentelemetry.io/)  
+- [Coralogix Docs](https://coralogix.com/docs/)  
+- [OpenTelemetry](https://opentelemetry.io/)  
 
 ## Workshop Prerequisites
 

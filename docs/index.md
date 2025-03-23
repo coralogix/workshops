@@ -1,92 +1,144 @@
 # Coralogix Workshops
 
-Coralogix workshops are community maintained reference implementations and tutorials on a variety of topics including  
-- OpenTelemetry tracing / Collector configs  
-- Observability techniques  
-- Coralogix platform  
-    
-Except for the RUM workshops, the workshops are **not designed to run on a desktop or laptop machine regardless of Kubernetes/docker method of installation.**  They are only designed to run on production grade Kubernetes clusters or virtual machines i.e. AWS EKS or EC2.  
+Welcome to the **Coralogix Workshops** — community-maintained reference implementations and tutorials focused on:
 
-The workshops are community maintained only and are not official documentation for either OpenTelemetry or Coralogix  
-Official docs are here:  
-- [Coralogix Docs](https://coralogix.com/docs/)  
-- [OpenTelemetry](https://opentelemetry.io/)  
+- OpenTelemetry tracing and Collector configuration
+- Observability techniques
+- Coralogix platform usage
+
+> **Note:** Except for RUM workshops, these examples are **not designed** to run on local machines (laptops/desktops), even with Docker or Kubernetes. They require **production-grade environments**, such as AWS EKS or EC2.
+
+These workshops are **community-supported** and are *not official documentation* for either OpenTelemetry or Coralogix.
+
+**Official Documentation:**
+
+- [Coralogix Docs](https://coralogix.com/docs/)
+- [OpenTelemetry Docs](https://opentelemetry.io/)
+
+---
 
 ## Workshop Prerequisites
 
-[Ready to get started? Check the prerequisites](prereqs.md)
+Before diving in, make sure you meet all requirements:  
+[Check the prerequisites](prereqs.md)
 
-## Coralogix and OpenTelemetry  
+---
 
-Learn more about the [Coralogix and OpenTelemetry here](https://coralogix.com/docs/opentelemetry/getting-started/)
+## Coralogix and OpenTelemetry
 
-# The Workshops
-Workshops are divided into three types: 
-- OpenTelemetry Collector: various configuration techniques  
-- Tracing Instrumentation: multiple types of instrumentating apps to emit traces
-- Other: Real User Monitoring (Browser/Mobile) and other examples
+Learn more: [Coralogix + OpenTelemetry Overview](https://coralogix.com/docs/opentelemetry/getting-started/)
 
-They all operate the same way:  
-- Each example has a reference app and/or config you can try  
-- Study the Github repo contents to understand how these configurations/examples work  
+---
 
+## The Workshops
+
+Workshops are organized into three categories:
+
+- **OpenTelemetry Collector** – Configuration techniques and examples
+- **Tracing Instrumentation** – Sample apps instrumented in multiple languages
+- **Other** – RUM (Real User Monitoring), eBPF, and more
+
+Each workshop includes a reference app and/or configuration you can study and deploy.  
+Browse the GitHub repo to understand how these examples work.
+
+---
 
 ## Tracing Workshops
 
-[Microsservices Workshop: Tracing + Collector configs](otel/microservices/index.md)
-- Kubernetes OpenTelemetry Collector for metrics, traces, and logs  
-- OpenTelemetry tracing instrumentation for containerized Python apps  
-- Simulated application using real microservices  
-- Prometheus custom metrics collection  
-- Redis trace spans / database monitoring 
-- Sample "bad" deployment and errors  
+### [Microservices Workshop: Tracing + Collector Configs](otel/microservices/index.md)
 
-**OpenTelemetry Collector Configuration Examples**  
-- [Prometheus](otel/prometheus/index.md)  
-- [MySQL Metrics + Query Performance](otel/mysql/index.md)  
-- [Redis Metrics](otel/redis/index.md)  
+Includes:
 
-## Tracing In Hosted Container Environments
+- OpenTelemetry Collector for metrics, traces, and logs (Kubernetes)
+- Automatic tracing instrumentation for Python container apps
+- Realistic microservices-based simulation
+- Prometheus custom metrics
+- Redis span tracing and DB monitoring
+- Simulated failure scenarios and “bad deployments”
 
-[AWS ECS Fargate (php)](otel/ecs-fargate/index.md)  
-- Microservice container, OpenTelemetry Collector  
-- Complete Fargate task and ECS config instructions  
+### OpenTelemetry Collector Configuration Examples
 
-[AWS ECS EC2 (Python/node)](otel/ecs-ec2/index.md)  
-- OpenTelemetry collector container  
-- Example app container/task and Cloudformation stack
+- [Prometheus Collector Config](otel/prometheus/index.md)
+- [MySQL Metrics + Query Performance](otel/mysql/index.md)
+- [Redis Metrics](otel/redis/index.md)
 
-## Tracing Instrumentation Examples For Hosts/Containers in Various Languages  
-### Autogenerators: Otel Tracing Instrumentation Demo Apps  
-Tracing examples for container/monolith: demos for .NET, Node, Java, and Python  
-- [Autogenerators](otel/autogenerators/index.md)  
+---
 
-## Kubernetes Specific Easy Tracing  
+## Tracing in Hosted Container Environments
 
-### OpenTelemetry Autoinjection: Otel Tracing on K8S With Auto Instrumentation Injection
-Automatically inject traciong instrumentation in k8s: demos for .NET, Node, Java, and Python  
-- [Kubernetese Instrumentation Autoinjection](otel/autoinjection/index.md)  
+### [AWS ECS Fargate (PHP)](otel/ecs-fargate/index.md)
 
-### eBPF: Otel APM Without Any Instrumentation - uses Linux Kernel Software based on eBPF
-Automatically generate APM spans and dashboards without any instrumentation- demos of .NET, Node, Java, and Python  
-- [Kubernetes eBPF](otel/ebpf/index.md)  
+- Microservice with OpenTelemetry Collector
+- Full Fargate Task & ECS configuration
 
+### [AWS ECS EC2 (Python/Node.js)](otel/ecs-ec2/index.md)
 
-## Manual Instrumetnation 
+- OpenTelemetry Collector container setup
+- Sample app container & CloudFormation template
 
-### OpenTelmetry Manual Instrumentation
-Examples of Otel APIs/SDKs to export logs/metrics/trace telemetry directly from an application to an OpenTelemetry Collector or OTLP endpoint  
-- [Otel Manual Instrumentation](otel/manual-instrumentation/index.md)  
+---
 
-## Real User Monitoring (RUM)  
-Visualize user experience metrics and link user sessions to back end applications  
-- [Real User Monitoring (RUM)](rum/index.md) for browsers and mobile apps  
+## Tracing Instrumentation Examples (Containers/Hosts)
 
-## Coralogix Live Demo Scripts  
-Scripts to install the Collector on a host or Kubernetes  
-- [Live Demo Scripts](https://github.com/coralogix/workshops/tree/master/livedemotools)  
-- Make sure to change all variables and refer to [Coralogix Docs](https://coralogix.com/docs/)  
-  
-## Official OpenTelemetry Demo  
-Try out the comprehensive demo materials from the OpenTelemetry Project  
-- [OpenTelemetry Demo](otel/opentelemetrydemo/index.md) for Kubernetes  
+### [Autogenerators](otel/autogenerators/index.md)
+
+Demo apps with automatic tracing for:
+
+- .NET
+- Node.js
+- Java
+- Python
+
+---
+
+## Kubernetes-Specific Tracing
+
+### [Autoinjection: Instrumentation Injection in Kubernetes](otel/autoinjection/index.md)
+
+Auto-inject tracing for:
+
+- .NET
+- Node.js
+- Java
+- Python
+
+### [Kubernetes eBPF: APM Without Instrumentation](otel/ebpf/index.md)
+
+Use Linux Kernel’s eBPF to generate spans and dashboards **without modifying code or deployments**:
+
+- .NET
+- Node.js
+- Java
+- Python
+
+---
+
+## Manual Instrumentation
+
+### [OpenTelemetry Manual Instrumentation](otel/manual-instrumentation/index.md)
+
+Examples using the OpenTelemetry SDKs and APIs to send telemetry data (logs, metrics, traces) directly from applications.
+
+---
+
+## Real User Monitoring (RUM)
+
+Measure frontend performance and correlate user sessions with backend telemetry:  
+[RUM for Browser & Mobile](rum/index.md)
+
+---
+
+## Coralogix Live Demo Scripts
+
+Install the OpenTelemetry Collector on a host or Kubernetes cluster:
+
+- [Live Demo Tools Repo](https://github.com/coralogix/workshops/tree/master/livedemotools)
+
+> **Be sure to modify variables appropriately and follow the official setup guides in** [Coralogix Docs](https://coralogix.com/docs/)
+
+---
+
+## Official OpenTelemetry Demo
+
+Try out the official OpenTelemetry demo app:  
+[OpenTelemetry Demo for Kubernetes](otel/opentelemetrydemo/index.md)

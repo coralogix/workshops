@@ -7,16 +7,13 @@ copyright: Copyright Coralogix. All rights reserved.
 
 theme:
   name: material
-  # custom_dir: overrides
   palette:
     primary: green
   logo: images/horizontal.png
   favicon: images/favicon.png
   font:
-      text: "Nunito Sans"
-      code: "Jetbrains mono"
-  # include_search_page: false
-  # search_index_only: true
+    text: "Nunito Sans"
+    code: "Jetbrains mono"
   language: en
   features:
     - navigation.tabs
@@ -36,26 +33,35 @@ markdown_extensions:
   - admonition
   - attr_list
   - md_in_html
-  - pymdownx.superfences  # Ensures proper rendering of nested code blocks in lists
-  - pymdownx.tabbed  # Enables tabbed code examples
-  - pymdownx.highlight  # Improves syntax highlighting
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - pymdownx.highlight
   - pymdownx.snippets
   - pymdownx.emoji
-  - pymdownx.details  # Enables collapsible sections
-  - pymdownx.tasklist  # Improves checklists
-  - pymdownx.tilde  # Enables strikethrough formatting
+  - pymdownx.details
+  - pymdownx.tasklist
+  - pymdownx.tilde
 
 nav:
   - Home: index.md
-  - OpenTelemetry Info:
-    - Overview and Value Proposition: otel/about-opentelemetry.md
+  - Prerequisites: prereqs.md
+  - Coralogix + OpenTelemetry: 
+      - Getting Started Overview: https://coralogix.com/docs/opentelemetry/getting-started/
   - Workshops:
-    - Kubernetes Microservices+Otel Collector: otel/microservices/index.md
-    - AWS ECS Fargate (php): otel/ecs-fargate/index.md
-    - AWS ECS EC2 (Python): otel/ecs-ec2/index.md
-    - Autogenerators - Instrumentation References: otel/autogenerators/index.md
-    - Auto Tracing Injection: otel/autoinjection/index.md
-    - eBPF: otel/ebpf/index.md
-    - Tail Sampling: otel/tailsampling/index.md
-    - Real User Monitoring (RUM) Browser/Mobile: rum/index.md
-    - Official OpenTelemetry Demo: otel/opentelemetrydemo/index.md
+      - Microservices + Otel Collector: otel/microservices/index.md
+      - Otel Collector Examples:
+          - Prometheus Collector Config: otel/prometheus/index.md
+          - MySQL Metrics + Query Performance: otel/mysql/index.md
+          - Redis Metrics: otel/redis/index.md
+      - Hosted Container Environments:
+          - AWS ECS Fargate (PHP): otel/ecs-fargate/index.md
+          - AWS ECS EC2 (Python/Node.js): otel/ecs-ec2/index.md
+      - Instrumentation Examples:
+          - Autogenerators (.NET, Node.js, Java, Python): otel/autogenerators/index.md
+          - Manual Instrumentation: otel/manual-instrumentation/index.md
+      - Kubernetes Specific:
+          - Auto Tracing Injection: otel/autoinjection/index.md
+          - eBPF (No Instrumentation): otel/ebpf/index.md
+      - Real User Monitoring (RUM): rum/index.md
+      - Official OpenTelemetry Demo: otel/opentelemetrydemo/index.md
+  - Live Demo Tools: https://github.com/coralogix/workshops/tree/master/livedemotools

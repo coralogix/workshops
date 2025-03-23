@@ -20,8 +20,7 @@ Official docs are here:
 
 Learn more about the [Coralogix and OpenTelemetry here](https://coralogix.com/docs/opentelemetry/getting-started/)
 
-# The Workshops  
-
+# The Workshops
 Workshops are divided into three types: 
 - OpenTelemetry Collector: various configuration techniques  
 - Tracing Instrumentation: multiple types of instrumentating apps to emit traces
@@ -49,16 +48,15 @@ They all operate the same way:
 
 ## Tracing In Hosted Container Environments
 
-[AWS ECS Fargate (php)](otel/ecs-fargate/index.md)
+[AWS ECS Fargate (php)](otel/ecs-fargate/index.md)  
 - Microservice container, OpenTelemetry Collector  
 - Complete Fargate task and ECS config instructions  
 
-[AWS ECS EC2 (Python/node)](otel/ecs-ec2/index.md)
+[AWS ECS EC2 (Python/node)](otel/ecs-ec2/index.md)  
 - OpenTelemetry collector container  
 - Example app container/task and Cloudformation stack
 
-## Tracing Instrumentation Examples For Hosts/Containers in Various Languages
-  
+## Tracing Instrumentation Examples For Hosts/Containers in Various Languages  
 ### Autogenerators: Otel Tracing Instrumentation Demo Apps  
 Tracing examples for container/monolith: demos for .NET, Node, Java, and Python  
 - [Autogenerators](otel/autogenerators/index.md)  
@@ -66,12 +64,12 @@ Tracing examples for container/monolith: demos for .NET, Node, Java, and Python
 ## Kubernetes Specific Easy Tracing  
 
 ### OpenTelemetry Autoinjection: Otel Tracing on K8S With Auto Instrumentation Injection
-Automatically inject traciong instrumentation in k8s: demos for .NET, Node, Java, and Python
-- [Autoinjection](otel/autoinjection/index.md)  
+Automatically inject traciong instrumentation in k8s: demos for .NET, Node, Java, and Python  
+- [Kubernetese Instrumentation Autoinjection](otel/autoinjection/index.md)  
 
 ### eBPF: Otel APM Without Any Instrumentation - uses Linux Kernel Software based on eBPF
-Automatically generate APM spans and dashboards without any instrumentation- demos for .NET, Node, Java, and Python 
-- [eBPF](otel/ebpf/index.md)  
+Automatically generate APM spans and dashboards without any instrumentation- demos of .NET, Node, Java, and Python  
+- [Kubernetes eBPF](otel/ebpf/index.md)  
 
 
 ## Manual Instrumetnation 

@@ -352,107 +352,11 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#opentelemetry-information" class="md-nav__link">
+  <a href="#coralogix-and-opentelemetry" class="md-nav__link">
     <span class="md-ellipsis">
-      OpenTelemetry Information
+      Coralogix and OpenTelemetry
     </span>
   </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#apm-and-opentelemetry-collector-tracing-instrumentation" class="md-nav__link">
-    <span class="md-ellipsis">
-      APM and OpenTelemetry Collector &amp; Tracing Instrumentation
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="APM and OpenTelemetry Collector & Tracing Instrumentation">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#microservices-workshop" class="md-nav__link">
-    <span class="md-ellipsis">
-      Microservices Workshop
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#other-containerized-environments" class="md-nav__link">
-    <span class="md-ellipsis">
-      Other Containerized Environments
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#apm-autogenerators-otel-tracing-instrumentation-demo-apps" class="md-nav__link">
-    <span class="md-ellipsis">
-      APM - Autogenerators: Otel Tracing Instrumentation Demo Apps
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#apm-autoinjection-otel-tracing-on-k8s-with-auto-instrumentation-injection" class="md-nav__link">
-    <span class="md-ellipsis">
-      APM - Autoinjection: Otel Tracing on K8S With Auto Instrumentation Injection
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#apm-ebpf-otel-apm-without-any-instrumentation-uses-linux-kernel-software-based-on-ebpf" class="md-nav__link">
-    <span class="md-ellipsis">
-      APM - eBPF: Otel APM Without Any Instrumentation - uses Linux Kernel Software based on eBPF
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#opentelmetry-manual-instrumentation" class="md-nav__link">
-    <span class="md-ellipsis">
-      OpenTelmetry Manual Instrumentation
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#real-user-monitoring-rum" class="md-nav__link">
-    <span class="md-ellipsis">
-      Real User Monitoring (RUM)
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#coralogix-live-demo-scripts" class="md-nav__link">
-    <span class="md-ellipsis">
-      Coralogix Live Demo Scripts
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#official-opentelemetry-demo" class="md-nav__link">
-    <span class="md-ellipsis">
-      Official OpenTelemetry Demo
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -804,57 +708,69 @@
 
 
 <h1 id="coralogix-workshops">Coralogix Workshops</h1>
-<p>Goal: help learn and practice OpenTelemetry and Coralogix RUM integrations<br />
-Each workshop includes easy-to-deploy reference implementations to see exactly how these integrations work.  </p>
-<p>These are designed to run on production grade cloud environments except for the RUM workshop which runs on a Mac development environment. <br />
-Except for the RUM workshop, these are <strong>not designed to run on a desktop or laptop machine regardless of Kubernetes/docker method of installation.</strong>  </p>
-<p>Before beginning please consult  <a href="https://coralogix.com/docs/">Coralogix Docs</a> for any topic of interest.<br />
-The workshops are not official documentation for the Coralogix platform.  </p>
+<p>Coralogix workshops are community maintained reference implementations and tutorials on a variety of topics including<br />
+- OpenTelemetry tracing / Collector configs<br />
+- Observability techniques<br />
+- Coralogix platform  </p>
+<p>Except for the RUM workshops, the workshops are <strong>not designed to run on a desktop or laptop machine regardless of Kubernetes/docker method of installation.</strong>  They are only designed to run on production grade Kubernetes clusters or virtual machines i.e. AWS EKS or EC2.  </p>
+<p>The workshops are community maintained only and are not official documentation for either OpenTelemetry or Coralogix<br />
+Official docs are here:<br />
+<a href="https://coralogix.com/docs/">Coralogix Docs</a><br />
+<a href="https://opentelemetry.io/">OpenTelemetry</a>  </p>
 <h2 id="workshop-prerequisites">Workshop Prerequisites</h2>
-<p><a href="prereqs/">Ready to get started? Check the prerequisites</a>.</p>
-<h2 id="opentelemetry-information">OpenTelemetry Information</h2>
-<p>Coralogix leverages open standard telemetry shippers, and infrastructure/application metrics, traces, and logs utilize OpenTelemetry.<br />
-Learn more about the <a href="otel/about-opentelemetry/">OpenTelemetry Overview and Value Proposition</a>.</p>
-<h2 id="apm-and-opentelemetry-collector-tracing-instrumentation">APM and OpenTelemetry Collector &amp; Tracing Instrumentation</h2>
-<h3 id="microservices-workshop">Microservices Workshop</h3>
-<p><a href="otel/microservices/">Kubernetes / APM</a>
+<p><a href="prereqs/">Ready to get started? Check the prerequisites</a></p>
+<h2 id="coralogix-and-opentelemetry">Coralogix and OpenTelemetry</h2>
+<p>Learn more about the <a href="https://coralogix.com/docs/opentelemetry/getting-started/">Coralogix and OpenTelemetry here</a></p>
+<h1 id="the-workshops">The Workshops</h1>
+<p>Workshops are divided into three types: 
+- OpenTelemetry Collector: various configuration techniques<br />
+- Tracing Instrumentation: multiple types of instrumentating apps to emit traces
+- Other: Real User Monitoring (Browser/Mobile) and other examples</p>
+<p>They all operate the same way:<br />
+- Each example has a reference app and/or config you can try<br />
+- Study the Github repo contents to understand how these configurations/examples work  </p>
+<h2 id="tracing-workshops">Tracing Workshops</h2>
+<p><a href="otel/microservices/">Microsservices Workshop: Tracing + Collector configs</a>
 - Kubernetes OpenTelemetry Collector for metrics, traces, and logs<br />
 - OpenTelemetry tracing instrumentation for containerized Python apps<br />
 - Simulated application using real microservices<br />
 - Prometheus custom metrics collection<br />
-- Redis<br />
+- Redis trace spans / database monitoring 
 - Sample "bad" deployment and errors  </p>
 <p><strong>OpenTelemetry Collector Configuration Examples</strong><br />
 - <a href="otel/prometheus/">Prometheus</a><br />
 - <a href="otel/mysql/">MySQL Metrics + Query Performance</a><br />
 - <a href="otel/redis/">Redis Metrics</a>  </p>
-<h3 id="other-containerized-environments">Other Containerized Environments</h3>
-<p><a href="otel/ecs-fargate/">AWS ECS Fargate (php)</a><br />
+<h2 id="tracing-in-hosted-container-environments">Tracing In Hosted Container Environments</h2>
+<p><a href="otel/ecs-fargate/">AWS ECS Fargate (php)</a>
 - Microservice container, OpenTelemetry Collector<br />
 - Complete Fargate task and ECS config instructions  </p>
-<p><a href="otel/ecs-ec2/">AWS ECS EC2 (Python/node)</a><br />
+<p><a href="otel/ecs-ec2/">AWS ECS EC2 (Python/node)</a>
 - OpenTelemetry collector container<br />
 - Example app container/task and Cloudformation stack</p>
-<h3 id="apm-autogenerators-otel-tracing-instrumentation-demo-apps">APM - Autogenerators: Otel Tracing Instrumentation Demo Apps</h3>
+<h2 id="tracing-instrumentation-examples-for-hostscontainers-in-various-languages">Tracing Instrumentation Examples For Hosts/Containers in Various Languages</h2>
+<h3 id="autogenerators-otel-tracing-instrumentation-demo-apps">Autogenerators: Otel Tracing Instrumentation Demo Apps</h3>
 <p>Tracing examples for container/monolith: demos for .NET, Node, Java, and Python<br />
 - <a href="otel/autogenerators/">Autogenerators</a>  </p>
-<h3 id="apm-autoinjection-otel-tracing-on-k8s-with-auto-instrumentation-injection">APM - Autoinjection: Otel Tracing on K8S With Auto Instrumentation Injection</h3>
-<p>Automatically inject traciong instrumentation in k8s: demos for .NET, Node, Java, and Python<br />
+<h2 id="kubernetes-specific-easy-tracing">Kubernetes Specific Easy Tracing</h2>
+<h3 id="opentelemetry-autoinjection-otel-tracing-on-k8s-with-auto-instrumentation-injection">OpenTelemetry Autoinjection: Otel Tracing on K8S With Auto Instrumentation Injection</h3>
+<p>Automatically inject traciong instrumentation in k8s: demos for .NET, Node, Java, and Python
 - <a href="otel/autoinjection/">Autoinjection</a>  </p>
-<h3 id="apm-ebpf-otel-apm-without-any-instrumentation-uses-linux-kernel-software-based-on-ebpf">APM - eBPF: Otel APM Without Any Instrumentation - uses Linux Kernel Software based on eBPF</h3>
-<p>Automatically generate APM spans and dashboards without any instrumentation- demos for .NET, Node, Java, and Python<br />
+<h3 id="ebpf-otel-apm-without-any-instrumentation-uses-linux-kernel-software-based-on-ebpf">eBPF: Otel APM Without Any Instrumentation - uses Linux Kernel Software based on eBPF</h3>
+<p>Automatically generate APM spans and dashboards without any instrumentation- demos for .NET, Node, Java, and Python 
 - <a href="otel/ebpf/">eBPF</a>  </p>
+<h2 id="manual-instrumetnation">Manual Instrumetnation</h2>
 <h3 id="opentelmetry-manual-instrumentation">OpenTelmetry Manual Instrumentation</h3>
-<p>Examples of Otel APIs/SDKs to export telemetry directly from an application <br />
+<p>Examples of Otel APIs/SDKs to export logs/metrics/trace telemetry directly from an application to an OpenTelemetry Collector or OTLP endpoint<br />
 - <a href="otel/manual-instrumentation/">Otel Manual Instrumentation</a>  </p>
-<h3 id="real-user-monitoring-rum">Real User Monitoring (RUM)</h3>
-<p>Visualize user experience metrics<br />
+<h2 id="real-user-monitoring-rum">Real User Monitoring (RUM)</h2>
+<p>Visualize user experience metrics and link user sessions to back end applications<br />
 - <a href="rum/">Real User Monitoring (RUM)</a> for browsers and mobile apps  </p>
-<h3 id="coralogix-live-demo-scripts">Coralogix Live Demo Scripts</h3>
+<h2 id="coralogix-live-demo-scripts">Coralogix Live Demo Scripts</h2>
 <p>Scripts to install the Collector on a host or Kubernetes<br />
 - <a href="https://github.com/coralogix/workshops/tree/master/livedemotools">Live Demo Scripts</a><br />
 - Make sure to change all variables and refer to <a href="https://coralogix.com/docs/">Coralogix Docs</a>  </p>
-<h3 id="official-opentelemetry-demo">Official OpenTelemetry Demo</h3>
+<h2 id="official-opentelemetry-demo">Official OpenTelemetry Demo</h2>
 <p>Try out the comprehensive demo materials from the OpenTelemetry Project<br />
 - <a href="otel/opentelemetrydemo/">OpenTelemetry Demo</a> for Kubernetes  </p>
 

@@ -980,7 +980,7 @@
         
   
   <span class="md-ellipsis">
-    Auto Tracing Injection
+    K8s Auto Tracing Injection
     
   </span>
   
@@ -1002,7 +1002,7 @@
         
   
   <span class="md-ellipsis">
-    eBPF (No Instrumentation)
+    K8s eBPF (No Instrumentation)
     
   </span>
   
@@ -1032,7 +1032,7 @@
         
   
   <span class="md-ellipsis">
-    Real User Monitoring (RUM)
+    Real User Monitoring Browser/Mobile (RUM)
     
   </span>
   
@@ -1116,7 +1116,7 @@
 <h2 id="requirements">Requirements</h2>
 <p>Prerequisites <a href="https://coralogix.github.io/workshops/prereqs/">here</a>  </p>
 <h2 id="what-is-an-autogenerator">What Is An Autogenerator?</h2>
-<p>An <code>autogenerator</code> is a reference implementation of OpenTelemetry that can run as a <strong><em>standalone</em></strong> single deployment application and emits interesting telemetry (metrics/traces/logs) to use as a 'how-to' template for your own OpenTelemetry use.  </p>
+<p>An <code>autogenerator</code> is a reference implementation of OpenTelemetry that can run as a <strong><em>standalone</em></strong> single deployment application and emits interesting telemetry (metricsm, traces, and/orlogs) to use as a 'how-to' template for your own OpenTelemetry use.  </p>
 <p>The goal of a reference implementation is to answer the question "how do I instrument my app for OpenTelemetry?" via showing a simple live example app that you can try yourself and then refer to for your own projects.  </p>
 <h2 id="instructions">Instructions</h2>
 <p>Each autogenerator project contains the following:</p>
@@ -1131,10 +1131,10 @@
 - <code>Dockerfile</code> to demonstrate containerization<br />
 - .yaml deployment example for Kubernetes<br />
 - Although the container examples are for Kubernetes, you can port them to any container style environment so long as required ports are open and there are no prohibitions for the deployment making requests of itself.  </p>
-<p><strong>Monolith Examples</strong><br />
+<p><strong>Host Examples</strong><br />
 - Env variable and other setup/run scripts<br />
 - Otel collector <code>config.yaml</code> if needed<br />
-- Monolith logs are NOT shipped by Otel Collector- if you want to ship them, they can be written to <code>/var/</code> with an updated Otel collector config  </p>
+- Host logs are NOT shipped by Otel Collector- if you want to ship them, they can be written to <code>/var/</code> with an updated Otel collector config  </p>
 <p>Most of these example create an <code>http client</code> and <code>http server</code> in a loop so that client and server spans are generated.  </p>
 <p>These examples are under frequent revision so please open an issue with any bug reports.  </p>
 <p>Before beginning, study <a href="https://opentelemetry.io/docs/zero-code/">Primary Otel docs for instrumentation</a>  </p>
@@ -1149,30 +1149,39 @@
 - .NET 8 app on a Linux container<br />
 - Generates looping requests of dual client/server .NET app
 - Logs with <code>Microsoft.Extensions.Logging</code><br />
-- <a href="https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation">Otel Docs/Repo</a>  </p>
+- <a href="https://opentelemetry.io/docs/zero-code/dotnet/">Otel Docs/Repo</a>  </p>
 <p><code>dotnet6-linux</code><br />
 - .NET 6 app on a Linux container<br />
 - Generates looping requests of <code>api.github.com</code><br />
 - Makes error spans<br />
-- <a href="https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation">Otel Docs/Repo</a>  </p>
+- <a href="https://opentelemetry.io/docs/zero-code/dotnet/">Otel Docs/Repo</a>  </p>
+<p><code>go</code>
+- Container / host examples
+- Go app with self requesting client/server app
+- Trace/span logging
+- <a href="https://github.com/open-telemetry/opentelemetry-go-instrumentation/">Otel Docs/Repo</a>  </p>
 <p><code>java</code>
-- Container / monolith built with Maven <br />
+- Container / host built with Maven <br />
 - Generates looping requests of a self running Spring server<br />
 - Trace and span ID log auto-injection using <code>log4j2</code><br />
 - Requires Coralogix parsing <code>Body</code> field that contains Trace and Span IDs<br />
-- <a href="https://github.com/open-telemetry/opentelemetry-java">Otel Docs/Repo</a>  </p>
+- <a href="https://opentelemetry.io/docs/zero-code/java/">Otel Docs/Repo</a>  </p>
 <p><code>node</code>
-- Container / monolith examples<br />
+- Container / host examples<br />
 - Generates looping requests of a self running Express server<br />
 - Trace and span ID log injection using <code>Pino</code><br />
 - Does not require parsing for Trace and span IDs<br />
-- <a href="https://github.com/open-telemetry/opentelemetry-js">Otel Docs/Repo</a>  </p>
+- <a href="https://opentelemetry.io/docs/zero-code/js/">Otel Docs/Repo</a>  </p>
+<p><code>php</code>
+- Container examples<br />
+- Generates looping requests of a self running php server and also includes a laraavel example<br />
+- <a href="https://opentelemetry.io/docs/zero-code/php/">Otel Docs/Repo</a>  </p>
 <p><code>python</code>
-- Container / monolith examples<br />
+- Container / host examples<br />
 - Generates looping requests of a self running Flask server<br />
 - Trace and span ID log injection using <code>Python Logger</code><br />
 - Does not require parsing for Trace and span IDs<br />
-- <a href="https://github.com/open-telemetry/opentelemetry-python">Otel Docs/Repo</a>  </p>
+- <a href="https://opentelemetry.io/docs/zero-code/python/">Otel Docs/Repo</a>  </p>
 
 
 

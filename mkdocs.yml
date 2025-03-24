@@ -60,8 +60,8 @@ nav:
           - Autogenerators (.NET, Node.js, Java, Python): otel/autogenerators/index.md
           - Manual Instrumentation: otel/manual-instrumentation/index.md
       - Kubernetes Specific:
-          - Auto Tracing Injection: otel/autoinjection/index.md
-          - eBPF (No Instrumentation): otel/ebpf/index.md
-      - Real User Monitoring (RUM): rum/index.md
+          - K8s Auto Tracing Injection: otel/autoinjection/index.md
+          - K8s eBPF (No Instrumentation): otel/ebpf/index.md
+      - Real User Monitoring Browser/Mobile (RUM): rum/index.md
       - Official OpenTelemetry Demo: otel/opentelemetrydemo/index.md
   - Live Demo Tools: https://github.com/coralogix/workshops/tree/master/livedemotools

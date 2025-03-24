@@ -5,11 +5,10 @@ Prerequisites [here](https://coralogix.github.io/workshops/prereqs/)
 
 ## What Is An Autogenerator?  
 
-An `autogenerator` is a reference implementation of OpenTelemetry that can run as a ***standalone*** single deployment application and emits interesting telemetry (metrics/traces/logs) to use as a 'how-to' template for your own OpenTelemetry use.  
+An `autogenerator` is a reference implementation of OpenTelemetry that can run as a ***standalone*** single deployment application and emits interesting telemetry (metricsm, traces, and/orlogs) to use as a 'how-to' template for your own OpenTelemetry use.  
 
 The goal of a reference implementation is to answer the question "how do I instrument my app for OpenTelemetry?" via showing a simple live example app that you can try yourself and then refer to for your own projects.  
-
-
+  
 ## Instructions  
  
 Each autogenerator project contains the following:
@@ -27,10 +26,10 @@ Each autogenerator project contains the following:
 - .yaml deployment example for Kubernetes  
 - Although the container examples are for Kubernetes, you can port them to any container style environment so long as required ports are open and there are no prohibitions for the deployment making requests of itself.  
   
-**Monolith Examples**  
+**Host Examples**  
 - Env variable and other setup/run scripts  
 - Otel collector `config.yaml` if needed  
-- Monolith logs are NOT shipped by Otel Collector- if you want to ship them, they can be written to `/var/` with an updated Otel collector config  
+- Host logs are NOT shipped by Otel Collector- if you want to ship them, they can be written to `/var/` with an updated Otel collector config  
   
 Most of these example create an `http client` and `http server` in a loop so that client and server spans are generated.  
 
@@ -54,31 +53,42 @@ cd workshops/workshops/otel/autogenerators
 - .NET 8 app on a Linux container  
 - Generates looping requests of dual client/server .NET app
 - Logs with `Microsoft.Extensions.Logging`  
-- [Otel Docs/Repo](https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation)  
+- [Otel Docs/Repo](https://opentelemetry.io/docs/zero-code/dotnet/)  
   
 `dotnet6-linux`  
 - .NET 6 app on a Linux container  
 - Generates looping requests of `api.github.com`  
 - Makes error spans  
-- [Otel Docs/Repo](https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation)  
-
+- [Otel Docs/Repo](https://opentelemetry.io/docs/zero-code/dotnet/)  
+  
+`go`
+- Container / host examples
+- Go app with self requesting client/server app
+- Trace/span logging
+- [Otel Docs/Repo](https://github.com/open-telemetry/opentelemetry-go-instrumentation/)  
+  
 `java`
-- Container / monolith built with Maven   
+- Container / host built with Maven   
 - Generates looping requests of a self running Spring server  
 - Trace and span ID log auto-injection using `log4j2`  
 - Requires Coralogix parsing `Body` field that contains Trace and Span IDs  
-- [Otel Docs/Repo](https://github.com/open-telemetry/opentelemetry-java)  
+- [Otel Docs/Repo](https://opentelemetry.io/docs/zero-code/java/)  
 
 `node`
-- Container / monolith examples  
+- Container / host examples  
 - Generates looping requests of a self running Express server  
 - Trace and span ID log injection using `Pino`  
 - Does not require parsing for Trace and span IDs  
-- [Otel Docs/Repo](https://github.com/open-telemetry/opentelemetry-js)  
+- [Otel Docs/Repo](https://opentelemetry.io/docs/zero-code/js/)  
 
+`php`
+- Container examples  
+- Generates looping requests of a self running php server and also includes a laraavel example  
+- [Otel Docs/Repo](https://opentelemetry.io/docs/zero-code/php/)  
+  
 `python`
-- Container / monolith examples  
+- Container / host examples  
 - Generates looping requests of a self running Flask server  
 - Trace and span ID log injection using `Python Logger`  
 - Does not require parsing for Trace and span IDs  
-- [Otel Docs/Repo](https://github.com/open-telemetry/opentelemetry-python)  
+- [Otel Docs/Repo](https://opentelemetry.io/docs/zero-code/python/)  

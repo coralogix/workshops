@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cx-autogen-py-django
+spec:
+  selector:
+    name: cx-autogen-py-django
+  ports:
+  - protocol: TCP
+    port: 5000
+    targetPort: 5000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cx-autogen-py-django
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: cx-autogen-py-django
+  template:
+    metadata:
+      labels:
+        name: cx-autogen-py-django
+    spec:
+      containers:
+      - name: cx-autogen-py-django
+        image: public.ecr.aws/w3s4j9x9/microservices-demo:py-autogen-django
+        imagePullPolicy: Always
+        workingDir: /home/code
+        ports:
+        - name: http
+          containerPort: 5000
+        env:
+        - name: OTEL_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: OTEL_SERVICE_NAME
+          value: cx-autogen-py-django
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: cx.application.name=cx-autogen-py-django,cx.subsystem.name=cx-autogen-py-django
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: http://$(OTEL_IP):4317
+

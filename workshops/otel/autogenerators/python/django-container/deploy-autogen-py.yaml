@@ -44,4 +44,7 @@ spec:
           value: cx.application.name=cx-autogen-py-django,cx.subsystem.name=cx-autogen-py-django
         - name: OTEL_EXPORTER_OTLP_ENDPOINT
           value: http://$(OTEL_IP):4317
+        - name: DJANGO_SETTINGS_MODULE
+          value: jsonlogger_demo.settings
+
 

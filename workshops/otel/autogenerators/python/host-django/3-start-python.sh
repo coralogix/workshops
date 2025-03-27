@@ -1,0 +1,1 @@
+./env/bin/opentelemetry-instrument python3 manage.py runserver --noreload

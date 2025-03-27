@@ -1,0 +1,7 @@
+unset OTEL_EXPORTER_OTLP_ENDPOINT
+unset OTEL_METRICS_EXPORTER
+unset OTEL_TRACES_EXPORTER
+unset OTEL_NODE_RESOURCE_DETECTORS
+unset OTEL_EXPORTER_OTLP_ENDPOINT
+unset OTEL_SERVICE_NAME
+export OTEL_RESOURCE_ATTRIBUTES=service.name=cx-autogen-python-django,cx.application.name=cx-autogen-python-django,cx.subsystem.name=cx-autogen-python-django

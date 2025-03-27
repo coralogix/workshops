@@ -1,9 +1,3 @@
-#!/bin/sh
-opentelemetry-instrument python3 manage.py runserver --noreload
-
-# Wait a moment for the server to become available
-sleep 2
-
 #!/bin/bash
 
 URL="http://localhost:8000"

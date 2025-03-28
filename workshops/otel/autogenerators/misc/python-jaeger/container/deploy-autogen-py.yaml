@@ -34,7 +34,9 @@ spec:
               containerPort: 5000
           env:
             - name: OTEL_EXPORTER_JAEGER_AGENT_HOST
-              value: "jaeger-agent.default.svc.cluster.local"  # Points to standalone Jaeger Agent service
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
             - name: OTEL_EXPORTER_JAEGER_AGENT_PORT
               value: "6831"
             - name: OTEL_SERVICE_NAME

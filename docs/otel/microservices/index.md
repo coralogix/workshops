@@ -26,8 +26,7 @@ Tthree services will appear:
 
 - `cx-shopping-cart-reqs` - a requesting service initiating a transaction  
 - `cx-payment-gateway-flask` - a server that is a bridge for a transaction to a database- returns a transaction ID to the `shopping-cart`  
-- `cx-redis` - an instance of a redis database used for a transaction
-
+- `cx-redis` - an instance of a redis database used for a transaction  
 ```
 source deploy-all.sh
 ```
@@ -66,13 +65,13 @@ Span latency will return to normal and Payment Gateway 500 responses will cease.
    
 **OpenTelemetry Instrumentation For Containerized Apps**  
 - Dockerfiles for the containers contain OpenTelemetry auto instrumentation for Python and are in `/python` root level  
-- Study Otel Python [Auto Instrumentation](https://opentelemetry.io/docs/instrumentation/python/automatic/)
-- Notice how the [Dockerfile](https://github.com/coralogix/workshops/blob/master/workshops/otel/microservices-demo/python/dockerfile-microsvcsdemo) adds the automatic instrumentation  
-- And observe how the [kickstart script](https://github.com/coralogix/workshops/blob/master/workshops/otel/microservices-demo/python/k8s/start-reqs-envurl-otel.sh) uses the instrumenting command  
+- Study Otel Python [Auto Instrumentation](https://opentelemetry.io/docs/instrumentation/python/automatic/)  
+- Notice how the [Dockerfile](https://github.com/coralogix/workshops/blob/master/workshops/otel/microservices/python/dockerfile-python) adds the automatic instrumentation   
+- And observe how the [kickstart script](https://github.com/coralogix/workshops/blob/master/workshops/otel/microservices/python/k8s/entrypoint-client-reqs.sh) uses the instrumenting command  
 
 **Kubernetes Deployments for Otel Tracing Instrumentation**    
 - `.yaml` deployment files are in `python/yaml` and show how environment variables are used to control the instrumentation
-- study the [deploy-all.yaml]((https://github.com/coralogix/workshops/tree/master/workshops/otel/microservices/yaml)) which shows the environment variables that control OpenTelemetry tracing instrumentation. Focus on how the [Kubernetes Downward API](https://kubernetes.io/docs/concepts/workloads/pods/downward-api/) use of `status.hostIP` to tell the instrumentation where to send traces: to the IP adddress of the host node on port 4317 - this is the default GRPC endpoint for OTLP trace spans    
+- study the [deploy-all.yaml]((https://github.com/coralogix/workshops/tree/master/workshops/otel/microservices/yaml) which shows the environment variables that control OpenTelemetry tracing instrumentation. Focus on how the [Kubernetes Downward API](https://kubernetes.io/docs/concepts/workloads/pods/downward-api/) use of `status.hostIP` to tell the instrumentation where to send traces: to the IP adddress of the host node on port 4317 - this is the default GRPC endpoint for OTLP trace spans    
 
 **Instrumented Applications and Frameworks**  
 - The Python apps that drive this example are in the `python/apps` dir  

@@ -70,8 +70,9 @@ Span latency will return to normal and Payment Gateway 500 responses will cease.
 - And observe how the [kickstart script](https://github.com/coralogix/workshops/blob/master/workshops/otel/microservices/python/k8s/entrypoint-client-reqs.sh) uses the instrumenting command  
 
 **Kubernetes Deployments for Otel Tracing Instrumentation**    
-- `.yaml` deployment files are in `python/yaml` and show how environment variables are used to control the instrumentation
-- study the [deploy-all.yaml]((https://github.com/coralogix/workshops/tree/master/workshops/otel/microservices/yaml) which shows the environment variables that control OpenTelemetry tracing instrumentation. Focus on how the [Kubernetes Downward API](https://kubernetes.io/docs/concepts/workloads/pods/downward-api/) use of `status.hostIP` to tell the instrumentation where to send traces: to the IP adddress of the host node on port 4317 - this is the default GRPC endpoint for OTLP trace spans    
+- `.yaml` deployment files are in `python/yaml` and show how environment variables are used to control the instrumentation  
+- study the [deploy-all.yaml](https://github.com/coralogix/workshops/tree/master/workshops/otel/microservices/yaml) which shows the environment variables that control OpenTelemetry tracing instrumentation. Focus on how the [Kubernetes Downward API](https://kubernetes.io/docs/concepts/workloads/pods/downward-api/) use of `status.hostIP` to tell the instrumentation where to send traces: to the IP adddress of the host node on port 4317 
+- this is the default GRPC endpoint for OTLP trace spans for python  
 
 **Instrumented Applications and Frameworks**  
 - The Python apps that drive this example are in the `python/apps` dir  

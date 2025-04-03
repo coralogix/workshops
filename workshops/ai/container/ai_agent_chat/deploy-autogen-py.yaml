@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cx-py-ai-chat
+spec:
+  selector:
+    name: cx-py-ai-chat
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cx-py-ai-chat
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      name: cx-py-ai-chat
+  template:
+    metadata:
+      labels:
+        name: cx-py-ai-chat
+        app: cx-py-ai-chat
+        tracing: enabled
+    spec:
+      containers:
+        - name: cx-py-ai-chat
+          image: public.ecr.aws/w3s4j9x9/microservices-demo:py-ai-chat
+          imagePullPolicy: Always
+          workingDir: /home/code
+          ports:
+            - name: http
+              containerPort: 5000
+          env:
+            - name: OTEL_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: OTEL_SERVICE_NAME
+              value: cx-py-ai-chat
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: cx.application.name=cx-py-ai-chat,cx.subsystem.name=cx-py-ai-chat
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: http://$(OTEL_IP):4317
+            - name: OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT
+              value: "true"
+            - name: OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED
+              value: "true"
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: openai-api
+                  key: api-key

@@ -30,6 +30,14 @@ Learn more: [Coralogix + OpenTelemetry Overview](https://coralogix.com/docs/open
 
 ---
 
+## OpenTelemetry Collector Tools  
+
+OTTL Playground - test OTTL statements: [https://ottl.run/](https://ottl.run/)  
+OTelBin: visualize and share OpenTelemetry colelctor configs: [https://www.otelbin.io/](https://www.otelbin.io/)  
+
+
+---
+
 ## The Workshops
 
 Workshops are organized into three categories:

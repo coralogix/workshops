@@ -27,7 +27,7 @@ opentelemetry-gateway:
       tail_sampling:
         decision_wait: 10s
         num_traces: 1000
-        expected_new_traces_per_sec: 100
+        expected_new_traces_per_sec: 500
         policies:
           [
             {
@@ -39,17 +39,17 @@ opentelemetry-gateway:
                     name: match-service-cx-py-1,
                     type: string_attribute,
                     string_attribute: {
-                      key: serviceName,
-                      values: [cx-py-1]
-                    }
+                      key: service.name,
+                      values: [cx-py-1],
+                    },
                   },
                   {
                     name: sample-cx-py-1,
                     type: probabilistic,
-                    probabilistic: { sampling_percentage: 80 }
-                  }
-                ]
-              }
+                    probabilistic: { sampling_percentage: 80 },
+                  },
+                ],
+              },
             },
             {
               name: cx-py-2-policy,
@@ -60,18 +60,18 @@ opentelemetry-gateway:
                     name: match-service-cx-py-2,
                     type: string_attribute,
                     string_attribute: {
-                      key: serviceName,
-                      values: [cx-py-2]
-                    }
+                      key: service.name,
+                      values: [cx-py-2],
+                    },
                   },
                   {
                     name: sample-cx-py-2,
                     type: probabilistic,
-                    probabilistic: { sampling_percentage: 10 }
-                  }
-                ]
-              }
-            }
+                    probabilistic: { sampling_percentage: 10 },
+                  },
+                ],
+              },
+            },
           ]
 
 opentelemetry-collector:

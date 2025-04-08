@@ -1,0 +1,41 @@
+global:
+  clusterName: slerner-cluster
+  domain: cx498.coralogix.com
+
+opentelemetry-agent:
+  enabled: true
+  mode: daemonset
+  presets:
+    loadBalancing:
+      enabled: true
+      routingKey: "traceID"
+      hostname: coralogix-opentelemetry-gateway
+
+  config:
+    service:
+      pipelines:
+        traces:
+          exporters:
+            - loadbalancing
+
+opentelemetry-gateway:
+  enabled: true
+  replicaCount: 3
+
+  config:
+    processors:
+      tail_sampling:
+        decision_wait: 10s
+        num_traces: 100
+        expected_new_traces_per_sec: 10
+        policies:
+          [
+            {
+              name: randomized-policy,
+              type: probabilistic,
+              probabilistic: {sampling_percentage: 10}
+            }
+          ]
+
+opentelemetry-collector:
+  enabled: false

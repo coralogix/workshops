@@ -20,7 +20,7 @@ opentelemetry-agent:
 
 opentelemetry-gateway:
   enabled: true
-  replicaCount: 1
+  replicaCount: 3
 
   config:
     processors:

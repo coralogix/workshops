@@ -22,7 +22,7 @@
     
     
       
-        <title>Tail Sampling - Coralogix Workshops</title>
+        <title>OpenTelemetry Tail Sampling - Coralogix Workshops</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#tail-sampling" class="md-skip">
+        <a href="#opentelemetry-tail-sampling" class="md-skip">
           Skip to content
         </a>
       
@@ -109,7 +109,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Tail Sampling
+              OpenTelemetry Tail Sampling
             
           </span>
         </div>
@@ -990,29 +990,39 @@
   
 
 
-<h1 id="tail-sampling">Tail Sampling</h1>
+<h1 id="opentelemetry-tail-sampling">OpenTelemetry Tail Sampling</h1>
 <h2 id="instructions">Instructions</h2>
-<p>Complete the Microservices Workshop or install the OpenTelemetry Collector on your k8s cluster: <a href="https://coralogix.com/docs/otel-collector-for-k8s/">Easy Coralogix instructions for Complete Observability are here</a>  </p>
-<h3 id="step-1-deploy-python-autogenerator">Step 1 - Deploy Python Autogenerator</h3>
+<p>OpenTelemetry Tail Sampling is based on a processor described here: <a href="https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/">https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/tailsamplingprocessor/README.md</a>  </p>
+<p>Coralogix Docs: <a href="https://coralogix.com/docs/tail-sampling-with-opentelemetry-using-kubernetes/">Tail Sampling</a>  </p>
+<h3 id="step-0-configure-and-deploy-tail-sampling-example">Step 0 - Configure and Deploy Tail Sampling Example</h3>
 <ul>
-<li>In <code>/workshops/workshops/otel/autogenerators/python/container</code> directory in repo  </li>
-<li>Configure <code>.yaml</code> with your globals  </li>
-<li>Deploy the Python autogenerator<br />
-<div class="highlight"><pre><span></span><code>source deploy-autogen-py.sh 
+<li>Install the OpenTelemetry Collector on your k8s cluster: <a href="https://coralogix.com/docs/otel-collector-for-k8s/">Coralogix instructions are here</a>  </li>
+<li>Change directory to <code>/workshops/workshops/otel/microservices/tailsampling</code> directory in repo  </li>
+<li>Configure all of the <code>.yaml</code> with your globals: cluster and region  </li>
+</ul>
+<h3 id="step-1-deploy-the-two-python-example-trace-generating-apps">Step 1 - Deploy the two Python example trace generating apps</h3>
+<div class="highlight"><pre><span></span><code>source 01-deploy-autogen-py.sh 
+</code></pre></div>
+<h3 id="step-2-try-sampling-both-apps-at-10">Step 2 - Try sampling both apps at 10%</h3>
+<ul>
+<li>Study <code>tailsampling10.yaml</code> to see how this is configured  </li>
+<li>Once deployed notice in Coralogix <strong>Explore-&gt;Tracing</strong> how the sample rate has dropped<br />
+<div class="highlight"><pre><span></span><code>source 02-deploy-tailsampling-10percent.sh
 </code></pre></div></li>
 </ul>
-<h3 id="step-2-configure-and-deploy-tail-sampling-example">Step 2 - Configure and Deploy Tail Sampling Example</h3>
+<h3 id="step-3-try-sampling-both-apps-at-10">Step 3 - Try sampling both apps at 10%</h3>
 <ul>
-<li>In <code>/workshops/workshops/otel/microservices/tailsampling</code> directory in repo  </li>
-<li>Configure <code>.yaml</code> with your globals  </li>
-<li>Deploy the example<br />
-<div class="highlight"><pre><span></span><code>source deploy-tailsampling.sh 
+<li>Study <code>tailsampling-apps-diff.yaml</code> to see how this is configured  </li>
+<li>The example will sample <code>cx-py-1</code> at 80% and <code>cx-py-2</code> at 20%</li>
+<li>In order to have multiple conditions for different apps, the tailsampling processor uses <strong>SubPolicies</strong> that specify a condtion of a span i.e. <code>service.name</code> and the sample policy for that service  </li>
+<li>Study the official docs to see all configuraiton options and examples <a href="https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/tailsamplingprocessor/README.md">https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/tailsamplingprocessor/README.md</a></li>
+<li>Once deployed notice in Coralogix <strong>Explore-&gt;Tracing</strong> how the sample rate has dropped<br />
+<div class="highlight"><pre><span></span><code>source 03-deploy-tailsampling-app1-app2-diff.sh
 </code></pre></div></li>
 </ul>
-<h3 id="step-3-study-results-in-coralogix">Step 3 - Study results in Coralogix</h3>
+<h3 id="step-4-cleanup">Step 4 - Cleanup</h3>
 <ul>
-<li>Notice that trace quantities have been reduced 90%  </li>
-<li>This example is based on Coralogix <a href="https://coralogix.com/docs/tail-sampling-with-opentelemetry-using-kubernetes/">official documentation for Tail Sampling</a></li>
+<li>A helm rollback of <code>otel-coralogix-integration</code> to the initial release before this workshop can restore original values  </li>
 </ul>
 
 

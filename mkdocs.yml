@@ -53,6 +53,7 @@ nav:
           - Prometheus Collector Config: otel/prometheus/index.md
           - MySQL Metrics + Query Performance: otel/mysql/index.md
           - Redis Metrics: otel/redis/index.md
+          - Tail Sampling: otel/tailsampling/index.md
       - Hosted Container Environments:
           - AWS ECS Fargate (PHP): otel/ecs-fargate/index.md
           - AWS ECS EC2 (Python/Node.js): otel/ecs-ec2/index.md

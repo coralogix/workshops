@@ -69,6 +69,7 @@ Includes:
 - [Prometheus Collector Config](otel/prometheus/index.md)
 - [MySQL Metrics + Query Performance](otel/mysql/index.md)
 - [Redis Metrics](otel/redis/index.md)
+- [Tail Sampling](otel/tailsampling/index.md)
 
 ---
 

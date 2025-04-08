@@ -4,7 +4,7 @@
 
 OpenTelemetry Tail Sampling is based on a processor described here: [https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/tailsamplingprocessor/README.md](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/)  
   
-Coralogix Docs: [Tail Sampling](https://coralogix.com/docs/tail-sampling-with-opentelemetry-using-kubernetes/)  
+Coralogix Docs: Coralogix has a pre-made set of helm values that configure the OpenTelemetry collector for sampling with a scalable array. Docs for this are here: [Coralogix Tail Sampling](https://coralogix.com/docs/tail-sampling-with-opentelemetry-using-kubernetes/)  
     
 ### Step 0 - Configure and Deploy Tail Sampling Example  
 - Install the OpenTelemetry Collector on your k8s cluster: [Coralogix instructions are here](https://coralogix.com/docs/otel-collector-for-k8s/)  
@@ -33,4 +33,9 @@ source 03-deploy-tailsampling-app1-app2-diff.sh
 ```   
 
 ### Step 4 - Cleanup
+- Delete the Python demo apps  
+```
+source 04-delete-autogen-py.sh
+```
+
 - A helm rollback of `otel-coralogix-integration` to the initial release before this workshop can restore original values  

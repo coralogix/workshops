@@ -1,1 +1,0 @@
-helm upgrade otel-coralogix-integration coralogix/otel-integration --values tailsampling-app2-10.yaml

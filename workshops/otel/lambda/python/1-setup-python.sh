@@ -1,8 +1,15 @@
-sudo apt install -y pipenv
-pipenv --clear
-sudo apt install -y python3.12-venv
+#!/bin/bash
+
+# Clean up any previous virtual environment
 rm -rf env
+
+# Create and activate a new virtual environment using Python 3.12
 python3 -m venv env
 source env/bin/activate
-pip3 install requests "Flask <3" "Werkzeug <3" serverless-wsgi
+
+# Upgrade pip and install required packages
+pip install --upgrade pip
+pip install requests "Flask<3" "Werkzeug<3" serverless-wsgi
+
+# Deactivate the environment
 deactivate

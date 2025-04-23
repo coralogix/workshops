@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/ubuntu/dotnetdb/SqlRandomIntegersApp/SqlRandomIntegersApp.csproj": {}
+    "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/SqlRandomIntegersApp/SqlRandomIntegersApp.csproj": {}
   },
   "projects": {
-    "/home/ubuntu/dotnetdb/SqlRandomIntegersApp/SqlRandomIntegersApp.csproj": {
+    "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/SqlRandomIntegersApp/SqlRandomIntegersApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/ubuntu/dotnetdb/SqlRandomIntegersApp/SqlRandomIntegersApp.csproj",
+        "projectUniqueName": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/SqlRandomIntegersApp/SqlRandomIntegersApp.csproj",
         "projectName": "SqlRandomIntegersApp",
-        "projectPath": "/home/ubuntu/dotnetdb/SqlRandomIntegersApp/SqlRandomIntegersApp.csproj",
+        "projectPath": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/SqlRandomIntegersApp/SqlRandomIntegersApp.csproj",
         "packagesPath": "/home/ubuntu/.nuget/packages/",
-        "outputPath": "/home/ubuntu/dotnetdb/SqlRandomIntegersApp/obj/",
+        "outputPath": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/SqlRandomIntegersApp/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/ubuntu/.nuget/NuGet/NuGet.Config"
@@ -38,6 +38,14 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Microsoft.Extensions.Logging": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Microsoft.Extensions.Logging.Console": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.3, )"
@@ -63,7 +71,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.105/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.115/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

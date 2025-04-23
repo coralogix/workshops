@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SqlRandomIntegersApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+52c901e8d9e8f57de30066318840dbc42cd19134")]
 [assembly: System.Reflection.AssemblyProductAttribute("SqlRandomIntegersApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SqlRandomIntegersApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

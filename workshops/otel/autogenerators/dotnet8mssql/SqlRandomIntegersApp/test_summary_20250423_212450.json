@@ -1,0 +1,63 @@
+{
+  "TotalDurationSeconds": 0.605,
+  "TotalIterations": 0,
+  "TotalOperations": 5,
+  "TotalErrors": 2,
+  "AverageOperationsPerIteration": 0.0,
+  "Categories": [
+    {
+      "Name": "Connection",
+      "DurationSeconds": 0.439,
+      "OperationCount": 2,
+      "ErrorCount": 0,
+      "Operations": [
+        {
+          "Operation": "SQL Server ready",
+          "DurationMs": 439,
+          "Status": "INFO",
+          "Error": null
+        },
+        {
+          "Operation": "SQL Server connection established",
+          "DurationMs": 0,
+          "Status": "INFO",
+          "Error": null
+        }
+      ]
+    },
+    {
+      "Name": "Database",
+      "DurationSeconds": 0.02,
+      "OperationCount": 2,
+      "ErrorCount": 1,
+      "Operations": [
+        {
+          "Operation": "Drop existing database",
+          "DurationMs": 13,
+          "Status": "INFO",
+          "Error": null
+        },
+        {
+          "Operation": "Create database",
+          "DurationMs": 7,
+          "Status": "ERROR",
+          "Error": "File option FILENAME is required in this CREATE/ALTER DATABASE statement."
+        }
+      ]
+    },
+    {
+      "Name": "Global Error",
+      "DurationSeconds": 0.0,
+      "OperationCount": 1,
+      "ErrorCount": 1,
+      "Operations": [
+        {
+          "Operation": "File option FILENAME is required in this CREATE/ALTER DATABASE statement.",
+          "DurationMs": 0,
+          "Status": "ERROR",
+          "Error": null
+        }
+      ]
+    }
+  ]
+}

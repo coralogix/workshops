@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Threading;
+using System.IO;
 
 namespace SqlRandomIntegersApp
 {
@@ -76,21 +77,16 @@ namespace SqlRandomIntegersApp
 
         static async Task Main(string[] args)
         {
-            // Parse duration from command line arguments
-            int durationMinutes = 1; // Default to 1 minute if no duration specified
-            if (args.Length > 0 && int.TryParse(args[0], out int minutes))
-            {
-                durationMinutes = Math.Max(1, minutes); // Ensure at least 1 minute
-            }
-
             string connectionString = $"Server={SQL_SERVER},{SQL_PORT};User Id={SQL_USER};Password={SQL_PASSWORD};Connection Timeout={CONNECTION_TIMEOUT};";
             var logs = new List<LogEntry>();
             var totalStopwatch = new Stopwatch();
             totalStopwatch.Start();
 
-            Console.WriteLine($"\n=== Starting SQL Server Performance Tests (Running for {durationMinutes} minute{(durationMinutes > 1 ? "s" : "")}) ===\n");
+            Console.WriteLine($"\n=== Starting SQL Server Performance Tests (Running until interrupted) ===\n");
+            Console.WriteLine("Press Ctrl+C to stop the test...\n");
 
-            var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMinutes(durationMinutes));
+            // Create cancellation token that never cancels
+            using var cancellationTokenSource = new CancellationTokenSource();
             var token = cancellationTokenSource.Token;
 
             try
@@ -106,9 +102,31 @@ namespace SqlRandomIntegersApp
 
                     // Initial setup
                     Console.WriteLine("\nSetting up test database...");
-                    await SetupDatabase(connection, logs);
+                    try
+                    {
+                        await SetupDatabase(connection, logs);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"\nWARNING: Database setup failed: {e.Message}");
+                        Console.WriteLine("Will attempt to continue with existing database...");
+                        
+                        // Try to use existing database
+                        try
+                        {
+                            connection.ChangeDatabase("TestDB");
+                        }
+                        catch
+                        {
+                            // If database doesn't exist, create it simply
+                            await ExecuteSqlCommandAsync(logs, connection,
+                                "IF DB_ID('TestDB') IS NULL CREATE DATABASE TestDB;",
+                                "Create database simple", "Database");
+                            connection.ChangeDatabase("TestDB");
+                        }
+                    }
 
-                    // Run tests in a loop until the time expires
+                    // Run tests in a loop until interrupted
                     int iteration = 1;
                     while (!token.IsCancellationRequested)
                     {
@@ -119,32 +137,20 @@ namespace SqlRandomIntegersApp
                             Console.WriteLine("\nRunning fast queries...");
                             await RunFastQueries(connection, logs);
 
-                            if (token.IsCancellationRequested) break;
-
                             Console.WriteLine("\nRunning slow queries...");
                             await RunSlowQueries(connection, logs);
-
-                            if (token.IsCancellationRequested) break;
 
                             Console.WriteLine("\nRunning parallel queries...");
                             await RunParallelQueries(connection, logs);
 
-                            if (token.IsCancellationRequested) break;
-
                             Console.WriteLine("\nRunning temp table queries...");
                             await RunTempTableQueries(connection, logs);
-
-                            if (token.IsCancellationRequested) break;
 
                             Console.WriteLine("\nRunning isolation level tests...");
                             await RunIsolationLevelTests(connection, logs);
 
-                            if (token.IsCancellationRequested) break;
-
                             Console.WriteLine("\nRunning deadlock scenarios...");
                             await RunDeadlockScenarios(connection, logs);
-
-                            if (token.IsCancellationRequested) break;
 
                             Console.WriteLine("\nRunning failed queries...");
                             await RunFailedQueries(connection, logs);
@@ -152,23 +158,18 @@ namespace SqlRandomIntegersApp
                             iteration++;
                             Console.WriteLine($"\nCompleted Iteration {iteration - 1}");
                             
-                            // Optional small delay between iterations
-                            await Task.Delay(1000, token);
-                        }
-                        catch (OperationCanceledException)
-                        {
-                            break;
+                            // Add a small delay between iterations to prevent overwhelming the system
+                            await Task.Delay(2000, token);
                         }
                         catch (Exception e)
                         {
                             Console.WriteLine($"\nError in iteration {iteration}: {e.Message}");
                             LogAction(logs, "ERROR", "Iteration", $"Failed in iteration {iteration}", 0, e.Message);
+                            // Add a longer delay after errors
+                            await Task.Delay(5000, token);
                             // Continue with next iteration
                         }
                     }
-
-                    Console.WriteLine("\nTime limit reached. Cleaning up...");
-                    await CleanupDatabase(connection, logs);
                 }
             }
             catch (Exception e)
@@ -191,13 +192,6 @@ namespace SqlRandomIntegersApp
                 var summaryFile = $"test_summary_{timestamp}.json";
                 await File.WriteAllTextAsync(summaryFile, summaryJson);
                 Console.WriteLine($"\nDetailed results have been written to: {summaryFile}");
-            }
-
-            // Keep console window open if running as executable
-            if (System.Diagnostics.Debugger.IsAttached)
-            {
-                Console.WriteLine("\nPress any key to exit...");
-                Console.ReadKey();
             }
         }
 
@@ -411,26 +405,14 @@ namespace SqlRandomIntegersApp
 
         private static async Task SetupDatabase(SqlConnection connection, List<LogEntry> logs)
         {
-            var stopwatch = new Stopwatch();
-
             // Drop existing database if it exists
             await ExecuteSqlCommandAsync(logs, connection, 
                 "IF DB_ID('TestDB') IS NOT NULL BEGIN ALTER DATABASE TestDB SET SINGLE_USER WITH ROLLBACK IMMEDIATE; DROP DATABASE TestDB; END", 
                 "Drop existing database", "Database");
 
-            // Create new database with specific configurations
-            await ExecuteSqlCommandAsync(logs, connection, @"
-                CREATE DATABASE TestDB
-                ON PRIMARY (
-                    NAME = TestDB_Data,
-                    SIZE = 1GB,
-                    FILEGROWTH = 256MB
-                )
-                LOG ON (
-                    NAME = TestDB_Log,
-                    SIZE = 512MB,
-                    FILEGROWTH = 128MB
-                )", 
+            // Create new database
+            await ExecuteSqlCommandAsync(logs, connection, 
+                "CREATE DATABASE TestDB;", 
                 "Create database", "Database");
 
             connection.ChangeDatabase("TestDB");
@@ -469,26 +451,6 @@ namespace SqlRandomIntegersApp
                 CREATE INDEX IX_DataRecords_CreatedAt ON DataRecords(CreatedAt);
                 CREATE INDEX IX_DataRecords_ComputedHash ON DataRecords(ComputedHash);
 
-                -- Partitioned historical data
-                CREATE PARTITION FUNCTION PF_CreatedAt (DATETIME2)
-                AS RANGE RIGHT FOR VALUES (
-                    '2023-01-01', '2023-04-01', '2023-07-01', '2023-10-01',
-                    '2024-01-01', '2024-04-01', '2024-07-01', '2024-10-01'
-                );
-
-                CREATE PARTITION SCHEME PS_CreatedAt
-                AS PARTITION PF_CreatedAt ALL TO ([PRIMARY]);
-
-                CREATE TABLE HistoricalData (
-                    ID BIGINT PRIMARY KEY IDENTITY(1,1),
-                    RecordID BIGINT,
-                    ChangeType NVARCHAR(20),
-                    ChangedAt DATETIME2(7),
-                    OldValue NVARCHAR(MAX),
-                    NewValue NVARCHAR(MAX),
-                    UserID NVARCHAR(50)
-                ) ON PS_CreatedAt(ChangedAt);
-
                 -- Table for handling locks and blocking scenarios
                 CREATE TABLE ProcessingQueue (
                     ID BIGINT PRIMARY KEY IDENTITY(1,1),
@@ -510,75 +472,11 @@ namespace SqlRandomIntegersApp
                     AcquiredAt DATETIME2(7),
                     Priority INT,
                     Status NVARCHAR(20)
-                );
-
-                -- Create stored procedures for complex operations
-                CREATE PROCEDURE ProcessRecord
-                    @RecordID BIGINT,
-                    @ProcessorID NVARCHAR(50)
-                AS
-                BEGIN
-                    SET NOCOUNT ON;
-                    SET XACT_ABORT ON;
-                    
-                    BEGIN TRY
-                        BEGIN TRANSACTION;
-                        
-                        DECLARE @LockExpiration DATETIME2(7) = DATEADD(MINUTE, 5, GETUTCDATE());
-                        
-                        UPDATE ProcessingQueue
-                        SET Status = 'PROCESSING',
-                            LockedBy = @ProcessorID,
-                            LockExpiration = @LockExpiration
-                        WHERE RecordID = @RecordID
-                        AND (Status = 'PENDING' OR (Status = 'PROCESSING' AND LockExpiration < GETUTCDATE()));
-                        
-                        IF @@ROWCOUNT > 0
-                        BEGIN
-                            UPDATE DataRecords
-                            SET IsProcessed = 1,
-                                ProcessingTime = CAST(RAND() * 1000 AS INT),
-                                UpdatedAt = GETUTCDATE()
-                            WHERE ID = @RecordID;
-                            
-                            INSERT INTO HistoricalData (RecordID, ChangeType, ChangedAt, OldValue, NewValue, UserID)
-                            VALUES (@RecordID, 'PROCESS', GETUTCDATE(), 'PENDING', 'PROCESSED', @ProcessorID);
-                        END
-                        
-                        COMMIT TRANSACTION;
-                    END TRY
-                    BEGIN CATCH
-                        IF @@TRANCOUNT > 0
-                            ROLLBACK TRANSACTION;
-                        THROW;
-                    END CATCH
-                END;
-
-                -- Create functions for complex calculations
-                CREATE FUNCTION CalculateProcessingMetrics (
-                    @Category NVARCHAR(50),
-                    @StartDate DATETIME2,
-                    @EndDate DATETIME2
-                )
-                RETURNS TABLE
-                AS
-                RETURN (
-                    SELECT 
-                        Category,
-                        COUNT(*) as TotalRecords,
-                        AVG(CAST(ProcessingTime as FLOAT)) as AvgProcessingTime,
-                        MIN(ProcessingTime) as MinProcessingTime,
-                        MAX(ProcessingTime) as MaxProcessingTime,
-                        SUM(CASE WHEN IsProcessed = 1 THEN 1 ELSE 0 END) as ProcessedCount,
-                        SUM(CASE WHEN RetryCount > 0 THEN 1 ELSE 0 END) as RetryCount
-                    FROM DataRecords
-                    WHERE Category = @Category
-                    AND CreatedAt BETWEEN @StartDate AND @EndDate
-                    GROUP BY Category
                 );", 
                 "Create schema", "Database");
 
             // Insert test data in batches
+            var stopwatch = new Stopwatch();
             stopwatch.Start();
             Random random = new Random();
             

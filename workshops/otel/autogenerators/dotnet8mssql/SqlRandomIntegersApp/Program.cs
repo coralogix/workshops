@@ -29,17 +29,50 @@ namespace SqlRandomIntegersApp
 
         // Test Data Configuration
         private static readonly string[] Categories = new[] { 
-            "Small", "Medium", "Large", "Extra Large", "Critical", "Low Priority", "Archived" 
+            "Small", "Medium", "Large", "Extra Large", "Critical", "Low Priority", "Archived", 
+            "Batch", "Real-time", "Historical", "Analytical"  // Added more categories
         };
         private static readonly string[] StatusCodes = new[] { 
-            "ACTIVE", "PENDING", "COMPLETED", "FAILED", "BLOCKED", "IN_PROGRESS" 
+            "ACTIVE", "PENDING", "COMPLETED", "FAILED", "BLOCKED", "IN_PROGRESS",
+            "RETRYING", "CANCELLED", "TIMEOUT", "PARTIAL"  // Added more status codes
         };
         private static readonly string[] DataTypes = new[] { 
-            "JSON", "XML", "CSV", "BINARY", "TEXT", "ENCRYPTED" 
+            "JSON", "XML", "CSV", "BINARY", "TEXT", "ENCRYPTED",
+            "COMPRESSED", "BASE64", "SERIALIZED", "HASHED"  // Added more data types
         };
         private static readonly string[] Priorities = new[] { 
-            "P0", "P1", "P2", "P3", "P4" 
+            "P0", "P1", "P2", "P3", "P4",
+            "URGENT", "NORMAL", "LOW", "BACKGROUND"  // Added more priorities
         };
+        
+        // Added more test variations
+        private static readonly (int min, int max)[] NumberRanges = new[] {
+            (1, 100), (100, 1000), (1000, 10000), (10000, 100000), (-1000, 1000)
+        };
+        
+        private static readonly string[] ErrorTypes = new[] {
+            "TIMEOUT", "DEADLOCK", "CONSTRAINT", "OVERFLOW", "CONVERSION",
+            "PERMISSION", "MEMORY", "IO", "NETWORK", "VALIDATION"
+        };
+
+        // Helper method to get random test data with weighted probabilities
+        private static T GetRandomWeighted<T>(Random random, T[] items, double errorProbability = 0.1)
+        {
+            if (random.NextDouble() < errorProbability)
+            {
+                // Return items from the latter half of the array (usually error/edge cases)
+                return items[random.Next(items.Length / 2, items.Length)];
+            }
+            // Return items from the first half (usually normal cases)
+            return items[random.Next(0, items.Length / 2)];
+        }
+
+        // Helper method to generate random decimal with precision
+        private static decimal GetRandomDecimal(Random random, int precision = 4)
+        {
+            double multiplier = Math.Pow(10, precision);
+            return (decimal)(random.NextDouble() * multiplier);
+        }
 
         static async Task Main(string[] args)
         {
@@ -640,87 +673,149 @@ namespace SqlRandomIntegersApp
 
         private static async Task RunFastQueries(SqlConnection connection, List<LogEntry> logs)
         {
-            // Test 1: Quick indexed lookup
+            var random = new Random();
+            
+            // Test 1: Quick indexed lookups with randomization
+            var range = NumberRanges[random.Next(NumberRanges.Length)];
+            var number = random.Next(range.min, range.max);
             await ExecuteSqlCommandAsync(logs, connection, 
-                "SELECT TOP 100 * FROM Numbers WHERE Number = 42", 
-                "Indexed lookup", "Query");
+                $"SELECT TOP 100 * FROM DataRecords WHERE Number BETWEEN {range.min} AND {range.max} AND Category = '{GetRandomWeighted(random, Categories)}'", 
+                "Indexed range lookup", "Query");
 
-            // Test 2: Category count with index
+            // Test 2: Category and status aggregation with index
+            var status = GetRandomWeighted(random, StatusCodes);
             await ExecuteSqlCommandAsync(logs, connection, 
-                "SELECT Category, COUNT(*) as Count FROM Numbers GROUP BY Category", 
-                "Category count", "Query");
+                $@"SELECT Category, Status, COUNT(*) as Count, 
+                   MIN(Number) as MinNumber, MAX(Number) as MaxNumber
+                   FROM DataRecords 
+                   WHERE Status = '{status}'
+                   GROUP BY Category, Status
+                   HAVING COUNT(*) > 10", 
+                "Category-status aggregation", "Query");
+
+            // Test 3: Recent records lookup with composite index
+            await ExecuteSqlCommandAsync(logs, connection, 
+                $@"SELECT TOP 1000 ID, Number, Category, Status, CreatedAt
+                   FROM DataRecords
+                   WHERE Category = '{GetRandomWeighted(random, Categories)}'
+                   AND CreatedAt >= DATEADD(MINUTE, -5, GETUTCDATE())
+                   ORDER BY CreatedAt DESC", 
+                "Recent records lookup", "Query");
+
+            // Test 4: Priority-based filtered count
+            var priority = GetRandomWeighted(random, Priorities);
+            await ExecuteSqlCommandAsync(logs, connection, 
+                $@"SELECT DataType, 
+                   COUNT(*) as TotalCount,
+                   SUM(CASE WHEN IsProcessed = 1 THEN 1 ELSE 0 END) as ProcessedCount
+                   FROM DataRecords
+                   WHERE Priority = '{priority}'
+                   GROUP BY DataType", 
+                "Priority-based counts", "Query");
         }
 
         private static async Task RunSlowQueries(SqlConnection connection, List<LogEntry> logs)
         {
-            // Test 1: Full table scan with string operations
+            var random = new Random();
+
+            // Test 1: Complex aggregation with string operations and JSON
             await ExecuteSqlCommandAsync(logs, connection, @"
-                WITH NumberGroups AS (
+                WITH DataStats AS (
                     SELECT 
-                        Number,
-                        Description,
                         Category,
-                        SUBSTRING(Description, 1, 10) as DescriptionStart,
-                        ROW_NUMBER() OVER (PARTITION BY Category ORDER BY Number) as RowNum
-                    FROM Numbers
+                        Status,
+                        COUNT(*) as RecordCount,
+                        AVG(CAST(Number as FLOAT)) as AvgNumber,
+                        STRING_AGG(CAST(ID as VARCHAR(20)), ',') as RecordIDs,
+                        JSON_VALUE(JsonData, '$.metrics.value') as MetricValue
+                    FROM DataRecords
+                    WHERE IsProcessed = 1
+                    GROUP BY Category, Status, JSON_VALUE(JsonData, '$.metrics.value')
                 )
                 SELECT 
                     Category,
-                    AVG(CAST(Number as FLOAT)) as AvgNumber,
-                    COUNT(*) as CategoryCount,
-                    STRING_AGG(DescriptionStart, ',') as DescriptionStarts
-                FROM NumberGroups
-                WHERE RowNum <= 1000
-                GROUP BY Category
-                HAVING COUNT(*) > 100;", 
-                "Complex aggregation", "Query");
+                    Status,
+                    RecordCount,
+                    AvgNumber,
+                    CAST(MetricValue as FLOAT) as MetricValue,
+                    COUNT(*) OVER (PARTITION BY Category) as CategoryTotal
+                FROM DataStats
+                WHERE RecordCount > 10
+                ORDER BY CategoryTotal DESC, AvgNumber DESC;", 
+                "Complex aggregation with JSON", "Query");
 
-            // Test 2: Cross join to generate large result set
-            await ExecuteSqlCommandAsync(logs, connection, @"
-                SELECT TOP 10000 
-                    a.Number as Number1, 
-                    b.Number as Number2,
-                    ABS(a.Number - b.Number) as Difference
-                FROM Numbers a
+            // Test 2: Cross apply with string operations
+            var searchCategory = GetRandomWeighted(random, Categories);
+            await ExecuteSqlCommandAsync(logs, connection, $@"
+                SELECT TOP 1000 
+                    dr1.Category,
+                    dr1.Status,
+                    dr1.Priority,
+                    Matches.MatchCount,
+                    Matches.AvgProcessingTime
+                FROM DataRecords dr1
                 CROSS APPLY (
-                    SELECT TOP 100 Number 
-                    FROM Numbers 
-                    WHERE Number > a.Number
-                    ORDER BY Number
-                ) b
-                WHERE a.Category = b.Category
-                ORDER BY Difference;", 
-                "Cross apply", "Query");
-
-            // Test 3: Recursive CTE
-            await ExecuteSqlCommandAsync(logs, connection, @"
-                WITH NumberSequence AS (
-                    SELECT TOP 100 
-                        Number,
-                        Category,
-                        1 as Level
-                    FROM Numbers
-                    WHERE Category = 'Large'
-                    
-                    UNION ALL
-                    
                     SELECT 
-                        n.Number,
-                        n.Category,
-                        ns.Level + 1
-                    FROM Numbers n
-                    INNER JOIN NumberSequence ns ON n.Number > ns.Number
-                    WHERE n.Category = ns.Category
-                        AND ns.Level < 5
+                        COUNT(*) as MatchCount,
+                        AVG(CAST(dr2.ProcessingTime as FLOAT)) as AvgProcessingTime
+                    FROM DataRecords dr2
+                    WHERE dr2.Category = dr1.Category
+                    AND dr2.Status = dr1.Status
+                    AND dr2.ProcessingTime > dr1.ProcessingTime
+                ) Matches
+                WHERE dr1.Category = '{searchCategory}'
+                AND Matches.MatchCount > 0
+                ORDER BY Matches.AvgProcessingTime DESC;",
+                "Cross apply with processing time", "Query");
+
+            // Test 3: Window functions with partitioning
+            var dataType = GetRandomWeighted(random, DataTypes);
+            await ExecuteSqlCommandAsync(logs, connection, $@"
+                WITH ProcessingStats AS (
+                    SELECT 
+                        ID,
+                        Category,
+                        Status,
+                        ProcessingTime,
+                        ROW_NUMBER() OVER (PARTITION BY Category ORDER BY ProcessingTime DESC) as RankInCategory,
+                        PERCENT_RANK() OVER (PARTITION BY Status ORDER BY ProcessingTime) as PercentileInStatus,
+                        LAG(ProcessingTime, 1, 0) OVER (PARTITION BY Category ORDER BY ProcessingTime) as PrevProcessingTime,
+                        LEAD(ProcessingTime, 1, 0) OVER (PARTITION BY Category ORDER BY ProcessingTime) as NextProcessingTime
+                    FROM DataRecords
+                    WHERE DataType = '{dataType}'
+                )
+                SELECT *
+                FROM ProcessingStats
+                WHERE RankInCategory <= 100
+                ORDER BY Category, ProcessingTime DESC;",
+                "Window functions analysis", "Query");
+
+            // Test 4: XML and hierarchical data
+            await ExecuteSqlCommandAsync(logs, connection, $@"
+                WITH XMLDATA AS (
+                    SELECT 
+                        ID,
+                        Category,
+                        XmlData.value('(/record/metrics/value)[1]', 'float') as MetricValue,
+                        XmlData.value('(/record/tags/category)[1]', 'nvarchar(50)') as XmlCategory,
+                        XmlData.value('(/record/tags/status)[1]', 'nvarchar(50)') as XmlStatus
+                    FROM DataRecords
+                    WHERE DataType IN ('XML', 'SERIALIZED')
                 )
                 SELECT 
-                    Level,
-                    COUNT(*) as NumberCount,
-                    AVG(CAST(Number as FLOAT)) as AvgNumber
-                FROM NumberSequence
-                GROUP BY Level
-                OPTION (MAXRECURSION 0);", 
-                "Recursive CTE", "Query");
+                    Category,
+                    XmlCategory,
+                    XmlStatus,
+                    COUNT(*) as RecordCount,
+                    AVG(MetricValue) as AvgMetricValue,
+                    MIN(MetricValue) as MinMetricValue,
+                    MAX(MetricValue) as MaxMetricValue
+                FROM XMLDATA
+                WHERE MetricValue IS NOT NULL
+                GROUP BY Category, XmlCategory, XmlStatus
+                HAVING COUNT(*) > 5
+                ORDER BY AvgMetricValue DESC;",
+                "XML data analysis", "Query");
         }
 
         private static async Task RunParallelQueries(SqlConnection connection, List<LogEntry> logs)
@@ -946,40 +1041,96 @@ namespace SqlRandomIntegersApp
 
         private static async Task RunFailedQueries(SqlConnection connection, List<LogEntry> logs)
         {
-            // Test 1: Division by zero
+            var random = new Random();
+
+            // Test 1: Arithmetic and conversion errors
             try
             {
+                var errorType = GetRandomWeighted(random, ErrorTypes, 0.8); // High probability of error
                 await ExecuteSqlCommandAsync(logs, connection, 
-                    "SELECT 1/0 as Result", 
-                    "Division by zero test", "Query");
+                    $@"SELECT 
+                        CASE WHEN '{errorType}' = 'OVERFLOW' THEN CAST(2147483647 + Number as INT)
+                             WHEN '{errorType}' = 'CONVERSION' THEN CAST('invalid' as INT)
+                             ELSE 1/0 
+                        END as ErrorResult
+                    FROM DataRecords 
+                    WHERE ID = 1;", 
+                    "Arithmetic error test", "Query");
             }
             catch (Exception e)
             {
-                LogAction(logs, "ERROR", "Query", "Division by zero", 0, e.Message);
+                LogAction(logs, "ERROR", "Query", "Arithmetic error", 0, e.Message);
             }
 
-            // Test 2: Invalid column name
+            // Test 2: Constraint violations
             try
             {
-                await ExecuteSqlCommandAsync(logs, connection, 
-                    "SELECT NonExistentColumn FROM Numbers", 
-                    "Invalid column test", "Query");
+                await ExecuteSqlCommandAsync(logs, connection, @"
+                    -- Attempt to insert duplicate key
+                    INSERT INTO DataRecords (ID, Number, Category, Status)
+                    SELECT TOP 1 ID, Number, Category, Status FROM DataRecords;",
+                    "Constraint violation test", "Query");
             }
             catch (Exception e)
             {
-                LogAction(logs, "ERROR", "Query", "Invalid column", 0, e.Message);
+                LogAction(logs, "ERROR", "Query", "Constraint violation", 0, e.Message);
             }
 
-            // Test 3: Syntax error
+            // Test 3: Invalid object references
             try
             {
+                var invalidObject = $"NonExistent_{random.Next(1000)}";
                 await ExecuteSqlCommandAsync(logs, connection, 
-                    "SELEC * FORM Numbers", 
-                    "Syntax error test", "Query");
+                    $"SELECT * FROM {invalidObject};",
+                    "Invalid object test", "Query");
+            }
+            catch (Exception e)
+            {
+                LogAction(logs, "ERROR", "Query", "Invalid object", 0, e.Message);
+            }
+
+            // Test 4: Syntax errors with varying complexity
+            try
+            {
+                var errorType = GetRandomWeighted(random, ErrorTypes, 0.8);
+                var errorQuery = errorType switch
+                {
+                    "SYNTAX" => "SELEC * FORM DataRecords",
+                    "JOIN" => "SELECT * FROM DataRecords INNER JOIN NumberSequence",
+                    "GROUP" => "SELECT Category, COUNT(*) DataRecords GROUP Category",
+                    _ => "SELECT * FROM DataRecords WHERE;"
+                };
+                await ExecuteSqlCommandAsync(logs, connection, errorQuery, "Syntax error test", "Query");
             }
             catch (Exception e)
             {
                 LogAction(logs, "ERROR", "Query", "Syntax error", 0, e.Message);
+            }
+
+            // Test 5: Lock timeout simulation
+            try
+            {
+                await ExecuteSqlCommandAsync(logs, connection, @"
+                    BEGIN TRANSACTION;
+                    
+                    -- Set a short lock timeout
+                    SET LOCK_TIMEOUT 1000;
+                    
+                    -- Try to update records that might be locked
+                    UPDATE DataRecords WITH (UPDLOCK)
+                    SET ProcessingTime = ProcessingTime + 1
+                    WHERE Category IN (
+                        SELECT TOP 1 Category 
+                        FROM DataRecords WITH (UPDLOCK)
+                        ORDER BY NEWID()
+                    );
+                    
+                    COMMIT TRANSACTION;",
+                    "Lock timeout test", "Query");
+            }
+            catch (Exception e)
+            {
+                LogAction(logs, "ERROR", "Query", "Lock timeout", 0, e.Message);
             }
         }
 

@@ -137,6 +137,13 @@ Measure frontend performance and correlate user sessions with backend telemetry:
 
 ---
 
+## AI Observability
+
+Observe AI prompts, responses, and API performance:  
+[AI Observability](ai/index.md)
+
+---
+
 ## Coralogix Live Demo Scripts
 
 Install the OpenTelemetry Collector on a host or Kubernetes cluster:

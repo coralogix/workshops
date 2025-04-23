@@ -1,0 +1,77 @@
+{
+  "TotalDurationSeconds": 1.103,
+  "TotalIterations": 0,
+  "TotalOperations": 6,
+  "TotalErrors": 2,
+  "AverageOperationsPerIteration": 0.0,
+  "Categories": [
+    {
+      "Name": "Cleanup",
+      "DurationSeconds": 0.508,
+      "OperationCount": 1,
+      "ErrorCount": 0,
+      "Operations": [
+        {
+          "Operation": "Drop existing database 'TestDB'",
+          "DurationMs": 508,
+          "Status": "INFO",
+          "Error": null
+        }
+      ]
+    },
+    {
+      "Name": "Connection",
+      "DurationSeconds": 0.44,
+      "OperationCount": 2,
+      "ErrorCount": 0,
+      "Operations": [
+        {
+          "Operation": "SQL Server ready",
+          "DurationMs": 440,
+          "Status": "INFO",
+          "Error": null
+        },
+        {
+          "Operation": "SQL Server connection established",
+          "DurationMs": 0,
+          "Status": "INFO",
+          "Error": null
+        }
+      ]
+    },
+    {
+      "Name": "Database",
+      "DurationSeconds": 0.008,
+      "OperationCount": 2,
+      "ErrorCount": 1,
+      "Operations": [
+        {
+          "Operation": "Drop existing database",
+          "DurationMs": 1,
+          "Status": "INFO",
+          "Error": null
+        },
+        {
+          "Operation": "Create database",
+          "DurationMs": 7,
+          "Status": "ERROR",
+          "Error": "File option FILENAME is required in this CREATE/ALTER DATABASE statement."
+        }
+      ]
+    },
+    {
+      "Name": "Global Error",
+      "DurationSeconds": 0.0,
+      "OperationCount": 1,
+      "ErrorCount": 1,
+      "Operations": [
+        {
+          "Operation": "File option FILENAME is required in this CREATE/ALTER DATABASE statement.",
+          "DurationMs": 0,
+          "Status": "ERROR",
+          "Error": null
+        }
+      ]
+    }
+  ]
+}

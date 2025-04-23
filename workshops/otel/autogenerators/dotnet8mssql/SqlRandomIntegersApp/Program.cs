@@ -675,51 +675,64 @@ namespace SqlRandomIntegersApp
         {
             var random = new Random();
             
+            // Add small random delay
+            await Task.Delay(random.Next(100, 500));
+            
             // Test 1: Quick indexed lookups with randomization
             var range = NumberRanges[random.Next(NumberRanges.Length)];
             var number = random.Next(range.min, range.max);
             await ExecuteSqlCommandAsync(logs, connection, 
-                $"SELECT TOP 100 * FROM DataRecords WHERE Number BETWEEN {range.min} AND {range.max} AND Category = '{GetRandomWeighted(random, Categories)}'", 
+                $@"WAITFOR DELAY '00:00:0{random.Next(1, 3)}';
+                SELECT TOP 100 * FROM DataRecords 
+                WHERE Number BETWEEN {range.min} AND {range.max} 
+                AND Category = '{GetRandomWeighted(random, Categories)}'", 
                 "Indexed range lookup", "Query");
 
             // Test 2: Category and status aggregation with index
             var status = GetRandomWeighted(random, StatusCodes);
             await ExecuteSqlCommandAsync(logs, connection, 
-                $@"SELECT Category, Status, COUNT(*) as Count, 
-                   MIN(Number) as MinNumber, MAX(Number) as MaxNumber
-                   FROM DataRecords 
-                   WHERE Status = '{status}'
-                   GROUP BY Category, Status
-                   HAVING COUNT(*) > 10", 
+                $@"WAITFOR DELAY '00:00:0{random.Next(1, 3)}';
+                SELECT Category, Status, COUNT(*) as Count, 
+                MIN(Number) as MinNumber, MAX(Number) as MaxNumber
+                FROM DataRecords 
+                WHERE Status = '{status}'
+                GROUP BY Category, Status
+                HAVING COUNT(*) > 10", 
                 "Category-status aggregation", "Query");
 
             // Test 3: Recent records lookup with composite index
             await ExecuteSqlCommandAsync(logs, connection, 
-                $@"SELECT TOP 1000 ID, Number, Category, Status, CreatedAt
-                   FROM DataRecords
-                   WHERE Category = '{GetRandomWeighted(random, Categories)}'
-                   AND CreatedAt >= DATEADD(MINUTE, -5, GETUTCDATE())
-                   ORDER BY CreatedAt DESC", 
+                $@"WAITFOR DELAY '00:00:0{random.Next(1, 3)}';
+                SELECT TOP 1000 ID, Number, Category, Status, CreatedAt
+                FROM DataRecords
+                WHERE Category = '{GetRandomWeighted(random, Categories)}'
+                AND CreatedAt >= DATEADD(MINUTE, -5, GETUTCDATE())
+                ORDER BY CreatedAt DESC", 
                 "Recent records lookup", "Query");
 
             // Test 4: Priority-based filtered count
             var priority = GetRandomWeighted(random, Priorities);
             await ExecuteSqlCommandAsync(logs, connection, 
-                $@"SELECT DataType, 
-                   COUNT(*) as TotalCount,
-                   SUM(CASE WHEN IsProcessed = 1 THEN 1 ELSE 0 END) as ProcessedCount
-                   FROM DataRecords
-                   WHERE Priority = '{priority}'
-                   GROUP BY DataType", 
+                $@"WAITFOR DELAY '00:00:0{random.Next(1, 3)}';
+                SELECT DataType, 
+                COUNT(*) as TotalCount,
+                SUM(CASE WHEN IsProcessed = 1 THEN 1 ELSE 0 END) as ProcessedCount
+                FROM DataRecords
+                WHERE Priority = '{priority}'
+                GROUP BY DataType", 
                 "Priority-based counts", "Query");
         }
 
         private static async Task RunSlowQueries(SqlConnection connection, List<LogEntry> logs)
         {
             var random = new Random();
+            
+            // Add medium random delay
+            await Task.Delay(random.Next(500, 1500));
 
             // Test 1: Complex aggregation with string operations and JSON
-            await ExecuteSqlCommandAsync(logs, connection, @"
+            await ExecuteSqlCommandAsync(logs, connection, $@"
+                WAITFOR DELAY '00:00:0{random.Next(3, 6)}';
                 WITH DataStats AS (
                     SELECT 
                         Category,
@@ -747,6 +760,7 @@ namespace SqlRandomIntegersApp
             // Test 2: Cross apply with string operations
             var searchCategory = GetRandomWeighted(random, Categories);
             await ExecuteSqlCommandAsync(logs, connection, $@"
+                WAITFOR DELAY '00:00:0{random.Next(3, 6)}';
                 SELECT TOP 1000 
                     dr1.Category,
                     dr1.Status,
@@ -768,9 +782,13 @@ namespace SqlRandomIntegersApp
                 ORDER BY Matches.AvgProcessingTime DESC;",
                 "Cross apply with processing time", "Query");
 
+            // Add longer random delay between complex operations
+            await Task.Delay(random.Next(1000, 2000));
+
             // Test 3: Window functions with partitioning
             var dataType = GetRandomWeighted(random, DataTypes);
             await ExecuteSqlCommandAsync(logs, connection, $@"
+                WAITFOR DELAY '00:00:0{random.Next(3, 6)}';
                 WITH ProcessingStats AS (
                     SELECT 
                         ID,
@@ -792,6 +810,7 @@ namespace SqlRandomIntegersApp
 
             // Test 4: XML and hierarchical data
             await ExecuteSqlCommandAsync(logs, connection, $@"
+                WAITFOR DELAY '00:00:0{random.Next(3, 6)}';
                 WITH XMLDATA AS (
                     SELECT 
                         ID,
@@ -820,13 +839,19 @@ namespace SqlRandomIntegersApp
 
         private static async Task RunParallelQueries(SqlConnection connection, List<LogEntry> logs)
         {
+            var random = new Random();
+            
+            // Add random delay between parallel operations
+            await Task.Delay(random.Next(500, 1500));
+
             // Enable parallel query execution
             await ExecuteSqlCommandAsync(logs, connection, 
                 "EXEC sp_configure 'max degree of parallelism', 4;", 
                 "Configure parallel execution", "Configuration");
 
             // Test 1: Parallel full table scan with computation
-            await ExecuteSqlCommandAsync(logs, connection, @"
+            await ExecuteSqlCommandAsync(logs, connection, $@"
+                WAITFOR DELAY '00:00:0{random.Next(3, 6)}';
                 SELECT 
                     Category,
                     COUNT(*) as TotalCount,
@@ -835,25 +860,32 @@ namespace SqlRandomIntegersApp
                     MAX(Number) as MaxNumber,
                     SUM(CASE WHEN Number % 2 = 0 THEN 1 ELSE 0 END) as EvenCount,
                     STRING_AGG(CAST(Number as VARCHAR(20)), ',') WITHIN GROUP (ORDER BY Number) as NumberList
-                FROM Numbers
+                FROM DataRecords
                 WHERE Number BETWEEN 1000 AND 900000
                 GROUP BY Category
                 OPTION (MAXDOP 4);", 
                 "Complex parallel aggregation", "Query");
 
+            // Add random delay between parallel operations
+            await Task.Delay(random.Next(1000, 2000));
+
             // Test 2: Parallel join operations
-            await ExecuteSqlCommandAsync(logs, connection, @"
+            await ExecuteSqlCommandAsync(logs, connection, $@"
+                WAITFOR DELAY '00:00:0{random.Next(3, 6)}';
                 WITH NumberRanges AS (
                     SELECT 
                         Number,
                         Category,
                         NTILE(100) OVER (ORDER BY Number) as Range
-                    FROM Numbers
+                    FROM DataRecords
+                    WHERE ProcessingTime > 0
                 )
                 SELECT 
                     r1.Range,
                     COUNT(*) as Combinations,
-                    AVG(ABS(r1.Number - r2.Number)) as AvgDifference
+                    AVG(ABS(r1.Number - r2.Number)) as AvgDifference,
+                    MAX(r1.Number) as MaxNumber,
+                    MIN(r2.Number) as MinNumber
                 FROM NumberRanges r1
                 JOIN NumberRanges r2 ON 
                     r1.Range = r2.Range AND 
@@ -861,6 +893,35 @@ namespace SqlRandomIntegersApp
                 GROUP BY r1.Range
                 OPTION (MAXDOP 4);",
                 "Parallel join operations", "Query");
+
+            // Test 3: Parallel data analysis with multiple operations
+            await ExecuteSqlCommandAsync(logs, connection, $@"
+                WAITFOR DELAY '00:00:0{random.Next(3, 6)}';
+                WITH ProcessingMetrics AS (
+                    SELECT 
+                        Category,
+                        Status,
+                        Priority,
+                        AVG(CAST(ProcessingTime as FLOAT)) as AvgProcessingTime,
+                        COUNT(*) as RecordCount,
+                        SUM(CASE WHEN IsProcessed = 1 THEN 1 ELSE 0 END) as ProcessedCount
+                    FROM DataRecords
+                    GROUP BY Category, Status, Priority
+                )
+                SELECT 
+                    Category,
+                    Status,
+                    Priority,
+                    AvgProcessingTime,
+                    RecordCount,
+                    ProcessedCount,
+                    CAST(ProcessedCount as FLOAT) / NULLIF(RecordCount, 0) as ProcessingRatio,
+                    RANK() OVER (PARTITION BY Category ORDER BY AvgProcessingTime DESC) as ProcessingTimeRank
+                FROM ProcessingMetrics
+                WHERE RecordCount > 100
+                ORDER BY Category, ProcessingTimeRank
+                OPTION (MAXDOP 4);",
+                "Parallel metrics analysis", "Query");
         }
 
         private static async Task RunTempTableQueries(SqlConnection connection, List<LogEntry> logs)

@@ -38,6 +38,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Microsoft.Data.SqlClient": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
             "Microsoft.Extensions.Logging": {
               "target": "Package",
               "version": "[8.0.0, )"
@@ -49,10 +53,6 @@
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.3, )"
-            },
-            "System.Data.SqlClient": {
-              "target": "Package",
-              "version": "[4.8.6, )"
             }
           },
           "imports": [

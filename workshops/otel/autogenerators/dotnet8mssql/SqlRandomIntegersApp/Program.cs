@@ -27,6 +27,7 @@ namespace SqlRandomIntegersApp
         private const string SQL_PORT = "1433";
         private const string SQL_USER = "sa";
         private const string SQL_PASSWORD = "Toortoor9#";
+        private const string SQL_DATABASE = "master";  // Initial database
 
         // Test Data Configuration
         private static readonly string[] Categories = new[] { 
@@ -77,7 +78,7 @@ namespace SqlRandomIntegersApp
 
         static async Task Main(string[] args)
         {
-            string connectionString = $"Server={SQL_SERVER},{SQL_PORT};User Id={SQL_USER};Password={SQL_PASSWORD};Connection Timeout={CONNECTION_TIMEOUT};";
+            string connectionString = $"Server={SQL_SERVER},{SQL_PORT};User Id={SQL_USER};Password={SQL_PASSWORD};Connection Timeout={CONNECTION_TIMEOUT};TrustServerCertificate=True;";
             var logs = new List<LogEntry>();
             var totalStopwatch = new Stopwatch();
             totalStopwatch.Start();
@@ -272,15 +273,36 @@ namespace SqlRandomIntegersApp
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
+            // Create a sanitized connection string for logging (remove password)
+            var builder = new SqlConnectionStringBuilder(connectionString);
+            var sanitizedConnectionString = $"Server={builder.DataSource};Database={builder.InitialCatalog};User Id={builder.UserID};Timeout={builder.ConnectTimeout}";
+
+            Console.WriteLine($"\nAttempting to connect to SQL Server with settings:");
+            Console.WriteLine($"Server: {builder.DataSource}");
+            Console.WriteLine($"Database: {builder.InitialCatalog ?? "default"}");
+            Console.WriteLine($"User: {builder.UserID}");
+            Console.WriteLine($"Timeout: {builder.ConnectTimeout} seconds");
+            Console.WriteLine($"TrustServerCertificate: {builder.TrustServerCertificate}\n");
+
             for (int i = 1; i <= maxRetries; i++)
             {
                 try
                 {
+                    Console.WriteLine($"Connection attempt {i}/{maxRetries}...");
                     using (var connection = new SqlConnection(connectionString))
                     {
                         await connection.OpenAsync();
                         stopwatch.Stop();
-                        LogAction(logs, "INFO", "Connection", "SQL Server ready", stopwatch.ElapsedMilliseconds);
+                        
+                        // Get server version and state information
+                        var serverInfo = await GetServerInfo(connection);
+                        Console.WriteLine($"\nConnection successful!");
+                        Console.WriteLine($"Server Version: {serverInfo.version}");
+                        Console.WriteLine($"Server State: {connection.State}");
+                        
+                        LogAction(logs, "INFO", "Connection", 
+                            $"SQL Server ready - Version: {serverInfo.version}, State: {connection.State}", 
+                            stopwatch.ElapsedMilliseconds);
 
                         // Clean up any existing test databases
                         Console.WriteLine("\nChecking for and removing any existing test databases...");
@@ -288,18 +310,73 @@ namespace SqlRandomIntegersApp
                         return;
                     }
                 }
-                catch (SqlException)
+                catch (SqlException e)
                 {
+                    var errorDetails = new StringBuilder();
+                    errorDetails.AppendLine($"\nAttempt {i} failed with SQL error(s):");
+                    
+                    // Log each error in the collection
+                    for (int j = 0; j < e.Errors.Count; j++)
+                    {
+                        var error = e.Errors[j];
+                        errorDetails.AppendLine($"Error {j + 1}:");
+                        errorDetails.AppendLine($"  Message: {error.Message}");
+                        errorDetails.AppendLine($"  Number: {error.Number}");
+                        errorDetails.AppendLine($"  State: {error.State}");
+                        errorDetails.AppendLine($"  Server: {error.Server}");
+                        errorDetails.AppendLine($"  Procedure: {error.Procedure}");
+                        errorDetails.AppendLine($"  LineNumber: {error.LineNumber}");
+                    }
+
+                    Console.WriteLine(errorDetails.ToString());
+
                     if (i == maxRetries)
                     {
                         stopwatch.Stop();
                         LogAction(logs, "ERROR", "Connection", 
-                            $"Failed to connect after {maxRetries} attempts", 
+                            $"Failed to connect after {maxRetries} attempts. Connection string: {sanitizedConnectionString}. Last errors: {errorDetails}", 
                             stopwatch.ElapsedMilliseconds);
                         throw;
                     }
-                    await Task.Delay(retryDelaySeconds * 1000);
+
+                    var remainingAttempts = maxRetries - i;
+                    var waitTime = TimeSpan.FromSeconds(retryDelaySeconds);
+                    Console.WriteLine($"Waiting {waitTime.TotalSeconds} seconds before next attempt... ({remainingAttempts} attempts remaining)");
+                    await Task.Delay(waitTime);
                 }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"\nAttempt {i} failed with unexpected error:");
+                    Console.WriteLine($"Error Type: {e.GetType().Name}");
+                    Console.WriteLine($"Message: {e.Message}");
+                    if (e.InnerException != null)
+                    {
+                        Console.WriteLine($"Inner Exception: {e.InnerException.Message}");
+                    }
+
+                    if (i == maxRetries)
+                    {
+                        stopwatch.Stop();
+                        LogAction(logs, "ERROR", "Connection", 
+                            $"Failed to connect after {maxRetries} attempts. Connection string: {sanitizedConnectionString}. Last error: {e.Message}", 
+                            stopwatch.ElapsedMilliseconds);
+                        throw;
+                    }
+
+                    var remainingAttempts = maxRetries - i;
+                    var waitTime = TimeSpan.FromSeconds(retryDelaySeconds);
+                    Console.WriteLine($"Waiting {waitTime.TotalSeconds} seconds before next attempt... ({remainingAttempts} attempts remaining)");
+                    await Task.Delay(waitTime);
+                }
+            }
+        }
+
+        private static async Task<(string version, string state)> GetServerInfo(SqlConnection connection)
+        {
+            using (var cmd = new SqlCommand("SELECT @@VERSION", connection))
+            {
+                var version = (await cmd.ExecuteScalarAsync())?.ToString() ?? "Unknown";
+                return (version, connection.State.ToString());
             }
         }
 

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace SqlRandomIntegersApp
 {
@@ -16,47 +17,291 @@ namespace SqlRandomIntegersApp
         // Configuration
         private const int TOTAL_RECORDS = 1000000; // 1 million records for meaningful performance testing
         private const int BATCH_SIZE = 1000; // Insert records in batches for better performance
+        private const int CONNECTION_TIMEOUT = 30; // Connection timeout in seconds
+        private const int COMMAND_TIMEOUT = 120; // Command timeout in seconds
+        
+        // SQL Server Connection Configuration
+        private const string SQL_SERVER = "localhost";
+        private const string SQL_PORT = "1433";
+        private const string SQL_USER = "sa";
+        private const string SQL_PASSWORD = "Toortoor9#";
         
         static async Task Main(string[] args)
         {
-            string server = "localhost";
-            string username = "sa";
-            string password = "Toortoor9#";
-            string connectionString = $"Server={server};User Id={username};Password={password};";
+            string connectionString = $"Server={SQL_SERVER},{SQL_PORT};User Id={SQL_USER};Password={SQL_PASSWORD};Connection Timeout={CONNECTION_TIMEOUT};";
             var logs = new List<LogEntry>();
-            var stopwatch = new Stopwatch();
+            var totalStopwatch = new Stopwatch();
+            totalStopwatch.Start();
+
+            Console.WriteLine("\n=== Starting SQL Server Performance Tests ===\n");
 
             try
             {
+                // Wait for SQL Server to be ready
+                Console.WriteLine("Connecting to SQL Server...");
+                await WaitForSqlServer(connectionString, logs);
+
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     await connection.OpenAsync();
-                    LogAction(logs, "INFO", "Connecting to SQL Server", "Connection successful");
+                    LogAction(logs, "INFO", "Connection", "SQL Server connection established");
 
-                    // Setup Database
+                    // Run all test scenarios
+                    Console.WriteLine("\nSetting up test database...");
                     await SetupDatabase(connection, logs);
 
-                    // Run Test Scenarios
+                    Console.WriteLine("\nRunning fast queries...");
                     await RunFastQueries(connection, logs);
+
+                    Console.WriteLine("\nRunning slow queries...");
                     await RunSlowQueries(connection, logs);
+
+                    Console.WriteLine("\nRunning parallel queries...");
                     await RunParallelQueries(connection, logs);
+
+                    Console.WriteLine("\nRunning temp table queries...");
                     await RunTempTableQueries(connection, logs);
+
+                    Console.WriteLine("\nRunning isolation level tests...");
                     await RunIsolationLevelTests(connection, logs);
+
+                    Console.WriteLine("\nRunning deadlock scenarios...");
                     await RunDeadlockScenarios(connection, logs);
+
+                    Console.WriteLine("\nRunning failed queries...");
                     await RunFailedQueries(connection, logs);
 
-                    // Cleanup
+                    Console.WriteLine("\nCleaning up...");
                     await CleanupDatabase(connection, logs);
                 }
             }
             catch (Exception e)
             {
-                LogAction(logs, "ERROR", e.Message, "An error occurred during test execution");
+                Console.WriteLine($"\nERROR: {e.Message}");
+                LogAction(logs, "ERROR", "Global Error", e.Message);
             }
             finally
             {
-                // Write logs to a file
-                await File.WriteAllTextAsync("logs.json", JsonConvert.SerializeObject(logs, Formatting.Indented));
+                totalStopwatch.Stop();
+                
+                // Generate and display summary
+                DisplaySummary(logs, totalStopwatch.ElapsedMilliseconds);
+                
+                // Write summary to a file
+                var summaryJson = JsonConvert.SerializeObject(
+                    GenerateSummaryObject(logs, totalStopwatch.ElapsedMilliseconds), 
+                    Formatting.Indented);
+                await File.WriteAllTextAsync("test_summary.json", summaryJson);
+                Console.WriteLine($"\nDetailed results have been written to: test_summary.json");
+            }
+
+            // Keep console window open if running as executable
+            if (System.Diagnostics.Debugger.IsAttached)
+            {
+                Console.WriteLine("\nPress any key to exit...");
+                Console.ReadKey();
+            }
+        }
+
+        private static void DisplaySummary(List<LogEntry> logs, long totalDuration)
+        {
+            Console.WriteLine("\n=== Test Execution Summary ===");
+            Console.WriteLine($"Total Duration: {totalDuration/1000.0:F2} seconds");
+            
+            var categories = logs
+                .GroupBy(l => l.Category)
+                .OrderBy(g => g.Key);
+
+            foreach (var category in categories)
+            {
+                var totalCategoryDuration = category.Sum(l => l.Duration);
+                var errorCount = category.Count(l => l.Severity == "ERROR");
+                var successCount = category.Count(l => l.Severity == "INFO");
+                
+                Console.WriteLine($"\n{category.Key}:");
+                Console.WriteLine($"  Duration: {totalCategoryDuration/1000.0:F2} seconds");
+                Console.WriteLine($"  Successful Operations: {successCount}");
+                if (errorCount > 0)
+                {
+                    Console.WriteLine($"  Failed Operations: {errorCount}");
+                    // Display error details
+                    var errors = category.Where(l => l.Severity == "ERROR");
+                    foreach (var error in errors)
+                    {
+                        Console.WriteLine($"    - {error.Operation}: {error.Result}");
+                    }
+                }
+            }
+
+            var totalErrors = logs.Count(l => l.Severity == "ERROR");
+            var totalSuccess = logs.Count(l => l.Severity == "INFO");
+            Console.WriteLine($"\nTotal Successful Operations: {totalSuccess}");
+            Console.WriteLine($"Total Failed Operations: {totalErrors}");
+        }
+
+        private static object GenerateSummaryObject(List<LogEntry> logs, long totalDuration)
+        {
+            return new
+            {
+                TotalDurationSeconds = totalDuration / 1000.0,
+                TotalOperations = logs.Count,
+                TotalErrors = logs.Count(l => l.Severity == "ERROR"),
+                Categories = logs
+                    .GroupBy(l => l.Category)
+                    .OrderBy(g => g.Key)
+                    .Select(g => new
+                    {
+                        Name = g.Key,
+                        DurationSeconds = g.Sum(l => l.Duration) / 1000.0,
+                        OperationCount = g.Count(),
+                        ErrorCount = g.Count(l => l.Severity == "ERROR"),
+                        Operations = g.Select(l => new
+                        {
+                            Operation = l.Operation,
+                            DurationMs = l.Duration,
+                            Status = l.Severity,
+                            Error = l.Severity == "ERROR" ? l.Result : null
+                        }).ToList()
+                    })
+                    .ToList()
+            };
+        }
+
+        private static async Task WaitForSqlServer(string connectionString, List<LogEntry> logs)
+        {
+            int maxRetries = 10;
+            int retryDelaySeconds = 5;
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            for (int i = 1; i <= maxRetries; i++)
+            {
+                try
+                {
+                    using (var connection = new SqlConnection(connectionString))
+                    {
+                        await connection.OpenAsync();
+                        stopwatch.Stop();
+                        LogAction(logs, "INFO", "Connection", "SQL Server ready", stopwatch.ElapsedMilliseconds);
+
+                        // Clean up any existing test databases
+                        Console.WriteLine("\nChecking for and removing any existing test databases...");
+                        await CleanupExistingDatabases(connection, logs);
+                        return;
+                    }
+                }
+                catch (SqlException)
+                {
+                    if (i == maxRetries)
+                    {
+                        stopwatch.Stop();
+                        LogAction(logs, "ERROR", "Connection", 
+                            $"Failed to connect after {maxRetries} attempts", 
+                            stopwatch.ElapsedMilliseconds);
+                        throw;
+                    }
+                    await Task.Delay(retryDelaySeconds * 1000);
+                }
+            }
+        }
+
+        private static async Task CleanupExistingDatabases(SqlConnection connection, List<LogEntry> logs)
+        {
+            try
+            {
+                // Get list of databases that might be left over from previous runs
+                var cmd = new SqlCommand(@"
+                    SELECT name 
+                    FROM sys.databases 
+                    WHERE name IN ('TestDB')", connection);
+
+                using (var reader = await cmd.ExecuteReaderAsync())
+                {
+                    var databasesToDelete = new List<string>();
+                    while (await reader.ReadAsync())
+                    {
+                        databasesToDelete.Add(reader.GetString(0));
+                    }
+                    reader.Close();
+
+                    foreach (var dbName in databasesToDelete)
+                    {
+                        try
+                        {
+                            await ExecuteSqlCommandAsync(logs, connection,
+                                $"ALTER DATABASE [{dbName}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE; DROP DATABASE [{dbName}];",
+                                $"Drop existing database '{dbName}'", "Cleanup");
+                        }
+                        catch (Exception ex)
+                        {
+                            LogAction(logs, "WARN", "Cleanup", $"Failed to drop database '{dbName}'", 0, ex.Message);
+                        }
+                    }
+
+                    if (databasesToDelete.Count > 0)
+                    {
+                        Console.WriteLine($"Cleaned up {databasesToDelete.Count} existing test database(s).");
+                    }
+                    else
+                    {
+                        Console.WriteLine("No existing test databases found.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogAction(logs, "WARN", "Cleanup", "Database cleanup check failed", 0, ex.Message);
+                Console.WriteLine("Warning: Could not perform initial database cleanup check.");
+            }
+        }
+
+        private static async Task ExecuteSqlCommandAsync(List<LogEntry> logs, SqlConnection connection, string sql, string operation, string category, SqlTransaction? transaction = null)
+        {
+            var stopwatch = new Stopwatch();
+            try
+            {
+                stopwatch.Start();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    if (transaction != null)
+                    {
+                        command.Transaction = transaction;
+                    }
+                    command.CommandTimeout = COMMAND_TIMEOUT;
+                    await command.ExecuteNonQueryAsync();
+                    stopwatch.Stop();
+                    LogAction(logs, "INFO", category, operation, stopwatch.ElapsedMilliseconds);
+                }
+            }
+            catch (Exception e)
+            {
+                stopwatch.Stop();
+                LogAction(logs, "ERROR", category, operation, stopwatch.ElapsedMilliseconds, e.Message);
+                throw;
+            }
+        }
+
+        private static void LogAction(List<LogEntry> logs, string severity, string category, string operation, long duration = 0, string? result = null)
+        {
+            var log = new LogEntry
+            {
+                Timestamp = DateTime.UtcNow,
+                Category = category,
+                Operation = operation,
+                Severity = severity,
+                Duration = duration,
+                Result = result
+            };
+            logs.Add(log);
+
+            // Print progress to console
+            if (severity == "ERROR")
+            {
+                Console.WriteLine($"  {operation} - Failed: {result}");
+            }
+            else if (duration > 0)
+            {
+                Console.WriteLine($"  {operation} - Completed in {duration/1000.0:F2}s");
             }
         }
 
@@ -67,10 +312,11 @@ namespace SqlRandomIntegersApp
             // Drop existing database if it exists
             await ExecuteSqlCommandAsync(logs, connection, 
                 "IF DB_ID('TestDB') IS NOT NULL BEGIN ALTER DATABASE TestDB SET SINGLE_USER WITH ROLLBACK IMMEDIATE; DROP DATABASE TestDB; END", 
-                "Checked and dropped existing 'TestDB'");
+                "Drop existing database", "Database");
 
             // Create new database
-            await ExecuteSqlCommandAsync(logs, connection, "CREATE DATABASE TestDB", "Database 'TestDB' created");
+            await ExecuteSqlCommandAsync(logs, connection, "CREATE DATABASE TestDB", 
+                "Create database", "Database");
             connection.ChangeDatabase("TestDB");
 
             // Create tables
@@ -85,7 +331,7 @@ namespace SqlRandomIntegersApp
                 );
                 CREATE INDEX IX_Numbers_Number ON Numbers(Number);
                 CREATE INDEX IX_Numbers_Category ON Numbers(Category);
-                ", "Created Numbers table with indexes");
+                ", "Create tables and indexes", "Database");
 
             // Insert test data in batches
             stopwatch.Start();
@@ -107,38 +353,28 @@ namespace SqlRandomIntegersApp
 
                 batchInsert.Append(string.Join(",", values));
                 await ExecuteSqlCommandAsync(logs, connection, batchInsert.ToString(), 
-                    $"Inserted batch of {values.Count} records");
+                    $"Insert batch {batchStart/BATCH_SIZE + 1}", "Database");
             }
             stopwatch.Stop();
-            LogAction(logs, "INFO", "Data Generation", 
-                $"Generated {TOTAL_RECORDS} records in {stopwatch.ElapsedMilliseconds}ms");
+            LogAction(logs, "INFO", "Database", "Data Generation", stopwatch.ElapsedMilliseconds);
         }
 
         private static async Task RunFastQueries(SqlConnection connection, List<LogEntry> logs)
         {
-            var stopwatch = new Stopwatch();
-
             // Test 1: Quick indexed lookup
-            stopwatch.Restart();
             await ExecuteSqlCommandAsync(logs, connection, 
                 "SELECT TOP 100 * FROM Numbers WHERE Number = 42", 
-                "Fast Query - Indexed lookup");
-            LogAction(logs, "INFO", "Fast Query", $"Indexed lookup completed in {stopwatch.ElapsedMilliseconds}ms");
+                "Indexed lookup", "Query");
 
             // Test 2: Category count with index
-            stopwatch.Restart();
             await ExecuteSqlCommandAsync(logs, connection, 
                 "SELECT Category, COUNT(*) as Count FROM Numbers GROUP BY Category", 
-                "Fast Query - Category count");
-            LogAction(logs, "INFO", "Fast Query", $"Category count completed in {stopwatch.ElapsedMilliseconds}ms");
+                "Category count", "Query");
         }
 
         private static async Task RunSlowQueries(SqlConnection connection, List<LogEntry> logs)
         {
-            var stopwatch = new Stopwatch();
-
             // Test 1: Full table scan with string operations
-            stopwatch.Restart();
             await ExecuteSqlCommandAsync(logs, connection, @"
                 WITH NumberGroups AS (
                     SELECT 
@@ -158,11 +394,9 @@ namespace SqlRandomIntegersApp
                 WHERE RowNum <= 1000
                 GROUP BY Category
                 HAVING COUNT(*) > 100;", 
-                "Slow Query - Complex aggregation");
-            LogAction(logs, "INFO", "Slow Query", $"Complex aggregation completed in {stopwatch.ElapsedMilliseconds}ms");
+                "Complex aggregation", "Query");
 
             // Test 2: Cross join to generate large result set
-            stopwatch.Restart();
             await ExecuteSqlCommandAsync(logs, connection, @"
                 SELECT TOP 10000 
                     a.Number as Number1, 
@@ -177,11 +411,9 @@ namespace SqlRandomIntegersApp
                 ) b
                 WHERE a.Category = b.Category
                 ORDER BY Difference;", 
-                "Slow Query - Cross apply");
-            LogAction(logs, "INFO", "Slow Query", $"Cross apply completed in {stopwatch.ElapsedMilliseconds}ms");
+                "Cross apply", "Query");
 
             // Test 3: Recursive CTE
-            stopwatch.Restart();
             await ExecuteSqlCommandAsync(logs, connection, @"
                 WITH NumberSequence AS (
                     SELECT TOP 100 
@@ -209,21 +441,17 @@ namespace SqlRandomIntegersApp
                 FROM NumberSequence
                 GROUP BY Level
                 OPTION (MAXRECURSION 0);", 
-                "Slow Query - Recursive CTE");
-            LogAction(logs, "INFO", "Slow Query", $"Recursive CTE completed in {stopwatch.ElapsedMilliseconds}ms");
+                "Recursive CTE", "Query");
         }
 
         private static async Task RunParallelQueries(SqlConnection connection, List<LogEntry> logs)
         {
-            var stopwatch = new Stopwatch();
-
             // Enable parallel query execution
             await ExecuteSqlCommandAsync(logs, connection, 
                 "EXEC sp_configure 'max degree of parallelism', 4;", 
-                "Configured parallel execution");
+                "Configure parallel execution", "Configuration");
 
             // Test 1: Parallel full table scan with computation
-            stopwatch.Restart();
             await ExecuteSqlCommandAsync(logs, connection, @"
                 SELECT 
                     Category,
@@ -237,11 +465,9 @@ namespace SqlRandomIntegersApp
                 WHERE Number BETWEEN 1000 AND 900000
                 GROUP BY Category
                 OPTION (MAXDOP 4);", 
-                "Parallel Query - Complex aggregation");
-            LogAction(logs, "INFO", "Parallel Query", $"Complex parallel aggregation completed in {stopwatch.ElapsedMilliseconds}ms");
+                "Complex parallel aggregation", "Query");
 
             // Test 2: Parallel join operations
-            stopwatch.Restart();
             await ExecuteSqlCommandAsync(logs, connection, @"
                 WITH NumberRanges AS (
                     SELECT 
@@ -260,16 +486,12 @@ namespace SqlRandomIntegersApp
                     r1.Number <> r2.Number
                 GROUP BY r1.Range
                 OPTION (MAXDOP 4);",
-                "Parallel Query - Join operations");
-            LogAction(logs, "INFO", "Parallel Query", $"Parallel join completed in {stopwatch.ElapsedMilliseconds}ms");
+                "Parallel join operations", "Query");
         }
 
         private static async Task RunTempTableQueries(SqlConnection connection, List<LogEntry> logs)
         {
-            var stopwatch = new Stopwatch();
-
             // Test 1: Global temporary table with indexes
-            stopwatch.Restart();
             await ExecuteSqlCommandAsync(logs, connection, @"
                 CREATE TABLE ##GlobalTempNumbers (
                     ID INT IDENTITY(1,1) PRIMARY KEY,
@@ -292,11 +514,9 @@ namespace SqlRandomIntegersApp
                 GROUP BY DATEPART(SECOND, ProcessedAt);
                 
                 DROP TABLE ##GlobalTempNumbers;",
-                "Temp Table - Global temp table operations");
-            LogAction(logs, "INFO", "Temp Table", $"Global temp table operations completed in {stopwatch.ElapsedMilliseconds}ms");
+                "Global temp table operations", "Database");
 
             // Test 2: Table variables for intermediate results
-            stopwatch.Restart();
             await ExecuteSqlCommandAsync(logs, connection, @"
                 DECLARE @CategoryStats TABLE (
                     Category NVARCHAR(50) PRIMARY KEY,
@@ -318,16 +538,12 @@ namespace SqlRandomIntegersApp
 
                 SELECT * FROM @CategoryStats
                 WHERE NumberCount > (SELECT AVG(NumberCount) FROM @CategoryStats);",
-                "Temp Table - Table variable operations");
-            LogAction(logs, "INFO", "Temp Table", $"Table variable operations completed in {stopwatch.ElapsedMilliseconds}ms");
+                "Table variable operations", "Database");
         }
 
         private static async Task RunIsolationLevelTests(SqlConnection connection, List<LogEntry> logs)
         {
-            var stopwatch = new Stopwatch();
-
             // Test 1: Read Committed with nolock hint
-            stopwatch.Restart();
             await ExecuteSqlCommandAsync(logs, connection, @"
                 SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
                 BEGIN TRANSACTION;
@@ -341,11 +557,9 @@ namespace SqlRandomIntegersApp
                 ORDER BY n1.Number;
                 
                 COMMIT TRANSACTION;",
-                "Isolation Level - Read Committed with NOLOCK");
-            LogAction(logs, "INFO", "Isolation Level", $"Read Committed test completed in {stopwatch.ElapsedMilliseconds}ms");
+                "Read Committed with NOLOCK", "Query");
 
             // Test 2: Snapshot isolation
-            stopwatch.Restart();
             await ExecuteSqlCommandAsync(logs, connection, @"
                 ALTER DATABASE TestDB SET ALLOW_SNAPSHOT_ISOLATION ON;
                 
@@ -367,14 +581,11 @@ namespace SqlRandomIntegersApp
                 GROUP BY Category;
                 
                 COMMIT TRANSACTION;",
-                "Isolation Level - Snapshot");
-            LogAction(logs, "INFO", "Isolation Level", $"Snapshot isolation test completed in {stopwatch.ElapsedMilliseconds}ms");
+                "Snapshot isolation", "Query");
         }
 
         private static async Task RunDeadlockScenarios(SqlConnection connection, List<LogEntry> logs)
         {
-            var stopwatch = new Stopwatch();
-
             // Create additional table for deadlock testing
             await ExecuteSqlCommandAsync(logs, connection, @"
                 CREATE TABLE NumberCategories (
@@ -385,10 +596,10 @@ namespace SqlRandomIntegersApp
                 
                 INSERT INTO NumberCategories (CategoryName)
                 SELECT DISTINCT Category FROM Numbers;",
-                "Created NumberCategories table");
+                "Create deadlock test table", "Database");
 
             // Test 1: Simulate deadlock with update operations
-            stopwatch.Restart();
+            var stopwatch = new Stopwatch();
             try
             {
                 // First transaction
@@ -409,8 +620,7 @@ namespace SqlRandomIntegersApp
                                 UPDATE NumberCategories
                                 SET LastUpdated = GETUTCDATE()
                                 WHERE CategoryName = 'Large';",
-                                "Deadlock Test - Transaction 1",
-                                transaction);
+                                "Transaction 1", "Query", transaction);
                             
                             transaction.Commit();
                         }
@@ -435,8 +645,7 @@ namespace SqlRandomIntegersApp
                                 UPDATE Numbers 
                                 SET IsProcessed = 1 
                                 WHERE Category = 'Large';",
-                                "Deadlock Test - Transaction 2",
-                                transaction);
+                                "Transaction 2", "Query", transaction);
                             
                             transaction.Commit();
                         }
@@ -447,18 +656,13 @@ namespace SqlRandomIntegersApp
             }
             catch (Exception e)
             {
-                LogAction(logs, "INFO", "Deadlock Test", $"Expected deadlock occurred: {e.Message}");
-            }
-            finally
-            {
-                stopwatch.Stop();
-                LogAction(logs, "INFO", "Deadlock Test", $"Deadlock scenario completed in {stopwatch.ElapsedMilliseconds}ms");
+                LogAction(logs, "INFO", "Query", "Deadlock Test", stopwatch.ElapsedMilliseconds, e.Message);
             }
 
             // Cleanup deadlock test objects
             await ExecuteSqlCommandAsync(logs, connection, 
                 "DROP TABLE NumberCategories;",
-                "Cleaned up deadlock test objects");
+                "Cleanup deadlock test", "Database");
         }
 
         private static async Task RunFailedQueries(SqlConnection connection, List<LogEntry> logs)
@@ -468,11 +672,11 @@ namespace SqlRandomIntegersApp
             {
                 await ExecuteSqlCommandAsync(logs, connection, 
                     "SELECT 1/0 as Result", 
-                    "Failed Query - Division by zero");
+                    "Division by zero test", "Query");
             }
             catch (Exception e)
             {
-                LogAction(logs, "ERROR", "Failed Query", $"Division by zero error: {e.Message}");
+                LogAction(logs, "ERROR", "Query", "Division by zero", 0, e.Message);
             }
 
             // Test 2: Invalid column name
@@ -480,11 +684,11 @@ namespace SqlRandomIntegersApp
             {
                 await ExecuteSqlCommandAsync(logs, connection, 
                     "SELECT NonExistentColumn FROM Numbers", 
-                    "Failed Query - Invalid column");
+                    "Invalid column test", "Query");
             }
             catch (Exception e)
             {
-                LogAction(logs, "ERROR", "Failed Query", $"Invalid column error: {e.Message}");
+                LogAction(logs, "ERROR", "Query", "Invalid column", 0, e.Message);
             }
 
             // Test 3: Syntax error
@@ -492,11 +696,11 @@ namespace SqlRandomIntegersApp
             {
                 await ExecuteSqlCommandAsync(logs, connection, 
                     "SELEC * FORM Numbers", 
-                    "Failed Query - Syntax error");
+                    "Syntax error test", "Query");
             }
             catch (Exception e)
             {
-                LogAction(logs, "ERROR", "Failed Query", $"Syntax error: {e.Message}");
+                LogAction(logs, "ERROR", "Query", "Syntax error", 0, e.Message);
             }
         }
 
@@ -504,56 +708,18 @@ namespace SqlRandomIntegersApp
         {
             connection.ChangeDatabase("master");
             await ExecuteSqlCommandAsync(logs, connection, 
-                "ALTER DATABASE TestDB SET SINGLE_USER WITH ROLLBACK IMMEDIATE; DROP DATABASE TestDB;", 
-                "Database cleanup completed");
-        }
-
-        private static async Task ExecuteSqlCommandAsync(List<LogEntry> logs, SqlConnection connection, string sql, string successMessage, SqlTransaction? transaction = null)
-        {
-            var stopwatch = new Stopwatch();
-            try
-            {
-                stopwatch.Start();
-                using (SqlCommand command = new SqlCommand(sql, connection))
-                {
-                    if (transaction != null)
-                    {
-                        command.Transaction = transaction;
-                    }
-                    await command.ExecuteNonQueryAsync();
-                    stopwatch.Stop();
-                    LogAction(logs, "INFO", sql, $"{successMessage} (Duration: {stopwatch.ElapsedMilliseconds}ms)");
-                }
-            }
-            catch (Exception e)
-            {
-                stopwatch.Stop();
-                LogAction(logs, "ERROR", sql, $"Error: {e.Message} (Duration: {stopwatch.ElapsedMilliseconds}ms)");
-                throw;
-            }
-        }
-
-        private static void LogAction(List<LogEntry> logs, string severity, string sql, string result)
-        {
-            var log = new LogEntry
-            {
-                Timestamp = DateTime.UtcNow,
-                Severity = severity,
-                SqlStatement = sql,
-                Result = result,
-                Duration = 0 // Will be filled by actual query execution
-            };
-            Console.WriteLine(JsonConvert.SerializeObject(log, Formatting.Indented));
-            logs.Add(log);
+                "ALTER DATABASE TestDB SET SINGLE_USER WITH ROLLBACK IMMEDIATE; DROP DATABASE TestDB;",
+                "Drop database", "Database");
         }
     }
 
     class LogEntry
     {
         public DateTime Timestamp { get; set; }
+        public string? Category { get; set; }
+        public string? Operation { get; set; }
         public string? Severity { get; set; }
-        public string? SqlStatement { get; set; }
-        public string? Result { get; set; }
         public long Duration { get; set; }
+        public string? Result { get; set; }
     }
 }

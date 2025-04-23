@@ -5,7 +5,7 @@
 - This example shows small reference for exercising OpenAI and sending AI telemetry to the Coralogix AI Center  
 - An OpenAI Platform Key is required    
 - Result will be telemetry in the Coralogix AI Center and associated traces in the Coralogix Trace Explorer and APM dashboards 
-- This example is designed to run on a Mac or Linux environment although can be ported to Windows  
+- This example is designed to run on a Mac or Linux environment command line although can be ported to Windows  
 
 In advance be sure to study the [Coralogix AI Center Documentation](https://coralogix.com/docs/user-guides/ai-observability/ai-center/)
 
@@ -29,8 +29,6 @@ Edit the `2-setup-python-env.sh` file and add your Coralogix API key, Endpoint, 
 [Coralogix endpoints are found here](https://coralogix.com/docs/integrations/coralogix-endpoints/)  
   
 ### Step 3 - Execute the Ai workshop
-
-0. **Start a new terminal** - this must be run in a dedicated terminal
 
 1. **Set up Python env**
 

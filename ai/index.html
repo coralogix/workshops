@@ -12,24 +12,24 @@
         <meta name="author" content="Coralogix">
       
       
-        <link rel="canonical" href="http://coralogix.github.io/otel/microservices/">
+        <link rel="canonical" href="http://coralogix.github.io/ai/">
       
       
       
       
-      <link rel="icon" href="../../images/favicon.png">
+      <link rel="icon" href="../images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.12">
     
     
       
-        <title>OpenTelemetry Microservices / Kubernetes - Coralogix Workshops</title>
+        <title>AI Observability - Coralogix Workshops</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.2afb09e1.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.2afb09e1.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -48,9 +48,9 @@
       
     
     
-      <link rel="stylesheet" href="../../stylesheets/extra.css">
+      <link rel="stylesheet" href="../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#opentelemetry-microservices-kubernetes" class="md-skip">
+        <a href="#ai-observability" class="md-skip">
           Skip to content
         </a>
       
@@ -90,9 +90,9 @@
 
 <header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="Coralogix Workshops" class="md-header__button md-logo" aria-label="Coralogix Workshops" data-md-component="logo">
+    <a href=".." title="Coralogix Workshops" class="md-header__button md-logo" aria-label="Coralogix Workshops" data-md-component="logo">
       
-  <img src="../../images/horizontal.png" alt="logo">
+  <img src="../images/horizontal.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -109,7 +109,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              OpenTelemetry Microservices / Kubernetes
+              AI Observability
             
           </span>
         </div>
@@ -188,7 +188,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../.." class="md-tabs__link">
+      <a href=".." class="md-tabs__link">
         
   
   
@@ -207,7 +207,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../prereqs/" class="md-tabs__link">
+      <a href="../prereqs/" class="md-tabs__link">
         
   
   
@@ -250,9 +250,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="Coralogix Workshops" class="md-nav__button md-logo" aria-label="Coralogix Workshops" data-md-component="logo">
+    <a href=".." title="Coralogix Workshops" class="md-nav__button md-logo" aria-label="Coralogix Workshops" data-md-component="logo">
       
-  <img src="../../images/horizontal.png" alt="logo">
+  <img src="../images/horizontal.png" alt="logo">
 
     </a>
     Coralogix Workshops
@@ -279,7 +279,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href=".." class="md-nav__link">
         
   
   
@@ -301,7 +301,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../prereqs/" class="md-nav__link">
+      <a href="../prereqs/" class="md-nav__link">
         
   
   
@@ -335,65 +335,54 @@
   
 
 
-<h1 id="opentelemetry-microservices-kubernetes">OpenTelemetry Microservices / Kubernetes</h1>
-<h2 id="instructions">Instructions</h2>
-<p>Requirements:<br />
-- <a href="https://coralogix.github.io/workshops/prereqs/">These prerequisites</a><br />
-- A Kubernetes cluster i.e. EKS/GKE/AKS for a sandbox environment. Localized k8s on a personal computer is not supported.  </p>
-<h3 id="step-1-install-the-opentelemetry-collector-on-your-k8s-cluster">Step 1 - Install the OpenTelemetry Collector on your k8s cluster</h3>
-<p><a href="https://coralogix.com/docs/otel-collector-for-k8s/">Easy Coralogix instructions for Complete Observability are here</a>  </p>
-<h3 id="step-2-clone-workshop">Step 2 - Clone workshop</h3>
-<div class="highlight"><pre><span></span><code>git clone https://github.com/coralogix/workshops
-</code></pre></div>
-<h3 id="step-3-change-to-workshop-dir">Step 3 - Change to workshop dir</h3>
-<div class="highlight"><pre><span></span><code>cd workshops/workshops/otel/microservices
-</code></pre></div>
-<h3 id="step-4-deploy-example-to-k8s">Step 4 - Deploy example to k8s</h3>
-<p>If you want to change the namespace, edit <code>yaml/deploy-all.yaml</code><br />
-Tthree services will appear:  </p>
+<h1 id="ai-observability">AI Observability</h1>
+<h2 id="coralogix-ai-center-workshop">Coralogix AI Center Workshop</h2>
 <ul>
-<li><code>cx-shopping-cart-reqs</code> - a requesting service initiating a transaction  </li>
-<li><code>cx-payment-gateway-flask</code> - a server that is a bridge for a transaction to a database- returns a transaction ID to the <code>shopping-cart</code>  </li>
-<li><code>cx-redis</code> - an instance of a redis database used for a transaction<br />
-<div class="highlight"><pre><span></span><code>source deploy-all.sh
-</code></pre></div></li>
+<li>This example shows small reference for exercising OpenAI and sending AI telemetry to the Coralogix AI Center  </li>
+<li>An OpenAI Platform Key is required    </li>
+<li>Result will be telemetry in the Coralogix AI Center and associated traces in the Coralogix Trace Explorer and APM dashboards </li>
+<li>This example is designed to run on a Mac or Linux environment although can be ported to Windows  </li>
 </ul>
-<p>Deploys the following as seen from the <code>http://cx-payment-gateway-flask:5000/</code> root span:  </p>
-<p>Note: images may vary from actual UI due to frequent updates:<br />
-<img src="https://coralogix.github.io/workshops/images/microservices-workshop/01.png" width=540>     </p>
-<!-- ![Microservices Workshop](../../images/microservices-workshop/01.png) -->
-<p>With healthy low latency spans for all services:  </p>
-<p><img src="https://coralogix.github.io/workshops/images/microservices-workshop/03.png" width=540>  </p>
-<h3 id="step-5-simulate-cicd-scenarios">Step 5 - Simulate CI/CD scenarios</h3>
-<p>Study results in Coralogix portal</p>
-<p>Simulate a "bad" deployment:<br />
-<div class="highlight"><pre><span></span><code>source deploy-bad.sh
-</code></pre></div></p>
-<p>This deployment will cause severe sporadic problems in <code>payment-gateway</code> such as 500s and latency in the service response along with a drop in transaction volume. You can see the latency spikes here:    </p>
-<p><img src="https://coralogix.github.io/workshops/images/microservices-workshop/04.png" width=540>   </p>
-<p>Alerts and automation can be built around span latency or Payment Gateway 500 responses.  </p>
-<p>Roll back the bad deployment for the services to return to normal:<br />
-<div class="highlight"><pre><span></span><code>source deploy-good.sh
-</code></pre></div></p>
-<p>Span latency will return to normal and Payment Gateway 500 responses will cease.  </p>
-<h3 id="step-6-study-how-opentelemetry-tracing-instrumentation-works">Step 6 - Study how OpenTelemetry tracing instrumentation works</h3>
-<p><strong>OpenTelemetry Instrumentation For Containerized Apps</strong><br />
-- Dockerfiles for the containers contain OpenTelemetry auto instrumentation for Python and are in <code>/python</code> root level<br />
-- Study Otel Python <a href="https://opentelemetry.io/docs/instrumentation/python/automatic/">Auto Instrumentation</a><br />
-- Notice how the <a href="https://github.com/coralogix/workshops/blob/master/workshops/otel/microservices/python/dockerfile-python">Dockerfile</a> adds the automatic instrumentation <br />
-- And observe how the <a href="https://github.com/coralogix/workshops/blob/master/workshops/otel/microservices/python/k8s/entrypoint-client-reqs.sh">kickstart script</a> uses the instrumenting command  </p>
-<p><strong>Kubernetes Deployments for Otel Tracing Instrumentation</strong>  <br />
-- <code>.yaml</code> deployment files are in <code>python/yaml</code> and show how environment variables are used to control the instrumentation<br />
-- study the <a href="https://github.com/coralogix/workshops/tree/master/workshops/otel/microservices/yaml">deploy-all.yaml</a> which shows the environment variables that control OpenTelemetry tracing instrumentation. Focus on how the <a href="https://kubernetes.io/docs/concepts/workloads/pods/downward-api/">Kubernetes Downward API</a> use of <code>status.hostIP</code> to tell the instrumentation where to send traces: to the IP adddress of the host node on port 4317 
-- this is the default GRPC endpoint for OTLP trace spans for python  </p>
-<p><strong>Instrumented Applications and Frameworks</strong><br />
-- The Python apps that drive this example are in the <code>python/apps</code> dir<br />
-- Examine the frameworks used to show how tracing picks up their execution <br />
-- Note that the <code>python requests</code> library is used to make http requests, and that <a href="https://opentelemetry.io/docs/instrumentation/python/automatic/">OpenTelemetry Python Instrumentation</a> lists <code>requests</code> as an <a href="https://opentelemetry.io/ecosystem/registry/?language=python&amp;component=instrumentation">automatically instrumented library</a>  </p>
-<h2 id="cleanup">Cleanup</h2>
-<p>To remove all the deployments/services/pods from the example from your k8s cluster (ignore any errors it reports):<br />
-<div class="highlight"><pre><span></span><code>source delete-all.sh
-</code></pre></div></p>
+<p>In advance be sure to study the <a href="https://coralogix.com/docs/user-guides/ai-observability/ai-center/">Coralogix AI Center Documentation</a></p>
+<h3 id="step-1-setup">Step 1 - Setup</h3>
+<p>Clone the repository:</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/coralogix/workshops
+</code></pre></div>
+<h3 id="step-2-configure-example">Step 2 - Configure Example</h3>
+<p>Navigate to the <code>ai/host</code> directory:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>./workshops/workshops/ai/host
+</code></pre></div>
+<p>Edit the <code>2-setup-python-env.sh</code> file and add your Coralogix API key, Endpoint, and OpenAI key<br />
+<a href="https://coralogix.com/docs/integrations/coralogix-endpoints/">Coralogix endpoints are found here</a>  </p>
+<h3 id="step-3-execute-the-ai-workshop">Step 3 - Execute the Ai workshop</h3>
+<ol>
+<li>
+<p><strong>Start a new terminal</strong> - this must be run in a dedicated terminal</p>
+</li>
+<li>
+<p><strong>Set up Python env</strong></p>
+<div class="highlight"><pre><span></span><code><span class="nb">source</span><span class="w"> </span><span class="m">1</span>-setup-python.sh
+</code></pre></div>
+</li>
+<li>
+<p><strong>Set up env variables:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="nb">source</span><span class="w"> </span><span class="m">2</span>-setup-python-env.sh
+</code></pre></div>
+</li>
+<li>
+<p><strong>Run the Python OpenAI example:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="nb">source</span><span class="w"> </span><span class="m">3</span>-run-python-app.sh
+</code></pre></div>
+</li>
+</ol>
+<p>Study telemetry in Coralogix AI Center, Explore-&gt;Tracing, and APM  </p>
+<ol>
+<li>
+<p><strong>Clean up:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="nb">source</span><span class="w"> </span><span class="m">4</span>-cleanup-python.sh
+</code></pre></div>
+</li>
+</ol>
 
 
 
@@ -452,10 +441,10 @@ Tthree services will appear:  </p>
     
     
       
-      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.instant", "navigation.sections", "navigation.expand", "navigation.top", "navigation.tracking", "toc.integrate", "toc.follow"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.instant", "navigation.sections", "navigation.expand", "navigation.top", "navigation.tracking", "toc.integrate", "toc.follow"], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.c8b220af.min.js"></script>
+      <script src="../assets/javascripts/bundle.c8b220af.min.js"></script>
       
     
   </body>

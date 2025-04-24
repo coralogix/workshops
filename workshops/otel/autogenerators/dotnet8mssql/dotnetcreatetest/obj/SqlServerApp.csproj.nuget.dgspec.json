@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/dotnetcreatetest/SqlServerApp/SqlServerApp.csproj": {}
+    "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/dotnetcreatetest/SqlServerApp.csproj": {}
   },
   "projects": {
-    "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/dotnetcreatetest/SqlServerApp/SqlServerApp.csproj": {
+    "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/dotnetcreatetest/SqlServerApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/dotnetcreatetest/SqlServerApp/SqlServerApp.csproj",
+        "projectUniqueName": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/dotnetcreatetest/SqlServerApp.csproj",
         "projectName": "SqlServerApp",
-        "projectPath": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/dotnetcreatetest/SqlServerApp/SqlServerApp.csproj",
+        "projectPath": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/dotnetcreatetest/SqlServerApp.csproj",
         "packagesPath": "/home/ubuntu/.nuget/packages/",
-        "outputPath": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/dotnetcreatetest/SqlServerApp/obj/",
+        "outputPath": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/dotnetcreatetest/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/ubuntu/.nuget/NuGet/NuGet.Config"

@@ -2219,11 +2219,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/SqlRandomIntegersApp/SqlRandomIntegersApp.csproj",
+      "projectUniqueName": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/dotnetmssqltest/SqlRandomIntegersApp.csproj",
       "projectName": "SqlRandomIntegersApp",
-      "projectPath": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/SqlRandomIntegersApp/SqlRandomIntegersApp.csproj",
+      "projectPath": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/dotnetmssqltest/SqlRandomIntegersApp.csproj",
       "packagesPath": "/home/ubuntu/.nuget/packages/",
-      "outputPath": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/SqlRandomIntegersApp/obj/",
+      "outputPath": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/dotnetmssqltest/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/ubuntu/.nuget/NuGet/NuGet.Config"

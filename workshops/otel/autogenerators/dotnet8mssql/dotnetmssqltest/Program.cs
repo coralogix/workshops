@@ -475,39 +475,24 @@ namespace SqlRandomIntegersApp {
             // Test 1: Quick indexed lookups with randomization
             var range = TestConfiguration.NumberRanges[random.Next(TestConfiguration.NumberRanges.Length)];
             var table1 = TestConfiguration.GetRandomTableName(random);
+            var category = GetRandomWeighted(random, TestConfiguration.Categories);
             await ExecuteSqlCommandAsync(logs, connection, 
-                $@"WAITFOR DELAY '00:00:01';
-                SELECT TOP {TestConfiguration.QUERY_LIMIT} * FROM {table1} 
-                WHERE Number BETWEEN {range.min} AND {range.max} 
-                AND Category = '{GetRandomWeighted(random, TestConfiguration.Categories)}'", 
+                $"SELECT TOP {TestConfiguration.QUERY_LIMIT} * FROM {table1} WHERE Number BETWEEN {range.min} AND {range.max} AND Category = '{category}';", 
                 $"Indexed range lookup on {table1}", "Query");
 
             // Test 2: Category and status aggregation with index
             var status = GetRandomWeighted(random, TestConfiguration.StatusCodes);
             var table2 = TestConfiguration.GetRandomTableName(random);
             await ExecuteSqlCommandAsync(logs, connection, 
-                $@"WAITFOR DELAY '00:00:01';
-                SELECT Category, Status, COUNT(*) as Count, 
-                MIN(Number) as MinNumber, MAX(Number) as MaxNumber
-                FROM {table2} 
-                WHERE Status = '{status}'
-                GROUP BY Category, Status
-                HAVING COUNT(*) > 5", 
+                $"SELECT Category, Status, COUNT(*) as Count, MIN(Number) as MinNumber, MAX(Number) as MaxNumber FROM {table2} WHERE Status = '{status}' GROUP BY Category, Status HAVING COUNT(*) > 5;", 
                 $"Category-status aggregation on {table2}", "Query");
 
             // Test 3: Recent records lookup with join between two random tables
             var table3 = TestConfiguration.GetRandomTableName(random);
             var table4 = TestConfiguration.GetRandomTableName(random);
+            var category2 = GetRandomWeighted(random, TestConfiguration.Categories);
             await ExecuteSqlCommandAsync(logs, connection, 
-                $@"WAITFOR DELAY '00:00:01';
-                SELECT TOP {TestConfiguration.QUERY_LIMIT} 
-                    t1.ID, t1.Number, t1.Category, t1.Status, t1.CreatedAt,
-                    t2.Number as RelatedNumber
-                FROM {table3} t1
-                LEFT JOIN {table4} t2 ON t1.Category = t2.Category
-                WHERE t1.Category = '{GetRandomWeighted(random, TestConfiguration.Categories)}'
-                AND t1.CreatedAt >= DATEADD(MINUTE, -5, GETUTCDATE())
-                ORDER BY t1.CreatedAt DESC", 
+                $"SELECT TOP {TestConfiguration.QUERY_LIMIT} t1.ID, t1.Number, t1.Category, t1.Status, t1.CreatedAt, t2.Number as RelatedNumber FROM {table3} t1 LEFT JOIN {table4} t2 ON t1.Category = t2.Category WHERE t1.Category = '{category2}' AND t1.CreatedAt >= DATEADD(MINUTE, -5, GETUTCDATE()) ORDER BY t1.CreatedAt DESC;", 
                 $"Recent records lookup joining {table3} and {table4}", "Query");
         }
 
@@ -519,52 +504,15 @@ namespace SqlRandomIntegersApp {
 
             // Test 1: Complex aggregation with string operations
             var randomTable1 = TestConfiguration.GetRandomTableName(random);
-            await ExecuteSqlCommandAsync(logs, connection, $@"
-                WAITFOR DELAY '00:00:02';
-                WITH DataStats AS (
-                    SELECT TOP {TestConfiguration.QUERY_LIMIT}
-                        Category,
-                        Status,
-                        COUNT(*) as RecordCount,
-                        AVG(CAST(Number as FLOAT)) as AvgNumber,
-                        STRING_AGG(CAST(ID as VARCHAR(20)), ',') as RecordIDs
-                    FROM {randomTable1}
-                    GROUP BY Category, Status
-                )
-                SELECT 
-                    Category,
-                    Status,
-                    RecordCount,
-                    AvgNumber,
-                    COUNT(*) OVER (PARTITION BY Category) as CategoryTotal
-                FROM DataStats
-                WHERE RecordCount > 5
-                ORDER BY CategoryTotal DESC, AvgNumber DESC;", 
+            await ExecuteSqlCommandAsync(logs, connection, 
+                $"WITH DataStats AS (SELECT TOP {TestConfiguration.QUERY_LIMIT} Category, Status, COUNT(*) as RecordCount, AVG(CAST(Number as FLOAT)) as AvgNumber, STRING_AGG(CAST(ID as VARCHAR(20)), ',') as RecordIDs FROM {randomTable1} GROUP BY Category, Status) SELECT Category, Status, RecordCount, AvgNumber, COUNT(*) OVER (PARTITION BY Category) as CategoryTotal FROM DataStats WHERE RecordCount > 5 ORDER BY CategoryTotal DESC, AvgNumber DESC;", 
                 "Complex aggregation", "Query");
 
             // Test 2: Cross apply with string operations
             var searchCategory = GetRandomWeighted(random, TestConfiguration.Categories);
             var randomTable2 = TestConfiguration.GetRandomTableName(random);
-            await ExecuteSqlCommandAsync(logs, connection, $@"
-                WAITFOR DELAY '00:00:02';
-                SELECT TOP {TestConfiguration.QUERY_LIMIT}
-                    dr1.Category,
-                    dr1.Status,
-                    Matches.MatchCount,
-                    Matches.AvgNumber
-                FROM {randomTable2} dr1
-                CROSS APPLY (
-                    SELECT 
-                        COUNT(*) as MatchCount,
-                        AVG(CAST(dr2.Number as FLOAT)) as AvgNumber
-                    FROM {randomTable2} dr2
-                    WHERE dr2.Category = dr1.Category
-                    AND dr2.Status = dr1.Status
-                    AND dr2.Number > dr1.Number
-                ) Matches
-                WHERE dr1.Category = '{searchCategory}'
-                AND Matches.MatchCount > 0
-                ORDER BY Matches.AvgNumber DESC;",
+            await ExecuteSqlCommandAsync(logs, connection, 
+                $"SELECT TOP {TestConfiguration.QUERY_LIMIT} dr1.Category, dr1.Status, Matches.MatchCount, Matches.AvgNumber FROM {randomTable2} dr1 CROSS APPLY (SELECT COUNT(*) as MatchCount, AVG(CAST(dr2.Number as FLOAT)) as AvgNumber FROM {randomTable2} dr2 WHERE dr2.Category = dr1.Category AND dr2.Status = dr1.Status AND dr2.Number > dr1.Number) Matches WHERE dr1.Category = '{searchCategory}' AND Matches.MatchCount > 0 ORDER BY Matches.AvgNumber DESC;",
                 "Cross apply with processing time", "Query");
         }
 
@@ -576,20 +524,8 @@ namespace SqlRandomIntegersApp {
 
             // Test 1: Parallel full table scan with computation
             var randomTable1 = TestConfiguration.GetRandomTableName(random);
-            await ExecuteSqlCommandAsync(logs, connection, $@"
-                WAITFOR DELAY '00:00:0{random.Next(3, 6)}';
-                SELECT 
-                    Category,
-                    COUNT(*) as TotalCount,
-                    AVG(CAST(Number as FLOAT)) as AvgNumber,
-                    MIN(Number) as MinNumber,
-                    MAX(Number) as MaxNumber,
-                    SUM(CASE WHEN Number % 2 = 0 THEN 1 ELSE 0 END) as EvenCount,
-                    STRING_AGG(CAST(Number as VARCHAR(20)), ',') WITHIN GROUP (ORDER BY Number) as NumberList
-                FROM {randomTable1}
-                WHERE Number BETWEEN 1000 AND 900000
-                GROUP BY Category
-                OPTION (MAXDOP 4);", 
+            await ExecuteSqlCommandAsync(logs, connection, 
+                $"SELECT Category, COUNT(*) as TotalCount, AVG(CAST(Number as FLOAT)) as AvgNumber, MIN(Number) as MinNumber, MAX(Number) as MaxNumber, SUM(CASE WHEN Number % 2 = 0 THEN 1 ELSE 0 END) as EvenCount, STRING_AGG(CAST(Number as VARCHAR(20)), ',') WITHIN GROUP (ORDER BY Number) as NumberList FROM {randomTable1} WHERE Number BETWEEN 1000 AND 900000 GROUP BY Category OPTION (MAXDOP 4);", 
                 "Complex parallel aggregation", "Query");
 
             // Add random delay between parallel operations
@@ -597,53 +533,14 @@ namespace SqlRandomIntegersApp {
 
             // Test 2: Parallel join operations
             var randomTable2 = TestConfiguration.GetRandomTableName(random);
-            await ExecuteSqlCommandAsync(logs, connection, $@"
-                WAITFOR DELAY '00:00:0{random.Next(3, 6)}';
-                WITH NumberRanges AS (
-                    SELECT 
-                        Number,
-                        Category,
-                        NTILE(100) OVER (ORDER BY Number) as Range
-                    FROM {randomTable2}
-                )
-                SELECT 
-                    r1.Range,
-                    COUNT(*) as Combinations,
-                    AVG(ABS(r1.Number - r2.Number)) as AvgDifference,
-                    MAX(r1.Number) as MaxNumber,
-                    MIN(r2.Number) as MinNumber
-                FROM NumberRanges r1
-                JOIN NumberRanges r2 ON 
-                    r1.Range = r2.Range AND 
-                    r1.Number <> r2.Number
-                GROUP BY r1.Range
-                OPTION (MAXDOP 4);",
+            await ExecuteSqlCommandAsync(logs, connection, 
+                $"WITH NumberRanges AS (SELECT Number, Category, NTILE(100) OVER (ORDER BY Number) as Range FROM {randomTable2}) SELECT r1.Range, COUNT(*) as Combinations, AVG(ABS(r1.Number - r2.Number)) as AvgDifference, MAX(r1.Number) as MaxNumber, MIN(r2.Number) as MinNumber FROM NumberRanges r1 JOIN NumberRanges r2 ON r1.Range = r2.Range AND r1.Number <> r2.Number GROUP BY r1.Range OPTION (MAXDOP 4);",
                 "Parallel join operations", "Query");
 
             // Test 3: Parallel data analysis with multiple operations
             var randomTable3 = TestConfiguration.GetRandomTableName(random);
-            await ExecuteSqlCommandAsync(logs, connection, $@"
-                WAITFOR DELAY '00:00:0{random.Next(3, 6)}';
-                WITH ProcessingMetrics AS (
-                    SELECT 
-                        Category,
-                        Status,
-                        AVG(CAST(Number as FLOAT)) as AvgNumber,
-                        COUNT(*) as RecordCount
-                    FROM {randomTable3}
-                    GROUP BY Category, Status
-                )
-                SELECT 
-                    Category,
-                    Status,
-                    AvgNumber,
-                    RecordCount,
-                    CAST(RecordCount as FLOAT) / NULLIF(SUM(RecordCount) OVER (PARTITION BY Category), 0) as CategoryRatio,
-                    RANK() OVER (PARTITION BY Category ORDER BY AvgNumber DESC) as ProcessingTimeRank
-                FROM ProcessingMetrics
-                WHERE RecordCount > 100
-                ORDER BY Category, ProcessingTimeRank
-                OPTION (MAXDOP 4);",
+            await ExecuteSqlCommandAsync(logs, connection, 
+                $"WITH ProcessingMetrics AS (SELECT Category, Status, AVG(CAST(Number as FLOAT)) as AvgNumber, COUNT(*) as RecordCount FROM {randomTable3} GROUP BY Category, Status) SELECT Category, Status, AvgNumber, RecordCount, CAST(RecordCount as FLOAT) / NULLIF(SUM(RecordCount) OVER (PARTITION BY Category), 0) as CategoryRatio, RANK() OVER (PARTITION BY Category ORDER BY AvgNumber DESC) as ProcessingTimeRank FROM ProcessingMetrics WHERE RecordCount > 100 ORDER BY Category, ProcessingTimeRank OPTION (MAXDOP 4);",
                 "Parallel metrics analysis", "Query");
         }
 

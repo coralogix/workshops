@@ -58,65 +58,114 @@ namespace SqlRandomIntegersApp {
     /// </summary>
     class Program {
         static async Task Main(string[] args) {
+            int? durationMinutes = null;
+            if (args.Length > 0 && int.TryParse(args[0], out int minutes)) {
+                durationMinutes = minutes;
+                Console.WriteLine($"Will run for {minutes} minutes");
+            } else {
+                Console.WriteLine("No duration specified - will run until interrupted");
+            }
+
+            DateTime? endTime = durationMinutes.HasValue 
+                ? DateTime.UtcNow.AddMinutes(durationMinutes.Value) 
+                : null;
+
             string connectionString = TestConfiguration.GetConnectionString();
             var logs = new List<LogEntry>();
             var totalStopwatch = new Stopwatch();
             totalStopwatch.Start();
 
-            Console.WriteLine($"\n=== Starting SQL Server Performance Tests (Will run {TestConfiguration.MAX_ITERATIONS} iterations) ===\n");
-
             using var cancellationTokenSource = new CancellationTokenSource();
+            Console.CancelKeyPress += (s, e) => {
+                e.Cancel = true; // Prevent immediate termination
+                Console.WriteLine("\nGracefully shutting down...");
+                cancellationTokenSource.Cancel();
+            };
+
             var token = cancellationTokenSource.Token;
 
-            SqlConnection? connection = null;
             try {
-                // Wait for SQL Server to be ready
-                Console.WriteLine("Connecting to SQL Server...");
-                await WaitForSqlServer(connectionString, logs);
-
-                connection = new SqlConnection(connectionString);
-                await connection.OpenAsync();
-                LogAction(logs, "INFO", "Connection", "SQL Server connection established");
-
-                // Initial setup
-                Console.WriteLine("\nSetting up test database...");
-                try {
-                    await SetupDatabase(connection, logs);
-                } catch (Exception e) {
-                    Console.WriteLine($"\nWARNING: Database setup failed: {e.Message}");
-                    Console.WriteLine("Will attempt to continue with existing database...");
-                    await TryUseExistingDatabase(connection, logs);
-                }
-
-                // Run tests for specified number of iterations
-                int iteration = 1;
-                while (!token.IsCancellationRequested && iteration <= TestConfiguration.MAX_ITERATIONS) {
+                while (!token.IsCancellationRequested && (!endTime.HasValue || DateTime.UtcNow < endTime.Value)) {
+                    Console.WriteLine($"\n=== Starting New Test Cycle at {DateTime.Now} ===\n");
+                    
+                    SqlConnection? connection = null;
                     try {
-                        await RunTestIteration(connection, logs, iteration);
-                        iteration++;
-                        
-                        if (iteration <= TestConfiguration.MAX_ITERATIONS) {
-                            Console.WriteLine($"\nWaiting 2 seconds before starting iteration {iteration}...");
-                            await Task.Delay(2000, token);
+                        // Wait for SQL Server to be ready
+                        Console.WriteLine("Connecting to SQL Server...");
+                        await WaitForSqlServer(connectionString, logs);
+
+                        connection = new SqlConnection(connectionString);
+                        await connection.OpenAsync();
+                        LogAction(logs, "INFO", "Connection", "SQL Server connection established");
+
+                        // Initial setup
+                        Console.WriteLine("\nSetting up test database...");
+                        try {
+                            await SetupDatabase(connection, logs);
+                        } catch (Exception e) {
+                            Console.WriteLine($"\nWARNING: Database setup failed: {e.Message}");
+                            Console.WriteLine("Will attempt to continue with existing database...");
+                            await TryUseExistingDatabase(connection, logs);
                         }
+
+                        // Run tests for specified number of iterations
+                        int iteration = 1;
+                        while (!token.IsCancellationRequested && 
+                               (!endTime.HasValue || DateTime.UtcNow < endTime.Value) && 
+                               iteration <= TestConfiguration.MAX_ITERATIONS) {
+                            try {
+                                await RunTestIteration(connection, logs, iteration);
+                                iteration++;
+                                
+                                if (iteration <= TestConfiguration.MAX_ITERATIONS) {
+                                    Console.WriteLine($"\nWaiting 2 seconds before starting iteration {iteration}...");
+                                    await Task.Delay(2000, token);
+                                }
+                            } catch (Exception e) {
+                                Console.WriteLine($"\nError in iteration {iteration}: {e.Message}");
+                                LogAction(logs, "ERROR", "Iteration", $"Failed in iteration {iteration}", 0, e.Message);
+                                
+                                if (iteration <= TestConfiguration.MAX_ITERATIONS) {
+                                    Console.WriteLine($"\nWaiting 5 seconds before retrying iteration {iteration}...");
+                                    await Task.Delay(5000, token);
+                                }
+                            }
+                        }
+
+                        // Cleanup after iterations complete
+                        if (connection.State == System.Data.ConnectionState.Open) {
+                            try {
+                                await CleanupDatabase(connection, logs);
+                            } catch (Exception e) {
+                                Console.WriteLine($"\nWARNING: Cleanup failed: {e.Message}");
+                                LogAction(logs, "ERROR", "Cleanup", "Failed to cleanup database", 0, e.Message);
+                            }
+                        }
+
                     } catch (Exception e) {
-                        Console.WriteLine($"\nError in iteration {iteration}: {e.Message}");
-                        LogAction(logs, "ERROR", "Iteration", $"Failed in iteration {iteration}", 0, e.Message);
-                        
-                        if (iteration <= TestConfiguration.MAX_ITERATIONS) {
-                            Console.WriteLine($"\nWaiting 5 seconds before retrying iteration {iteration}...");
-                            await Task.Delay(5000, token);
+                        Console.WriteLine($"\nERROR: {e.Message}");
+                        LogAction(logs, "ERROR", "Global Error", e.Message);
+                    } finally {
+                        if (connection != null) {
+                            connection.Dispose();
                         }
                     }
-                }
 
-                Console.WriteLine($"\n=== Completed all {TestConfiguration.MAX_ITERATIONS} iterations ===\n");
+                    // If we're not at the end time and not cancelled, wait a bit before next cycle
+                    if (!token.IsCancellationRequested && (!endTime.HasValue || DateTime.UtcNow < endTime.Value)) {
+                        Console.WriteLine("\nWaiting 5 seconds before starting next cycle...");
+                        await Task.Delay(5000, token);
+                    }
+                }
+            } catch (OperationCanceledException) {
+                Console.WriteLine("\nOperation was cancelled");
             } catch (Exception e) {
-                Console.WriteLine($"\nERROR: {e.Message}");
-                LogAction(logs, "ERROR", "Global Error", e.Message);
+                Console.WriteLine($"\nFatal error: {e.Message}");
+                LogAction(logs, "ERROR", "Fatal Error", e.Message);
             } finally {
                 totalStopwatch.Stop();
                 DisplaySummary(logs, totalStopwatch.ElapsedMilliseconds);
+                Console.WriteLine("\nApplication has completed execution");
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Data.SqlClient;
+using OpenTelemetry.Trace;
 
 namespace SqlServerApp
 {

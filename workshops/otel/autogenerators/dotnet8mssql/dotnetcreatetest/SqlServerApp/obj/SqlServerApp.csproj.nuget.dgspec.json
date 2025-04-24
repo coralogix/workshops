@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/ubuntu/dotnetdb/dotnetcreatetest/SqlServerApp/SqlServerApp.csproj": {}
+    "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/dotnetcreatetest/SqlServerApp/SqlServerApp.csproj": {}
   },
   "projects": {
-    "/home/ubuntu/dotnetdb/dotnetcreatetest/SqlServerApp/SqlServerApp.csproj": {
+    "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/dotnetcreatetest/SqlServerApp/SqlServerApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/ubuntu/dotnetdb/dotnetcreatetest/SqlServerApp/SqlServerApp.csproj",
+        "projectUniqueName": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/dotnetcreatetest/SqlServerApp/SqlServerApp.csproj",
         "projectName": "SqlServerApp",
-        "projectPath": "/home/ubuntu/dotnetdb/dotnetcreatetest/SqlServerApp/SqlServerApp.csproj",
+        "projectPath": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/dotnetcreatetest/SqlServerApp/SqlServerApp.csproj",
         "packagesPath": "/home/ubuntu/.nuget/packages/",
-        "outputPath": "/home/ubuntu/dotnetdb/dotnetcreatetest/SqlServerApp/obj/",
+        "outputPath": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/dotnetcreatetest/SqlServerApp/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/ubuntu/.nuget/NuGet/NuGet.Config"
@@ -38,9 +38,9 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
-            "System.Data.SqlClient": {
+            "Microsoft.Data.SqlClient": {
               "target": "Package",
-              "version": "[4.8.6, )"
+              "version": "[6.0.1, )"
             }
           },
           "imports": [
@@ -59,7 +59,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.105/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.115/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

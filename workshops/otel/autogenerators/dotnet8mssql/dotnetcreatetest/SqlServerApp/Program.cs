@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 
 namespace SqlServerApp
 {
@@ -10,7 +10,7 @@ namespace SqlServerApp
             string server = "localhost";  // Replace with your server name or IP address
             string username = "sa";  // Replace with your SQL Server username
             string password = "Toortoor9#";  // Replace with your SQL Server password
-            string connectionString = $"Server={server};User Id={username};Password={password};";
+            string connectionString = $"Server={server};User Id={username};Password={password};TrustServerCertificate=True;";
 
             try
             {

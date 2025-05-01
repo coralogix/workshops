@@ -1,0 +1,51 @@
+
+Executing DMV queries...
+Checking DMV access permissions...
+  Server State Permission: True
+Permission check failed: Object cannot be cast from DBNull to other types.
+
+Executing query: Server Information
+  Retrieved 1 rows in 2ms
+
+Executing query: Database Information
+  Retrieved 5 rows in 26ms
+
+Executing query: Memory Usage Details
+  Retrieved 10 rows in 3ms
+
+Executing query: CPU Usage by Database
+  Retrieved 1 rows in 9ms
+
+Executing query: Wait Statistics
+  Retrieved 10 rows in 2ms
+
+Executing query: IO Statistics by Database
+  Retrieved 17 rows in 15ms
+
+Executing query: Connection Statistics
+  Retrieved 2 rows in 3ms
+
+Executing query: Transaction Information
+  Error executing query: Invalid column name 'transaction_id'.
+
+Executing query: Index Usage Statistics
+  Retrieved 10 rows in 27ms
+
+Executing query: Query Execution Statistics
+  Retrieved 10 rows in 15ms
+
+Executing query: Stored Procedure Statistics
+  Retrieved 2 rows in 5ms
+
+Executing query: Blocked Queries
+  Error executing query: Invalid column name 'last_transaction_started'.
+Invalid column name 'last_transaction_started'.
+
+Executing query: Lock Information
+  Retrieved 0 rows in 27ms
+
+Executing query: Currently Executing Queries
+  Retrieved 1 rows in 16ms
+
+Executing query: Lock Escalation Statistics
+  Retrieved 128 rows in 26ms

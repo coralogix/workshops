@@ -1569,7 +1569,91 @@ namespace SqlRandomIntegersApp {
                         OR page_io_latch_wait_in_ms > 0)
                     ORDER BY 
                         (page_lock_wait_in_ms + row_lock_wait_in_ms + 
-                         page_latch_wait_in_ms + page_io_latch_wait_in_ms) DESC"}
+                         page_latch_wait_in_ms + page_io_latch_wait_in_ms) DESC"},
+
+                {"Detailed Query Introspection", @"
+                    WITH QueryStats AS (
+                        SELECT TOP 50
+                            qs.sql_handle,
+                            qs.plan_handle,
+                            qs.execution_count,
+                            qs.total_worker_time,
+                            qs.total_elapsed_time,
+                            qs.total_logical_reads,
+                            qs.total_physical_reads,
+                            qs.total_logical_writes,
+                            qs.creation_time,
+                            qs.last_execution_time,
+                            qs.statement_start_offset,
+                            qs.statement_end_offset,
+                            qs.min_worker_time,
+                            qs.max_worker_time,
+                            qs.min_elapsed_time,
+                            qs.max_elapsed_time,
+                            qs.min_logical_reads,
+                            qs.max_logical_reads,
+                            qs.plan_generation_num,
+                            qs.total_rows,
+                            qs.last_rows,
+                            qs.min_rows,
+                            qs.max_rows,
+                            qs.total_dop,
+                            qs.last_dop,
+                            qs.min_dop,
+                            qs.max_dop,
+                            qs.total_grant_kb,
+                            qs.last_grant_kb,
+                            qs.min_grant_kb,
+                            qs.max_grant_kb,
+                            qs.total_used_grant_kb,
+                            qs.last_used_grant_kb,
+                            qs.min_used_grant_kb,
+                            qs.max_used_grant_kb,
+                            qs.total_ideal_grant_kb,
+                            qs.last_ideal_grant_kb,
+                            qs.min_ideal_grant_kb,
+                            qs.max_ideal_grant_kb
+                        FROM sys.dm_exec_query_stats qs
+                        ORDER BY qs.total_worker_time DESC
+                    )
+                    SELECT 
+                        qs.*,
+                        SUBSTRING(st.text, 
+                            (qs.statement_start_offset/2)+1,
+                            ((CASE qs.statement_end_offset
+                                WHEN -1 THEN DATALENGTH(st.text)
+                                ELSE qs.statement_end_offset
+                                END - qs.statement_start_offset)/2) + 1) as QueryText,
+                        qp.query_plan as QueryPlan,
+                        DB_NAME(st.dbid) as DatabaseName,
+                        OBJECT_NAME(st.objectid, st.dbid) as ObjectName,
+                        -- Performance Metrics
+                        CAST(qs.total_worker_time / 1000000.0 as decimal(18,2)) as total_cpu_seconds,
+                        CAST(qs.total_elapsed_time / 1000000.0 as decimal(18,2)) as total_duration_seconds,
+                        CAST(qs.total_worker_time * 1.0 / qs.execution_count / 1000000.0 as decimal(18,2)) as avg_cpu_seconds,
+                        CAST(qs.total_elapsed_time * 1.0 / qs.execution_count / 1000000.0 as decimal(18,2)) as avg_duration_seconds,
+                        CAST(qs.total_logical_reads * 1.0 / qs.execution_count as decimal(18,2)) as avg_logical_reads,
+                        CAST(qs.total_physical_reads * 1.0 / qs.execution_count as decimal(18,2)) as avg_physical_reads,
+                        CAST(qs.total_logical_writes * 1.0 / qs.execution_count as decimal(18,2)) as avg_logical_writes,
+                        -- Memory Metrics
+                        CAST(qs.total_grant_kb * 1.0 / qs.execution_count / 1024.0 as decimal(18,2)) as avg_memory_grant_mb,
+                        CAST(qs.total_used_grant_kb * 1.0 / qs.execution_count / 1024.0 as decimal(18,2)) as avg_memory_used_mb,
+                        CAST(qs.total_ideal_grant_kb * 1.0 / qs.execution_count / 1024.0 as decimal(18,2)) as avg_memory_ideal_mb,
+                        -- Parallelism Metrics
+                        CAST(qs.total_dop * 1.0 / qs.execution_count as decimal(18,2)) as avg_dop,
+                        -- Row Metrics
+                        CAST(qs.total_rows * 1.0 / qs.execution_count as decimal(18,2)) as avg_rows,
+                        -- Execution Pattern
+                        DATEDIFF(MINUTE, qs.creation_time, qs.last_execution_time) as minutes_since_creation,
+                        DATEDIFF(MINUTE, qs.last_execution_time, GETUTCDATE()) as minutes_since_last_execution,
+                        CAST(qs.execution_count * 1.0 / 
+                            CASE WHEN DATEDIFF(MINUTE, qs.creation_time, GETUTCDATE()) = 0 
+                                THEN 1 
+                                ELSE DATEDIFF(MINUTE, qs.creation_time, GETUTCDATE()) 
+                            END as decimal(18,2)) as executions_per_minute
+                    FROM QueryStats qs
+                    CROSS APPLY sys.dm_exec_sql_text(qs.sql_handle) st
+                    OUTER APPLY sys.dm_exec_query_plan(qs.plan_handle) qp"},
             };
 
             // Execute DMV queries

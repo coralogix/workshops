@@ -1,12 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
-using Newtonsoft.Json;
+using Microsoft.Extensions.Logging;
+using OpenTelemetry.Logs;
+using OpenTelemetry.Resources;
+using System.Text.Json;
 
 class Program
 {
     static void Main()
     {
+        using var loggerFactory = LoggerFactory.Create(builder =>
+        {
+            builder
+                .SetMinimumLevel(LogLevel.Information)
+                .AddConsole()
+                .AddOpenTelemetry(options =>
+                {
+                    options.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("dotnetdmv"));
+                    options.AddOtlpExporter(otlpOptions =>
+                    {
+                        otlpOptions.Endpoint = new Uri("http://localhost:4317");
+                        otlpOptions.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.Grpc;
+                    });
+                });
+        });
+        var logger = loggerFactory.CreateLogger("dotnetdmv");
+
         try
         {
             var connectionString = "Server=localhost,1433;User Id=sa;Password=Toortoor9#;TrustServerCertificate=True;";
@@ -21,7 +41,7 @@ class Program
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                // Output JSON logs for DMV queries
+                // Output logs for DMV queries
                 foreach (var query in queries)
                 {
                     using (var command = new SqlCommand(query, connection))
@@ -35,13 +55,7 @@ class Program
                                 var value = reader.IsDBNull(i) ? null : reader.GetValue(i);
                                 body[reader.GetName(i)] = value;
                             }
-                            var logObj = new {
-                                timestamp = DateTime.UtcNow.ToString("o"),
-                                severity = 30,
-                                body = body
-                            };
-                            string json = JsonConvert.SerializeObject(logObj);
-                            Console.WriteLine(json);
+                            logger.LogInformation("DMV row {@Body}", body);
                         }
                     }
                 }
@@ -77,7 +91,7 @@ class Program
                     }
                     // Gather related stats: lock waits, blocking, execution stats
                     var stats = new Dictionary<string, object?>();
-                    // Lock waits and blocking
+                    // Lock waits
                     using (var lockCmd = new SqlCommand($@"
                         SELECT COUNT(*) AS LockCount FROM sys.dm_tran_locks WHERE resource_associated_entity_id = OBJECT_ID(@procName)", connection))
                     {
@@ -115,24 +129,27 @@ class Program
                             }
                         }
                     }
-                    var procLog = new {
-                        timestamp = DateTime.UtcNow.ToString("o"),
-                        severity = 30,
-                        body = new {
-                            ProcedureName = procName,
-                            Definition = definition,
-                            Queries = queriesInProc,
-                            Stats = stats
-                        }
+                    var procBody = new Dictionary<string, object?>
+                    {
+                        ["ProcedureName"] = procName,
+                        ["Definition"] = definition,
+                        ["Queries"] = queriesInProc,
+                        ["Stats"] = stats
                     };
-                    string procJson = JsonConvert.SerializeObject(procLog);
-                    Console.WriteLine(procJson);
+                    logger.LogInformation(
+                        "Stored procedure report {ProcedureName} {Definition} {Queries} {LockCount} {BlockingCount}",
+                        procBody["ProcedureName"],
+                        procBody["Definition"],
+                        JsonSerializer.Serialize(procBody["Queries"]),
+                        ((Dictionary<string, object?>)procBody["Stats"])["LockCount"],
+                        ((Dictionary<string, object?>)procBody["Stats"])["BlockingCount"]
+                    );
                 }
             }
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"[dotnetdmv] Exception: {ex}");
+            logger.LogError(ex, "[dotnetdmv] Exception");
         }
     }
 }

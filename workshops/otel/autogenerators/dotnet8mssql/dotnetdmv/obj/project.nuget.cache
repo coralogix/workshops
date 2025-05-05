@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "2VjKqHH7D3iia0POGJz9td20NqJ01QKdd4MLrWT6ZERWoHNdOVjfvhDlBPs5ZWRh1VpcvGENjgJ4xuzO+gS48w==",
+  "dgSpecHash": "FBJlLzl0ZEgWrF7ctdH+ILpFaxQGgIXbQVHYStln08TcmlrVN9Deu6xR90LKLwCphi77UFqo/K6zMJyfGy5CMw==",
   "success": true,
-  "projectFilePath": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/dotnetdmv/SqlRandomIntegersApp.csproj",
+  "projectFilePath": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/dotnetdmv/dotnetdmv.csproj",
   "expectedPackageFiles": [
     "/home/ubuntu/.nuget/packages/azure.core/1.38.0/azure.core.1.38.0.nupkg.sha512",
     "/home/ubuntu/.nuget/packages/azure.identity/1.11.4/azure.identity.1.11.4.nupkg.sha512",

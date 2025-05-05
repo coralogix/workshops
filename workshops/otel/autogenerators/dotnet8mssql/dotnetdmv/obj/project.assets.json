@@ -2219,9 +2219,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/dotnetdmv/SqlRandomIntegersApp.csproj",
-      "projectName": "SqlRandomIntegersApp",
-      "projectPath": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/dotnetdmv/SqlRandomIntegersApp.csproj",
+      "projectUniqueName": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/dotnetdmv/dotnetdmv.csproj",
+      "projectName": "dotnetdmv",
+      "projectPath": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/dotnetdmv/dotnetdmv.csproj",
       "packagesPath": "/home/ubuntu/.nuget/packages/",
       "outputPath": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/dotnetdmv/obj/",
       "projectStyle": "PackageReference",

@@ -182,9 +182,8 @@ namespace SqlRandomIntegersApp {
 
         private static async Task RunTestIteration(SqlConnection connection, List<LogEntry> logs, int iteration) {
             Console.WriteLine($"\n=== Starting Iteration {iteration} ===");
-            
-            // Define test scenarios with consistent delays between each
-            var testScenarios = new List<(string name, Func<SqlConnection, List<LogEntry>, Task> action)> {
+            // Direct query scenarios
+            var directScenarios = new List<(string name, Func<SqlConnection, List<LogEntry>, Task> action)> {
                 ("Fast queries", RunFastQueries),
                 ("Slow queries", RunSlowQueries),
                 ("Parallel queries", RunParallelQueries),
@@ -194,20 +193,37 @@ namespace SqlRandomIntegersApp {
                 ("Failed queries", RunFailedQueries),
                 ("Problematic queries", RunProblematicQueries)
             };
-
-            foreach (var (name, action) in testScenarios) {
+            // Stored procedure scenarios
+            var spScenarios = new List<(string name, Func<SqlConnection, List<LogEntry>, Task> action)> {
+                ("Fast queries (SP)", RunFastQueriesSP),
+                ("Slow queries (SP)", RunSlowQueriesSP),
+                ("Parallel queries (SP)", RunParallelQueriesSP),
+                ("Temp table queries (SP)", RunTempTableQueriesSP),
+                ("Isolation level tests (SP)", RunIsolationLevelTestsSP),
+                ("Deadlock scenarios (SP)", RunDeadlockScenariosSP),
+                ("Failed queries (SP)", RunFailedQueriesSP),
+                ("Problematic queries (SP)", RunProblematicQueriesSP)
+            };
+            foreach (var (name, action) in directScenarios) {
                 try {
                     Console.WriteLine($"\nRunning {name}...");
                     await action(connection, logs);
-                    // Add a small delay between test scenarios
                     await Task.Delay(500);
                 } catch (Exception e) {
                     Console.WriteLine($"Error in {name}: {e.Message}");
                     LogAction(logs, "ERROR", name, $"Failed in {name}", 0, e.Message);
-                    // Continue with next scenario even if one fails
                 }
             }
-
+            foreach (var (name, action) in spScenarios) {
+                try {
+                    Console.WriteLine($"\nRunning {name}...");
+                    await action(connection, logs);
+                    await Task.Delay(500);
+                } catch (Exception e) {
+                    Console.WriteLine($"Error in {name}: {e.Message}");
+                    LogAction(logs, "ERROR", name, $"Failed in {name}", 0, e.Message);
+                }
+            }
             Console.WriteLine($"\nCompleted Iteration {iteration}");
         }
 
@@ -505,6 +521,113 @@ namespace SqlRandomIntegersApp {
             
             stopwatch.Stop();
             LogAction(logs, "INFO", "Database", "Data Generation Complete", stopwatch.ElapsedMilliseconds);
+
+            // Create complex stored procedures
+            await ExecuteSqlCommandAsync(logs, connection, @"
+                IF OBJECT_ID('usp_ComplexAggregation', 'P') IS NOT NULL DROP PROCEDURE usp_ComplexAggregation;
+                CREATE PROCEDURE usp_ComplexAggregation
+                AS
+                BEGIN
+                    SET NOCOUNT ON;
+                    SELECT Category, Status, COUNT(*) AS RecordCount, AVG(Number) AS AvgNumber
+                    FROM DataRecords_01
+                    GROUP BY Category, Status;
+                END;
+
+                IF OBJECT_ID('usp_JoinAndTempTable', 'P') IS NOT NULL DROP PROCEDURE usp_JoinAndTempTable;
+                CREATE PROCEDURE usp_JoinAndTempTable
+                AS
+                BEGIN
+                    SET NOCOUNT ON;
+                    SELECT t1.ID, t1.Number, t2.Description
+                    INTO #TempJoin
+                    FROM DataRecords_01 t1
+                    INNER JOIN DataRecords_02 t2 ON t1.Category = t2.Category;
+                    SELECT COUNT(*) AS TempCount FROM #TempJoin;
+                    DROP TABLE #TempJoin;
+                END;
+
+                IF OBJECT_ID('usp_ErrorHandlingDemo', 'P') IS NOT NULL DROP PROCEDURE usp_ErrorHandlingDemo;
+                CREATE PROCEDURE usp_ErrorHandlingDemo
+                @InputNumber INT
+                AS
+                BEGIN
+                    SET NOCOUNT ON;
+                    BEGIN TRY
+                        IF @InputNumber < 0
+                            THROW 50001, 'Negative numbers not allowed', 1;
+                        SELECT TOP 1 * FROM DataRecords_01 WHERE Number = @InputNumber;
+                    END TRY
+                    BEGIN CATCH
+                        SELECT ERROR_MESSAGE() AS ErrorMessage;
+                    END CATCH
+                END;
+
+                -- Add new stored procedures for each scenario
+                IF OBJECT_ID('usp_FastQueries', 'P') IS NOT NULL DROP PROCEDURE usp_FastQueries;
+                CREATE PROCEDURE usp_FastQueries AS
+                BEGIN
+                    SET NOCOUNT ON;
+                    SELECT TOP 50 * FROM DataRecords_01 WHERE Number BETWEEN 1 AND 100 AND Category = 'Small';
+                    SELECT Category, Status, COUNT(*) as Count, MIN(Number) as MinNumber, MAX(Number) as MaxNumber FROM DataRecords_02 WHERE Status = 'ACTIVE' GROUP BY Category, Status HAVING COUNT(*) > 5;
+                    SELECT TOP 50 t1.ID, t1.Number, t1.Category, t1.Status, t1.CreatedAt, t2.Number as RelatedNumber FROM DataRecords_03 t1 LEFT JOIN DataRecords_04 t2 ON t1.Category = t2.Category WHERE t1.Category = 'Medium' AND t1.CreatedAt >= DATEADD(MINUTE, -5, GETUTCDATE()) ORDER BY t1.CreatedAt DESC;
+                END;
+                IF OBJECT_ID('usp_SlowQueries', 'P') IS NOT NULL DROP PROCEDURE usp_SlowQueries;
+                CREATE PROCEDURE usp_SlowQueries AS
+                BEGIN
+                    SET NOCOUNT ON;
+                    WITH DataStats AS (SELECT TOP 50 Category, Status, COUNT(*) as RecordCount, AVG(CAST(Number as FLOAT)) as AvgNumber, STRING_AGG(CAST(ID as VARCHAR(20)), ',') as RecordIDs FROM DataRecords_05 GROUP BY Category, Status) SELECT Category, Status, RecordCount, AvgNumber, COUNT(*) OVER (PARTITION BY Category) as CategoryTotal FROM DataStats WHERE RecordCount > 5 ORDER BY CategoryTotal DESC, AvgNumber DESC;
+                    SELECT TOP 50 dr1.Category, dr1.Status, Matches.MatchCount, Matches.AvgNumber FROM DataRecords_06 dr1 CROSS APPLY (SELECT COUNT(*) as MatchCount, AVG(CAST(dr2.Number as FLOAT)) as AvgNumber FROM DataRecords_06 dr2 WHERE dr2.Category = dr1.Category AND dr2.Status = dr1.Status AND dr2.Number > dr1.Number) Matches WHERE dr1.Category = 'Large' AND Matches.MatchCount > 0 ORDER BY Matches.AvgNumber DESC;
+                END;
+                IF OBJECT_ID('usp_ParallelQueries', 'P') IS NOT NULL DROP PROCEDURE usp_ParallelQueries;
+                CREATE PROCEDURE usp_ParallelQueries AS
+                BEGIN
+                    SET NOCOUNT ON;
+                    SELECT Category, COUNT(*) as TotalCount, AVG(CAST(Number as FLOAT)) as AvgNumber, MIN(Number) as MinNumber, MAX(Number) as MaxNumber, SUM(CASE WHEN Number % 2 = 0 THEN 1 ELSE 0 END) as EvenCount, STRING_AGG(CAST(Number as VARCHAR(20)), ',') WITHIN GROUP (ORDER BY Number) as NumberList FROM DataRecords_07 WHERE Number BETWEEN 1000 AND 900000 GROUP BY Category OPTION (MAXDOP 4);
+                    WITH NumberRanges AS (SELECT Number, Category, NTILE(100) OVER (ORDER BY Number) as Range FROM DataRecords_08) SELECT r1.Range, COUNT(*) as Combinations, AVG(ABS(r1.Number - r2.Number)) as AvgDifference, MAX(r1.Number) as MaxNumber, MIN(r2.Number) as MinNumber FROM NumberRanges r1 JOIN NumberRanges r2 ON r1.Range = r2.Range AND r1.Number <> r2.Number GROUP BY r1.Range OPTION (MAXDOP 4);
+                    WITH ProcessingMetrics AS (SELECT Category, Status, AVG(CAST(Number as FLOAT)) as AvgNumber, COUNT(*) as RecordCount FROM DataRecords_09 GROUP BY Category, Status) SELECT Category, Status, AvgNumber, RecordCount, CAST(RecordCount as FLOAT) / NULLIF(SUM(RecordCount) OVER (PARTITION BY Category), 0) as CategoryRatio, RANK() OVER (PARTITION BY Category ORDER BY AvgNumber DESC) as ProcessingTimeRank FROM ProcessingMetrics WHERE RecordCount > 100 ORDER BY Category, ProcessingTimeRank OPTION (MAXDOP 4);
+                END;
+                IF OBJECT_ID('usp_TempTableQueries', 'P') IS NOT NULL DROP PROCEDURE usp_TempTableQueries;
+                CREATE PROCEDURE usp_TempTableQueries AS
+                BEGIN
+                    SET NOCOUNT ON;
+                    CREATE TABLE #TempNumbers (ID INT IDENTITY(1,1) PRIMARY KEY, Number INT, Category NVARCHAR(50), ProcessedAt DATETIME2 DEFAULT GETUTCDATE());
+                    INSERT INTO #TempNumbers (Number, Category) SELECT TOP 100 Number, Category FROM DataRecords_10 WHERE Category = 'Large';
+                    SELECT DATEPART(SECOND, ProcessedAt) as ProcessedSecond, COUNT(*) as NumberCount, AVG(CAST(Number as FLOAT)) as AvgNumber FROM #TempNumbers GROUP BY DATEPART(SECOND, ProcessedAt);
+                    DROP TABLE #TempNumbers;
+                END;
+                IF OBJECT_ID('usp_IsolationLevelTests', 'P') IS NOT NULL DROP PROCEDURE usp_IsolationLevelTests;
+                CREATE PROCEDURE usp_IsolationLevelTests AS
+                BEGIN
+                    SET NOCOUNT ON;
+                    SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+                    SELECT TOP 50 dr.Number, dr.Category FROM DataRecords_11 dr ORDER BY dr.Number;
+                END;
+                IF OBJECT_ID('usp_DeadlockScenarios', 'P') IS NOT NULL DROP PROCEDURE usp_DeadlockScenarios;
+                CREATE PROCEDURE usp_DeadlockScenarios AS
+                BEGIN
+                    SET NOCOUNT ON;
+                    -- Simulate deadlock scenario (no-op for demo)
+                    SELECT 1 AS DeadlockSimulated;
+                END;
+                IF OBJECT_ID('usp_FailedQueries', 'P') IS NOT NULL DROP PROCEDURE usp_FailedQueries;
+                CREATE PROCEDURE usp_FailedQueries AS
+                BEGIN
+                    SET NOCOUNT ON;
+                    BEGIN TRY
+                        SELECT 1/0 AS WillFail;
+                    END TRY
+                    BEGIN CATCH
+                        SELECT ERROR_MESSAGE() AS ErrorMessage;
+                    END CATCH
+                END;
+                IF OBJECT_ID('usp_ProblematicQueries', 'P') IS NOT NULL DROP PROCEDURE usp_ProblematicQueries;
+                CREATE PROCEDURE usp_ProblematicQueries AS
+                BEGIN
+                    SET NOCOUNT ON;
+                    SELECT a.*, b.* FROM DataRecords_12 a, DataRecords_13 b WHERE a.Number > b.Number;
+                END;
+            ", "Create stored procedures", "Database");
         }
 
         private static string GenerateRandomText(int length)
@@ -1062,6 +1185,32 @@ namespace SqlRandomIntegersApp {
             }
         }
 
+        // SP-based test scenario methods
+        private static async Task RunFastQueriesSP(SqlConnection connection, List<LogEntry> logs) {
+            await ExecuteSqlCommandAsync(logs, connection, "EXEC usp_FastQueries;", "Execute usp_FastQueries", "StoredProcedure");
+        }
+        private static async Task RunSlowQueriesSP(SqlConnection connection, List<LogEntry> logs) {
+            await ExecuteSqlCommandAsync(logs, connection, "EXEC usp_SlowQueries;", "Execute usp_SlowQueries", "StoredProcedure");
+        }
+        private static async Task RunParallelQueriesSP(SqlConnection connection, List<LogEntry> logs) {
+            await ExecuteSqlCommandAsync(logs, connection, "EXEC usp_ParallelQueries;", "Execute usp_ParallelQueries", "StoredProcedure");
+        }
+        private static async Task RunTempTableQueriesSP(SqlConnection connection, List<LogEntry> logs) {
+            await ExecuteSqlCommandAsync(logs, connection, "EXEC usp_TempTableQueries;", "Execute usp_TempTableQueries", "StoredProcedure");
+        }
+        private static async Task RunIsolationLevelTestsSP(SqlConnection connection, List<LogEntry> logs) {
+            await ExecuteSqlCommandAsync(logs, connection, "EXEC usp_IsolationLevelTests;", "Execute usp_IsolationLevelTests", "StoredProcedure");
+        }
+        private static async Task RunDeadlockScenariosSP(SqlConnection connection, List<LogEntry> logs) {
+            await ExecuteSqlCommandAsync(logs, connection, "EXEC usp_DeadlockScenarios;", "Execute usp_DeadlockScenarios", "StoredProcedure");
+        }
+        private static async Task RunFailedQueriesSP(SqlConnection connection, List<LogEntry> logs) {
+            await ExecuteSqlCommandAsync(logs, connection, "EXEC usp_FailedQueries;", "Execute usp_FailedQueries", "StoredProcedure");
+        }
+        private static async Task RunProblematicQueriesSP(SqlConnection connection, List<LogEntry> logs) {
+            await ExecuteSqlCommandAsync(logs, connection, "EXEC usp_ProblematicQueries;", "Execute usp_ProblematicQueries", "StoredProcedure");
+        }
+
         private static async Task CleanupDatabase(SqlConnection connection, List<LogEntry> logs) {
             try {
                 // Drop each table first to avoid any locking issues
@@ -1072,6 +1221,17 @@ namespace SqlRandomIntegersApp {
                             $"Drop table {tableName}", "Database");
                     } catch (Exception ex) {
                         LogAction(logs, "WARN", "Cleanup", $"Failed to drop table {tableName}", 0, ex.Message);
+                    }
+                }
+                // Drop stored procedures
+                string[] procedures = { "usp_ComplexAggregation", "usp_JoinAndTempTable", "usp_ErrorHandlingDemo", "usp_FastQueries", "usp_SlowQueries", "usp_ParallelQueries", "usp_TempTableQueries", "usp_IsolationLevelTests", "usp_DeadlockScenarios", "usp_FailedQueries", "usp_ProblematicQueries" };
+                foreach (var proc in procedures) {
+                    try {
+                        await ExecuteSqlCommandAsync(logs, connection,
+                            $"IF OBJECT_ID('{proc}', 'P') IS NOT NULL DROP PROCEDURE {proc};",
+                            $"Drop procedure {proc}", "Database");
+                    } catch (Exception ex) {
+                        LogAction(logs, "WARN", "Cleanup", $"Failed to drop procedure {proc}", 0, ex.Message);
                     }
                 }
             } catch (Exception ex) {

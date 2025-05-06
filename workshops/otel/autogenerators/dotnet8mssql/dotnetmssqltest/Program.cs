@@ -452,90 +452,82 @@ namespace SqlRandomIntegersApp {
         }
 
         private static async Task SetupDatabase(SqlConnection connection, List<LogEntry> logs) {
-            // Drop and recreate database
+            // Only create database if it does not exist
             await ExecuteSqlCommandAsync(logs, connection, @"
-                IF DB_ID('TestDB') IS NOT NULL 
-                BEGIN 
-                    ALTER DATABASE TestDB SET SINGLE_USER WITH ROLLBACK IMMEDIATE; 
-                    DROP DATABASE TestDB; 
-                END
-                CREATE DATABASE TestDB;", 
+                IF DB_ID('TestDB') IS NULL 
+                    CREATE DATABASE TestDB;", 
                 "Setup database", "Database");
 
             connection.ChangeDatabase("TestDB");
 
-            // Create tables
+            // Create tables if they do not exist
             foreach (var tableName in TestConfiguration.GetAllTableNames()) {
                 await ExecuteSqlCommandAsync(logs, connection, $@"
-                    CREATE TABLE {tableName} (
-                        ID BIGINT PRIMARY KEY IDENTITY(1,1),
-                        Number INT,
-                        Description NVARCHAR(100),
-                        Category NVARCHAR(50),
-                        Status NVARCHAR(20),
-                        CreatedAt DATETIME2(7) DEFAULT GETUTCDATE()
-                    );
-
-                    CREATE INDEX IX_{tableName}_Number ON {tableName}(Number);
-                    CREATE INDEX IX_{tableName}_Category ON {tableName}(Category);
-                    CREATE INDEX IX_{tableName}_Status ON {tableName}(Status);", 
+                    IF OBJECT_ID('{tableName}', 'U') IS NULL
+                    BEGIN
+                        CREATE TABLE {tableName} (
+                            ID BIGINT PRIMARY KEY IDENTITY(1,1),
+                            Number INT,
+                            Description NVARCHAR(100),
+                            Category NVARCHAR(50),
+                            Status NVARCHAR(20),
+                            CreatedAt DATETIME2(7) DEFAULT GETUTCDATE()
+                        );
+                        CREATE INDEX IX_{tableName}_Number ON {tableName}(Number);
+                        CREATE INDEX IX_{tableName}_Category ON {tableName}(Category);
+                        CREATE INDEX IX_{tableName}_Status ON {tableName}(Status);
+                    END", 
                     $"Create schema for {tableName}", "Database");
             }
 
-            // Insert test data across all tables
+            // Insert test data across all tables (skip if table already has data)
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             var random = new Random();
-
-            // Calculate records per table
             int recordsPerTable = TestConfiguration.TOTAL_RECORDS / TestConfiguration.NUMBER_OF_TABLES;
-
             foreach (var tableName in TestConfiguration.GetAllTableNames()) {
+                // Check if table already has data
+                using (var checkCmd = new SqlCommand($"SELECT COUNT(*) FROM {tableName}", connection)) {
+                    var count = (int)await checkCmd.ExecuteScalarAsync();
+                    if (count > 0) continue;
+                }
                 using (var cmd = new SqlCommand()) {
                     cmd.Connection = connection;
                     cmd.CommandText = $@"
                         INSERT INTO {tableName} (Number, Description, Category, Status)
                         VALUES (@num, @desc, @cat, @status)";
-
                     var numParam = cmd.Parameters.Add("@num", System.Data.SqlDbType.Int);
                     var descParam = cmd.Parameters.Add("@desc", System.Data.SqlDbType.NVarChar, 100);
                     var catParam = cmd.Parameters.Add("@cat", System.Data.SqlDbType.NVarChar, 50);
                     var statusParam = cmd.Parameters.Add("@status", System.Data.SqlDbType.NVarChar, 20);
-
                     for (int i = 0; i < recordsPerTable; i++) {
                         numParam.Value = random.Next(1, 1000000);
                         descParam.Value = $"Test record {i} in {tableName}";
                         catParam.Value = TestConfiguration.Categories[random.Next(TestConfiguration.Categories.Length)];
                         statusParam.Value = TestConfiguration.StatusCodes[random.Next(TestConfiguration.StatusCodes.Length)];
-                        
                         await cmd.ExecuteNonQueryAsync();
-
                         if (i % TestConfiguration.LOG_BATCH_SIZE == 0) {
                             LogAction(logs, "INFO", "Database", $"Inserted {i} records into {tableName}", stopwatch.ElapsedMilliseconds);
                         }
                     }
                 }
-                
                 LogAction(logs, "INFO", "Database", $"Completed inserting {recordsPerTable} records into {tableName}", stopwatch.ElapsedMilliseconds);
             }
-            
             stopwatch.Stop();
             LogAction(logs, "INFO", "Database", "Data Generation Complete", stopwatch.ElapsedMilliseconds);
 
-            // Create complex stored procedures
-            await ExecuteSqlCommandAsync(logs, connection, @"
-                IF OBJECT_ID('usp_ComplexAggregation', 'P') IS NOT NULL DROP PROCEDURE usp_ComplexAggregation;
-                CREATE PROCEDURE usp_ComplexAggregation
+            // Create or alter stored procedures (no drops)
+            var procedureDefinitions = new[]
+            {
+                @"CREATE OR ALTER PROCEDURE usp_ComplexAggregation
                 AS
                 BEGIN
                     SET NOCOUNT ON;
                     SELECT Category, Status, COUNT(*) AS RecordCount, AVG(Number) AS AvgNumber
                     FROM DataRecords_01
                     GROUP BY Category, Status;
-                END;
-
-                IF OBJECT_ID('usp_JoinAndTempTable', 'P') IS NOT NULL DROP PROCEDURE usp_JoinAndTempTable;
-                CREATE PROCEDURE usp_JoinAndTempTable
+                END;",
+                @"CREATE OR ALTER PROCEDURE usp_JoinAndTempTable
                 AS
                 BEGIN
                     SET NOCOUNT ON;
@@ -545,10 +537,8 @@ namespace SqlRandomIntegersApp {
                     INNER JOIN DataRecords_02 t2 ON t1.Category = t2.Category;
                     SELECT COUNT(*) AS TempCount FROM #TempJoin;
                     DROP TABLE #TempJoin;
-                END;
-
-                IF OBJECT_ID('usp_ErrorHandlingDemo', 'P') IS NOT NULL DROP PROCEDURE usp_ErrorHandlingDemo;
-                CREATE PROCEDURE usp_ErrorHandlingDemo
+                END;",
+                @"CREATE OR ALTER PROCEDURE usp_ErrorHandlingDemo
                 @InputNumber INT
                 AS
                 BEGIN
@@ -561,57 +551,48 @@ namespace SqlRandomIntegersApp {
                     BEGIN CATCH
                         SELECT ERROR_MESSAGE() AS ErrorMessage;
                     END CATCH
-                END;
-
-                -- Add new stored procedures for each scenario
-                IF OBJECT_ID('usp_FastQueries', 'P') IS NOT NULL DROP PROCEDURE usp_FastQueries;
-                CREATE PROCEDURE usp_FastQueries AS
+                END;",
+                @"CREATE OR ALTER PROCEDURE usp_FastQueries AS
                 BEGIN
                     SET NOCOUNT ON;
                     SELECT TOP 50 * FROM DataRecords_01 WHERE Number BETWEEN 1 AND 100 AND Category = 'Small';
                     SELECT Category, Status, COUNT(*) as Count, MIN(Number) as MinNumber, MAX(Number) as MaxNumber FROM DataRecords_02 WHERE Status = 'ACTIVE' GROUP BY Category, Status HAVING COUNT(*) > 5;
                     SELECT TOP 50 t1.ID, t1.Number, t1.Category, t1.Status, t1.CreatedAt, t2.Number as RelatedNumber FROM DataRecords_03 t1 LEFT JOIN DataRecords_04 t2 ON t1.Category = t2.Category WHERE t1.Category = 'Medium' AND t1.CreatedAt >= DATEADD(MINUTE, -5, GETUTCDATE()) ORDER BY t1.CreatedAt DESC;
-                END;
-                IF OBJECT_ID('usp_SlowQueries', 'P') IS NOT NULL DROP PROCEDURE usp_SlowQueries;
-                CREATE PROCEDURE usp_SlowQueries AS
+                END;",
+                @"CREATE OR ALTER PROCEDURE usp_SlowQueries AS
                 BEGIN
                     SET NOCOUNT ON;
                     WITH DataStats AS (SELECT TOP 50 Category, Status, COUNT(*) as RecordCount, AVG(CAST(Number as FLOAT)) as AvgNumber, STRING_AGG(CAST(ID as VARCHAR(20)), ',') as RecordIDs FROM DataRecords_05 GROUP BY Category, Status) SELECT Category, Status, RecordCount, AvgNumber, COUNT(*) OVER (PARTITION BY Category) as CategoryTotal FROM DataStats WHERE RecordCount > 5 ORDER BY CategoryTotal DESC, AvgNumber DESC;
                     SELECT TOP 50 dr1.Category, dr1.Status, Matches.MatchCount, Matches.AvgNumber FROM DataRecords_06 dr1 CROSS APPLY (SELECT COUNT(*) as MatchCount, AVG(CAST(dr2.Number as FLOAT)) as AvgNumber FROM DataRecords_06 dr2 WHERE dr2.Category = dr1.Category AND dr2.Status = dr1.Status AND dr2.Number > dr1.Number) Matches WHERE dr1.Category = 'Large' AND Matches.MatchCount > 0 ORDER BY Matches.AvgNumber DESC;
-                END;
-                IF OBJECT_ID('usp_ParallelQueries', 'P') IS NOT NULL DROP PROCEDURE usp_ParallelQueries;
-                CREATE PROCEDURE usp_ParallelQueries AS
+                END;",
+                @"CREATE OR ALTER PROCEDURE usp_ParallelQueries AS
                 BEGIN
                     SET NOCOUNT ON;
                     SELECT Category, COUNT(*) as TotalCount, AVG(CAST(Number as FLOAT)) as AvgNumber, MIN(Number) as MinNumber, MAX(Number) as MaxNumber, SUM(CASE WHEN Number % 2 = 0 THEN 1 ELSE 0 END) as EvenCount, STRING_AGG(CAST(Number as VARCHAR(20)), ',') WITHIN GROUP (ORDER BY Number) as NumberList FROM DataRecords_07 WHERE Number BETWEEN 1000 AND 900000 GROUP BY Category OPTION (MAXDOP 4);
                     WITH NumberRanges AS (SELECT Number, Category, NTILE(100) OVER (ORDER BY Number) as Range FROM DataRecords_08) SELECT r1.Range, COUNT(*) as Combinations, AVG(ABS(r1.Number - r2.Number)) as AvgDifference, MAX(r1.Number) as MaxNumber, MIN(r2.Number) as MinNumber FROM NumberRanges r1 JOIN NumberRanges r2 ON r1.Range = r2.Range AND r1.Number <> r2.Number GROUP BY r1.Range OPTION (MAXDOP 4);
                     WITH ProcessingMetrics AS (SELECT Category, Status, AVG(CAST(Number as FLOAT)) as AvgNumber, COUNT(*) as RecordCount FROM DataRecords_09 GROUP BY Category, Status) SELECT Category, Status, AvgNumber, RecordCount, CAST(RecordCount as FLOAT) / NULLIF(SUM(RecordCount) OVER (PARTITION BY Category), 0) as CategoryRatio, RANK() OVER (PARTITION BY Category ORDER BY AvgNumber DESC) as ProcessingTimeRank FROM ProcessingMetrics WHERE RecordCount > 100 ORDER BY Category, ProcessingTimeRank OPTION (MAXDOP 4);
-                END;
-                IF OBJECT_ID('usp_TempTableQueries', 'P') IS NOT NULL DROP PROCEDURE usp_TempTableQueries;
-                CREATE PROCEDURE usp_TempTableQueries AS
+                END;",
+                @"CREATE OR ALTER PROCEDURE usp_TempTableQueries AS
                 BEGIN
                     SET NOCOUNT ON;
                     CREATE TABLE #TempNumbers (ID INT IDENTITY(1,1) PRIMARY KEY, Number INT, Category NVARCHAR(50), ProcessedAt DATETIME2 DEFAULT GETUTCDATE());
                     INSERT INTO #TempNumbers (Number, Category) SELECT TOP 100 Number, Category FROM DataRecords_10 WHERE Category = 'Large';
                     SELECT DATEPART(SECOND, ProcessedAt) as ProcessedSecond, COUNT(*) as NumberCount, AVG(CAST(Number as FLOAT)) as AvgNumber FROM #TempNumbers GROUP BY DATEPART(SECOND, ProcessedAt);
                     DROP TABLE #TempNumbers;
-                END;
-                IF OBJECT_ID('usp_IsolationLevelTests', 'P') IS NOT NULL DROP PROCEDURE usp_IsolationLevelTests;
-                CREATE PROCEDURE usp_IsolationLevelTests AS
+                END;",
+                @"CREATE OR ALTER PROCEDURE usp_IsolationLevelTests AS
                 BEGIN
                     SET NOCOUNT ON;
                     SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
                     SELECT TOP 50 dr.Number, dr.Category FROM DataRecords_11 dr ORDER BY dr.Number;
-                END;
-                IF OBJECT_ID('usp_DeadlockScenarios', 'P') IS NOT NULL DROP PROCEDURE usp_DeadlockScenarios;
-                CREATE PROCEDURE usp_DeadlockScenarios AS
+                END;",
+                @"CREATE OR ALTER PROCEDURE usp_DeadlockScenarios AS
                 BEGIN
                     SET NOCOUNT ON;
                     -- Simulate deadlock scenario (no-op for demo)
                     SELECT 1 AS DeadlockSimulated;
-                END;
-                IF OBJECT_ID('usp_FailedQueries', 'P') IS NOT NULL DROP PROCEDURE usp_FailedQueries;
-                CREATE PROCEDURE usp_FailedQueries AS
+                END;",
+                @"CREATE OR ALTER PROCEDURE usp_FailedQueries AS
                 BEGIN
                     SET NOCOUNT ON;
                     BEGIN TRY
@@ -620,14 +601,41 @@ namespace SqlRandomIntegersApp {
                     BEGIN CATCH
                         SELECT ERROR_MESSAGE() AS ErrorMessage;
                     END CATCH
-                END;
-                IF OBJECT_ID('usp_ProblematicQueries', 'P') IS NOT NULL DROP PROCEDURE usp_ProblematicQueries;
-                CREATE PROCEDURE usp_ProblematicQueries AS
+                END;",
+                @"CREATE OR ALTER PROCEDURE usp_ProblematicQueries AS
                 BEGIN
                     SET NOCOUNT ON;
                     SELECT a.*, b.* FROM DataRecords_12 a, DataRecords_13 b WHERE a.Number > b.Number;
-                END;
-            ", "Create stored procedures", "Database");
+                END;"
+            };
+            foreach (var procSql in procedureDefinitions)
+            {
+                await ExecuteSqlCommandAsync(logs, connection, procSql, "Create stored procedure", "Database");
+            }
+
+            // Log all user-defined stored procedures after creation
+            try
+            {
+                using (var cmd = new SqlCommand("SELECT SCHEMA_NAME(schema_id) AS schema_name, name FROM sys.procedures WHERE is_ms_shipped = 0;", connection))
+                using (var reader = await cmd.ExecuteReaderAsync())
+                {
+                    Console.WriteLine("Stored procedures present in TestDB after creation:");
+                    bool found = false;
+                    while (await reader.ReadAsync())
+                    {
+                        found = true;
+                        Console.WriteLine($"{reader.GetString(0)}.{reader.GetString(1)}");
+                    }
+                    if (!found)
+                    {
+                        Console.WriteLine("(none)");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ERROR] Exception while listing stored procedures: {ex.Message}");
+            }
         }
 
         private static string GenerateRandomText(int length)
@@ -1212,37 +1220,7 @@ namespace SqlRandomIntegersApp {
         }
 
         private static async Task CleanupDatabase(SqlConnection connection, List<LogEntry> logs) {
-            try {
-                // Drop each table first to avoid any locking issues
-                foreach (var tableName in TestConfiguration.GetAllTableNames()) {
-                    try {
-                        await ExecuteSqlCommandAsync(logs, connection,
-                            $"IF OBJECT_ID('{tableName}', 'U') IS NOT NULL DROP TABLE {tableName};",
-                            $"Drop table {tableName}", "Database");
-                    } catch (Exception ex) {
-                        LogAction(logs, "WARN", "Cleanup", $"Failed to drop table {tableName}", 0, ex.Message);
-                    }
-                }
-                // Drop stored procedures
-                string[] procedures = { "usp_ComplexAggregation", "usp_JoinAndTempTable", "usp_ErrorHandlingDemo", "usp_FastQueries", "usp_SlowQueries", "usp_ParallelQueries", "usp_TempTableQueries", "usp_IsolationLevelTests", "usp_DeadlockScenarios", "usp_FailedQueries", "usp_ProblematicQueries" };
-                foreach (var proc in procedures) {
-                    try {
-                        await ExecuteSqlCommandAsync(logs, connection,
-                            $"IF OBJECT_ID('{proc}', 'P') IS NOT NULL DROP PROCEDURE {proc};",
-                            $"Drop procedure {proc}", "Database");
-                    } catch (Exception ex) {
-                        LogAction(logs, "WARN", "Cleanup", $"Failed to drop procedure {proc}", 0, ex.Message);
-                    }
-                }
-            } catch (Exception ex) {
-                LogAction(logs, "WARN", "Cleanup", "Table cleanup failed", 0, ex.Message);
-            }
-
-            // Switch to master and drop the test database
-            connection.ChangeDatabase("master");
-            await ExecuteSqlCommandAsync(logs, connection, 
-                "ALTER DATABASE TestDB SET SINGLE_USER WITH ROLLBACK IMMEDIATE; DROP DATABASE TestDB;",
-                "Drop database", "Database");
+            // Do nothing: persist database and stored procedures between runs
         }
 
         // Helper method to get random test data with weighted probabilities

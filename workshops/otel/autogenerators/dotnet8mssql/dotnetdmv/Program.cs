@@ -5,9 +5,24 @@ using Microsoft.Extensions.Logging;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Resources;
 using System.Text.Json;
+using System.Text;
+using System.Security.Cryptography;
 
 class Program
 {
+    // Helper to compute SHA256 hash of a string
+    static string ComputeSha256Hash(string rawData)
+    {
+        using (var sha256 = SHA256.Create())
+        {
+            var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(rawData));
+            var sb = new StringBuilder();
+            foreach (var b in bytes)
+                sb.Append(b.ToString("x2"));
+            return sb.ToString();
+        }
+    }
+
     static void Main()
     {
         using var loggerFactory = LoggerFactory.Create(builder =>
@@ -69,40 +84,11 @@ class Program
                     cts.Cancel();
                 };
                 var token = cts.Token;
+                var queryStatsDict = new Dictionary<string, long>(); // hash -> exec count
                 while (!token.IsCancellationRequested)
                 {
-                    // --- Datadog-style Stored Procedure Performance Logging ---
-                    using (var procStatsCmd = new SqlCommand(@"
-                        SELECT
-                            DB_NAME(database_id) as database_name,
-                            OBJECT_NAME(object_id, database_id) as procedure_name,
-                            execution_count,
-                            total_worker_time,
-                            total_elapsed_time,
-                            total_logical_reads,
-                            total_logical_writes,
-                            total_physical_reads
-                        FROM sys.dm_exec_procedure_stats
-                        WHERE database_id = DB_ID()", connection))
-                    using (var procStatsReader = procStatsCmd.ExecuteReader())
-                    {
-                        while (procStatsReader.Read())
-                        {
-                            logger.LogInformation(
-                                "ProcStats {Database} {Procedure} {ExecutionCount} {WorkerTime} {ElapsedTime} {LogicalReads} {LogicalWrites} {PhysicalReads}",
-                                procStatsReader["database_name"],
-                                procStatsReader["procedure_name"],
-                                procStatsReader["execution_count"],
-                                procStatsReader["total_worker_time"],
-                                procStatsReader["total_elapsed_time"],
-                                procStatsReader["total_logical_reads"],
-                                procStatsReader["total_logical_writes"],
-                                procStatsReader["total_physical_reads"]
-                            );
-                        }
-                    }
-
                     // Log execution stats and SQL text for running/cached queries
+                    queryStatsDict.Clear();
                     using (var queryStatsCmd = new SqlCommand(@"
                         SELECT
                             qs.sql_handle,
@@ -120,8 +106,15 @@ class Program
                     {
                         while (queryStatsReader.Read())
                         {
+                            var sqlText = queryStatsReader["sql_text"]?.ToString() ?? "";
+                            var queryHash = ComputeSha256Hash(sqlText);
+                            var execCount = queryStatsReader["execution_count"] is long l ? l : Convert.ToInt64(queryStatsReader["execution_count"]);
+                            // For metrics: keep max exec count per hash
+                            if (!queryStatsDict.ContainsKey(queryHash) || execCount > queryStatsDict[queryHash])
+                                queryStatsDict[queryHash] = execCount;
+                            // Log with hash and full SQL text
                             logger.LogInformation(
-                                "QueryStats {SqlHandle} {ExecutionCount} {WorkerTime} {ElapsedTime} {LogicalReads} {LogicalWrites} {PhysicalReads} {SqlText}",
+                                "QueryStats {SqlHandle} {ExecutionCount} {WorkerTime} {ElapsedTime} {LogicalReads} {LogicalWrites} {PhysicalReads} {SqlText} {QueryHash}",
                                 queryStatsReader["sql_handle"],
                                 queryStatsReader["execution_count"],
                                 queryStatsReader["total_worker_time"],
@@ -129,79 +122,8 @@ class Program
                                 queryStatsReader["total_logical_reads"],
                                 queryStatsReader["total_logical_writes"],
                                 queryStatsReader["total_physical_reads"],
-                                queryStatsReader["sql_text"]
-                            );
-                        }
-                    }
-
-                    // --- Datadog-style Wait Stats Logging ---
-                    using (var waitStatsCmd = new SqlCommand(@"
-                        SELECT
-                            wait_type,
-                            waiting_tasks_count,
-                            wait_time_ms,
-                            max_wait_time_ms,
-                            signal_wait_time_ms
-                        FROM sys.dm_os_wait_stats
-                        WHERE waiting_tasks_count > 0
-                    ", connection))
-                    using (var waitStatsReader = waitStatsCmd.ExecuteReader())
-                    {
-                        while (waitStatsReader.Read())
-                        {
-                            logger.LogInformation(
-                                "WaitStats {WaitType} {WaitingTasksCount} {WaitTimeMs} {MaxWaitTimeMs} {SignalWaitTimeMs}",
-                                waitStatsReader["wait_type"],
-                                waitStatsReader["waiting_tasks_count"],
-                                waitStatsReader["wait_time_ms"],
-                                waitStatsReader["max_wait_time_ms"],
-                                waitStatsReader["signal_wait_time_ms"]
-                            );
-                        }
-                    }
-
-                    // --- Datadog-style TempDB Usage Logging ---
-                    using (var tempdbCmd = new SqlCommand(@"
-                        SELECT
-                            counter_name,
-                            instance_name,
-                            cntr_value
-                        FROM sys.dm_os_performance_counters
-                        WHERE object_name LIKE '%tempdb%' AND (
-                            counter_name = 'Data File(s) Size (KB)'
-                            OR counter_name = 'Log File(s) Size (KB)'
-                            OR counter_name = 'Version Store Size (KB)'
-                            OR counter_name = 'Free Space (KB)'
-                        )
-                    ", connection))
-                    using (var tempdbReader = tempdbCmd.ExecuteReader())
-                    {
-                        while (tempdbReader.Read())
-                        {
-                            logger.LogInformation(
-                                "TempDBUsage {CounterName} {InstanceName} {Value}",
-                                tempdbReader["counter_name"],
-                                tempdbReader["instance_name"],
-                                tempdbReader["cntr_value"]
-                            );
-                        }
-                    }
-
-                    // --- Datadog-style Deadlock Logging (Deadlock count from performance counters) ---
-                    using (var deadlockCmd = new SqlCommand(@"
-                        SELECT
-                            cntr_value
-                        FROM sys.dm_os_performance_counters
-                        WHERE counter_name = 'Number of Deadlocks/sec'
-                            AND instance_name = '_Total'
-                    ", connection))
-                    using (var deadlockReader = deadlockCmd.ExecuteReader())
-                    {
-                        while (deadlockReader.Read())
-                        {
-                            logger.LogInformation(
-                                "Deadlocks {DeadlocksPerSec}",
-                                deadlockReader["cntr_value"]
+                                sqlText,
+                                queryHash
                             );
                         }
                     }
@@ -283,21 +205,14 @@ class Program
                             }
                         }
                     }
-                    var procBody = new Dictionary<string, object?>
-                    {
-                        ["ProcedureName"] = procName,
-                        ["Definition"] = definition,
-                        ["Queries"] = queriesInProc,
-                        ["Stats"] = stats
-                    };
-                    logger.LogInformation(
-                        "Stored procedure report {ProcedureName} {Definition} {Queries} {LockCount} {BlockingCount}",
-                        procBody["ProcedureName"],
-                        procBody["Definition"],
-                        JsonSerializer.Serialize(procBody["Queries"]),
-                        ((Dictionary<string, object?>)procBody["Stats"])["LockCount"],
-                        ((Dictionary<string, object?>)procBody["Stats"])["BlockingCount"]
-                    );
+                    // Emit as structured log state (not message template)
+                    logger.LogInformation(new {
+                        ProcedureName = procName,
+                        Definition = definition,
+                        Queries = queriesInProc,
+                        LockCount = stats.ContainsKey("LockCount") ? stats["LockCount"] : null,
+                        BlockingCount = stats.ContainsKey("BlockingCount") ? stats["BlockingCount"] : null
+                    });
                 }
             }
         }

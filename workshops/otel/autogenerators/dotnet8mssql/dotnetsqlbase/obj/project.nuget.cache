@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "en94Eb1wTFIp2Ustm5k43q5csbaNVObiSVR2xnvT/VyR52XYhZ9rMhr0QYHfyjz8Dm+xZFTjwFqvWUld+Y25OQ==",
+  "dgSpecHash": "3RYg6eMU/e4/clRNRdV1OFqh2kKF0EE48WM0q7GR1jVqxxXSQcp6rsQ7O1c/OkXhgqtLarEfcABNHo4L4AAU/Q==",
   "success": true,
-  "projectFilePath": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/dotnetsql/Program.csproj",
+  "projectFilePath": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/dotnetsqlbase/Program.csproj",
   "expectedPackageFiles": [
     "/home/ubuntu/.nuget/packages/azure.core/1.38.0/azure.core.1.38.0.nupkg.sha512",
     "/home/ubuntu/.nuget/packages/azure.identity/1.11.4/azure.identity.1.11.4.nupkg.sha512",

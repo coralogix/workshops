@@ -2604,11 +2604,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/dotnetsql/Program.csproj",
+      "projectUniqueName": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/dotnetsqlbase/Program.csproj",
       "projectName": "Program",
-      "projectPath": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/dotnetsql/Program.csproj",
+      "projectPath": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/dotnetsqlbase/Program.csproj",
       "packagesPath": "/home/ubuntu/.nuget/packages/",
-      "outputPath": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/dotnetsql/obj/",
+      "outputPath": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/dotnetsqlbase/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/ubuntu/.nuget/NuGet/NuGet.Config"

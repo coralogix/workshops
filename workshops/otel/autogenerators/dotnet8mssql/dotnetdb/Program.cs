@@ -5,6 +5,7 @@ using OpenTelemetry.Logs;
 using OpenTelemetry.Resources;
 using OpenTelemetry;
 using System.Text.Json;
+using System.Collections.Generic;
 
 class Program
 {
@@ -116,40 +117,84 @@ class Program
                     JOIN sys.sql_modules m ON p.object_id = m.object_id
                     WHERE p.is_ms_shipped = 0
                     ORDER BY p.name;";
+                var procedures = new List<(string Name, string Definition)>();
                 using (var procCommand = new SqlCommand(procQuery, dbConnection))
                 using (var procReader = procCommand.ExecuteReader())
                 {
-                    int procCount = 0;
                     while (procReader.Read())
                     {
-                        procCount++;
-                        string procName = procReader.GetString(0);
-                        string procDef = procReader.GetString(1);
+                        procedures.Add((procReader.GetString(0), procReader.GetString(1)));
+                    }
+                } // procReader is now closed
+                if (procedures.Count == 0)
+                {
+                    var logObjNone = new
+                    {
+                        timestamp = DateTime.UtcNow.ToString("o"),
+                        severity = INFO,
+                        database = dbName,
+                        procedure_name = "(none)",
+                        sql_statement = "No user stored procedures found."
+                    };
+                    var logJsonNone = JsonSerializer.Serialize(logObjNone);
+                    logger.LogInformation(logJsonNone);
+                    Console.WriteLine(logJsonNone);
+                }
+                else
+                {
+                    foreach (var (procName, procDef) in procedures)
+                    {
+                        // Query sys.dm_exec_procedure_stats for metrics
+                        string statsQuery = @"
+                            SELECT 
+                                execution_count,
+                                last_execution_time,
+                                total_worker_time,
+                                total_elapsed_time,
+                                total_logical_reads,
+                                total_logical_writes
+                            FROM sys.dm_exec_procedure_stats
+                            WHERE database_id = DB_ID(@dbName) AND OBJECT_NAME(object_id, database_id) = @procName;";
+                        long? executionCount = null;
+                        DateTime? lastExecutionTime = null;
+                        long? totalWorkerTime = null;
+                        long? totalElapsedTime = null;
+                        long? totalLogicalReads = null;
+                        long? totalLogicalWrites = null;
+                        using (var statsCommand = new SqlCommand(statsQuery, dbConnection))
+                        {
+                            statsCommand.Parameters.AddWithValue("@dbName", dbName);
+                            statsCommand.Parameters.AddWithValue("@procName", procName);
+                            using (var statsReader = statsCommand.ExecuteReader())
+                            {
+                                if (statsReader.Read())
+                                {
+                                    executionCount = statsReader.IsDBNull(0) ? null : statsReader.GetInt64(0);
+                                    lastExecutionTime = statsReader.IsDBNull(1) ? null : statsReader.GetDateTime(1);
+                                    totalWorkerTime = statsReader.IsDBNull(2) ? null : statsReader.GetInt64(2);
+                                    totalElapsedTime = statsReader.IsDBNull(3) ? null : statsReader.GetInt64(3);
+                                    totalLogicalReads = statsReader.IsDBNull(4) ? null : statsReader.GetInt64(4);
+                                    totalLogicalWrites = statsReader.IsDBNull(5) ? null : statsReader.GetInt64(5);
+                                }
+                            }
+                        }
                         var logObjProc = new
                         {
                             timestamp = DateTime.UtcNow.ToString("o"),
                             severity = INFO,
                             database = dbName,
                             procedure_name = procName,
-                            sql_statement = procDef
+                            sql_statement = procDef,
+                            execution_count = executionCount,
+                            last_execution_time = lastExecutionTime?.ToString("o"),
+                            total_worker_time = totalWorkerTime,
+                            total_elapsed_time = totalElapsedTime,
+                            total_logical_reads = totalLogicalReads,
+                            total_logical_writes = totalLogicalWrites
                         };
                         var logJsonProc = JsonSerializer.Serialize(logObjProc);
                         logger.LogInformation(logJsonProc);
                         Console.WriteLine(logJsonProc);
-                    }
-                    if (procCount == 0)
-                    {
-                        var logObjNone = new
-                        {
-                            timestamp = DateTime.UtcNow.ToString("o"),
-                            severity = INFO,
-                            database = dbName,
-                            procedure_name = "(none)",
-                            sql_statement = "No user stored procedures found."
-                        };
-                        var logJsonNone = JsonSerializer.Serialize(logObjNone);
-                        logger.LogInformation(logJsonNone);
-                        Console.WriteLine(logJsonNone);
                     }
                 }
                 dbConnection.Close();
@@ -180,7 +225,7 @@ class Program
             var logJsonError = JsonSerializer.Serialize(logObjError);
             logger.LogError(logJsonError);
             Console.WriteLine(logJsonError);
-            Console.WriteLine($"[dotnetdmv] Exception in {dbName}: {ex.Message}");
+            Console.WriteLine($"[sqlanalyzer] Exception in {dbName}: {ex.Message}");
         }
     }
 }

@@ -453,31 +453,13 @@ namespace SqlRandomIntegersApp {
 
         private static async Task SetupDatabase(SqlConnection connection, List<LogEntry> logs) {
             // Only create database if it does not exist
-            await ExecuteSqlCommandAsync(logs, connection, @"
-                IF DB_ID('TestDB') IS NULL 
-                    CREATE DATABASE TestDB;", 
-                "Setup database", "Database");
+            await ExecuteSqlCommandAsync(logs, connection, "IF DB_ID('TestDB') IS NULL CREATE DATABASE TestDB;", "Setup database", "Database");
 
             connection.ChangeDatabase("TestDB");
 
             // Create tables if they do not exist
             foreach (var tableName in TestConfiguration.GetAllTableNames()) {
-                await ExecuteSqlCommandAsync(logs, connection, $@"
-                    IF OBJECT_ID('{tableName}', 'U') IS NULL
-                    BEGIN
-                        CREATE TABLE {tableName} (
-                            ID BIGINT PRIMARY KEY IDENTITY(1,1),
-                            Number INT,
-                            Description NVARCHAR(100),
-                            Category NVARCHAR(50),
-                            Status NVARCHAR(20),
-                            CreatedAt DATETIME2(7) DEFAULT GETUTCDATE()
-                        );
-                        CREATE INDEX IX_{tableName}_Number ON {tableName}(Number);
-                        CREATE INDEX IX_{tableName}_Category ON {tableName}(Category);
-                        CREATE INDEX IX_{tableName}_Status ON {tableName}(Status);
-                    END", 
-                    $"Create schema for {tableName}", "Database");
+                await ExecuteSqlCommandAsync(logs, connection, $"IF OBJECT_ID('{tableName}', 'U') IS NULL BEGIN CREATE TABLE {tableName} (ID BIGINT PRIMARY KEY IDENTITY(1,1), Number INT, Description NVARCHAR(100), Category NVARCHAR(50), Status NVARCHAR(20), CreatedAt DATETIME2(7) DEFAULT GETUTCDATE()); CREATE INDEX IX_{tableName}_Number ON {tableName}(Number); CREATE INDEX IX_{tableName}_Category ON {tableName}(Category); CREATE INDEX IX_{tableName}_Status ON {tableName}(Status); END", $"Create schema for {tableName}", "Database");
             }
 
             // Insert test data across all tables (skip if table already has data)
@@ -493,9 +475,7 @@ namespace SqlRandomIntegersApp {
                 }
                 using (var cmd = new SqlCommand()) {
                     cmd.Connection = connection;
-                    cmd.CommandText = $@"
-                        INSERT INTO {tableName} (Number, Description, Category, Status)
-                        VALUES (@num, @desc, @cat, @status)";
+                    cmd.CommandText = $"INSERT INTO {tableName} (Number, Description, Category, Status) VALUES (@num, @desc, @cat, @status)";
                     var numParam = cmd.Parameters.Add("@num", System.Data.SqlDbType.Int);
                     var descParam = cmd.Parameters.Add("@desc", System.Data.SqlDbType.NVarChar, 100);
                     var catParam = cmd.Parameters.Add("@cat", System.Data.SqlDbType.NVarChar, 50);
@@ -519,94 +499,17 @@ namespace SqlRandomIntegersApp {
             // Create or alter stored procedures (no drops)
             var procedureDefinitions = new[]
             {
-                @"CREATE OR ALTER PROCEDURE usp_ComplexAggregation
-                AS
-                BEGIN
-                    SET NOCOUNT ON;
-                    SELECT Category, Status, COUNT(*) AS RecordCount, AVG(Number) AS AvgNumber
-                    FROM DataRecords_01
-                    GROUP BY Category, Status;
-                END;",
-                @"CREATE OR ALTER PROCEDURE usp_JoinAndTempTable
-                AS
-                BEGIN
-                    SET NOCOUNT ON;
-                    SELECT t1.ID, t1.Number, t2.Description
-                    INTO #TempJoin
-                    FROM DataRecords_01 t1
-                    INNER JOIN DataRecords_02 t2 ON t1.Category = t2.Category;
-                    SELECT COUNT(*) AS TempCount FROM #TempJoin;
-                    DROP TABLE #TempJoin;
-                END;",
-                @"CREATE OR ALTER PROCEDURE usp_ErrorHandlingDemo
-                @InputNumber INT
-                AS
-                BEGIN
-                    SET NOCOUNT ON;
-                    BEGIN TRY
-                        IF @InputNumber < 0
-                            THROW 50001, 'Negative numbers not allowed', 1;
-                        SELECT TOP 1 * FROM DataRecords_01 WHERE Number = @InputNumber;
-                    END TRY
-                    BEGIN CATCH
-                        SELECT ERROR_MESSAGE() AS ErrorMessage;
-                    END CATCH
-                END;",
-                @"CREATE OR ALTER PROCEDURE usp_FastQueries AS
-                BEGIN
-                    SET NOCOUNT ON;
-                    SELECT TOP 50 * FROM DataRecords_01 WHERE Number BETWEEN 1 AND 100 AND Category = 'Small';
-                    SELECT Category, Status, COUNT(*) as Count, MIN(Number) as MinNumber, MAX(Number) as MaxNumber FROM DataRecords_02 WHERE Status = 'ACTIVE' GROUP BY Category, Status HAVING COUNT(*) > 5;
-                    SELECT TOP 50 t1.ID, t1.Number, t1.Category, t1.Status, t1.CreatedAt, t2.Number as RelatedNumber FROM DataRecords_03 t1 LEFT JOIN DataRecords_04 t2 ON t1.Category = t2.Category WHERE t1.Category = 'Medium' AND t1.CreatedAt >= DATEADD(MINUTE, -5, GETUTCDATE()) ORDER BY t1.CreatedAt DESC;
-                END;",
-                @"CREATE OR ALTER PROCEDURE usp_SlowQueries AS
-                BEGIN
-                    SET NOCOUNT ON;
-                    WITH DataStats AS (SELECT TOP 50 Category, Status, COUNT(*) as RecordCount, AVG(CAST(Number as FLOAT)) as AvgNumber, STRING_AGG(CAST(ID as VARCHAR(20)), ',') as RecordIDs FROM DataRecords_05 GROUP BY Category, Status) SELECT Category, Status, RecordCount, AvgNumber, COUNT(*) OVER (PARTITION BY Category) as CategoryTotal FROM DataStats WHERE RecordCount > 5 ORDER BY CategoryTotal DESC, AvgNumber DESC;
-                    SELECT TOP 50 dr1.Category, dr1.Status, Matches.MatchCount, Matches.AvgNumber FROM DataRecords_06 dr1 CROSS APPLY (SELECT COUNT(*) as MatchCount, AVG(CAST(dr2.Number as FLOAT)) as AvgNumber FROM DataRecords_06 dr2 WHERE dr2.Category = dr1.Category AND dr2.Status = dr1.Status AND dr2.Number > dr1.Number) Matches WHERE dr1.Category = 'Large' AND Matches.MatchCount > 0 ORDER BY Matches.AvgNumber DESC;
-                END;",
-                @"CREATE OR ALTER PROCEDURE usp_ParallelQueries AS
-                BEGIN
-                    SET NOCOUNT ON;
-                    SELECT Category, COUNT(*) as TotalCount, AVG(CAST(Number as FLOAT)) as AvgNumber, MIN(Number) as MinNumber, MAX(Number) as MaxNumber, SUM(CASE WHEN Number % 2 = 0 THEN 1 ELSE 0 END) as EvenCount, STRING_AGG(CAST(Number as VARCHAR(20)), ',') WITHIN GROUP (ORDER BY Number) as NumberList FROM DataRecords_07 WHERE Number BETWEEN 1000 AND 900000 GROUP BY Category OPTION (MAXDOP 4);
-                    WITH NumberRanges AS (SELECT Number, Category, NTILE(100) OVER (ORDER BY Number) as Range FROM DataRecords_08) SELECT r1.Range, COUNT(*) as Combinations, AVG(ABS(r1.Number - r2.Number)) as AvgDifference, MAX(r1.Number) as MaxNumber, MIN(r2.Number) as MinNumber FROM NumberRanges r1 JOIN NumberRanges r2 ON r1.Range = r2.Range AND r1.Number <> r2.Number GROUP BY r1.Range OPTION (MAXDOP 4);
-                    WITH ProcessingMetrics AS (SELECT Category, Status, AVG(CAST(Number as FLOAT)) as AvgNumber, COUNT(*) as RecordCount FROM DataRecords_09 GROUP BY Category, Status) SELECT Category, Status, AvgNumber, RecordCount, CAST(RecordCount as FLOAT) / NULLIF(SUM(RecordCount) OVER (PARTITION BY Category), 0) as CategoryRatio, RANK() OVER (PARTITION BY Category ORDER BY AvgNumber DESC) as ProcessingTimeRank FROM ProcessingMetrics WHERE RecordCount > 100 ORDER BY Category, ProcessingTimeRank OPTION (MAXDOP 4);
-                END;",
-                @"CREATE OR ALTER PROCEDURE usp_TempTableQueries AS
-                BEGIN
-                    SET NOCOUNT ON;
-                    CREATE TABLE #TempNumbers (ID INT IDENTITY(1,1) PRIMARY KEY, Number INT, Category NVARCHAR(50), ProcessedAt DATETIME2 DEFAULT GETUTCDATE());
-                    INSERT INTO #TempNumbers (Number, Category) SELECT TOP 100 Number, Category FROM DataRecords_10 WHERE Category = 'Large';
-                    SELECT DATEPART(SECOND, ProcessedAt) as ProcessedSecond, COUNT(*) as NumberCount, AVG(CAST(Number as FLOAT)) as AvgNumber FROM #TempNumbers GROUP BY DATEPART(SECOND, ProcessedAt);
-                    DROP TABLE #TempNumbers;
-                END;",
-                @"CREATE OR ALTER PROCEDURE usp_IsolationLevelTests AS
-                BEGIN
-                    SET NOCOUNT ON;
-                    SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
-                    SELECT TOP 50 dr.Number, dr.Category FROM DataRecords_11 dr ORDER BY dr.Number;
-                END;",
-                @"CREATE OR ALTER PROCEDURE usp_DeadlockScenarios AS
-                BEGIN
-                    SET NOCOUNT ON;
-                    -- Simulate deadlock scenario (no-op for demo)
-                    SELECT 1 AS DeadlockSimulated;
-                END;",
-                @"CREATE OR ALTER PROCEDURE usp_FailedQueries AS
-                BEGIN
-                    SET NOCOUNT ON;
-                    BEGIN TRY
-                        SELECT 1/0 AS WillFail;
-                    END TRY
-                    BEGIN CATCH
-                        SELECT ERROR_MESSAGE() AS ErrorMessage;
-                    END CATCH
-                END;",
-                @"CREATE OR ALTER PROCEDURE usp_ProblematicQueries AS
-                BEGIN
-                    SET NOCOUNT ON;
-                    SELECT a.*, b.* FROM DataRecords_12 a, DataRecords_13 b WHERE a.Number > b.Number;
-                END;"
+                "CREATE OR ALTER PROCEDURE usp_ComplexAggregation AS BEGIN SET NOCOUNT ON; SELECT Category, Status, COUNT(*) AS RecordCount, AVG(Number) AS AvgNumber FROM DataRecords_01 GROUP BY Category, Status; END;",
+                "CREATE OR ALTER PROCEDURE usp_JoinAndTempTable AS BEGIN SET NOCOUNT ON; SELECT t1.ID, t1.Number, t2.Description INTO #TempJoin FROM DataRecords_01 t1 INNER JOIN DataRecords_02 t2 ON t1.Category = t2.Category; SELECT COUNT(*) AS TempCount FROM #TempJoin; DROP TABLE #TempJoin; END;",
+                "CREATE OR ALTER PROCEDURE usp_ErrorHandlingDemo @InputNumber INT AS BEGIN SET NOCOUNT ON; BEGIN TRY IF @InputNumber < 0 THROW 50001, 'Negative numbers not allowed', 1; SELECT TOP 1 * FROM DataRecords_01 WHERE Number = @InputNumber; END TRY BEGIN CATCH SELECT ERROR_MESSAGE() AS ErrorMessage; END CATCH END;",
+                "CREATE OR ALTER PROCEDURE usp_FastQueries AS BEGIN SET NOCOUNT ON; SELECT TOP 50 * FROM DataRecords_01 WHERE Number BETWEEN 1 AND 100 AND Category = 'Small'; SELECT Category, Status, COUNT(*) as Count, MIN(Number) as MinNumber, MAX(Number) as MaxNumber FROM DataRecords_02 WHERE Status = 'ACTIVE' GROUP BY Category, Status HAVING COUNT(*) > 5; SELECT TOP 50 t1.ID, t1.Number, t1.Category, t1.Status, t1.CreatedAt, t2.Number as RelatedNumber FROM DataRecords_03 t1 LEFT JOIN DataRecords_04 t2 ON t1.Category = t2.Category WHERE t1.Category = 'Medium' AND t1.CreatedAt >= DATEADD(MINUTE, -5, GETUTCDATE()) ORDER BY t1.CreatedAt DESC; END;",
+                "CREATE OR ALTER PROCEDURE usp_SlowQueries AS BEGIN SET NOCOUNT ON; WITH DataStats AS (SELECT TOP 50 Category, Status, COUNT(*) as RecordCount, AVG(CAST(Number as FLOAT)) as AvgNumber, STRING_AGG(CAST(ID as VARCHAR(20)), ',') as RecordIDs FROM DataRecords_05 GROUP BY Category, Status) SELECT Category, Status, RecordCount, AvgNumber, COUNT(*) OVER (PARTITION BY Category) as CategoryTotal FROM DataStats WHERE RecordCount > 5 ORDER BY CategoryTotal DESC, AvgNumber DESC; SELECT TOP 50 dr1.Category, dr1.Status, Matches.MatchCount, Matches.AvgNumber FROM DataRecords_06 dr1 CROSS APPLY (SELECT COUNT(*) as MatchCount, AVG(CAST(dr2.Number as FLOAT)) as AvgNumber FROM DataRecords_06 dr2 WHERE dr2.Category = dr1.Category AND dr2.Status = dr1.Status AND dr2.Number > dr1.Number) Matches WHERE dr1.Category = 'Large' AND Matches.MatchCount > 0 ORDER BY Matches.AvgNumber DESC; END;",
+                "CREATE OR ALTER PROCEDURE usp_ParallelQueries AS BEGIN SET NOCOUNT ON; SELECT Category, COUNT(*) as TotalCount, AVG(CAST(Number as FLOAT)) as AvgNumber, MIN(Number) as MinNumber, MAX(Number) as MaxNumber, SUM(CASE WHEN Number % 2 = 0 THEN 1 ELSE 0 END) as EvenCount, STRING_AGG(CAST(Number as VARCHAR(20)), ',') WITHIN GROUP (ORDER BY Number) as NumberList FROM DataRecords_07 WHERE Number BETWEEN 1000 AND 900000 GROUP BY Category OPTION (MAXDOP 4); WITH NumberRanges AS (SELECT Number, Category, NTILE(100) OVER (ORDER BY Number) as Range FROM DataRecords_08) SELECT r1.Range, COUNT(*) as Combinations, AVG(ABS(r1.Number - r2.Number)) as AvgDifference, MAX(r1.Number) as MaxNumber, MIN(r2.Number) as MinNumber FROM NumberRanges r1 JOIN NumberRanges r2 ON r1.Range = r2.Range AND r1.Number <> r2.Number GROUP BY r1.Range OPTION (MAXDOP 4); WITH ProcessingMetrics AS (SELECT Category, Status, AVG(CAST(Number as FLOAT)) as AvgNumber, COUNT(*) as RecordCount FROM DataRecords_09 GROUP BY Category, Status) SELECT Category, Status, AvgNumber, RecordCount, CAST(RecordCount as FLOAT) / NULLIF(SUM(RecordCount) OVER (PARTITION BY Category), 0) as CategoryRatio, RANK() OVER (PARTITION BY Category ORDER BY AvgNumber DESC) as ProcessingTimeRank FROM ProcessingMetrics WHERE RecordCount > 100 ORDER BY Category, ProcessingTimeRank OPTION (MAXDOP 4); END;",
+                "CREATE OR ALTER PROCEDURE usp_TempTableQueries AS BEGIN SET NOCOUNT ON; CREATE TABLE #TempNumbers (ID INT IDENTITY(1,1) PRIMARY KEY, Number INT, Category NVARCHAR(50), ProcessedAt DATETIME2 DEFAULT GETUTCDATE()); INSERT INTO #TempNumbers (Number, Category) SELECT TOP 100 Number, Category FROM DataRecords_10 WHERE Category = 'Large'; SELECT DATEPART(SECOND, ProcessedAt) as ProcessedSecond, COUNT(*) as NumberCount, AVG(CAST(Number as FLOAT)) as AvgNumber FROM #TempNumbers GROUP BY DATEPART(SECOND, ProcessedAt); DROP TABLE #TempNumbers; END;",
+                "CREATE OR ALTER PROCEDURE usp_IsolationLevelTests AS BEGIN SET NOCOUNT ON; SET TRANSACTION ISOLATION LEVEL READ COMMITTED; SELECT TOP 50 dr.Number, dr.Category FROM DataRecords_11 dr ORDER BY dr.Number; END;",
+                "CREATE OR ALTER PROCEDURE usp_DeadlockScenarios AS BEGIN SET NOCOUNT ON; SELECT 1 AS DeadlockSimulated; END;",
+                "CREATE OR ALTER PROCEDURE usp_FailedQueries AS BEGIN SET NOCOUNT ON; BEGIN TRY SELECT 1/0 AS WillFail; END TRY BEGIN CATCH SELECT ERROR_MESSAGE() AS ErrorMessage; END CATCH END;",
+                "CREATE OR ALTER PROCEDURE usp_ProblematicQueries AS BEGIN SET NOCOUNT ON; SELECT a.*, b.* FROM DataRecords_12 a, DataRecords_13 b WHERE a.Number > b.Number; END;"
             };
             foreach (var procSql in procedureDefinitions)
             {

@@ -3,9 +3,8 @@ FROM python:slim
 # Create working directory
 RUN mkdir /home/code
 
-# Copy application and entrypoint script
+# Copy application
 COPY app.py /home/code/
-COPY entrypoint.sh /home/code/
 
 # Set working directory
 WORKDIR /home/code
@@ -20,8 +19,5 @@ RUN apt -y update && \
     opentelemetry-bootstrap -a install && \
     apt -y autoremove && apt-get -y autoclean
 
-# Ensure entrypoint.sh is executable
-RUN chmod +x /home/code/entrypoint.sh
-
 # Set entrypoint
-ENTRYPOINT ["/bin/sh", "/home/code/entrypoint.sh"]
+ENTRYPOINT ["opentelemetry-instrument", "python3", "app.py"]

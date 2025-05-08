@@ -1,7 +1,7 @@
-aws cloudformation deploy --template-file ecs-fargate-cf-autogen.yaml \
-    --stack-name slerner-fargate-test \
+aws cloudformation deploy --template-file fargate-new.yaml \
+    --stack-name slerner-fargate-test2 \
     --region us-west-2 \
     --capabilities CAPABILITY_NAMED_IAM \
     --parameter-overrides \
-        PrivateKey="" \
+        PrivateKey="YOURKEYHERE" \
         CoralogixRegion="US2"

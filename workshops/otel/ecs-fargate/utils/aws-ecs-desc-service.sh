@@ -1,2 +1,2 @@
-aws ecs describe-services --cluster slerner-cluster \
- --services fargate-service
+aws ecs describe-services --cluster slerner-ecs-cluster \
+ --services slerner-fargate-java-service

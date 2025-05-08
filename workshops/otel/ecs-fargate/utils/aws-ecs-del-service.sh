@@ -1,1 +1,1 @@
-aws ecs delete-service --cluster slerner-cluster --service coralogix-fargate-service --force
+aws ecs delete-service --cluster slerner-ecs-cluster --service slerner-fargate-java-service --force

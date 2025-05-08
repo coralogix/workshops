@@ -1,27 +1,35 @@
-import logging
 import json
-from flask import Flask, request
+import logging
 import threading
-import requests
 import time
 import uuid
+from typing import Any
+
+import requests
+from flask import Flask, request
 
 # Initialize the Flask app
 app = Flask(__name__)
 
-# Define the home route
 @app.route('/')
-def home():
+def home() -> str:
+    """
+    Home route that returns a greeting and the request ID from headers.
+    """
     request_id = request.headers.get('X-Request-ID', 'Unknown')
     return f'Hello, World from Flask! request_id: {request_id}'
 
-# Run the Flask app in a background thread
-def run_flask_app():
+def run_flask_app() -> None:
+    """
+    Runs the Flask app on a background thread.
+    """
     app.run(debug=False, use_reloader=False, port=5000, host='0.0.0.0')
 
-# Custom JSON formatter for logs
 class JsonFormatter(logging.Formatter):
-    def format(self, record):
+    """
+    Custom JSON formatter for logging.
+    """
+    def format(self, record: logging.LogRecord) -> str:
         log_record = {
             "time": self.formatTime(record, self.datefmt),
             "name": record.name,
@@ -33,33 +41,48 @@ class JsonFormatter(logging.Formatter):
             log_record["exception"] = self.formatException(record.exc_info)
         return json.dumps(log_record)
 
-# Configure logging with the custom JSON formatter
-def setup_logging():
+def setup_logging() -> None:
+    """
+    Configures logging to use the custom JSON formatter.
+    """
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
-    logger.handlers.clear()  # Prevent duplicated handlers on reload
+
+    # Remove all handlers associated with the root logger object.
+    if logger.hasHandlers():
+        logger.handlers.clear()
 
     handler = logging.StreamHandler()
     handler.setLevel(logging.DEBUG)
-
-    formatter = JsonFormatter()
-    handler.setFormatter(formatter)
+    handler.setFormatter(JsonFormatter())
     logger.addHandler(handler)
 
-if __name__ == '__main__':
+def main() -> None:
+    """
+    Main function to start the Flask server and periodically make requests to it.
+    """
     setup_logging()
     logger = logging.getLogger(__name__)
 
+    # Start Flask server in a background thread
     flask_thread = threading.Thread(target=run_flask_app, daemon=True)
     flask_thread.start()
-
     logger.debug("Flask server started in background.")
 
     try:
         while True:
             request_id = str(uuid.uuid4())
-            response = requests.get("http://127.0.0.1:5000", headers={'X-Request-ID': request_id})
-            logger.debug(f"Received response: {response.text}", extra={'responseBody': response.text})
+            response = requests.get(
+                "http://127.0.0.1:5000",
+                headers={'X-Request-ID': request_id}
+            )
+            logger.debug(
+                f"Received response: {response.text}",
+                extra={'responseBody': response.text}
+            )
             time.sleep(0.3)
     except KeyboardInterrupt:
         logger.debug("Application stopped.")
+
+if __name__ == '__main__':
+    main()

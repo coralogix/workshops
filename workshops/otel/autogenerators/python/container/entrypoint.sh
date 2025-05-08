@@ -1,1 +1,0 @@
-opentelemetry-instrument python3 app.py

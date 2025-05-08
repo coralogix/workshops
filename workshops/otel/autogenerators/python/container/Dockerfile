@@ -13,7 +13,7 @@ WORKDIR /home/code
 RUN apt -y update && \
     export PATH="$HOME/.local/bin:$PATH" && \
     pip install --upgrade pip && \
-    pip install requests "Flask <3" "Werkzeug <3" && \
+    pip install requests "Flask" "Werkzeug" && \
     pip install opentelemetry-distro opentelemetry-exporter-otlp && \
     opentelemetry-bootstrap -a install && \
     apt -y autoremove && apt-get -y autoclean

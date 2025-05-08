@@ -39,12 +39,6 @@ spec:
               fieldPath: status.hostIP
         - name: OTEL_PYTHON_LOG_CORRELATION
           value: "TRUE"
-        - name: OTEL_PYTHON_LOG_FORMAT
-          value: "%(msg)s [span_id=%(span_id)s]"
-        - name: OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED
-          value: "true"
-        - name: OTEL_PYTHON_LOG_LEVEL
-          value: "DEBUG"
         - name: OTEL_SERVICE_NAME
           value: cx-autogen-py
         - name: OTEL_RESOURCE_ATTRIBUTES

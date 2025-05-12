@@ -7,6 +7,7 @@ using OpenTelemetry;
 using System.Text.Json;
 using System.Collections.Generic;
 using OpenTelemetry.Trace;
+using System.Diagnostics;
 
 /*
  * Program.cs
@@ -21,6 +22,8 @@ using OpenTelemetry.Trace;
 
 class Program
 {
+    static readonly ActivitySource ActivitySource = new("dotnetdb");
+
     /// <summary>
     /// Entry point. Sets up OpenTelemetry tracing and logging, then loops forever:
     /// - Connects to SQL Server
@@ -31,11 +34,13 @@ class Program
     static void Main()
     {
         using var tracerProvider = Sdk.CreateTracerProviderBuilder()
-            .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("SqlRandomIntegersApp"))
+            .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("CX-DB-query"))
+            .AddSource("dotnetdb")
             .AddOtlpExporter(otlpOptions =>
             {
                 otlpOptions.Endpoint = new Uri("http://localhost:4317");
             })
+            .AddConsoleExporter()
             .Build();
         using var loggerFactory = LoggerFactory.Create(builder =>
         {
@@ -43,7 +48,7 @@ class Program
                 .SetMinimumLevel(LogLevel.Information)
                 .AddOpenTelemetry(options =>
                 {
-                    options.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("dotnet8mssql-db"));
+                    options.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("CX-DB-query"));
                     options.AddOtlpExporter(otlpOptions =>
                     {
                         otlpOptions.Endpoint = new Uri("http://localhost:4317");
@@ -51,7 +56,6 @@ class Program
                 });
         });
         var logger = loggerFactory.CreateLogger<Program>();
-        var tracer = tracerProvider.GetTracer("OpenTelemetry.Instrumentation.SqlClient");
 
         // Connection string for SQL Server (update as needed)
         var baseConnectionString = "Server=localhost,1433;User Id=sa;Password=Toortoor9#;TrustServerCertificate=True;";
@@ -72,7 +76,7 @@ class Program
 
                     foreach (var dbName in dbsToCheck)
                     {
-                        ListStoredProceduresForDatabase(baseConnectionString, dbName, logger, tracer);
+                        ListStoredProceduresForDatabase(baseConnectionString, dbName, logger);
                     }
 
                     connection.Close();
@@ -82,7 +86,7 @@ class Program
             catch (Exception ex)
             {
                 LogDbError(logger, ERROR, "server", "ConnectToServer", "OPEN CONNECTION", ex.Message);
-                Console.WriteLine($"[dotnetdmv] Exception: {ex.Message}");
+                // Console.WriteLine($"[dotnetdmv] Exception: {ex.Message}");
             }
             System.Threading.Thread.Sleep(5000); // Wait 5 seconds before next loop
         }
@@ -94,8 +98,7 @@ class Program
     /// <param name="baseConnectionString">Base connection string (without Database=...)</param>
     /// <param name="dbName">Database name</param>
     /// <param name="logger">ILogger instance</param>
-    /// <param name="tracer">OpenTelemetry Tracer</param>
-    static void ListStoredProceduresForDatabase(string baseConnectionString, string dbName, ILogger logger, Tracer tracer)
+    static void ListStoredProceduresForDatabase(string baseConnectionString, string dbName, ILogger logger)
     {
         var dbConnectionString = baseConnectionString + $"Database={dbName};";
         const int INFO = 20;
@@ -131,23 +134,24 @@ class Program
                 {
                     foreach (var (procName, procDef) in procedures)
                     {
-                        // Emit a span for this stored procedure
-                        using (var span = tracer.StartActiveSpan(
-                            dbName, // operationName
-                            SpanKind.Client))
+                        // Emit a span for this stored procedure using ActivitySource
+                        using (var activity = ActivitySource.StartActivity(procName, ActivityKind.Client))
                         {
-                            span.SetAttribute("db.system", "mssql");
-                            span.SetAttribute("db.name", "sp-" + dbName);
-                            span.SetAttribute("db.statement", procDef);
-                            span.SetAttribute("server.address", "localhost");
-                            span.SetAttribute("span.kind", "client");
-                            span.SetAttribute("cx.subsystem.name", "SqlRandomIntegersApp");
-                            span.SetAttribute("cx.application.name", "workshop");
-                            span.SetAttribute("otel.library.name", "OpenTelemetry.Instrumentation.SqlClient");
-                            span.SetAttribute("otel.library.version", "1.11.0-beta.2");
-                            span.SetAttribute("otel.scope.name", "OpenTelemetry.Instrumentation.SqlClient");
-                            span.SetAttribute("otel.scope.version", "1.11.0-beta.2");
-
+                            if (activity != null)
+                            {
+                                Console.WriteLine($"[DEBUG] Created span: TraceId={activity.TraceId}, SpanId={activity.SpanId}, Name={dbName}");
+                                activity.SetTag("db.system", "mssql");
+                                activity.SetTag("db.name", "sp-" + dbName);
+                                activity.SetTag("db.statement", procDef);
+                                activity.SetTag("server.address", "localhost");
+                                activity.SetTag("span.kind", "client");
+                                activity.SetTag("cx.subsystem.name", "CX-DB-query");
+                                activity.SetTag("cx.application.name", "workshop");
+                                activity.SetTag("otel.library.name", "OpenTelemetry.Instrumentation.SqlClient");
+                                activity.SetTag("otel.library.version", "1.11.0-beta.2");
+                                activity.SetTag("otel.scope.name", "OpenTelemetry.Instrumentation.SqlClient");
+                                activity.SetTag("otel.scope.version", "1.11.0-beta.2");
+                            }
                             // Query sys.dm_exec_procedure_stats for metrics
                             var stats = GetProcedureStats(dbConnection, dbName, procName);
 
@@ -168,7 +172,7 @@ class Program
                             };
                             var logJsonProc = JsonSerializer.Serialize(logObjProc);
                             logger.LogInformation(logJsonProc);
-                            Console.WriteLine(logJsonProc);
+                            // Console.WriteLine(logJsonProc);
                         }
                     }
                 }
@@ -179,7 +183,7 @@ class Program
         catch (Exception ex)
         {
             LogDbError(logger, ERROR, dbName, "ListStoredProcedures", "SELECT ... FROM sys.procedures ...", ex.Message);
-            Console.WriteLine($"[sqlanalyzer] Exception in {dbName}: {ex.Message}");
+            // Console.WriteLine($"[sqlanalyzer] Exception in {dbName}: {ex.Message}");
         }
     }
 
@@ -251,7 +255,7 @@ class Program
         };
         var logJson = JsonSerializer.Serialize(logObj);
         logger.LogInformation(logJson);
-        Console.WriteLine(logJson);
+        // Console.WriteLine(logJson);
     }
 
     /// <summary>
@@ -270,7 +274,7 @@ class Program
         };
         var logJson = JsonSerializer.Serialize(logObj);
         logger.LogError(logJson);
-        Console.WriteLine(logJson);
+        // Console.WriteLine(logJson);
     }
 
     /// <summary>

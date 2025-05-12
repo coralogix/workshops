@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "LCRIjoMzrMVQT1OxvbsywJrWkNffUM8b7yJoCtWVCt11GOVdmc18XgiXDeakpAcmTLtzLK/EqeKTGKhFmP0m6A==",
+  "dgSpecHash": "9b+O7Et2/pktXU2Q3zDPAJwF1eJmU2UJKku2Kn/8cmwhBjFf/ka1W+5nTj1615UfQdRHf0ZEonaOF/qZRI/kgA==",
   "success": true,
   "projectFilePath": "/home/ubuntu/workshops/workshops/otel/autogenerators/dotnet8mssql/dotnetdb/Program.csproj",
   "expectedPackageFiles": [
@@ -40,6 +40,7 @@
     "/home/ubuntu/.nuget/packages/opentelemetry/1.12.0/opentelemetry.1.12.0.nupkg.sha512",
     "/home/ubuntu/.nuget/packages/opentelemetry.api/1.12.0/opentelemetry.api.1.12.0.nupkg.sha512",
     "/home/ubuntu/.nuget/packages/opentelemetry.api.providerbuilderextensions/1.12.0/opentelemetry.api.providerbuilderextensions.1.12.0.nupkg.sha512",
+    "/home/ubuntu/.nuget/packages/opentelemetry.exporter.console/1.12.0/opentelemetry.exporter.console.1.12.0.nupkg.sha512",
     "/home/ubuntu/.nuget/packages/opentelemetry.exporter.opentelemetryprotocol/1.12.0/opentelemetry.exporter.opentelemetryprotocol.1.12.0.nupkg.sha512",
     "/home/ubuntu/.nuget/packages/opentelemetry.extensions.hosting/1.12.0/opentelemetry.extensions.hosting.1.12.0.nupkg.sha512",
     "/home/ubuntu/.nuget/packages/system.clientmodel/1.0.0/system.clientmodel.1.0.0.nupkg.sha512",

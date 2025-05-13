@@ -94,126 +94,151 @@ class Program
 
     /// <summary>
     /// Lists user-defined stored procedures in the given database, logs their metadata and performance stats, and emits an OpenTelemetry span for each.
+    /// This version is simplified for readability and is fully documented for clarity.
     /// </summary>
     /// <param name="baseConnectionString">Base connection string (without Database=...)</param>
     /// <param name="dbName">Database name</param>
     /// <param name="logger">ILogger instance</param>
     static void ListStoredProceduresForDatabase(string baseConnectionString, string dbName, ILogger logger)
     {
-        var dbConnectionString = baseConnectionString + $"Database={dbName};";
+        // Build the connection string for the target database
+        string dbConnectionString = baseConnectionString + $"Database={dbName};";
         const int INFO = 20;
         const int ERROR = 40;
+
         try
         {
-            using (var dbConnection = new SqlConnection(dbConnectionString))
+            // Open a connection to the database
+            using var dbConnection = new SqlConnection(dbConnectionString);
+            dbConnection.Open();
+            LogDbEvent(logger, INFO, dbName, "ConnectToDatabase", "OPEN CONNECTION");
+
+            // Query for user-defined stored procedures and their definitions
+            string procQuery = @"
+                SELECT p.name, m.definition
+                FROM sys.procedures p
+                JOIN sys.sql_modules m ON p.object_id = m.object_id
+                WHERE p.is_ms_shipped = 0
+                ORDER BY p.name;";
+
+            // Collect all procedures in a list
+            var procedures = new List<(string Name, string Definition)>();
+            using (var procCommand = new SqlCommand(procQuery, dbConnection))
+            using (var procReader = procCommand.ExecuteReader())
             {
-                dbConnection.Open();
-                LogDbEvent(logger, INFO, dbName, "ConnectToDatabase", "OPEN CONNECTION");
-
-                // Query for user-defined stored procedures and their definitions
-                string procQuery = @"
-                    SELECT p.name, m.definition
-                    FROM sys.procedures p
-                    JOIN sys.sql_modules m ON p.object_id = m.object_id
-                    WHERE p.is_ms_shipped = 0
-                    ORDER BY p.name;";
-                var procedures = new List<(string Name, string Definition)>();
-                using (var procCommand = new SqlCommand(procQuery, dbConnection))
-                using (var procReader = procCommand.ExecuteReader())
+                while (procReader.Read())
                 {
-                    while (procReader.Read())
-                    {
-                        procedures.Add((procReader.GetString(0), procReader.GetString(1)));
-                    }
+                    string procName = procReader.GetString(0);
+                    string procDef = procReader.GetString(1);
+                    procedures.Add((procName, procDef));
                 }
-                if (procedures.Count == 0)
-                {
-                    LogDbEvent(logger, INFO, dbName, "(none)", "No user stored procedures found.");
-                }
-                else
-                {
-                    foreach (var (procName, procDef) in procedures)
-                    {
-                        var stats = GetProcedureStats(dbConnection, dbName, procName);
-                        using (var activity = ActivitySource.StartActivity(procName, ActivityKind.Client))
-                        {
-                            if (activity != null)
-                            {
-                                activity.SetTag("db.system", "mssql");
-                                activity.SetTag("db.name", "sp-" + dbName);
-                                activity.SetTag("db.statement", procDef); // Full procedure definition
-                                activity.SetTag("server.address", "localhost");
-                                activity.SetTag("span.kind", "client");
-                                activity.SetTag("cx.subsystem.name", "CX-DB-query");
-                                activity.SetTag("cx.application.name", "workshop");
-                                activity.SetTag("otel.library.name", "OpenTelemetry.Instrumentation.SqlClient");
-                                activity.SetTag("otel.library.version", "1.11.0-beta.2");
-                                activity.SetTag("otel.scope.name", "OpenTelemetry.Instrumentation.SqlClient");
-                                activity.SetTag("otel.scope.version", "1.11.0-beta.2");
-                            }
-
-                            // Only execute if the procedure definition does NOT contain INSERT, UPDATE, DELETE, or MERGE (case-insensitive)
-                            var lowerDef = procDef.ToLowerInvariant();
-                            if (!lowerDef.Contains("insert ") && !lowerDef.Contains("update ") && !lowerDef.Contains("delete ") && !lowerDef.Contains("merge "))
-                            {
-                                try
-                                {
-                                    using (var execCmd = new SqlCommand($"EXEC {procName}", dbConnection))
-                                    {
-                                        execCmd.CommandTimeout = 30;
-                                        execCmd.ExecuteNonQuery();
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-                                    activity?.SetTag("otel.status_code", "ERROR");
-                                    activity?.SetTag("otel.status_description", ex.Message);
-                                }
-                            }
-                            // else: skip execution, but span is still created with db.statement
-
-                            // After the span and (optional) execution, set custom tags using 'stats'
-                            if (activity != null)
-                            {
-                                if (stats.ExecutionCount != null)
-                                    activity.SetTag("cx.proc.execution_count", stats.ExecutionCount);
-                                if (stats.LastExecutionTime != null)
-                                    activity.SetTag("cx.proc.last_execution_time", stats.LastExecutionTime?.ToString("o"));
-                                if (stats.TotalWorkerTime != null)
-                                    activity.SetTag("cx.proc.total_worker_time", stats.TotalWorkerTime);
-                                if (stats.TotalElapsedTime != null)
-                                    activity.SetTag("cx.proc.total_elapsed_time", stats.TotalElapsedTime);
-                                if (stats.TotalLogicalReads != null)
-                                    activity.SetTag("cx.proc.total_logical_reads", stats.TotalLogicalReads);
-                                if (stats.TotalLogicalWrites != null)
-                                    activity.SetTag("cx.proc.total_logical_writes", stats.TotalLogicalWrites);
-                            }
-                        }
-                        // Logging (outside the using block is fine)
-                        logger.LogInformation(
-                            "Procedure stats: timestamp={timestamp} severity={severity} database={database} procedure_name={procedure_name} sql_statement={sql_statement} execution_count={execution_count} last_execution_time={last_execution_time} total_worker_time={total_worker_time} total_elapsed_time={total_elapsed_time} total_logical_reads={total_logical_reads} total_logical_writes={total_logical_writes}",
-                            DateTime.UtcNow.ToString("o"),
-                            INFO,
-                            dbName,
-                            procName,
-                            procDef,
-                            stats.ExecutionCount,
-                            stats.LastExecutionTime?.ToString("o"),
-                            stats.TotalWorkerTime,
-                            stats.TotalElapsedTime,
-                            stats.TotalLogicalReads,
-                            stats.TotalLogicalWrites
-                        );
-                    }
-                }
-                dbConnection.Close();
-                LogDbEvent(logger, INFO, dbName, "DisconnectFromDatabase", "CLOSE CONNECTION");
             }
+
+            // If no procedures found, log and return
+            if (procedures.Count == 0)
+            {
+                LogDbEvent(logger, INFO, dbName, "(none)", "No user stored procedures found.");
+                dbConnection.Close();
+                return;
+            }
+
+            // For each stored procedure, create a span, execute if safe, collect stats, and log
+            foreach (var (procName, procDef) in procedures)
+            {
+                // Collect stats before execution (for initial state)
+                var stats = GetProcedureStats(dbConnection, dbName, procName);
+
+                // Start a span for this stored procedure execution
+                using var activity = ActivitySource.StartActivity(procName, ActivityKind.Client);
+                if (activity != null)
+                {
+                    // Set standard OpenTelemetry and custom tags
+                    activity.SetTag("db.system", "mssql");
+                    activity.SetTag("db.name", "sp-" + dbName);
+                    activity.SetTag("db.statement", procDef); // Full procedure definition
+                    activity.SetTag("server.address", "localhost");
+                    activity.SetTag("span.kind", "client");
+                    activity.SetTag("cx.subsystem.name", "CX-DB-query");
+                    activity.SetTag("cx.application.name", "workshop");
+                    activity.SetTag("otel.library.name", "OpenTelemetry.Instrumentation.SqlClient");
+                    activity.SetTag("otel.library.version", "1.11.0-beta.2");
+                    activity.SetTag("otel.scope.name", "OpenTelemetry.Instrumentation.SqlClient");
+                    activity.SetTag("otel.scope.version", "1.11.0-beta.2");
+                    activity.SetTag("cx.proc.name", procName);
+                }
+
+                // Determine if the procedure is safe to execute (only SELECTs, no DML)
+                bool isSelectOnly = true;
+                string lowerDef = procDef.ToLowerInvariant();
+                if (lowerDef.Contains("insert ") || lowerDef.Contains("update ") || lowerDef.Contains("delete ") || lowerDef.Contains("merge "))
+                {
+                    isSelectOnly = false;
+                }
+
+                // If safe, execute the procedure
+                if (isSelectOnly)
+                {
+                    try
+                    {
+                        using var execCmd = new SqlCommand($"EXEC {procName}", dbConnection);
+                        execCmd.CommandTimeout = 30;
+                        execCmd.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        // Record error in the span if execution fails
+                        activity?.SetTag("otel.status_code", "ERROR");
+                        activity?.SetTag("otel.status_description", ex.Message);
+                    }
+                }
+                // If not safe, skip execution but still create the span
+
+                // Collect stats after execution (for up-to-date metrics)
+                stats = GetProcedureStats(dbConnection, dbName, procName);
+
+                // Add custom tags to the span for performance metrics if available
+                if (activity != null)
+                {
+                    if (stats.ExecutionCount != null)
+                        activity.SetTag("cx.proc.execution_count", stats.ExecutionCount);
+                    if (stats.LastExecutionTime != null)
+                        activity.SetTag("cx.proc.last_execution_time", stats.LastExecutionTime?.ToString("o"));
+                    if (stats.TotalWorkerTime != null)
+                        activity.SetTag("cx.proc.total_worker_time", stats.TotalWorkerTime);
+                    if (stats.TotalElapsedTime != null)
+                        activity.SetTag("cx.proc.total_elapsed_time", stats.TotalElapsedTime);
+                    if (stats.TotalLogicalReads != null)
+                        activity.SetTag("cx.proc.total_logical_reads", stats.TotalLogicalReads);
+                    if (stats.TotalLogicalWrites != null)
+                        activity.SetTag("cx.proc.total_logical_writes", stats.TotalLogicalWrites);
+                }
+
+                // Log the procedure stats as structured log
+                logger.LogInformation(
+                    // Message template for structured logging
+                    "Procedure stats: timestamp={timestamp} severity={severity} database={database} procedure_name={procedure_name} sql_statement={sql_statement} execution_count={execution_count} last_execution_time={last_execution_time} total_worker_time={total_worker_time} total_elapsed_time={total_elapsed_time} total_logical_reads={total_logical_reads} total_logical_writes={total_logical_writes}",
+                    DateTime.UtcNow.ToString("o"),
+                    INFO,
+                    dbName,
+                    procName,
+                    procDef,
+                    stats.ExecutionCount,
+                    stats.LastExecutionTime?.ToString("o"),
+                    stats.TotalWorkerTime,
+                    stats.TotalElapsedTime,
+                    stats.TotalLogicalReads,
+                    stats.TotalLogicalWrites
+                );
+            }
+
+            // Close the database connection
+            dbConnection.Close();
+            LogDbEvent(logger, INFO, dbName, "DisconnectFromDatabase", "CLOSE CONNECTION");
         }
         catch (Exception ex)
         {
+            // Log any errors that occur during the process
             LogDbError(logger, ERROR, dbName, "ListStoredProcedures", "SELECT ... FROM sys.procedures ...", ex.Message);
-            // Console.WriteLine($"[sqlanalyzer] Exception in {dbName}: {ex.Message}");
         }
     }
 

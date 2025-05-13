@@ -134,15 +134,14 @@ class Program
                 {
                     foreach (var (procName, procDef) in procedures)
                     {
-                        // Emit a span for this stored procedure using ActivitySource
+                        var stats = GetProcedureStats(dbConnection, dbName, procName);
                         using (var activity = ActivitySource.StartActivity(procName, ActivityKind.Client))
                         {
                             if (activity != null)
                             {
-                                Console.WriteLine($"[DEBUG] Created span: TraceId={activity.TraceId}, SpanId={activity.SpanId}, Name={dbName}");
                                 activity.SetTag("db.system", "mssql");
                                 activity.SetTag("db.name", "sp-" + dbName);
-                                activity.SetTag("db.statement", procDef);
+                                activity.SetTag("db.statement", procDef); // Full procedure definition
                                 activity.SetTag("server.address", "localhost");
                                 activity.SetTag("span.kind", "client");
                                 activity.SetTag("cx.subsystem.name", "CX-DB-query");
@@ -152,28 +151,59 @@ class Program
                                 activity.SetTag("otel.scope.name", "OpenTelemetry.Instrumentation.SqlClient");
                                 activity.SetTag("otel.scope.version", "1.11.0-beta.2");
                             }
-                            // Query sys.dm_exec_procedure_stats for metrics
-                            var stats = GetProcedureStats(dbConnection, dbName, procName);
 
-                            // Log procedure info and stats
-                            var logObjProc = new
+                            // Only execute if the procedure definition does NOT contain INSERT, UPDATE, DELETE, or MERGE (case-insensitive)
+                            var lowerDef = procDef.ToLowerInvariant();
+                            if (!lowerDef.Contains("insert ") && !lowerDef.Contains("update ") && !lowerDef.Contains("delete ") && !lowerDef.Contains("merge "))
                             {
-                                timestamp = DateTime.UtcNow.ToString("o"),
-                                severity = INFO,
-                                database = dbName,
-                                procedure_name = procName,
-                                sql_statement = procDef,
-                                execution_count = stats.ExecutionCount,
-                                last_execution_time = stats.LastExecutionTime?.ToString("o"),
-                                total_worker_time = stats.TotalWorkerTime,
-                                total_elapsed_time = stats.TotalElapsedTime,
-                                total_logical_reads = stats.TotalLogicalReads,
-                                total_logical_writes = stats.TotalLogicalWrites
-                            };
-                            var logJsonProc = JsonSerializer.Serialize(logObjProc);
-                            logger.LogInformation(logJsonProc);
-                            // Console.WriteLine(logJsonProc);
+                                try
+                                {
+                                    using (var execCmd = new SqlCommand($"EXEC {procName}", dbConnection))
+                                    {
+                                        execCmd.CommandTimeout = 30;
+                                        execCmd.ExecuteNonQuery();
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    activity?.SetTag("otel.status_code", "ERROR");
+                                    activity?.SetTag("otel.status_description", ex.Message);
+                                }
+                            }
+                            // else: skip execution, but span is still created with db.statement
+
+                            // After the span and (optional) execution, set custom tags using 'stats'
+                            if (activity != null)
+                            {
+                                if (stats.ExecutionCount != null)
+                                    activity.SetTag("cx.proc.execution_count", stats.ExecutionCount);
+                                if (stats.LastExecutionTime != null)
+                                    activity.SetTag("cx.proc.last_execution_time", stats.LastExecutionTime?.ToString("o"));
+                                if (stats.TotalWorkerTime != null)
+                                    activity.SetTag("cx.proc.total_worker_time", stats.TotalWorkerTime);
+                                if (stats.TotalElapsedTime != null)
+                                    activity.SetTag("cx.proc.total_elapsed_time", stats.TotalElapsedTime);
+                                if (stats.TotalLogicalReads != null)
+                                    activity.SetTag("cx.proc.total_logical_reads", stats.TotalLogicalReads);
+                                if (stats.TotalLogicalWrites != null)
+                                    activity.SetTag("cx.proc.total_logical_writes", stats.TotalLogicalWrites);
+                            }
                         }
+                        // Logging (outside the using block is fine)
+                        logger.LogInformation(
+                            "Procedure stats: timestamp={timestamp} severity={severity} database={database} procedure_name={procedure_name} sql_statement={sql_statement} execution_count={execution_count} last_execution_time={last_execution_time} total_worker_time={total_worker_time} total_elapsed_time={total_elapsed_time} total_logical_reads={total_logical_reads} total_logical_writes={total_logical_writes}",
+                            DateTime.UtcNow.ToString("o"),
+                            INFO,
+                            dbName,
+                            procName,
+                            procDef,
+                            stats.ExecutionCount,
+                            stats.LastExecutionTime?.ToString("o"),
+                            stats.TotalWorkerTime,
+                            stats.TotalElapsedTime,
+                            stats.TotalLogicalReads,
+                            stats.TotalLogicalWrites
+                        );
                     }
                 }
                 dbConnection.Close();
@@ -233,7 +263,7 @@ class Program
         {
             ExecutionCount = executionCount,
             LastExecutionTime = lastExecutionTime,
-            TotalWorkerTime = totalWorkerTime,
+            TotalWorkerTime = totalWorkerTime, 
             TotalElapsedTime = totalElapsedTime,
             TotalLogicalReads = totalLogicalReads,
             TotalLogicalWrites = totalLogicalWrites
@@ -245,17 +275,15 @@ class Program
     /// </summary>
     static void LogDbEvent(ILogger logger, int severity, string database, string procedureName, string sqlStatement)
     {
-        var logObj = new
-        {
-            timestamp = DateTime.UtcNow.ToString("o"),
+        logger.LogInformation(
+            "DbEvent: timestamp={timestamp} severity={severity} database={database} procedure_name={procedure_name} sql_statement={sql_statement}",
+            DateTime.UtcNow.ToString("o"),
             severity,
             database,
-            procedure_name = procedureName,
-            sql_statement = sqlStatement
-        };
-        var logJson = JsonSerializer.Serialize(logObj);
-        logger.LogInformation(logJson);
-        // Console.WriteLine(logJson);
+            procedureName,
+            sqlStatement
+        );
+        // Console.WriteLine(...);
     }
 
     /// <summary>
@@ -263,18 +291,16 @@ class Program
     /// </summary>
     static void LogDbError(ILogger logger, int severity, string database, string procedureName, string sqlStatement, string exception)
     {
-        var logObj = new
-        {
-            timestamp = DateTime.UtcNow.ToString("o"),
+        logger.LogError(
+            "DbError: timestamp={timestamp} severity={severity} database={database} procedure_name={procedure_name} sql_statement={sql_statement} exception={exception}",
+            DateTime.UtcNow.ToString("o"),
             severity,
             database,
-            procedure_name = procedureName,
-            sql_statement = sqlStatement,
+            procedureName,
+            sqlStatement,
             exception
-        };
-        var logJson = JsonSerializer.Serialize(logObj);
-        logger.LogError(logJson);
-        // Console.WriteLine(logJson);
+        );
+        // Console.WriteLine(...);
     }
 
     /// <summary>

@@ -164,27 +164,23 @@ namespace SqlRandomIntegersApp {
                     {
                         await connection.OpenAsync();
                         connection.ChangeDatabase("TestDB");
-                        var tasks = new List<Task>();
+                        // Sequential execution of queries and stored procedures
                         foreach (var (procName, query, description) in ReadOnlyTestQueries)
                         {
                             // Run as direct query
-                            tasks.Add(Task.Run(async () => {
-                                try {
-                                    await ExecuteSqlCommandAsync(logs, connection, query, $"Direct: {description}", "Query");
-                                } catch (Exception ex) {
-                                    LogAction(logs, "EXPECTED_ERROR", "Query", $"Direct error: {description}", 0, ex.Message);
-                                }
-                            }, token));
+                            try {
+                                await ExecuteSqlCommandAsync(logs, connection, query, $"Direct: {description}", "Query");
+                            } catch (Exception ex) {
+                                LogAction(logs, "EXPECTED_ERROR", "Query", $"Direct error: {description}", 0, ex.Message);
+                            }
+
                             // Run as stored procedure
-                            tasks.Add(Task.Run(async () => {
-                                try {
-                                    await ExecuteSqlCommandAsync(logs, connection, $"EXEC {procName};", $"StoredProc: {description}", "StoredProcedure");
-                                } catch (Exception ex) {
-                                    LogAction(logs, "EXPECTED_ERROR", "StoredProcedure", $"StoredProc error: {description}", 0, ex.Message);
-                                }
-                            }, token));
+                            try {
+                                await ExecuteSqlCommandAsync(logs, connection, $"EXEC {procName};", $"StoredProc: {description}", "StoredProcedure");
+                            } catch (Exception ex) {
+                                LogAction(logs, "EXPECTED_ERROR", "StoredProcedure", $"StoredProc error: {description}", 0, ex.Message);
+                            }
                         }
-                        await Task.WhenAll(tasks);
                     }
                     // Wait before next cycle
                     if (!token.IsCancellationRequested && (!endTime.HasValue || DateTime.UtcNow < endTime.Value)) {

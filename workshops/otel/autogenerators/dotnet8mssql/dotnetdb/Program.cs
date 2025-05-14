@@ -47,7 +47,6 @@ class Program
             {
                 otlpOptions.Endpoint = new Uri("http://localhost:4317");
             })
-            .AddConsoleExporter()
             .Build();
         using var loggerFactory = LoggerFactory.Create(builder =>
         {
@@ -207,25 +206,21 @@ class Program
                         }
                         // Logging (outside the using block is fine)
                         logger.LogInformation(
-                            "{@ProcedureStats}",
-                            new {
-                                timestamp = DateTime.UtcNow.ToString("o"),
-                                severity = INFO,
-                                database = dbName,
-                                procedure_name = procName,
-                                sql_statement = procDef,
-                                execution_count = stats.ExecutionCount,
-                                last_execution_time = stats.LastExecutionTime?.ToString("o"),
-                                total_worker_time = stats.TotalWorkerTime,
-                                total_elapsed_time = stats.TotalElapsedTime,
-                                total_logical_reads = stats.TotalLogicalReads,
-                                total_logical_writes = stats.TotalLogicalWrites,
-                                trace_id = System.Diagnostics.Activity.Current?.TraceId.ToString(),
-                                span_id = System.Diagnostics.Activity.Current?.SpanId.ToString()
-                            }
+                            "Procedure stats: timestamp={timestamp} severity={severity} database={database} procedure_name={procedure_name} sql_statement={sql_statement} execution_count={execution_count} last_execution_time={last_execution_time} total_worker_time={total_worker_time} total_elapsed_time={total_elapsed_time} total_logical_reads={total_logical_reads} total_logical_writes={total_logical_writes}",
+                            DateTime.UtcNow.ToString("o"),
+                            INFO,
+                            dbName,
+                            procName,
+                            procDef,
+                            stats.ExecutionCount,
+                            stats.LastExecutionTime?.ToString("o"),
+                            stats.TotalWorkerTime,
+                            stats.TotalElapsedTime,
+                            stats.TotalLogicalReads,
+                            stats.TotalLogicalWrites
                         );
                         // Print single-line summary to console
-                        Console.WriteLine($"[{DateTime.UtcNow:HH:mm:ss}] {dbName}.{procName} execs={stats.ExecutionCount} last={stats.LastExecutionTime?.ToString("HH:mm:ss") ?? "-"} cpu={stats.TotalWorkerTime}ms elapsed={stats.TotalElapsedTime}ms reads={stats.TotalLogicalReads} writes={stats.TotalLogicalWrites} trace={System.Diagnostics.Activity.Current?.TraceId} span={System.Diagnostics.Activity.Current?.SpanId}");
+                        Console.WriteLine($"[{DateTime.UtcNow:HH:mm:ss}] {dbName}.{procName} execs={stats.ExecutionCount} last={stats.LastExecutionTime?.ToString("HH:mm:ss") ?? "-"} cpu={stats.TotalWorkerTime}ms elapsed={stats.TotalElapsedTime}ms reads={stats.TotalLogicalReads} writes={stats.TotalLogicalWrites} span={System.Diagnostics.Activity.Current?.SpanId}");
                     }
                 }
                 dbConnection.Close();
@@ -297,16 +292,15 @@ class Program
     /// </summary>
     static void LogDbEvent(ILogger logger, int severity, string database, string procedureName, string sqlStatement)
     {
-        LogStructured(logger, new StructuredLog {
-            Timestamp = DateTime.UtcNow,
-            Severity = severity >= 40 ? "ERROR" : "INFO",
-            Database = database,
-            Procedure = procedureName,
-            Operation = "DbEvent",
-            SqlStatement = sqlStatement,
-            Status = "event",
-            Type = "event"
-        });
+        logger.LogInformation(
+            "DbEvent: timestamp={timestamp} severity={severity} database={database} procedure_name={procedure_name} sql_statement={sql_statement}",
+            DateTime.UtcNow.ToString("o"),
+            severity,
+            database,
+            procedureName,
+            sqlStatement
+        );
+        // Console.WriteLine(...);
     }
 
     /// <summary>
@@ -314,17 +308,16 @@ class Program
     /// </summary>
     static void LogDbError(ILogger logger, int severity, string database, string procedureName, string sqlStatement, string exception)
     {
-        LogStructured(logger, new StructuredLog {
-            Timestamp = DateTime.UtcNow,
-            Severity = "ERROR",
-            Database = database,
-            Procedure = procedureName,
-            Operation = "DbError",
-            SqlStatement = sqlStatement,
-            Status = "error",
-            ErrorMessage = exception,
-            Type = "error"
-        }, isError: true);
+        logger.LogError(
+            "DbError: timestamp={timestamp} severity={severity} database={database} procedure_name={procedure_name} sql_statement={sql_statement} exception={exception}",
+            DateTime.UtcNow.ToString("o"),
+            severity,
+            database,
+            procedureName,
+            sqlStatement,
+            exception
+        );
+        // Console.WriteLine(...);
     }
 
     /// <summary>
@@ -380,23 +373,6 @@ class Program
                     Command = lockReader["command"]
                 };
                 LockAnalyticsBag.Add(lockInfo);
-                LogStructured(logger, new StructuredLog {
-                    Timestamp = lockInfo.Timestamp,
-                    Severity = "INFO",
-                    Type = "lock",
-                    SessionId = lockInfo.SessionId,
-                    BlockingSessionId = lockInfo.BlockingSessionId,
-                    ResourceType = lockInfo.ResourceType,
-                    RequestMode = lockInfo.RequestMode,
-                    RequestStatus = lockInfo.RequestStatus,
-                    LoginName = lockInfo.LoginName,
-                    HostName = lockInfo.HostName,
-                    ProgramName = lockInfo.ProgramName,
-                    WaitType = lockInfo.WaitType,
-                    WaitTime = lockInfo.WaitTime,
-                    Status = lockInfo.Status?.ToString(),
-                    Command = lockInfo.Command
-                });
                 if (lockInfo.BlockingSessionId != DBNull.Value && Convert.ToInt32(lockInfo.BlockingSessionId) != 0)
                 {
                     using var activity = ActivitySource.StartActivity($"BlockingSession-{lockInfo.BlockingSessionId}", ActivityKind.Internal);
@@ -434,15 +410,12 @@ class Program
         var topSlow = QueryAnalyticsBag.OrderByDescending(q => q.DurationMs).Take(3).ToList();
         if (topSlow.Count > 0)
         {
-            LogStructured(logger, new StructuredLog {
-                Timestamp = now,
-                Severity = "INFO",
-                Type = "summary",
-                Operation = "top_slowest_queries",
-                Summary = topSlow.Select(q => new {
+            logger.LogInformation(
+                "Summary: top_slowest_queries: {topSlow}",
+                topSlow.Select(q => new {
                     q.Database, q.Procedure, q.DurationMs, q.Rows, q.Status
                 }).ToList()
-            });
+            );
         }
         // Most frequent procedures
         var freq = QueryAnalyticsBag.GroupBy(q => q.Procedure)
@@ -450,13 +423,10 @@ class Program
             .OrderByDescending(x => x.Count).Take(3).ToList();
         if (freq.Count > 0)
         {
-            LogStructured(logger, new StructuredLog {
-                Timestamp = now,
-                Severity = "INFO",
-                Type = "summary",
-                Operation = "most_frequent_procedures",
-                Summary = freq
-            });
+            logger.LogInformation(
+                "Summary: most_frequent_procedures: {freq}",
+                freq
+            );
         }
         // Error rates
         var errorRates = ErrorAnalyticsBag.GroupBy(e => e.Procedure)
@@ -464,27 +434,21 @@ class Program
             .OrderByDescending(x => x.ErrorCount).Take(3).ToList();
         if (errorRates.Count > 0)
         {
-            LogStructured(logger, new StructuredLog {
-                Timestamp = now,
-                Severity = "INFO",
-                Type = "summary",
-                Operation = "error_rates",
-                Summary = errorRates
-            });
+            logger.LogInformation(
+                "Summary: error_rates: {errorRates}",
+                errorRates
+            );
         }
         // Blocking/lock stats
         var blocking = LockAnalyticsBag.Where(l => l.BlockingSessionId != DBNull.Value && Convert.ToInt32(l.BlockingSessionId) != 0).ToList();
         if (blocking.Count > 0)
         {
-            LogStructured(logger, new StructuredLog {
-                Timestamp = now,
-                Severity = "INFO",
-                Type = "summary",
-                Operation = "blocking_sessions",
-                Summary = blocking.Select(l => new {
+            logger.LogInformation(
+                "Summary: blocking_sessions: {blocking}",
+                blocking.Select(l => new {
                     l.SessionId, l.BlockingSessionId, l.ResourceType, l.RequestMode, l.WaitType, l.WaitTime
                 }).ToList()
-            });
+            );
         }
         // Clear analytics for next interval
         QueryAnalyticsBag.Clear();
@@ -549,50 +513,5 @@ class Program
         public object? WaitTime { get; set; }
         public object? Status { get; set; }
         public object? Command { get; set; }
-    }
-
-    // Add StructuredLog class for unified logging
-    public class StructuredLog
-    {
-        public DateTime Timestamp { get; set; }
-        public string Severity { get; set; } = "INFO";
-        public string? Database { get; set; }
-        public string? Procedure { get; set; }
-        public string? Operation { get; set; }
-        public string? SqlStatement { get; set; }
-        public long? DurationMs { get; set; }
-        public int? Rows { get; set; }
-        public long? LogicalReads { get; set; }
-        public long? LogicalWrites { get; set; }
-        public long? CpuTimeMs { get; set; }
-        public string? Status { get; set; }
-        public string? ErrorMessage { get; set; }
-        public string? TraceId { get; set; }
-        public string? SpanId { get; set; }
-        public string? Type { get; set; } // e.g. query, lock, summary
-        // Lock-specific fields
-        public object? SessionId { get; set; }
-        public object? BlockingSessionId { get; set; }
-        public object? ResourceType { get; set; }
-        public object? RequestMode { get; set; }
-        public object? RequestStatus { get; set; }
-        public object? LoginName { get; set; }
-        public object? HostName { get; set; }
-        public object? ProgramName { get; set; }
-        public object? WaitType { get; set; }
-        public object? WaitTime { get; set; }
-        public object? Command { get; set; }
-        // Summary-specific fields
-        public object? Summary { get; set; }
-    }
-
-    // Helper for structured JSON logging
-    static void LogStructured(ILogger logger, StructuredLog log, bool isError = false)
-    {
-        var json = JsonSerializer.Serialize(log, new JsonSerializerOptions { WriteIndented = false });
-        if (isError)
-            logger.LogError(json);
-        else
-            logger.LogInformation(json);
     }
 }

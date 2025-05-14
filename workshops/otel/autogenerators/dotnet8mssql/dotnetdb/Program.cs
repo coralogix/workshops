@@ -116,117 +116,126 @@ class Program
     /// <param name="logger">ILogger instance</param>
     static void ListStoredProceduresForDatabase(string baseConnectionString, string dbName, ILogger logger)
     {
-        string dbConnectionString = baseConnectionString + $"Database={dbName};";
+        var dbConnectionString = baseConnectionString + $"Database={dbName};";
         const int INFO = 20;
         const int ERROR = 40;
         try
         {
-            using var dbConnection = new SqlConnection(dbConnectionString);
-            dbConnection.Open();
-            LogDbEvent(logger, INFO, dbName, "ConnectToDatabase", "OPEN CONNECTION");
+            using (var dbConnection = new SqlConnection(dbConnectionString))
+            {
+                dbConnection.Open();
+                LogDbEvent(logger, INFO, dbName, "ConnectToDatabase", "OPEN CONNECTION");
 
-            string procQuery = @"
-                SELECT p.name, m.definition
-                FROM sys.procedures p
-                JOIN sys.sql_modules m ON p.object_id = m.object_id
-                WHERE p.is_ms_shipped = 0
-                ORDER BY p.name;";
-            var procedures = new List<(string Name, string Definition)>();
-            using (var procCommand = new SqlCommand(procQuery, dbConnection))
-            using (var procReader = procCommand.ExecuteReader())
-            {
-                while (procReader.Read())
+                // Query for user-defined stored procedures and their definitions
+                string procQuery = @"
+                    SELECT p.name, m.definition
+                    FROM sys.procedures p
+                    JOIN sys.sql_modules m ON p.object_id = m.object_id
+                    WHERE p.is_ms_shipped = 0
+                    ORDER BY p.name;";
+                var procedures = new List<(string Name, string Definition)>();
+                using (var procCommand = new SqlCommand(procQuery, dbConnection))
+                using (var procReader = procCommand.ExecuteReader())
                 {
-                    string procName = procReader.GetString(0);
-                    string procDef = procReader.GetString(1);
-                    procedures.Add((procName, procDef));
+                    while (procReader.Read())
+                    {
+                        procedures.Add((procReader.GetString(0), procReader.GetString(1)));
+                    }
                 }
-            }
-            if (procedures.Count == 0)
-            {
-                LogDbEvent(logger, INFO, dbName, "(none)", "No user stored procedures found.");
+                if (procedures.Count == 0)
+                {
+                    LogDbEvent(logger, INFO, dbName, "(none)", "No user stored procedures found.");
+                }
+                else
+                {
+                    foreach (var (procName, procDef) in procedures)
+                    {
+                        var stats = GetProcedureStats(dbConnection, dbName, procName);
+                        using (var activity = ActivitySource.StartActivity(procName, ActivityKind.Client))
+                        {
+                            if (activity != null)
+                            {
+                                activity.SetTag("db.system", "mssql");
+                                activity.SetTag("db.name", "sp-" + dbName);
+                                activity.SetTag("db.statement", procDef); // Full procedure definition
+                                activity.SetTag("server.address", "localhost");
+                                activity.SetTag("span.kind", "client");
+                                activity.SetTag("cx.subsystem.name", "CX-DB-query");
+                                activity.SetTag("cx.application.name", "workshop");
+                                activity.SetTag("otel.library.name", "OpenTelemetry.Instrumentation.SqlClient");
+                                activity.SetTag("otel.library.version", "1.11.0-beta.2");
+                                activity.SetTag("otel.scope.name", "OpenTelemetry.Instrumentation.SqlClient");
+                                activity.SetTag("otel.scope.version", "1.11.0-beta.2");
+                            }
+
+                            // Only execute if the procedure definition does NOT contain INSERT, UPDATE, DELETE, or MERGE (case-insensitive)
+                            var lowerDef = procDef.ToLowerInvariant();
+                            if (!lowerDef.Contains("insert ") && !lowerDef.Contains("update ") && !lowerDef.Contains("delete ") && !lowerDef.Contains("merge "))
+                            {
+                                try
+                                {
+                                    using (var execCmd = new SqlCommand($"EXEC {procName}", dbConnection))
+                                    {
+                                        execCmd.CommandTimeout = 30;
+                                        execCmd.ExecuteNonQuery();
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    activity?.SetTag("otel.status_code", "ERROR");
+                                    activity?.SetTag("otel.status_description", ex.Message);
+                                }
+                            }
+                            // else: skip execution, but span is still created with db.statement
+
+                            // After the span and (optional) execution, set custom tags using 'stats'
+                            if (activity != null)
+                            {
+                                if (stats.ExecutionCount != null)
+                                    activity.SetTag("cx.proc.execution_count", stats.ExecutionCount);
+                                if (stats.LastExecutionTime != null)
+                                    activity.SetTag("cx.proc.last_execution_time", stats.LastExecutionTime?.ToString("o"));
+                                if (stats.TotalWorkerTime != null)
+                                    activity.SetTag("cx.proc.total_worker_time", stats.TotalWorkerTime);
+                                if (stats.TotalElapsedTime != null)
+                                    activity.SetTag("cx.proc.total_elapsed_time", stats.TotalElapsedTime);
+                                if (stats.TotalLogicalReads != null)
+                                    activity.SetTag("cx.proc.total_logical_reads", stats.TotalLogicalReads);
+                                if (stats.TotalLogicalWrites != null)
+                                    activity.SetTag("cx.proc.total_logical_writes", stats.TotalLogicalWrites);
+                            }
+                        }
+                        // Logging (outside the using block is fine)
+                        logger.LogInformation(
+                            "{@ProcedureStats}",
+                            new {
+                                timestamp = DateTime.UtcNow.ToString("o"),
+                                severity = INFO,
+                                database = dbName,
+                                procedure_name = procName,
+                                sql_statement = procDef,
+                                execution_count = stats.ExecutionCount,
+                                last_execution_time = stats.LastExecutionTime?.ToString("o"),
+                                total_worker_time = stats.TotalWorkerTime,
+                                total_elapsed_time = stats.TotalElapsedTime,
+                                total_logical_reads = stats.TotalLogicalReads,
+                                total_logical_writes = stats.TotalLogicalWrites,
+                                trace_id = System.Diagnostics.Activity.Current?.TraceId.ToString(),
+                                span_id = System.Diagnostics.Activity.Current?.SpanId.ToString()
+                            }
+                        );
+                        // Print single-line summary to console
+                        Console.WriteLine($"[{DateTime.UtcNow:HH:mm:ss}] {dbName}.{procName} execs={stats.ExecutionCount} last={stats.LastExecutionTime?.ToString("HH:mm:ss") ?? "-"} cpu={stats.TotalWorkerTime}ms elapsed={stats.TotalElapsedTime}ms reads={stats.TotalLogicalReads} writes={stats.TotalLogicalWrites} trace={System.Diagnostics.Activity.Current?.TraceId} span={System.Diagnostics.Activity.Current?.SpanId}");
+                    }
+                }
                 dbConnection.Close();
-                return;
+                LogDbEvent(logger, INFO, dbName, "DisconnectFromDatabase", "CLOSE CONNECTION");
             }
-            foreach (var (procName, procDef) in procedures)
-            {
-                var stats = GetProcedureStats(dbConnection, dbName, procName);
-                using var activity = ActivitySource.StartActivity(procName, ActivityKind.Client);
-                var stopwatch = Stopwatch.StartNew();
-                int rows = 0;
-                string status = "success";
-                string? errorMessage = null;
-                try
-                {
-                    using var execCmd = new SqlCommand($"EXEC {procName}", dbConnection);
-                    execCmd.CommandTimeout = 30;
-                    using var reader = execCmd.ExecuteReader();
-                    while (reader.Read()) rows++;
-                    stopwatch.Stop();
-                }
-                catch (Exception ex)
-                {
-                    stopwatch.Stop();
-                    status = "error";
-                    errorMessage = ex.Message;
-                    ErrorAnalyticsBag.Add(new ErrorAnalytics {
-                        Timestamp = DateTime.UtcNow,
-                        Database = dbName,
-                        Procedure = procName,
-                        ErrorMessage = ex.Message
-                    });
-                }
-                // Add analytics for summary
-                QueryAnalyticsBag.Add(new QueryAnalytics {
-                    Timestamp = DateTime.UtcNow,
-                    Database = dbName,
-                    Procedure = procName,
-                    DurationMs = stopwatch.ElapsedMilliseconds,
-                    Rows = rows,
-                    LogicalReads = stats.TotalLogicalReads,
-                    LogicalWrites = stats.TotalLogicalWrites,
-                    CpuTime = stats.TotalWorkerTime,
-                    Status = status
-                });
-                // Log as structured JSON
-                var logObj = new {
-                    type = "query",
-                    timestamp = DateTime.UtcNow,
-                    database = dbName,
-                    procedure = procName,
-                    duration_ms = stopwatch.ElapsedMilliseconds,
-                    rows,
-                    logical_reads = stats.TotalLogicalReads,
-                    logical_writes = stats.TotalLogicalWrites,
-                    cpu_time_ms = stats.TotalWorkerTime,
-                    status,
-                    error_message = errorMessage,
-                    trace_id = activity?.TraceId.ToString(),
-                    span_id = activity?.SpanId.ToString()
-                };
-                logger.LogInformation(JsonSerializer.Serialize(logObj));
-                // Add tags to span
-                activity?.SetTag("db.rows", rows);
-                activity?.SetTag("db.duration_ms", stopwatch.ElapsedMilliseconds);
-                activity?.SetTag("db.system", "mssql");
-                activity?.SetTag("db.name", "sp-" + dbName);
-                activity?.SetTag("db.statement", procDef);
-                activity?.SetTag("db.operation", procName);
-                activity?.SetTag("db.logical_reads", stats.TotalLogicalReads);
-                activity?.SetTag("db.logical_writes", stats.TotalLogicalWrites);
-                activity?.SetTag("db.cpu_time_ms", stats.TotalWorkerTime);
-                if (status == "error")
-                {
-                    activity?.SetTag("otel.status_code", "ERROR");
-                    activity?.SetTag("otel.status_description", errorMessage);
-                }
-            }
-            dbConnection.Close();
-            LogDbEvent(logger, INFO, dbName, "DisconnectFromDatabase", "CLOSE CONNECTION");
         }
         catch (Exception ex)
         {
             LogDbError(logger, ERROR, dbName, "ListStoredProcedures", "SELECT ... FROM sys.procedures ...", ex.Message);
+            // Console.WriteLine($"[sqlanalyzer] Exception in {dbName}: {ex.Message}");
         }
     }
 
@@ -288,15 +297,16 @@ class Program
     /// </summary>
     static void LogDbEvent(ILogger logger, int severity, string database, string procedureName, string sqlStatement)
     {
-        logger.LogInformation(
-            "DbEvent: timestamp={timestamp} severity={severity} database={database} procedure_name={procedure_name} sql_statement={sql_statement}",
-            DateTime.UtcNow.ToString("o"),
-            severity,
-            database,
-            procedureName,
-            sqlStatement
-        );
-        // Console.WriteLine(...);
+        LogStructured(logger, new StructuredLog {
+            Timestamp = DateTime.UtcNow,
+            Severity = severity >= 40 ? "ERROR" : "INFO",
+            Database = database,
+            Procedure = procedureName,
+            Operation = "DbEvent",
+            SqlStatement = sqlStatement,
+            Status = "event",
+            Type = "event"
+        });
     }
 
     /// <summary>
@@ -304,16 +314,17 @@ class Program
     /// </summary>
     static void LogDbError(ILogger logger, int severity, string database, string procedureName, string sqlStatement, string exception)
     {
-        logger.LogError(
-            "DbError: timestamp={timestamp} severity={severity} database={database} procedure_name={procedure_name} sql_statement={sql_statement} exception={exception}",
-            DateTime.UtcNow.ToString("o"),
-            severity,
-            database,
-            procedureName,
-            sqlStatement,
-            exception
-        );
-        // Console.WriteLine(...);
+        LogStructured(logger, new StructuredLog {
+            Timestamp = DateTime.UtcNow,
+            Severity = "ERROR",
+            Database = database,
+            Procedure = procedureName,
+            Operation = "DbError",
+            SqlStatement = sqlStatement,
+            Status = "error",
+            ErrorMessage = exception,
+            Type = "error"
+        }, isError: true);
     }
 
     /// <summary>
@@ -369,23 +380,23 @@ class Program
                     Command = lockReader["command"]
                 };
                 LockAnalyticsBag.Add(lockInfo);
-                var logObj = new {
-                    type = "lock",
-                    timestamp = lockInfo.Timestamp,
-                    session_id = lockInfo.SessionId,
-                    blocking_session_id = lockInfo.BlockingSessionId,
-                    resource_type = lockInfo.ResourceType,
-                    request_mode = lockInfo.RequestMode,
-                    request_status = lockInfo.RequestStatus,
-                    login_name = lockInfo.LoginName,
-                    host_name = lockInfo.HostName,
-                    program_name = lockInfo.ProgramName,
-                    wait_type = lockInfo.WaitType,
-                    wait_time = lockInfo.WaitTime,
-                    status = lockInfo.Status,
-                    command = lockInfo.Command
-                };
-                logger.LogInformation(JsonSerializer.Serialize(logObj));
+                LogStructured(logger, new StructuredLog {
+                    Timestamp = lockInfo.Timestamp,
+                    Severity = "INFO",
+                    Type = "lock",
+                    SessionId = lockInfo.SessionId,
+                    BlockingSessionId = lockInfo.BlockingSessionId,
+                    ResourceType = lockInfo.ResourceType,
+                    RequestMode = lockInfo.RequestMode,
+                    RequestStatus = lockInfo.RequestStatus,
+                    LoginName = lockInfo.LoginName,
+                    HostName = lockInfo.HostName,
+                    ProgramName = lockInfo.ProgramName,
+                    WaitType = lockInfo.WaitType,
+                    WaitTime = lockInfo.WaitTime,
+                    Status = lockInfo.Status?.ToString(),
+                    Command = lockInfo.Command
+                });
                 if (lockInfo.BlockingSessionId != DBNull.Value && Convert.ToInt32(lockInfo.BlockingSessionId) != 0)
                 {
                     using var activity = ActivitySource.StartActivity($"BlockingSession-{lockInfo.BlockingSessionId}", ActivityKind.Internal);
@@ -423,14 +434,15 @@ class Program
         var topSlow = QueryAnalyticsBag.OrderByDescending(q => q.DurationMs).Take(3).ToList();
         if (topSlow.Count > 0)
         {
-            logger.LogInformation(JsonSerializer.Serialize(new {
-                type = "summary",
-                timestamp = now,
-                summary_type = "top_slowest_queries",
-                queries = topSlow.Select(q => new {
+            LogStructured(logger, new StructuredLog {
+                Timestamp = now,
+                Severity = "INFO",
+                Type = "summary",
+                Operation = "top_slowest_queries",
+                Summary = topSlow.Select(q => new {
                     q.Database, q.Procedure, q.DurationMs, q.Rows, q.Status
-                })
-            }));
+                }).ToList()
+            });
         }
         // Most frequent procedures
         var freq = QueryAnalyticsBag.GroupBy(q => q.Procedure)
@@ -438,12 +450,13 @@ class Program
             .OrderByDescending(x => x.Count).Take(3).ToList();
         if (freq.Count > 0)
         {
-            logger.LogInformation(JsonSerializer.Serialize(new {
-                type = "summary",
-                timestamp = now,
-                summary_type = "most_frequent_procedures",
-                procedures = freq
-            }));
+            LogStructured(logger, new StructuredLog {
+                Timestamp = now,
+                Severity = "INFO",
+                Type = "summary",
+                Operation = "most_frequent_procedures",
+                Summary = freq
+            });
         }
         // Error rates
         var errorRates = ErrorAnalyticsBag.GroupBy(e => e.Procedure)
@@ -451,25 +464,27 @@ class Program
             .OrderByDescending(x => x.ErrorCount).Take(3).ToList();
         if (errorRates.Count > 0)
         {
-            logger.LogInformation(JsonSerializer.Serialize(new {
-                type = "summary",
-                timestamp = now,
-                summary_type = "error_rates",
-                errors = errorRates
-            }));
+            LogStructured(logger, new StructuredLog {
+                Timestamp = now,
+                Severity = "INFO",
+                Type = "summary",
+                Operation = "error_rates",
+                Summary = errorRates
+            });
         }
         // Blocking/lock stats
         var blocking = LockAnalyticsBag.Where(l => l.BlockingSessionId != DBNull.Value && Convert.ToInt32(l.BlockingSessionId) != 0).ToList();
         if (blocking.Count > 0)
         {
-            logger.LogInformation(JsonSerializer.Serialize(new {
-                type = "summary",
-                timestamp = now,
-                summary_type = "blocking_sessions",
-                blocking_sessions = blocking.Select(l => new {
+            LogStructured(logger, new StructuredLog {
+                Timestamp = now,
+                Severity = "INFO",
+                Type = "summary",
+                Operation = "blocking_sessions",
+                Summary = blocking.Select(l => new {
                     l.SessionId, l.BlockingSessionId, l.ResourceType, l.RequestMode, l.WaitType, l.WaitTime
-                })
-            }));
+                }).ToList()
+            });
         }
         // Clear analytics for next interval
         QueryAnalyticsBag.Clear();
@@ -534,5 +549,50 @@ class Program
         public object? WaitTime { get; set; }
         public object? Status { get; set; }
         public object? Command { get; set; }
+    }
+
+    // Add StructuredLog class for unified logging
+    public class StructuredLog
+    {
+        public DateTime Timestamp { get; set; }
+        public string Severity { get; set; } = "INFO";
+        public string? Database { get; set; }
+        public string? Procedure { get; set; }
+        public string? Operation { get; set; }
+        public string? SqlStatement { get; set; }
+        public long? DurationMs { get; set; }
+        public int? Rows { get; set; }
+        public long? LogicalReads { get; set; }
+        public long? LogicalWrites { get; set; }
+        public long? CpuTimeMs { get; set; }
+        public string? Status { get; set; }
+        public string? ErrorMessage { get; set; }
+        public string? TraceId { get; set; }
+        public string? SpanId { get; set; }
+        public string? Type { get; set; } // e.g. query, lock, summary
+        // Lock-specific fields
+        public object? SessionId { get; set; }
+        public object? BlockingSessionId { get; set; }
+        public object? ResourceType { get; set; }
+        public object? RequestMode { get; set; }
+        public object? RequestStatus { get; set; }
+        public object? LoginName { get; set; }
+        public object? HostName { get; set; }
+        public object? ProgramName { get; set; }
+        public object? WaitType { get; set; }
+        public object? WaitTime { get; set; }
+        public object? Command { get; set; }
+        // Summary-specific fields
+        public object? Summary { get; set; }
+    }
+
+    // Helper for structured JSON logging
+    static void LogStructured(ILogger logger, StructuredLog log, bool isError = false)
+    {
+        var json = JsonSerializer.Serialize(log, new JsonSerializerOptions { WriteIndented = false });
+        if (isError)
+            logger.LogError(json);
+        else
+            logger.LogInformation(json);
     }
 }

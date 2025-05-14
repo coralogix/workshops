@@ -174,7 +174,7 @@ namespace SqlRandomIntegersApp {
                                 } catch (Exception ex) {
                                     LogAction(logs, "EXPECTED_ERROR", "Query", $"Direct error: {description}", 0, ex.Message);
                                 }
-                            }));
+                            }, token));
                             // Run as stored procedure
                             tasks.Add(Task.Run(async () => {
                                 try {
@@ -182,7 +182,7 @@ namespace SqlRandomIntegersApp {
                                 } catch (Exception ex) {
                                     LogAction(logs, "EXPECTED_ERROR", "StoredProcedure", $"StoredProc error: {description}", 0, ex.Message);
                                 }
-                            }));
+                            }, token));
                         }
                         await Task.WhenAll(tasks);
                     }
@@ -202,6 +202,7 @@ namespace SqlRandomIntegersApp {
                 totalStopwatch.Stop();
                 DisplaySummary(logs, totalStopwatch.ElapsedMilliseconds);
                 Console.WriteLine("\nApplication has completed execution");
+                Environment.Exit(0);
             }
         }
 
@@ -280,7 +281,7 @@ namespace SqlRandomIntegersApp {
                 string procSql = $"CREATE OR ALTER PROCEDURE {procName} AS BEGIN SET NOCOUNT ON; {query} END;";
                 try
                 {
-                    await ExecuteSqlCommandAsync(logs, connection, procSql, $"Create {procName}", "Database");
+                    await ExecuteSqlCommandAsync(logs, connection, procSql.Replace("\n", " ").Replace("\r", " "), $"Create {procName}", "Database");
                 }
                 catch (Exception ex)
                 {
@@ -419,7 +420,7 @@ namespace SqlRandomIntegersApp {
             };
             foreach (var procSql in procedureDefinitions)
             {
-                await ExecuteSqlCommandAsync(logs, connection, procSql, "Create stored procedure", "Database");
+                await ExecuteSqlCommandAsync(logs, connection, procSql.Replace("\n", " ").Replace("\r", " "), "Create stored procedure", "Database");
             }
         }
 

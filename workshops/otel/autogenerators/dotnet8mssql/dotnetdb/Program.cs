@@ -156,15 +156,29 @@ class Program
                             {
                                 activity.SetTag("db.system", "mssql");
                                 activity.SetTag("db.name", "sp-" + dbName);
-                                activity.SetTag("db.statement", procDef); // Full procedure definition
+                                activity.SetTag("db.procedure", procName);
+                                activity.SetTag("db.statement", $"EXEC {procName}");
+                                activity.SetTag("db.procedure.definition", procDef);
                                 activity.SetTag("server.address", "localhost");
                                 activity.SetTag("span.kind", "client");
                                 activity.SetTag("cx.subsystem.name", "CX-DB-query");
                                 activity.SetTag("cx.application.name", "workshop");
-                                activity.SetTag("otel.library.name", "OpenTelemetry.Instrumentation.SqlClient");
+                                activity.SetTag("otel.library.name", "dotnetdb");
                                 activity.SetTag("otel.library.version", "1.11.0-beta.2");
-                                activity.SetTag("otel.scope.name", "OpenTelemetry.Instrumentation.SqlClient");
+                                activity.SetTag("otel.scope.name", "dotnetdb");
                                 activity.SetTag("otel.scope.version", "1.11.0-beta.2");
+                                if (stats.ExecutionCount != null)
+                                    activity.SetTag("cx.proc.execution_count", stats.ExecutionCount);
+                                if (stats.LastExecutionTime != null)
+                                    activity.SetTag("cx.proc.last_execution_time", stats.LastExecutionTime?.ToString("o"));
+                                if (stats.TotalWorkerTime != null)
+                                    activity.SetTag("cx.proc.total_worker_time", stats.TotalWorkerTime);
+                                if (stats.TotalElapsedTime != null)
+                                    activity.SetTag("cx.proc.total_elapsed_time", stats.TotalElapsedTime);
+                                if (stats.TotalLogicalReads != null)
+                                    activity.SetTag("cx.proc.total_logical_reads", stats.TotalLogicalReads);
+                                if (stats.TotalLogicalWrites != null)
+                                    activity.SetTag("cx.proc.total_logical_writes", stats.TotalLogicalWrites);
                             }
 
                             // Only execute if the procedure definition does NOT contain INSERT, UPDATE, DELETE, or MERGE (case-insensitive)
@@ -185,42 +199,28 @@ class Program
                                     activity?.SetTag("otel.status_description", ex.Message);
                                 }
                             }
-                            // else: skip execution, but span is still created with db.statement
+                            // else: skip execution, but span is still created with db.statement and tags
 
-                            // After the span and (optional) execution, set custom tags using 'stats'
-                            if (activity != null)
-                            {
-                                if (stats.ExecutionCount != null)
-                                    activity.SetTag("cx.proc.execution_count", stats.ExecutionCount);
-                                if (stats.LastExecutionTime != null)
-                                    activity.SetTag("cx.proc.last_execution_time", stats.LastExecutionTime?.ToString("o"));
-                                if (stats.TotalWorkerTime != null)
-                                    activity.SetTag("cx.proc.total_worker_time", stats.TotalWorkerTime);
-                                if (stats.TotalElapsedTime != null)
-                                    activity.SetTag("cx.proc.total_elapsed_time", stats.TotalElapsedTime);
-                                if (stats.TotalLogicalReads != null)
-                                    activity.SetTag("cx.proc.total_logical_reads", stats.TotalLogicalReads);
-                                if (stats.TotalLogicalWrites != null)
-                                    activity.SetTag("cx.proc.total_logical_writes", stats.TotalLogicalWrites);
-                            }
+                            // Logging (outside the using block is fine)
+                            logger.LogInformation(
+                                "Procedure stats: timestamp={timestamp} severity={severity} database={database} procedure_name={procedure_name} sql_statement={sql_statement} execution_count={execution_count} last_execution_time={last_execution_time} total_worker_time={total_worker_time} total_elapsed_time={total_elapsed_time} total_logical_reads={total_logical_reads} total_logical_writes={total_logical_writes} trace_id={trace_id} span_id={span_id}",
+                                DateTime.UtcNow.ToString("o"),
+                                INFO,
+                                dbName,
+                                procName,
+                                $"EXEC {procName}",
+                                stats.ExecutionCount,
+                                stats.LastExecutionTime?.ToString("o"),
+                                stats.TotalWorkerTime,
+                                stats.TotalElapsedTime,
+                                stats.TotalLogicalReads,
+                                stats.TotalLogicalWrites,
+                                activity?.TraceId.ToString(),
+                                activity?.SpanId.ToString()
+                            );
                         }
-                        // Logging (outside the using block is fine)
-                        logger.LogInformation(
-                            "Procedure stats: timestamp={timestamp} severity={severity} database={database} procedure_name={procedure_name} sql_statement={sql_statement} execution_count={execution_count} last_execution_time={last_execution_time} total_worker_time={total_worker_time} total_elapsed_time={total_elapsed_time} total_logical_reads={total_logical_reads} total_logical_writes={total_logical_writes}",
-                            DateTime.UtcNow.ToString("o"),
-                            INFO,
-                            dbName,
-                            procName,
-                            procDef,
-                            stats.ExecutionCount,
-                            stats.LastExecutionTime?.ToString("o"),
-                            stats.TotalWorkerTime,
-                            stats.TotalElapsedTime,
-                            stats.TotalLogicalReads,
-                            stats.TotalLogicalWrites
-                        );
                         // Print single-line summary to console
-                        Console.WriteLine($"[{DateTime.UtcNow:HH:mm:ss}] {dbName}.{procName} execs={stats.ExecutionCount} last={stats.LastExecutionTime?.ToString("HH:mm:ss") ?? "-"} cpu={stats.TotalWorkerTime}ms elapsed={stats.TotalElapsedTime}ms reads={stats.TotalLogicalReads} writes={stats.TotalLogicalWrites} span={System.Diagnostics.Activity.Current?.SpanId}");
+                        Console.WriteLine($"[{DateTime.UtcNow:HH:mm:ss}] {dbName}.{procName} execs={stats.ExecutionCount} last={stats.LastExecutionTime?.ToString("HH:mm:ss") ?? "-"} cpu={stats.TotalWorkerTime}ms elapsed={stats.TotalElapsedTime}ms reads={stats.TotalLogicalReads} writes={stats.TotalLogicalWrites} trace={activity?.TraceId} span={activity?.SpanId}");
                     }
                 }
                 dbConnection.Close();

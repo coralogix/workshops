@@ -180,7 +180,6 @@ class Program
                                 if (stats.TotalLogicalWrites != null)
                                     activity.SetTag("cx.proc.total_logical_writes", stats.TotalLogicalWrites);
                             }
-
                             // Only execute if the procedure definition does NOT contain INSERT, UPDATE, DELETE, or MERGE (case-insensitive)
                             var lowerDef = procDef.ToLowerInvariant();
                             if (!lowerDef.Contains("insert ") && !lowerDef.Contains("update ") && !lowerDef.Contains("delete ") && !lowerDef.Contains("merge "))
@@ -199,8 +198,6 @@ class Program
                                     activity?.SetTag("otel.status_description", ex.Message);
                                 }
                             }
-                            // else: skip execution, but span is still created with db.statement and tags
-
                             // Logging (outside the using block is fine)
                             logger.LogInformation(
                                 "Procedure stats: timestamp={timestamp} severity={severity} database={database} procedure_name={procedure_name} sql_statement={sql_statement} execution_count={execution_count} last_execution_time={last_execution_time} total_worker_time={total_worker_time} total_elapsed_time={total_elapsed_time} total_logical_reads={total_logical_reads} total_logical_writes={total_logical_writes} trace_id={trace_id} span_id={span_id}",
@@ -218,9 +215,9 @@ class Program
                                 activity?.TraceId.ToString(),
                                 activity?.SpanId.ToString()
                             );
+                            // Print single-line summary to console (must be inside the using block)
+                            Console.WriteLine($"[{DateTime.UtcNow:HH:mm:ss}] {dbName}.{procName} execs={stats.ExecutionCount} last={stats.LastExecutionTime?.ToString("HH:mm:ss") ?? "-"} cpu={stats.TotalWorkerTime}ms elapsed={stats.TotalElapsedTime}ms reads={stats.TotalLogicalReads} writes={stats.TotalLogicalWrites} trace={activity?.TraceId} span={activity?.SpanId}");
                         }
-                        // Print single-line summary to console
-                        Console.WriteLine($"[{DateTime.UtcNow:HH:mm:ss}] {dbName}.{procName} execs={stats.ExecutionCount} last={stats.LastExecutionTime?.ToString("HH:mm:ss") ?? "-"} cpu={stats.TotalWorkerTime}ms elapsed={stats.TotalElapsedTime}ms reads={stats.TotalLogicalReads} writes={stats.TotalLogicalWrites} trace={activity?.TraceId} span={activity?.SpanId}");
                     }
                 }
                 dbConnection.Close();

@@ -1,1 +1,1 @@
-helm upgrade otel-coralogix-integration coralogix/otel-integration --values override-otel.yaml
+helm upgrade otel-coralogix-integration coralogix/otel-integration --version=0.0.175 --render-subchart-notes --values override-otel.yaml

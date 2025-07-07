@@ -52,3 +52,4 @@ coverage/
 # Miscellaneous
 site
 package.json
+livedemotools/config.demo.yaml

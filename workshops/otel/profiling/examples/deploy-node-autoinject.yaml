@@ -1,0 +1,25 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cx-autoinject-node
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      name: cx-autoinject-node
+  template:
+    metadata:
+      labels:
+        name: cx-autoinject-node
+      annotations:
+        instrumentation.opentelemetry.io/inject-nodejs: "default/instrumentation"
+    spec:
+      containers:
+      - name: cx-autoinject-node
+        image: public.ecr.aws/w3s4j9x9/autoinject-demo:node-autoinject
+        imagePullPolicy: Always
+        workingDir: /home/code
+        env:
+        # command: [ "/bin/bash", "-c", "--" ]
+        # args: [ "while true; do sleep 30; done;" ]

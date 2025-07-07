@@ -1,0 +1,15 @@
+---
+global:
+  clusterName: slerner-cluster
+  domain: cx498.coralogix.com
+opentelemetry-agent:
+  enabled: true
+  presets:
+    profilesCollection:
+      enabled: true
+
+  command:
+    extraArgs: [ "--feature-gates=service.profilesSupport" ]
+
+coralogix-ebpf-profiler:
+  enabled: true

@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cx-autoinject-java
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      name: cx-autoinject-java
+  template:
+    metadata:
+      labels:
+        name: cx-autoinject-java
+      annotations:
+        instrumentation.opentelemetry.io/inject-java: "default/instrumentation"
+    spec:
+      containers:
+      - name: cx-autoinject-java
+        image: public.ecr.aws/w3s4j9x9/autoinject-demo:java-autoinject
+        imagePullPolicy: Always
+        workingDir: /home/code
+        env:
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        # command: [ "/bin/bash", "-c", "--" ]
+        # args: [ "while true; do sleep 30; done;" ]

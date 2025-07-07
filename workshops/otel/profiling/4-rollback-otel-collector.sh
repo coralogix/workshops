@@ -1,0 +1,1 @@
+helm rollback otel-coralogix-integration

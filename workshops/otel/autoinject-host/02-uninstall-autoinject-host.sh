@@ -12,6 +12,7 @@ sudo dpkg --purge opentelemetry-injector
 
 echo "Removing OpenTelemetry Injector configuration directory..."
 sudo rm -rf /etc/opentelemetry/otelinject
+<<<<<<< HEAD
 
 echo "Removing OpenTelemetry Injector library..."
 sudo rm -rf /usr/lib/opentelemetry/libotelinject.so
@@ -20,3 +21,7 @@ echo "Removing OpenTelemetry Injector preload entry..."
 sudo sed -i '\|/usr/lib/opentelemetry/libotelinject.so|d' /etc/ld.so.preload
 
 echo "OpenTelemetry Injector uninstallation complete."
+=======
+sudo rm -rf /usr/lib/opentelemetry/libotelinject.so
+sudo rm -rf /etc/ld.so.preload
+>>>>>>> a4f25b8 (fixes)

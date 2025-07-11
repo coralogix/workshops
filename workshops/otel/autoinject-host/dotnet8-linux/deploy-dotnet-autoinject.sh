@@ -1,1 +1,0 @@
-kubectl apply -f deploy-dotnet8-autoinject.yaml

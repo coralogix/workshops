@@ -1,1 +1,0 @@
-kubectl delete deployment cx-autoinject-dotnet8

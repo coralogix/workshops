@@ -1,1 +1,0 @@
-kubectl apply -f deploy-node-autoinject.yaml 

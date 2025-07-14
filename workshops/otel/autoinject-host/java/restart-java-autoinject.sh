@@ -1,1 +1,0 @@
-kubectl rollout restart deployment cx-autoinject-java

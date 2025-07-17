@@ -100,9 +100,22 @@ Demo apps with automatic tracing for:
 
 ---
 
+## Linux Host-Specific Tracing
+
+### [Autoinjection: Instrumentation Injection For A Linux Host](otel/autoinjection-linuxhost/index.md)
+
+Auto-inject tracing for:
+
+- .NET
+- Node.js
+- Java
+- Systemd or Systemwide
+
+---
+
 ## Kubernetes-Specific Tracing
 
-### [Autoinjection: Instrumentation Injection in Kubernetes](otel/autoinjection/index.md)
+### [Autoinjection: Instrumentation Injection in Kubernetes](otel/autoinjection-k8s/index.md)
 
 Auto-inject tracing for:
 

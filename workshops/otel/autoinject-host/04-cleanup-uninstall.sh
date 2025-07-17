@@ -19,58 +19,6 @@ stop_script() {
     SCRIPT_SHOULD_CONTINUE=false
 }
 
-# Root privilege detection and validation
-# Uses multiple methods to ensure accurate detection across different environments
-check_root_privileges() {
-    local is_root=false
-    
-    # Method 1: Check effective user ID (most reliable)
-    if [ "${EUID:-}" = "0" ]; then
-        is_root=true
-    fi
-    
-    # Method 2: Use id command as fallback (works when EUID is not set)
-    if [ "$is_root" = "false" ] && command -v id >/dev/null 2>&1; then
-        if [ "$(id -u 2>/dev/null)" = "0" ]; then
-            is_root=true
-        fi
-    fi
-    
-    # Method 3: Check whoami as additional verification (less reliable but comprehensive)
-    if [ "$is_root" = "false" ] && command -v whoami >/dev/null 2>&1; then
-        if [ "$(whoami 2>/dev/null)" = "root" ]; then
-            is_root=true
-        fi
-    fi
-    
-    # Validate root privileges are actually present by testing write access to system directory
-    if [ "$is_root" = "true" ]; then
-        if ! touch /tmp/.root_test_$$; then
-            echo "Warning: Detected as root but cannot write to system directories" >&2
-            is_root=false
-        else
-            rm -f /tmp/.root_test_$$ 2>/dev/null || true
-        fi
-    fi
-    
-    if [ "$is_root" = "false" ]; then
-        echo "Error: This script requires root privileges to uninstall system components" >&2
-        echo "Please run with sudo: sudo $0" >&2
-        stop_script
-        return 1
-    fi
-    
-    return 0
-}
-
-# Check root privileges using our robust detection method
-check_root_privileges
-
-# Early termination check - stop here if root validation failed
-if [ "$SCRIPT_SHOULD_CONTINUE" = "false" ]; then
-    return 2>/dev/null || true
-fi
-
 # Function to display uninstallation options
 show_uninstallation_options() {
     echo "OpenTelemetry Injector Uninstallation"
@@ -106,7 +54,7 @@ remove_build_artifacts() {
     # Also check common build locations
     if [ -f "/tmp/opentelemetry-injector.deb" ]; then
         echo "Removing .deb package from /tmp..."
-        rm -f /tmp/opentelemetry-injector*.deb
+        sudo rm -f /tmp/opentelemetry-injector*.deb
     fi
     
     echo "Build artifacts cleanup complete."

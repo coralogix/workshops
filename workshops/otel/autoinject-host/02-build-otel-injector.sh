@@ -105,10 +105,7 @@ if [ "$IS_ROOT" = "false" ] && command -v whoami >/dev/null 2>&1; then
 fi
 
 # Evaluate root status and proceed or stop
-if [ "$IS_ROOT" = "true" ]; then
-    echo "Running with root privileges - proceeding with build..."
-    echo ""
-else
+if [ "$IS_ROOT" = "false" ]; then
     echo "ERROR: This script requires root privileges to build the OpenTelemetry injector package."
     echo "   The build process needs to:"
     echo "   • Access system build tools and dependencies"
@@ -240,73 +237,62 @@ echo ""
 
 # Build the .deb package using the official makefile target
 # The make command will handle all compilation and packaging steps
+echo "Building packages..."
+BUILD_SUCCESS=false
+
+# Try building DEB package
+echo "Attempting to build DEB package..."
 if sudo make deb-package; then
-    echo ""
-    echo "Build completed successfully!"
+    echo "DEB package built successfully!"
+    BUILD_SUCCESS=true
 else
-    echo ""
-    echo "ERROR: Build process failed."
-    echo "This could be due to:"
-    echo "• Missing build dependencies"
-    echo "• Compilation errors in the source code"
-    echo "• Insufficient system resources"
-    echo ""
-    echo "Please check the build output above for specific error messages."
-    echo "You may need to install additional build dependencies."
+    echo "DEB package build failed or not supported"
+fi
+
+# Try building RPM package
+echo "Attempting to build RPM package..."
+if sudo make rpm-package 2>/dev/null; then
+    echo "RPM package built successfully!"
+    BUILD_SUCCESS=true
+else
+    echo "RPM package build failed or not supported"
+fi
+
+if [ "$BUILD_SUCCESS" = "false" ]; then
+    echo "No packages were built successfully."
     stop_script
-    
-    # Navigate back before stopping
     cd ..
     return 2>/dev/null || true
 fi
 
-echo ""
-
-#===============================================================================
-# PACKAGE EXTRACTION AND CLEANUP
-#===============================================================================
-#
-# Move the built package to a predictable location and clean up build artifacts
-# This makes it easy for the installation script to find the package
-#
-echo "Package Extraction"
-echo "=================="
-echo ""
-
 BUILD_DIR="instrumentation/dist"
-PACKAGE_NAME="opentelemetry-injector.deb"
-
-echo "Navigating to build output directory: $BUILD_DIR"
 cd "$BUILD_DIR"
 
-# Check if any .deb files were created
-if ! ls *.deb 1> /dev/null 2>&1; then
-    echo "ERROR: No .deb package files found in $(pwd)"
-    echo "Build may have completed but package creation failed."
-    echo "Please check the build output above for errors."
-    stop_script
-    
-    # Navigate back before stopping
+# Copy any built packages
+PACKAGES_COPIED=0
+
+if ls *.deb 1> /dev/null 2>&1; then
+    DEB_PACKAGE=$(ls *.deb | head -1)
     cd ../../..
-    return 2>/dev/null || true
+    cp "$REPO_DIR/$BUILD_DIR/$DEB_PACKAGE" "./opentelemetry-injector.deb"
+    echo "DEB package copied: opentelemetry-injector.deb"
+    PACKAGES_COPIED=$((PACKAGES_COPIED + 1))
+    cd "$REPO_DIR/$BUILD_DIR"
 fi
 
-# Get the actual package name that was built
-BUILT_PACKAGE=$(ls *.deb | head -1)
-echo "Found built package: $BUILT_PACKAGE"
+if ls *.rpm 1> /dev/null 2>&1; then
+    RPM_PACKAGE=$(ls *.rpm | head -1)
+    cd ../../..
+    cp "$REPO_DIR/$BUILD_DIR/$RPM_PACKAGE" "./opentelemetry-injector.rpm"
+    echo "RPM package copied: opentelemetry-injector.rpm"
+    PACKAGES_COPIED=$((PACKAGES_COPIED + 1))
+    cd "$REPO_DIR/$BUILD_DIR"
+fi
 
-# Navigate back to the original directory
-echo "Returning to original directory..."
 cd ../../..
 
-# Copy the package to the current directory with a standard name
-echo "Copying package to current directory as '$PACKAGE_NAME'..."
-if cp "$REPO_DIR/$BUILD_DIR/$BUILT_PACKAGE" "./$PACKAGE_NAME"; then
-    echo "Package copied successfully."
-else
-    echo "ERROR: Failed to copy package to current directory."
-    echo "Source: $REPO_DIR/$BUILD_DIR/$BUILT_PACKAGE"
-    echo "Destination: ./$PACKAGE_NAME"
+if [ "$PACKAGES_COPIED" = "0" ]; then
+    echo "No package files found to copy"
     stop_script
 fi
 
@@ -334,21 +320,30 @@ echo ""
 echo "Build Process Complete!"
 echo "======================="
 echo ""
-echo "Package Information:"
-echo "• Package name: $PACKAGE_NAME"
-echo "• Package location: $(pwd)/$PACKAGE_NAME"
-echo "• Package size: $(du -h "$PACKAGE_NAME" | cut -f1)"
+echo "Built Packages:"
+
+if [ -f "opentelemetry-injector.deb" ]; then
+    echo "• DEB package: opentelemetry-injector.deb"
+    echo "  Size: $(du -h opentelemetry-injector.deb | cut -f1)"
+    if command -v dpkg >/dev/null 2>&1; then
+        echo "  Info: $(dpkg --info opentelemetry-injector.deb | grep Package: || echo 'Package info not available')"
+        echo "  Version: $(dpkg --info opentelemetry-injector.deb | grep Version: || echo 'Version info not available')"
+    fi
+fi
+
+if [ -f "opentelemetry-injector.rpm" ]; then
+    echo "• RPM package: opentelemetry-injector.rpm"
+    echo "  Size: $(du -h opentelemetry-injector.rpm | cut -f1)"
+    if command -v rpm >/dev/null 2>&1; then
+        echo "  Info: $(rpm -qip opentelemetry-injector.rpm | grep Name: || echo 'Package info not available')"
+        echo "  Version: $(rpm -qip opentelemetry-injector.rpm | grep Version: || echo 'Version info not available')"
+    fi
+fi
+
 echo ""
 echo "Next Steps:"
-echo "1. The OpenTelemetry injector package has been built successfully"
-echo "2. Run the installation script: sudo ./03-install-otel-injector.sh"
-echo "3. Choose your preferred injection method (system-wide or systemd-only)"
+echo "1. The OpenTelemetry injector packages have been built successfully"
+echo "2. For DEB systems: Run sudo ./03-install-otel-injector.sh"
+echo "3. For RPM systems: Install with 'sudo rpm -i opentelemetry-injector.rpm'"
 echo ""
-echo "Package Details:"
-if command -v dpkg >/dev/null 2>&1; then
-    echo "• Package info: $(dpkg --info "$PACKAGE_NAME" | grep Package: || echo 'Package info not available')"
-    echo "• Version: $(dpkg --info "$PACKAGE_NAME" | grep Version: || echo 'Version info not available')"
-fi
-echo ""
-echo "The package is ready for installation on this or other compatible systems."
-echo "You can copy '$PACKAGE_NAME' to other Ubuntu/Debian systems for installation." 
+echo "The packages are ready for installation on compatible systems." 

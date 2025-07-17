@@ -12,7 +12,7 @@
         <meta name="author" content="Coralogix">
       
       
-        <link rel="canonical" href="http://coralogix.github.io/otel/microservices/">
+        <link rel="canonical" href="http://coralogix.github.io/otel/autoinjection-linuxhost/">
       
       
       
@@ -22,7 +22,7 @@
     
     
       
-        <title>OpenTelemetry Microservices / Kubernetes - Coralogix Workshops</title>
+        <title>Autoinjection - Coralogix Workshops</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#opentelemetry-microservices-kubernetes" class="md-skip">
+        <a href="#autoinjection" class="md-skip">
           Skip to content
         </a>
       
@@ -109,7 +109,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              OpenTelemetry Microservices / Kubernetes
+              Autoinjection
             
           </span>
         </div>
@@ -335,64 +335,39 @@
   
 
 
-<h1 id="opentelemetry-microservices-kubernetes">OpenTelemetry Microservices / Kubernetes</h1>
-<h2 id="instructions">Instructions</h2>
-<p>Requirements:<br />
-- <a href="https://coralogix.github.io/workshops/prereqs/">These prerequisites</a><br />
-- A Kubernetes cluster i.e. EKS/GKE/AKS for a sandbox environment. Localized k8s on a personal computer is not supported.  </p>
-<h3 id="step-1-install-the-opentelemetry-collector-on-your-k8s-cluster">Step 1 - Install the OpenTelemetry Collector on your k8s cluster</h3>
-<p><a href="https://coralogix.com/docs/otel-collector-for-k8s/">Easy Coralogix instructions for Complete Observability are here</a>  </p>
-<h3 id="step-2-clone-workshop">Step 2 - Clone workshop</h3>
+<h1 id="autoinjection">Autoinjection</h1>
+<h2 id="requirements">Requirements</h2>
+<p>Prerequisites <a href="https://coralogix.github.io/workshops/prereqs/">here</a>  </p>
+<h2 id="what-is-autoinjecton">What Is Autoinjecton?</h2>
+<p>OpenTelemetry can inject, via installer, zero code tracing instrumentation into deployments that use Java, Node, .NET.  </p>
+<p>This is a great way to easily deploy tracing at scale without changing any code.</p>
+<p>Official documentation is here: <a href="https://github.com/open-telemetry/opentelemetry-injector">https://github.com/open-telemetry/opentelemetry-injector</a>  </p>
+<p>At the time of this writing 6/2025, there are no builds of the deb/rpm installers on Github- we are supplying them until there are.<br />
+Build instructions are also available in the Github README.md if one wants to build their own deb/rpm installer.  </p>
+<h3 id="step-1-clone-repo">Step 1 - Clone Repo</h3>
 <div class="highlight"><pre><span></span><code>git clone https://github.com/coralogix/workshops
 </code></pre></div>
-<h3 id="step-3-change-to-workshop-dir">Step 3 - Change to workshop dir</h3>
-<div class="highlight"><pre><span></span><code>cd workshops/workshops/otel/microservices
+<h3 id="step-2-change-to-autoinject-directory">Step 2 - Change to Autoinject Directory</h3>
+<div class="highlight"><pre><span></span><code>cd workshops/workshops/otel/autoinject-linuxhost
 </code></pre></div>
-<h3 id="step-4-deploy-example-to-k8s">Step 4 - Deploy example to k8s</h3>
-<p>If you want to change the namespace, edit <code>yaml/deploy-all.yaml</code><br />
-Tthree services will appear:  </p>
-<ul>
-<li><code>cx-shopping-cart-reqs</code> - a requesting service initiating a transaction  </li>
-<li><code>cx-payment-gateway-flask</code> - a server that is a bridge for a transaction to a database- returns a transaction ID to the <code>shopping-cart</code>  </li>
-<li><code>cx-redis</code> - an instance of a redis database used for a transaction<br />
-<div class="highlight"><pre><span></span><code>source deploy-all.sh
-</code></pre></div></li>
-</ul>
-<p>Deploys the following as seen from the <code>http://cx-payment-gateway-flask:5000/</code> root span:  </p>
-<p>Note: images may vary from actual UI due to frequent updates:<br />
-<img src="https://coralogix.github.io/workshops/images/microservices-workshop/01.png" width=540>     </p>
-<!-- ![Microservices Workshop](../../images/microservices-workshop/01.png) -->
-<p>With healthy low latency spans for all services:  </p>
-<p><img src="https://coralogix.github.io/workshops/images/microservices-workshop/03.png" width=540>  </p>
-<h3 id="step-5-simulate-cicd-scenarios">Step 5 - Simulate CI/CD scenarios</h3>
-<p>Study results in Coralogix portal</p>
-<p>Simulate a "bad" deployment:<br />
-<div class="highlight"><pre><span></span><code>source deploy-bad.sh
+<h3 id="step-3-install-injector">Step 3 - Install Injector</h3>
+<p>This script should detect deb/rpm installer appropriate for your Linux and install it along with per language instrumentation:<br />
+<div class="highlight"><pre><span></span><code>source install-otel-injector.sh
 </code></pre></div></p>
-<p>This deployment will cause severe sporadic problems in <code>payment-gateway</code> such as 500s and latency in the service response along with a drop in transaction volume. You can see the latency spikes here:    </p>
-<p><img src="https://coralogix.github.io/workshops/images/microservices-workshop/04.png" width=540>   </p>
-<p>Alerts and automation can be built around span latency or Payment Gateway 500 responses.  </p>
-<p>Roll back the bad deployment for the services to return to normal:<br />
-<div class="highlight"><pre><span></span><code>source deploy-good.sh
+<h3 id="step-4-deploy-examples">Step 4 - Deploy Examples</h3>
+<p>Single command deploys examples in Java, .NET 8, Node are in each language subdirectory to deploy:</p>
+<p><code>dotnet8-linux</code><br />
+<div class="highlight"><pre><span></span><code>dotnet run
 </code></pre></div></p>
-<p>Span latency will return to normal and Payment Gateway 500 responses will cease.  </p>
-<h3 id="step-6-study-how-opentelemetry-tracing-instrumentation-works">Step 6 - Study how OpenTelemetry tracing instrumentation works</h3>
-<p><strong>OpenTelemetry Instrumentation For Containerized Apps</strong><br />
-- Dockerfiles for the containers contain OpenTelemetry auto instrumentation for Python and are in <code>/python</code> root level<br />
-- Study Otel Python <a href="https://opentelemetry.io/docs/instrumentation/python/automatic/">Auto Instrumentation</a><br />
-- Notice how the <a href="https://github.com/coralogix/workshops/blob/master/workshops/otel/microservices/python/dockerfile-python">Dockerfile</a> adds the automatic instrumentation <br />
-- And observe how the <a href="https://github.com/coralogix/workshops/blob/master/workshops/otel/microservices/python/k8s/entrypoint-client-reqs.sh">kickstart script</a> uses the instrumenting command  </p>
-<p><strong>Kubernetes Deployments for Otel Tracing Instrumentation</strong>  <br />
-- <code>.yaml</code> deployment files are in <code>python/yaml</code> and show how environment variables are used to control the instrumentation<br />
-- study the <a href="https://github.com/coralogix/workshops/tree/master/workshops/otel/microservices/yaml">deploy-all.yaml</a> which shows the environment variables that control OpenTelemetry tracing instrumentation. Focus on how the <a href="https://kubernetes.io/docs/concepts/workloads/pods/downward-api/">Kubernetes Downward API</a> use of <code>status.hostIP</code> to tell the instrumentation where to send traces: to the IP adddress of the host node on port 4317 
-- this is the default GRPC endpoint for OTLP trace spans for python  </p>
-<p><strong>Instrumented Applications and Frameworks</strong><br />
-- The Python apps that drive this example are in the <code>python/apps</code> dir<br />
-- Examine the frameworks used to show how tracing picks up their execution <br />
-- Note that the <code>python requests</code> library is used to make http requests, and that <a href="https://opentelemetry.io/docs/instrumentation/python/automatic/">OpenTelemetry Python Instrumentation</a> lists <code>requests</code> as an <a href="https://opentelemetry.io/ecosystem/registry/?language=python&amp;component=instrumentation">automatically instrumented library</a>  </p>
-<h2 id="cleanup">Cleanup</h2>
-<p>To remove all the deployments/services/pods from the example from your k8s cluster (ignore any errors it reports):<br />
-<div class="highlight"><pre><span></span><code>source delete-all.sh
+<p><code>java</code>
+<div class="highlight"><pre><span></span><code>source 02-run-app.sh
+</code></pre></div></p>
+<p><code>node</code> 
+<div class="highlight"><pre><span></span><code>node app.js
+</code></pre></div></p>
+<p>Study the traces in Coralogix.  </p>
+<p>Cleanup:<br />
+<div class="highlight"><pre><span></span><code>sudo ./03-cleanup-uninstall.sh  
 </code></pre></div></p>
 
 

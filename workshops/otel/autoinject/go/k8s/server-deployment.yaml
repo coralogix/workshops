@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-server
+  namespace: otel-autoinject-demo
+  labels:
+    app: go-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-server
+  template:
+    metadata:
+      labels:
+        app: go-server
+      annotations:
+        instrumentation.opentelemetry.io/inject-go: "go-instrumentation"
+    spec:
+      containers:
+      - name: server
+        image: go-server:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        env:
+        - name: PORT
+          value: "8080"
+        - name: SERVER_NAME
+          value: "go-server-k8s"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: go-server
+  namespace: otel-autoinject-demo
+  labels:
+    app: go-server
+spec:
+  selector:
+    app: go-server
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+  type: ClusterIP 

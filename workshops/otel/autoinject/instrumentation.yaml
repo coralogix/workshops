@@ -2,6 +2,7 @@ apiVersion: opentelemetry.io/v1alpha1
 kind: Instrumentation
 metadata:
   name: instrumentation
+  namespace: default
 spec:
   propagators:
     - tracecontext
@@ -42,3 +43,11 @@ spec:
             fieldPath: status.hostIP
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
         value: "http://$(OTEL_IP):4317"
+  go:
+    env:
+      - name: OTEL_IP
+        valueFrom:
+          fieldRef:
+            fieldPath: status.hostIP
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: "http://$(OTEL_IP):4318"

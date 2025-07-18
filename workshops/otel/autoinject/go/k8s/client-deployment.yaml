@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-client
+  namespace: otel-autoinject-demo
+  labels:
+    app: go-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-client
+  template:
+    metadata:
+      labels:
+        app: go-client
+      annotations:
+        instrumentation.opentelemetry.io/inject-go: "go-instrumentation"
+    spec:
+      containers:
+      - name: client
+        image: go-client:latest
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: SERVER_URL
+          value: "http://go-server:8080"
+        - name: CLIENT_NAME
+          value: "go-client-k8s"
+        - name: REQUEST_DELAY
+          value: "3s"
+        - name: OTEL_GO_AUTO_TARGET_EXE
+          value: "/root/client"
+        - name: OTEL_SERVICE_NAME
+          value: "go-client"
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: "service.version=1.0.0,deployment.environment=demo"
+        resources:
+          requests:
+            memory: "32Mi"
+            cpu: "25m"
+          limits:
+            memory: "64Mi"
+            cpu: "50m" 

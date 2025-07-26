@@ -1,0 +1,23 @@
+apiVersion: opentelemetry.io/v1alpha1
+kind: Instrumentation
+metadata:
+  name: go-instrumentation
+  namespace: otel-autoinject-demo
+spec:
+  exporter:
+    endpoint: http://otel-collector:4317
+  propagators:
+    - tracecontext
+    - baggage
+  sampler:
+    type: parentbased_traceidratio
+    argument: "1"
+  go:
+    image: ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-go:v0.15.0-alpha
+    env:
+      - name: OTEL_GO_AUTO_TARGET_EXE
+        value: "/root/server"
+      - name: OTEL_SERVICE_NAME
+        value: "go-server"
+      - name: OTEL_RESOURCE_ATTRIBUTES
+        value: "service.version=1.0.0,deployment.environment=demo" 

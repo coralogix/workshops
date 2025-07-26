@@ -1,0 +1,94 @@
+# Go Auto-Instrumentation Reference Example
+# 
+# This deployment demonstrates OpenTelemetry auto-instrumentation for Go applications.
+# The key is the annotations that trigger the OpenTelemetry operator to inject
+# auto-instrumentation sidecars without requiring any changes to the application code.
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: cx-autoinject-go
+  namespace: default
+  labels:
+    app: cx-autoinject-go
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  selector:
+    name: cx-autoinject-go
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cx-autoinject-go
+  namespace: default
+  labels:
+    app: cx-autoinject-go
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: cx-autoinject-go
+  template:
+    metadata:
+      labels:
+        name: cx-autoinject-go
+      annotations:
+        # CRITICAL: These annotations enable auto-instrumentation
+        # The operator will inject a sidecar container that uses eBPF
+        # to intercept HTTP calls and generate traces automatically
+        instrumentation.opentelemetry.io/inject-go: "default/instrumentation"
+        instrumentation.opentelemetry.io/otel-go-auto-target-exe: "/root/app"
+    spec:
+      containers:
+      - name: cx-autoinject-go
+        image: dambott2/go-autoinject:reference-example
+        imagePullPolicy: Always
+        ports:
+          - name: http
+            containerPort: 8080
+        command: ["./app"]
+        args: ["both"]  # Run both server and client for demo purposes
+        env:
+        - name: OTEL_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: PORT
+          value: "8080"
+        - name: SERVER_NAME
+          value: "go-autoinject-demo"  # Updated to reflect reference example
+        - name: CLIENT_NAME
+          value: "go-autoinject-client"
+        - name: SERVER_URL
+          value: "http://localhost:8080"
+        - name: REQUEST_DELAY
+          value: "5s"
+        - name: SERVICE_NAME
+          value: "go-autoinject-demo"  # Used for log correlation
+        # Health checks to ensure the application is ready
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        # Resource limits for production-like behavior
+        resources:
+          limits:
+            cpu: 100m
+            memory: 128Mi
+          requests:
+            cpu: 50m
+            memory: 64Mi

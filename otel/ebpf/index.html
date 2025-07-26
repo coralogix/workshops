@@ -22,7 +22,7 @@
     
     
       
-        <title>eBPF - Coralogix Workshops</title>
+        <title>eBPF for Kubernetes - Coralogix Workshops</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#ebpf" class="md-skip">
+        <a href="#ebpf-for-kubernetes" class="md-skip">
           Skip to content
         </a>
       
@@ -109,7 +109,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              eBPF
+              eBPF for Kubernetes
             
           </span>
         </div>
@@ -335,7 +335,7 @@
   
 
 
-<h1 id="ebpf">eBPF</h1>
+<h1 id="ebpf-for-kubernetes">eBPF for Kubernetes</h1>
 <h2 id="requirements">Requirements</h2>
 <p>Prerequisites <a href="https://coralogix.github.io/workshops/prereqs/">here</a><br />
 eBPF in this context only runs on Kubernetes with modern Linux kernel based containers.<br />
@@ -347,32 +347,31 @@ Note that eBPF integration is currently in a beta state and is subject to change
 <p>The Coralogix implementation loads an eBPF agent into the kernels of running containers that exports the eBPF related telemetry and converts it to OpenTelemetry compatiable spans. eBPF spans do not provide traces since they don't have a trace ID. Please carefully read <a href="https://coralogix.github.io/workshops/prereqs/">official Coralogix Documenttion</a>  above for more detail.</p>
 <h2 id="instructions">Instructions</h2>
 <p>This workshop is designed to add the eBPF agent to an existing installation of the Coralogix OpenTelemetry helm chart and then deploy simple applications in Python, Node, .NET, and Java to demonstrate the spans and APM capabilities available with eBPF.</p>
-<h3 id="step-1-install-the-opentelemetry-collector-on-your-k8s-cluster">Step 1 - Install the OpenTelemetry Collector on your k8s cluster</h3>
-<p><strong>Very important- make sure to change the version of the Coralogix installer to .128 when running the helm chart example below</strong>  </p>
-<p>You can reference the example of how to do this in the workshop installer script:<br />
-<code>01-helm-otel-v128.sh</code>  </p>
+<h3 id="install-the-opentelemetry-collector-on-your-k8s-cluster">Install the OpenTelemetry Collector on your k8s cluster</h3>
 <p><a href="https://coralogix.com/docs/otel-collector-for-k8s/">Easy Coralogix instructions for Complete Observability are here</a>  </p>
-<h3 id="step-2-clone-repo">Step 2 - Clone Repo</h3>
+<h3 id="clone-repo">Clone Repo</h3>
 <div class="highlight"><pre><span></span><code>git clone https://github.com/coralogix/workshops
 </code></pre></div>
-<h3 id="step-3-change-to-ebpf-directory">Step 3 - Change to eBPF Directory</h3>
+<h3 id="change-to-ebpf-directory">Change to eBPF Directory</h3>
 <div class="highlight"><pre><span></span><code>cd workshops/workshops/otel/ebpf
 </code></pre></div>
-<h3 id="step-4-override-the-opentelemetry-helm-chart-to-add-the-ebpf-agent">Step 4 - Override the OpenTelemetry Helm Chart to add the eBPF Agent</h3>
+<h3 id="step-1-deploy-the-opentelemetry-helm-chart-with-ebpf-instrumentation">Step 1 - Deploy the OpenTelemetry Helm Chart with eBPF Instrumentation</h3>
 <p>Edit <code>ebpf.yaml</code> and update the globals for your domain and cluster name then:<br />
-<div class="highlight"><pre><span></span><code>source 02-deploy-ebpf.sh
+<div class="highlight"><pre><span></span><code>source 01-helm-otel-ebpf.sh
 </code></pre></div></p>
-<h3 id="step-5-deploy-example-applications">Step 5 - Deploy Example Applications</h3>
-<div class="highlight"><pre><span></span><code>source 03-deploy-all-examples.sh
+<h3 id="step-2-deploy-example-applications">Step 2 - Deploy Example Applications</h3>
+<div class="highlight"><pre><span></span><code>source 02-deploy-all-examples.sh
 </code></pre></div>
-<h3 id="step-6-study-the-results">Step 6 - Study The Results</h3>
-<p>Note in <code>Coralogix-&gt;Explore-&gt;Traces</code> that the requests are only one span deep, and that the TraceID is not truly utilized for connecting spans. Also note the <code>otel.library.name</code> of <code>coralogix-ebpf-agent</code>.  </p>
+<h3 id="study-the-results">Study The Results</h3>
+<p>Start with <code>Coralogix-&gt;Explore-&gt;Traces</code> to examine the spans.</p>
 <p>Coralogix-&gt;APM shows the working service catalog.  </p>
 <p>Other parts of the Kubernetes system are being traced as well- these can be filtered following instructions in the documentation above.</p>
-<h3 id="step-7-cleanup">Step 7 - Cleanup</h3>
-<p><div class="highlight"><pre><span></span><code>source 04-delete-all-examples.sh
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>source 05-delete-cx-otel.sh
+<h3 id="step-3-cleanup">Step 3 - Cleanup</h3>
+<p>Delete the app examples:<br />
+<div class="highlight"><pre><span></span><code>source 03-delete-all-examples.sh
+</code></pre></div></p>
+<p>Delete the otel collector:
+<div class="highlight"><pre><span></span><code>source 04-delete-cx-otel.sh
 </code></pre></div></p>
 
 

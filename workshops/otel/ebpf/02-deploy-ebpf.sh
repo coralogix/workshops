@@ -1,1 +1,0 @@
-helm upgrade otel-coralogix-integration coralogix/otel-integration --values ebpf.yaml --version=0.0.128

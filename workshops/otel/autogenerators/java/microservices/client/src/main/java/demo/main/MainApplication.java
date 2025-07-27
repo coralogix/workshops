@@ -1,9 +1,6 @@
 package demo.main;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
@@ -11,8 +8,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.reactive.function.client.WebClient;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -20,21 +17,27 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Main application class that starts the OkHttp client to make requests to a target server.
+ * Main application class that demonstrates modern HTTP client usage with WebClient.
  */
 @SpringBootApplication
 public class MainApplication {
-    private final OkHttpClient client = new OkHttpClient();
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
     private static final Logger logger = LogManager.getLogger(MainApplication.class);
+    private final WebClient webClient;
+
+    public MainApplication() {
+        this.webClient = WebClient.builder()
+            .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(1024 * 1024))
+            .build();
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(MainApplication.class, args);
     }
 
     /**
-     * CommandLineRunner to start the OkHttp client loop after the Spring Boot application has started.
+     * CommandLineRunner to start the WebClient loop after the Spring Boot application has started.
      *
      * @return the CommandLineRunner bean
      */
@@ -64,25 +67,25 @@ public class MainApplication {
             String uuid = UUID.randomUUID().toString();
             try {
                 // Add structured data to ThreadContext for JSON logging
-                ThreadContext.put("request_uuid", uuid);
+                ThreadContext.put("client_request_uuid", uuid);
                 ThreadContext.put("target_url", targetUrl);
                 
-                String response = run(targetUrl, uuid);
+                String response = makeRequest(targetUrl, uuid);
                 
                 // Add response data to context
-                ThreadContext.put("response_body", response);
+                ThreadContext.put("response_content", response);
                 ThreadContext.put("status", "success");
                 
                 logger.info("Client request completed successfully");
                 
-            } catch (IOException e) {
+            } catch (Exception e) {
                 // Add error data to context
-                ThreadContext.put("request_uuid", uuid);
+                ThreadContext.put("client_request_uuid", uuid);
                 ThreadContext.put("target_url", targetUrl);
                 ThreadContext.put("status", "error");
                 ThreadContext.put("error_message", e.getMessage());
                 
-                logger.error("OkHttp request failed");
+                logger.error("WebClient request failed");
             } finally {
                 // Clear context to prevent memory leaks
                 ThreadContext.clearAll();
@@ -92,21 +95,19 @@ public class MainApplication {
     }
 
     /**
-     * Makes a GET request to the specified URL and returns the response as a string.
+     * Makes a GET request using WebClient to the specified URL and returns the response as a string.
      *
      * @param url  the URL to fetch data from
      * @param uuid the UUID for correlating request and response logs
      * @return the response from the URL as a string
-     * @throws IOException if an I/O error occurs
      */
-    private String run(String url, String uuid) throws IOException {
-        Request request = new Request.Builder()
-                .url(url)
-                .addHeader("UUID", uuid)
-                .build();
-        try (Response response = client.newCall(request).execute()) {
-            return response.body().string();
-        }
+    private String makeRequest(String url, String uuid) {
+        return webClient.get()
+                .uri(url)
+                .header("UUID", uuid)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block(); // Convert to synchronous for this example
     }
 
     /**

@@ -64,13 +64,6 @@
             <version>${log4j.version}</version>
         </dependency>
 
-        <!-- OkHttp dependency -->
-        <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>${okhttp.version}</version>
-        </dependency>
-
         <!-- Jackson Databind dependency -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -82,6 +75,13 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
+            <version>${spring.boot.version}</version>
+        </dependency>
+
+        <!-- Spring WebFlux for WebClient (modern HTTP client) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
             <version>${spring.boot.version}</version>
         </dependency>
 

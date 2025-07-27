@@ -10,10 +10,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -23,14 +19,14 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Main application class that starts the Spring Boot server and the OkHttp client.
+ * Main application class that starts the OkHttp client to make requests to a target server.
  */
 @SpringBootApplication
 public class MainApplication {
     private final OkHttpClient client = new OkHttpClient();
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-    private static final Logger logger = LogManager.getLogger(ApiController.class); // Focus logging on ApiController
+    private static final Logger logger = LogManager.getLogger(MainApplication.class);
 
     public static void main(String[] args) {
         SpringApplication.run(MainApplication.class, args);
@@ -44,7 +40,15 @@ public class MainApplication {
     @Bean
     public CommandLineRunner runClient() {
         return args -> {
-            String targetUrl = "http://localhost:8080/api/data";
+            // Get target URL from environment variable, fallback to localhost for local development
+            String targetHost = System.getenv("TARGET_HOST");
+            if (targetHost == null || targetHost.isEmpty()) {
+                targetHost = "localhost:8080";
+                logger.warn("TARGET_HOST environment variable not set, using default: {}", targetHost);
+            }
+            
+            String targetUrl = "http://" + targetHost + "/api/data";
+            logger.info("Client starting, target URL: {}", targetUrl);
             startClientLoop(targetUrl);
         };
     }
@@ -58,7 +62,8 @@ public class MainApplication {
         while (true) {
             String uuid = UUID.randomUUID().toString();
             try {
-                run(targetUrl, uuid);
+                String response = run(targetUrl, uuid);
+                logger.info("Client Request UUID: {}, Response: {}", uuid, response);
             } catch (IOException e) {
                 logger.error("OkHttp Error UUID: {}, Error: {}", uuid, e.getMessage());
             }
@@ -94,28 +99,6 @@ public class MainApplication {
             Thread.sleep(ms);
         } catch (InterruptedException ex) {
             Thread.currentThread().interrupt();
-        }
-    }
-
-    /**
-     * Spring Boot REST controller that provides the /api/data endpoint.
-     */
-    @RestController
-    @RequestMapping("/api")
-    public static class ApiController {
-        private static final Logger logger = LogManager.getLogger(ApiController.class);
-
-        /**
-         * Handles GET requests to /api/data and returns a simple message.
-         *
-         * @param uuid the UUID for correlating request and response logs
-         * @return a simple message
-         */
-        @GetMapping("/data")
-        public String getData(@RequestHeader("UUID") String uuid) {
-            String response = "Hello from Spring Boot!";
-            logger.info("Spring Response UUID: {}, Response: {}", uuid, response);
-            return response;
         }
     }
 }

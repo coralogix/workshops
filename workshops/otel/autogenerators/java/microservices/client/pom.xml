@@ -78,10 +78,10 @@
             <version>${jackson.version}</version>
         </dependency>
 
-        <!-- Spring Boot Web Starter dependency -->
+        <!-- Spring Boot Starter dependency (minimal for CommandLineRunner) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter</artifactId>
             <version>${spring.boot.version}</version>
         </dependency>
 

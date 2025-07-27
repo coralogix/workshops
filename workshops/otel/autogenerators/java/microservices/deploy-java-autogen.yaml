@@ -1,40 +1,97 @@
+# Java Microservices Server Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cx-java-autogen
+  name: cx-java-server
   namespace: default
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      name: cx-java-autogen
+      app: cx-java-server
   template:
     metadata:
       labels:
-        name: cx-java-autogen
+        app: cx-java-server
     spec:
       containers:
-      - name: cx-java-autogen
+      - name: cx-java-server
         image: public.ecr.aws/w3s4j9x9/java-microservices-autogen
         imagePullPolicy: Always
-        workingDir: /home/code
+        workingDir: /home/code/server
         env:
         - name: OTEL_IP
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
         - name: OTEL_SERVICE_NAME
-          value: cx-java-autogen
+          value: cx-java-server
         - name: OTEL_RESOURCE_ATTRIBUTES
-          value: cx.application.name=cx-java-autogen,cx.subsystem.name=cx-java-autogen,mycustomtag=mycustomvalue
+          value: cx.application.name=cx-java-server,cx.subsystem.name=cx-java-server,service.type=server
         - name: OTEL_EXPORTER_OTLP_ENDPOINT
           value: http://$(OTEL_IP):4318
         - name: OTEL_LOGS_EXPORTER
           value: none
-        # - name: OTEL_METRIC_EXPORTER
-        #   value: none
         ports:
         - containerPort: 8080
           name: http
           protocol: TCP
-        # command: [ "/bin/bash", "-c", "--" ]
-        # args: [ "while true; do sleep 30; done;" ]
+        command: ["/bin/bash"]
+        args: ["./entrypoint.sh"]
+
+---
+# Java Microservices Server Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: cx-java-server-service
+  namespace: default
+spec:
+  selector:
+    app: cx-java-server
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+    protocol: TCP
+  type: ClusterIP
+
+---
+# Java Microservices Client Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cx-java-client
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cx-java-client
+  template:
+    metadata:
+      labels:
+        app: cx-java-client
+    spec:
+      containers:
+      - name: cx-java-client
+        image: public.ecr.aws/w3s4j9x9/java-microservices-autogen
+        imagePullPolicy: Always
+        workingDir: /home/code/client
+        env:
+        - name: TARGET_HOST
+          value: cx-java-server-service:8080
+        - name: OTEL_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: OTEL_SERVICE_NAME
+          value: cx-java-client
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: cx.application.name=cx-java-client,cx.subsystem.name=cx-java-client,service.type=client
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: http://$(OTEL_IP):4318
+        - name: OTEL_LOGS_EXPORTER
+          value: none
+        command: ["/bin/bash"]
+        args: ["./entrypoint.sh"]

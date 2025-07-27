@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: cx-java-server
-        image: public.ecr.aws/w3s4j9x9/java-microservices-autogen
+        image: public.ecr.aws/w3s4j9x9/microservices-demo:java-microservices-autogen
         imagePullPolicy: Always
         workingDir: /home/code/server
         env:
@@ -27,7 +27,7 @@ spec:
         - name: OTEL_SERVICE_NAME
           value: cx-java-server
         - name: OTEL_RESOURCE_ATTRIBUTES
-          value: cx.application.name=cx-java-server,cx.subsystem.name=cx-java-server,service.type=server
+          value: cx.application.name=cx-java-server,cx.subsystem.name=cx-java-server
         - name: OTEL_EXPORTER_OTLP_ENDPOINT
           value: http://$(OTEL_IP):4318
         - name: OTEL_LOGS_EXPORTER
@@ -75,7 +75,7 @@ spec:
     spec:
       containers:
       - name: cx-java-client
-        image: public.ecr.aws/w3s4j9x9/java-microservices-autogen
+        image: public.ecr.aws/w3s4j9x9/microservices-demo:java-microservices-autogen
         imagePullPolicy: Always
         workingDir: /home/code/client
         env:
@@ -88,7 +88,7 @@ spec:
         - name: OTEL_SERVICE_NAME
           value: cx-java-client
         - name: OTEL_RESOURCE_ATTRIBUTES
-          value: cx.application.name=cx-java-client,cx.subsystem.name=cx-java-client,service.type=client
+          value: cx.application.name=cx-java-client,cx.subsystem.name=cx-java-client
         - name: OTEL_EXPORTER_OTLP_ENDPOINT
           value: http://$(OTEL_IP):4318
         - name: OTEL_LOGS_EXPORTER

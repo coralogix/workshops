@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cx-java-autogen
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      name: cx-java-autogen
+  template:
+    metadata:
+      labels:
+        name: cx-java-autogen
+    spec:
+      containers:
+      - name: cx-java-autogen
+        image: public.ecr.aws/w3s4j9x9/java-microservices-autogen
+        imagePullPolicy: Always
+        workingDir: /home/code
+        env:
+        - name: OTEL_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: OTEL_SERVICE_NAME
+          value: cx-java-autogen
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: cx.application.name=cx-java-autogen,cx.subsystem.name=cx-java-autogen,mycustomtag=mycustomvalue
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: http://$(OTEL_IP):4318
+        - name: OTEL_LOGS_EXPORTER
+          value: none
+        # - name: OTEL_METRIC_EXPORTER
+        #   value: none
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        # command: [ "/bin/bash", "-c", "--" ]
+        # args: [ "while true; do sleep 30; done;" ]

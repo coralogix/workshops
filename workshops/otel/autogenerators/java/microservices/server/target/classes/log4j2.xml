@@ -2,11 +2,7 @@
 <Configuration status="debug">
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <JsonTemplateLayout eventTemplateUri="classpath:EcsLayout.json">
-                <EventTemplateAdditionalField key="trace_id" value="$${ctx:trace_id:-}"/>
-                <EventTemplateAdditionalField key="span_id" value="$${ctx:span_id:-}"/>
-                <EventTemplateAdditionalField key="trace_flags" value="$${ctx:trace_flags:-}"/>
-            </JsonTemplateLayout>
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg trace_id=%X{trace_id} span_id=%X{span_id} trace_flags=%X{trace_flags} event_type=%X{event_type} request_uuid=%X{request_uuid} status=%X{status} %n"/>
         </Console>
     </Appenders>
     <Loggers>

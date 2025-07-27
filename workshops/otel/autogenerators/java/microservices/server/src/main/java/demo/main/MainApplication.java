@@ -34,9 +34,6 @@ public class MainApplication {
         /**
          * Handles GET requests to /api/data and returns a simple message.
          * Randomly introduces delays to simulate slow method execution.
-         *
-         * @param uuid optional UUID for correlating request and response logs
-         * @return a simple message
          */
         @GetMapping("/data")
         public String getData(@RequestHeader(value = "UUID", required = false) String uuid) {
@@ -45,37 +42,40 @@ public class MainApplication {
                 uuid = "generated-" + System.currentTimeMillis();
             }
 
-            // Add structured fields to logging context
-            ThreadContext.put("request_uuid", uuid);
-            ThreadContext.put("endpoint", "/api/data");
-            ThreadContext.put("method", "GET");
-
             try {
+                ThreadContext.put("event_type", "server_request_received");
+                ThreadContext.put("request_uuid", uuid);
+                ThreadContext.put("endpoint", "/api/data");
+                ThreadContext.put("method", "GET");
+
                 // Randomly introduce delays (30% chance of delay)
                 if (random.nextDouble() < 0.3) {
-                    // Random delay between 100ms and 2000ms
                     int delayMs = 100 + random.nextInt(1900);
-                    ThreadContext.put("delay_ms", String.valueOf(delayMs));
+                    
                     ThreadContext.put("performance_issue", "true");
+                    ThreadContext.put("delay_ms", String.valueOf(delayMs));
                     logger.warn("Simulating slow method execution");
+                    
                     try {
                         Thread.sleep(delayMs);
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
                         ThreadContext.put("error_type", "InterruptedException");
                         logger.error("Sleep interrupted during request processing");
+                        return "Request processing interrupted";
                     }
                 } else {
                     ThreadContext.put("performance_issue", "false");
                 }
 
-                String response = "Hello from Spring Boot!";
-                ThreadContext.put("response_message", response);
-                ThreadContext.put("response_status", "success");
+                String response = "Hello from Spring Boot! UUID: " + uuid;
+                ThreadContext.put("event_type", "server_response_sent");
+                ThreadContext.put("request_uuid", uuid);
+                ThreadContext.put("response_body", response);
+                ThreadContext.put("status", "success");
                 logger.info("Request processed successfully");
                 return response;
             } finally {
-                // Clean up ThreadContext to prevent memory leaks
                 ThreadContext.clearAll();
             }
         }

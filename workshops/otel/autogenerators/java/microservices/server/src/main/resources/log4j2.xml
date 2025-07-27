@@ -2,26 +2,7 @@
 <Configuration status="debug">
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <JsonTemplateLayout>
-                <EventTemplate>{
-  "timestamp": "${json:timestamp}",
-  "level": "${json:level}",
-  "logger": "${json:logger}",
-  "message": "${json:message}",
-  "thread": "${json:thread}",
-  "trace_id": "${json:mdc:trace_id}",
-  "span_id": "${json:mdc:span_id}",
-  "trace_flags": "${json:mdc:trace_flags}",
-  "request_uuid": "${json:mdc:request_uuid}",
-  "endpoint": "${json:mdc:endpoint}",
-  "method": "${json:mdc:method}",
-  "performance_issue": "${json:mdc:performance_issue}",
-  "delay_ms": "${json:mdc:delay_ms}",
-  "response_message": "${json:mdc:response_message}",
-  "response_status": "${json:mdc:response_status}",
-  "error_type": "${json:mdc:error_type}"
-}</EventTemplate>
-            </JsonTemplateLayout>
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg trace_id=%X{trace_id} span_id=%X{span_id} trace_flags=%X{trace_flags} event_type=%X{event_type} request_uuid=%X{request_uuid} status=%X{status} %n"/>
         </Console>
     </Appenders>
     <Loggers>

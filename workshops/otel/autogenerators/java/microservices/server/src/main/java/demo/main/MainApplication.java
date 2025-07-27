@@ -2,6 +2,7 @@ package demo.main;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.ThreadContext;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,22 +45,39 @@ public class MainApplication {
                 uuid = "generated-" + System.currentTimeMillis();
             }
 
-            // Randomly introduce delays (30% chance of delay)
-            if (random.nextDouble() < 0.3) {
-                // Random delay between 100ms and 2000ms
-                int delayMs = 100 + random.nextInt(1900);
-                logger.warn("Simulating slow method - UUID: {}, Delay: {}ms", uuid, delayMs);
-                try {
-                    Thread.sleep(delayMs);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    logger.error("Sleep interrupted for UUID: {}", uuid);
-                }
-            }
+            // Add structured fields to logging context
+            ThreadContext.put("request_uuid", uuid);
+            ThreadContext.put("endpoint", "/api/data");
+            ThreadContext.put("method", "GET");
 
-            String response = "Hello from Spring Boot!";
-            logger.info("Spring Response UUID: {}, Response: {}", uuid, response);
-            return response;
+            try {
+                // Randomly introduce delays (30% chance of delay)
+                if (random.nextDouble() < 0.3) {
+                    // Random delay between 100ms and 2000ms
+                    int delayMs = 100 + random.nextInt(1900);
+                    ThreadContext.put("delay_ms", String.valueOf(delayMs));
+                    ThreadContext.put("performance_issue", "true");
+                    logger.warn("Simulating slow method execution");
+                    try {
+                        Thread.sleep(delayMs);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        ThreadContext.put("error_type", "InterruptedException");
+                        logger.error("Sleep interrupted during request processing");
+                    }
+                } else {
+                    ThreadContext.put("performance_issue", "false");
+                }
+
+                String response = "Hello from Spring Boot!";
+                ThreadContext.put("response_message", response);
+                ThreadContext.put("response_status", "success");
+                logger.info("Request processed successfully");
+                return response;
+            } finally {
+                // Clean up ThreadContext to prevent memory leaks
+                ThreadContext.clearAll();
+            }
         }
     }
 }

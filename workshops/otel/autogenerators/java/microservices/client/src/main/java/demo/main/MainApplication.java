@@ -6,6 +6,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.ThreadContext;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -62,10 +63,29 @@ public class MainApplication {
         while (true) {
             String uuid = UUID.randomUUID().toString();
             try {
+                // Add structured data to ThreadContext for JSON logging
+                ThreadContext.put("request_uuid", uuid);
+                ThreadContext.put("target_url", targetUrl);
+                
                 String response = run(targetUrl, uuid);
-                logger.info("Client Request UUID: {}, Response: {}", uuid, response);
+                
+                // Add response data to context
+                ThreadContext.put("response_body", response);
+                ThreadContext.put("status", "success");
+                
+                logger.info("Client request completed successfully");
+                
             } catch (IOException e) {
-                logger.error("OkHttp Error UUID: {}, Error: {}", uuid, e.getMessage());
+                // Add error data to context
+                ThreadContext.put("request_uuid", uuid);
+                ThreadContext.put("target_url", targetUrl);
+                ThreadContext.put("status", "error");
+                ThreadContext.put("error_message", e.getMessage());
+                
+                logger.error("OkHttp request failed");
+            } finally {
+                // Clear context to prevent memory leaks
+                ThreadContext.clearAll();
             }
             wait(500);
         }

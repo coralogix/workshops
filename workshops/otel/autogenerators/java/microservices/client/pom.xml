@@ -91,6 +91,13 @@
             <artifactId>opentelemetry-log4j-context-data-2.17-autoconfigure</artifactId>
             <version>${opentelemetry.version}</version>
         </dependency>
+
+        <!-- Log4j2 JSON Layout dependency -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-layout-template-json</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

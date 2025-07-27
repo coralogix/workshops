@@ -1,6 +1,5 @@
 package demo.main;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
@@ -10,10 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -21,8 +16,6 @@ import java.util.UUID;
  */
 @SpringBootApplication
 public class MainApplication {
-    private static final ObjectMapper objectMapper = new ObjectMapper();
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
     private static final Logger logger = LogManager.getLogger(MainApplication.class);
     private final WebClient webClient;
 
@@ -90,6 +83,7 @@ public class MainApplication {
                 // Clear context to prevent memory leaks
                 ThreadContext.clearAll();
             }
+            // Wait 500ms between requests = 2 requests per second
             wait(500);
         }
     }

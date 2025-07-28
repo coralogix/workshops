@@ -36,7 +36,7 @@ source 1-deploy-override.sh
 We will reuse a zero-code instrumentaiton example from the `autoinjection` workshop.   
   
 This application has a client and server in the deployment, and the server has random slowdowns to study with profiling.  
-Consult the README `workshops/workshops/otel/autogenerators/java/microservices/README.md` for more details on the architecture and frameworks used. 
+Consult the [README](https://github.com/coralogix/workshops/blob/master/workshops/otel/autogenerators/java/microservices/README.md) (also found here workshops/workshops/otel/autogenerators/java/microservices/README.md) for more details on the architecture and frameworks used. 
 ```
 cd workshops/workshops/otel/autogenerators/java/microservices
 source deploy-java-autogen.sh

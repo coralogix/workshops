@@ -113,9 +113,9 @@ Auto-inject tracing for:
 
 ---
 
-## Kubernetes-Specific Tracing
+## Kubernetes-Specific Tracing and Profiling
 
-### [Autoinjection: Instrumentation Injection in Kubernetes](otel/autoinjection-k8s/index.md)
+### [Kubernetes Autoinjection: Automatic Instrumentation Injection](otel/autoinjection-k8s/index.md)
 
 Auto-inject tracing for:
 
@@ -132,6 +132,12 @@ Use Linux Kernel’s eBPF to generate spans and dashboards **without modifying c
 - Node.js
 - Java
 - Python
+
+### [Kubernetes Continuous Profiling](otel/profiling/index.md)
+
+Continously profile applications with eBPF to understand how methods are impacting performance:
+
+- Java
 
 ---
 

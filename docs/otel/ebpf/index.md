@@ -39,9 +39,12 @@ Edit `ebpf.yaml` and update the globals for your domain and cluster name then:
 source 01-helm-otel-ebpf.sh
 ```  
 
-### Step 2 - Deploy Example Applications
+### Step 2 - Deploy Example Applications  
+We will reuse the zero-instrumentaiton examples from the `autoinjection` workshop.  
+These are applications that have no OpenTelemetry instrumentaion in their containers.  
 ```
-source 02-deploy-all-examples.sh
+cd workshops/workshops/otel/autoinject
+source deploy-all-examples.sh
 ```
 
 ### Study The Results  
@@ -55,10 +58,10 @@ Start with `Coralogix->Explore->Traces` to examine the spans.
 
 Delete the app examples:  
 ```
-source 03-delete-all-examples.sh
+source delete-all-examples.sh
 ```  
-  
-Delete the otel collector:
+Return to the eBPF workshop and delete the otel collector
 ```
+cd workshops/workshops/otel/ebpf
 source 04-delete-cx-otel.sh
 ```

@@ -26,10 +26,6 @@ git clone https://github.com/coralogix/workshops
 cd workshops/workshops/otel/profiling
 ```  
 
-### Step 0 - Install the OpenTelemetry Collector on your k8s cluster  
-   
-[Easy Coralogix instructions for Complete Observability are here](https://coralogix.com/docs/otel-collector-for-k8s/)  
-
 ### Step 1 - Override the OpenTelemetry Collector with Continuous Profiling
 Edit `override-otel.yaml` and update the globals for your domain and cluster name then:  
 ```
@@ -37,9 +33,10 @@ source 1-deploy-override.sh
 ```  
 
 ### Step 2 - Deploy Example Applications  
+We will reuse a zero-code instrumentaiton example from the `autoinjection` workshop.   
+  
 This application has a client and server in the deployment, and the server has random slowdowns to study with profiling.  
-Consult the README `workshops/workshops/otel/profiling/README.md` for more details on the architecture and frameworks used. 
-We will reuse the zero-instrumentaiton examples from the `autoinjection` workshop.  
+Consult the README `workshops/workshops/otel/autogenerators/java/microservices/README.md` for more details on the architecture and frameworks used. 
 ```
 cd workshops/workshops/otel/autogenerators/java/microservices
 source deploy-java-autogen.sh

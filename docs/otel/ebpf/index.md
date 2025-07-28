@@ -40,7 +40,7 @@ source 01-helm-otel-ebpf.sh
 ```  
 
 ### Step 2 - Deploy Example Applications  
-We will reuse the zero-instrumentaiton examples from the `autoinjection` workshop.  
+We will reuse the zero-code instrumentaiton examples from the `autoinjection` workshop.  
 These are applications that have no OpenTelemetry instrumentaion in their containers.  
 ```
 cd workshops/workshops/otel/autoinject
@@ -63,5 +63,5 @@ source delete-all-examples.sh
 Return to the eBPF workshop and delete the otel collector
 ```
 cd workshops/workshops/otel/ebpf
-source 04-delete-cx-otel.sh
+source 02-delete-cx-otel.sh
 ```

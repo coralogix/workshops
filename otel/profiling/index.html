@@ -12,7 +12,7 @@
         <meta name="author" content="Coralogix">
       
       
-        <link rel="canonical" href="http://coralogix.github.io/otel/ebpf/">
+        <link rel="canonical" href="http://coralogix.github.io/otel/profiling/">
       
       
       
@@ -22,7 +22,7 @@
     
     
       
-        <title>eBPF for Kubernetes - Coralogix Workshops</title>
+        <title>Profiling - Coralogix Workshops</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#ebpf-for-kubernetes" class="md-skip">
+        <a href="#profiling" class="md-skip">
           Skip to content
         </a>
       
@@ -109,7 +109,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              eBPF for Kubernetes
+              Profiling
             
           </span>
         </div>
@@ -335,47 +335,46 @@
   
 
 
-<h1 id="ebpf-for-kubernetes">eBPF for Kubernetes</h1>
+<h1 id="profiling">Profiling</h1>
 <h2 id="requirements">Requirements</h2>
 <p>Prerequisites <a href="https://coralogix.github.io/workshops/prereqs/">here</a><br />
 eBPF in this context only runs on Kubernetes with modern Linux kernel based containers.<br />
-Note that eBPF integration is currently in a beta state and is subject to change.  </p>
-<h2 id="official-documentation-here">Official Documentation <a href="https://coralogix.com/docs/user-guides/apm/getting-started/ebpf-for-apm/">here</a></h2>
-<p>Please read the <a href="https://coralogix.com/docs/user-guides/apm/getting-started/ebpf-for-apm/">official documentation</a> thoroughly before proceeding. There are many combinations possible with eBPF installation and this workshop only showcases one of them.  </p>
-<h2 id="what-is-ebpf">What is eBPF?</h2>
-<p><a href="https://ebpf.io/">eBPF</a> describes software that runs inside the Linux kernel and can extend its functionality. For Observability purposes, the loaded module is capturing telemetry related to observability such as system calls, network activity, kernel function calls etc.  </p>
-<p>The Coralogix implementation loads an eBPF agent into the kernels of running containers that exports the eBPF related telemetry and converts it to OpenTelemetry compatiable spans. eBPF spans do not provide traces since they don't have a trace ID. Please carefully read <a href="https://coralogix.github.io/workshops/prereqs/">official Coralogix Documenttion</a>  above for more detail.</p>
+Note that eBPF integration w/ profiling is currently in a beta state and is subject to change.  </p>
+<h2 id="official-documentation-here">Official Documentation <a href="https://coralogix.com/docs/user-guides/continuous-profiling/setup/">here</a></h2>
+<p>Please read the <a href="https://coralogix.com/docs/user-guides/continuous-profiling/setup/">official documentation</a> thoroughly before proceeding.</p>
 <h2 id="instructions">Instructions</h2>
-<p>This workshop is designed to add the eBPF agent to an existing installation of the Coralogix OpenTelemetry helm chart and then deploy simple applications in Python, Node, .NET, and Java to demonstrate the spans and APM capabilities available with eBPF.</p>
+<p>This workshop is designed to add the eBPF agent to an existing installation of the Coralogix OpenTelemetry helm chart and then deploy simple applications in Java to demonstrate the spans and APM / profiling capabilities available with eBPF.</p>
 <h3 id="install-the-opentelemetry-collector-on-your-k8s-cluster">Install the OpenTelemetry Collector on your k8s cluster</h3>
 <p><a href="https://coralogix.com/docs/otel-collector-for-k8s/">Easy Coralogix instructions for Complete Observability are here</a>  </p>
 <h3 id="clone-repo">Clone Repo</h3>
 <div class="highlight"><pre><span></span><code>git clone https://github.com/coralogix/workshops
 </code></pre></div>
-<h3 id="change-to-ebpf-directory">Change to eBPF Directory</h3>
-<div class="highlight"><pre><span></span><code>cd workshops/workshops/otel/ebpf
+<h3 id="change-to-profiling-directory">Change to Profiling Directory</h3>
+<div class="highlight"><pre><span></span><code>cd workshops/workshops/otel/profiling
 </code></pre></div>
-<h3 id="step-1-deploy-the-opentelemetry-helm-chart-with-ebpf-instrumentation">Step 1 - Deploy the OpenTelemetry Helm Chart with eBPF Instrumentation</h3>
-<p>Edit <code>ebpf.yaml</code> and update the globals for your domain and cluster name then:<br />
-<div class="highlight"><pre><span></span><code>source 01-helm-otel-ebpf.sh
+<h3 id="step-0-install-the-opentelemetry-collector-on-your-k8s-cluster">Step 0 - Install the OpenTelemetry Collector on your k8s cluster</h3>
+<p><a href="https://coralogix.com/docs/otel-collector-for-k8s/">Easy Coralogix instructions for Complete Observability are here</a>  </p>
+<h3 id="step-1-override-the-opentelemetry-collector-with-continuous-profiling">Step 1 - Override the OpenTelemetry Collector with Continuous Profiling</h3>
+<p>Edit <code>override-otel.yaml</code> and update the globals for your domain and cluster name then:<br />
+<div class="highlight"><pre><span></span><code>source 1-deploy-override.sh
 </code></pre></div></p>
 <h3 id="step-2-deploy-example-applications">Step 2 - Deploy Example Applications</h3>
-<p>We will reuse the zero-instrumentaiton examples from the <code>autoinjection</code> workshop.<br />
-These are applications that have no OpenTelemetry instrumentaion in their containers.<br />
-<div class="highlight"><pre><span></span><code>cd workshops/workshops/otel/autoinject
-source deploy-all-examples.sh
+<p>This application has a client and server in the deployment, and the server has random slowdowns to study with profiling.<br />
+Consult the README <code>workshops/workshops/otel/profiling/README.md</code> for more details on the architecture and frameworks used. 
+We will reuse the zero-instrumentaiton examples from the <code>autoinjection</code> workshop.<br />
+<div class="highlight"><pre><span></span><code>cd workshops/workshops/otel/autogenerators/java/microservices
+source deploy-java-autogen.sh
 </code></pre></div></p>
 <h3 id="study-the-results">Study The Results</h3>
-<p>Start with <code>Coralogix-&gt;Explore-&gt;Traces</code> to examine the spans.</p>
 <p>Coralogix-&gt;APM shows the working service catalog.  </p>
-<p>Other parts of the Kubernetes system are being traced as well- these can be filtered following instructions in the documentation above.</p>
+<p>Click on the <code>cx-java-server</code> service and select Profiles to see the profiles. Consult the <a href="https://coralogix.com/docs/user-guides/continuous-profiling/setup/">official documentation</a> for more details.  </p>
 <h3 id="step-3-cleanup">Step 3 - Cleanup</h3>
 <p>Delete the app examples:<br />
-<div class="highlight"><pre><span></span><code>source delete-all-examples.sh
+<div class="highlight"><pre><span></span><code>source delete-java-autogen.sh
 </code></pre></div>
-Return to the eBPF workshop and delete the otel collector
-<div class="highlight"><pre><span></span><code>cd workshops/workshops/otel/ebpf
-source 04-delete-cx-otel.sh
+Return to the profiling workshop and roll back  the otel collector
+<div class="highlight"><pre><span></span><code>cd workshops/workshops/otel/profiling
+source 2-rollback-otel-collector.sh
 </code></pre></div></p>
 
 

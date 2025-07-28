@@ -360,7 +360,7 @@ Note that eBPF integration is currently in a beta state and is subject to change
 <div class="highlight"><pre><span></span><code>source 01-helm-otel-ebpf.sh
 </code></pre></div></p>
 <h3 id="step-2-deploy-example-applications">Step 2 - Deploy Example Applications</h3>
-<p>We will reuse the zero-instrumentaiton examples from the <code>autoinjection</code> workshop.<br />
+<p>We will reuse the zero-code instrumentaiton examples from the <code>autoinjection</code> workshop.<br />
 These are applications that have no OpenTelemetry instrumentaion in their containers.<br />
 <div class="highlight"><pre><span></span><code>cd workshops/workshops/otel/autoinject
 source deploy-all-examples.sh
@@ -375,7 +375,7 @@ source deploy-all-examples.sh
 </code></pre></div>
 Return to the eBPF workshop and delete the otel collector
 <div class="highlight"><pre><span></span><code>cd workshops/workshops/otel/ebpf
-source 04-delete-cx-otel.sh
+source 02-delete-cx-otel.sh
 </code></pre></div></p>
 
 

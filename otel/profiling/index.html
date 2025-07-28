@@ -352,16 +352,14 @@ Note that eBPF integration w/ profiling is currently in a beta state and is subj
 <h3 id="change-to-profiling-directory">Change to Profiling Directory</h3>
 <div class="highlight"><pre><span></span><code>cd workshops/workshops/otel/profiling
 </code></pre></div>
-<h3 id="step-0-install-the-opentelemetry-collector-on-your-k8s-cluster">Step 0 - Install the OpenTelemetry Collector on your k8s cluster</h3>
-<p><a href="https://coralogix.com/docs/otel-collector-for-k8s/">Easy Coralogix instructions for Complete Observability are here</a>  </p>
 <h3 id="step-1-override-the-opentelemetry-collector-with-continuous-profiling">Step 1 - Override the OpenTelemetry Collector with Continuous Profiling</h3>
 <p>Edit <code>override-otel.yaml</code> and update the globals for your domain and cluster name then:<br />
 <div class="highlight"><pre><span></span><code>source 1-deploy-override.sh
 </code></pre></div></p>
 <h3 id="step-2-deploy-example-applications">Step 2 - Deploy Example Applications</h3>
+<p>We will reuse a zero-code instrumentaiton example from the <code>autoinjection</code> workshop.   </p>
 <p>This application has a client and server in the deployment, and the server has random slowdowns to study with profiling.<br />
-Consult the README <code>workshops/workshops/otel/profiling/README.md</code> for more details on the architecture and frameworks used. 
-We will reuse the zero-instrumentaiton examples from the <code>autoinjection</code> workshop.<br />
+Consult the README <code>workshops/workshops/otel/autogenerators/java/microservices/README.md</code> for more details on the architecture and frameworks used. 
 <div class="highlight"><pre><span></span><code>cd workshops/workshops/otel/autogenerators/java/microservices
 source deploy-java-autogen.sh
 </code></pre></div></p>

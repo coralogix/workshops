@@ -17,6 +17,8 @@
         <jackson.version>2.15.2</jackson.version>
         <opentelemetry.version>2.11.0-alpha</opentelemetry.version>
         <maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
+        <okhttp.version>4.11.0</okhttp.version>
+        <caffeine.version>2.9.3</caffeine.version>
     </properties>
 
     <dependencyManagement>
@@ -48,6 +50,27 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j2</artifactId>
+        </dependency>
+
+        <!-- OkHttp for HTTP client operations -->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>${okhttp.version}</version>
+        </dependency>
+
+        <!-- Caffeine Cache for cache operations -->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>${caffeine.version}</version>
+        </dependency>
+
+        <!-- Jackson for JSON processing -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
 
         <!-- OpenTelemetry Log4j Context Data Autoconfigure -->

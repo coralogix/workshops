@@ -16,18 +16,35 @@ def get_incidents(api_key, start_time, end_time, region):
     # Try with a minimal request body - just empty object
     request_body = {}
 
+    # Handle region parameter - if it already contains .coralogix.com, use it directly
+    if region.endswith('.coralogix.com'):
+        endpoint = f"ng-api-grpc.{region}:443"
+    else:
+        endpoint = f"ng-api-grpc.{region}.coralogix.com:443"
+    
     cmd = [
         "grpcurl",
         "-H", f"Authorization: Bearer {api_key}",
         "-d", json.dumps(request_body),
-        f"ng-api-grpc.{region}:443",
+        endpoint,
         "com.coralogixapis.incidents.v1.IncidentsService/ListIncidents"
     ]
 
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, check=True)
         response = json.loads(result.stdout)
-        return response.get("incidents", [])
+        all_incidents = response.get("incidents", [])
+        
+        # Filter incidents by time locally since the API doesn't seem to support time filtering
+        filtered_incidents = []
+        for incident in all_incidents:
+            if incident.get("createdAt"):
+                created_at_str = incident["createdAt"].replace('Z', '+00:00')
+                created_at = datetime.datetime.fromisoformat(created_at_str)
+                if start_time <= created_at <= end_time:
+                    filtered_incidents.append(incident)
+        
+        return filtered_incidents
     except subprocess.CalledProcessError as e:
         print(f"Error calling Coralogix API: {e}")
         print(f"Stderr: {e.stderr}")

@@ -1,95 +1,104 @@
-# Simple Coralogix Metrics Sender
+# OpenTelemetry TypeScript Metrics Example (Coralogix)
 
-A minimal TypeScript application that generates a random metric every 3 seconds and sends it to Coralogix using OpenTelemetry and the OTLP gRPC exporter.
+A TypeScript application that demonstrates OpenTelemetry metrics instrumentation. Sends exactly **100 metrics examples** instantly to Coralogix via gRPC.
 
-## Features
+## What It Does
 
-- 🎲 Generates a random metric (`simple_counter`) every 3 seconds
-- 📡 Sends metrics to Coralogix via OpenTelemetry OTLP gRPC
-- 📱 Customizable application and subsystem names
-- 🛑 Graceful shutdown handling
+- **Counter Metrics**: Tracks requests with HTTP method, endpoint, and status code labels
+- **Histogram Metrics**: Measures response time distributions 
+- **Observable Gauge Metrics**: Monitors memory usage (heap, RSS)
+- **Instant Execution**: Sends all 100 metrics immediately and stops
 
 ## Prerequisites
 
-- Node.js (v14 or higher)
+- Node.js (v16 or higher)
 - npm
+- Coralogix account with valid private key
 
-## Installation
+## Quick Start
 
 1. Install dependencies:
    ```bash
    npm install
    ```
-2. Build the TypeScript code:
+
+2. Build the application (compiles TypeScript to JavaScript):
    ```bash
    npm run build
    ```
 
-## Usage
-
-1. Set your Coralogix private key as an environment variable:
-   ```bash
-   export CORALOGIX_PRIVATE_KEY="your-private-key-here"
-   ```
-   Optionally, set the application and subsystem names:
-   ```bash
-   export CORALOGIX_APP_NAME="your-app-name"
-   export CORALOGIX_SUBSYSTEM="your-subsystem-name"
-   ```
-2. Start the metrics sender:
+3. Run the application (executes the compiled code and shows console output):
    ```bash
    npm start
    ```
 
-## Output Example
+**Note**: `npm run build` only compiles the code and won't show any console output. You must use `npm start` to actually run the application and see the metrics being sent.
+
+## Example Output
+
+When you run `npm start`, you'll see:
 
 ```
-✅ Coralogix setup complete
-📊 Metric Name: simple_counter
-📱 Application: simple-app
-🔧 Subsystem: simple-metrics
-🚀 Simple Coralogix Metrics Sender
-📊 Sending simple_counter every 3 seconds
-🔍 Look for in Coralogix: simple_counter (simple-app/simple-metrics)
-⏹️  Press Ctrl+C to stop
+OpenTelemetry setup complete
+Exporting to: Coralogix (typescript-metrics-example/metrics-demo)
+Metrics created: counter, histogram, gauge
+OpenTelemetry Metrics Example
+Sending 100 metrics examples to Coralogix
+Metrics: demo-requests_total (counter), demo-response_time_ms (histogram), demo-memory_usage_bytes (gauge)
 
-📊 simple_counter #1 | Time: 12:00:00 PM | Value: 7 | Sent to Coralogix
-📊 simple_counter #2 | Time: 12:00:03 PM | Value: 2 | Sent to Coralogix
-...
+Request #1 | Time: 2:30:15 PM
+   GET /api/users - 200 (87ms)
+   Counter: +1, Histogram: 87ms, Gauge: auto-updated
+
+Request #2 | Time: 2:30:15 PM
+   POST /api/orders - 201 (156ms)
+   Counter: +1, Histogram: 156ms, Gauge: auto-updated
+
+... (98 more requests) ...
+
+Request #100 | Time: 2:30:15 PM
+   GET /api/users - 200 (126ms)
+   Counter: +1, Histogram: 126ms, Gauge: auto-updated
+
+Completed 100 iterations! Stopping...
+
+Metrics Summary:
+   Total requests processed: 100
+   Counter metrics sent: 100
+   Histogram metrics sent: 100
+   Gauge metrics: continuously updated
+All metrics flushed successfully
 ```
 
-## Environment Variables
+## Metrics Generated
 
-| Variable                | Required | Default         | Description                        |
-|-------------------------|----------|----------------|------------------------------------|
-| `CORALOGIX_PRIVATE_KEY` | Yes      | (none)         | Your Coralogix private key         |
-| `CORALOGIX_APP_NAME`    | No       | simple-app     | Application name in Coralogix      |
-| `CORALOGIX_SUBSYSTEM`   | No       | simple-metrics | Subsystem name in Coralogix        |
+1. **`demo-requests_total`** (Counter): Total requests with method, endpoint, status_code labels
+2. **`demo-response_time_ms`** (Histogram): Response times with custom buckets [10, 50, 100, 200, 500, 1000, 2000, 5000]
+3. **`demo-memory_usage_bytes`** (Observable Gauge): Current memory usage by type (heap_used, heap_total, rss)
 
-## Project Structure
+## Scripts
 
+- `npm run build` - Compile TypeScript to JavaScript (no output expected)
+- `npm run dev` - Run with ts-node for development  
+- `npm start` - Run compiled JavaScript and see console output
+
+## Configuration
+
+### Environment Variables
+
+| Variable                | Required | Default                    | Description                        |
+|-------------------------|----------|----------------------------|------------------------------------|
+| `CORALOGIX_PRIVATE_KEY` | No       | Uses hardcoded default key | Your Coralogix private key         |
+| `CORALOGIX_APP_NAME`    | No       | typescript-metrics-example | Application name in Coralogix      |
+| `CORALOGIX_SUBSYSTEM`   | No       | metrics-demo               | Subsystem name in Coralogix        |
+
+### Setting Environment Variables
+
+```bash
+export CORALOGIX_PRIVATE_KEY="your-private-key-here"
+export CORALOGIX_APP_NAME="your-app-name"
+export CORALOGIX_SUBSYSTEM="your-subsystem-name"
+npm start
 ```
-coralogix-typescript-example/
-├── simple-coralogix.ts      # Main application file
-├── package.json             # Dependencies and scripts
-├── package-lock.json        # Dependency lock file
-├── tsconfig.json            # TypeScript configuration
-└── README.md                # This file
-```
 
-## Stopping the Application
-
-Press `Ctrl+C` to gracefully stop the metrics sender. The application will display a summary of metrics sent.
-
-## Troubleshooting
-
-- **No metrics in Coralogix?**
-  - Double-check your `CORALOGIX_PRIVATE_KEY` and Coralogix dashboard filters.
-  - Ensure your network allows outbound gRPC connections.
-- **TypeScript errors?**
-  - Run `npm run type-check` to check for issues.
-  - Run `npm install` to ensure all dependencies are installed.
-
-## License
-
-This project is for educational and demonstration purposes. 
+The app sends metrics to `https://ingress.cx498.coralogix.com:443`. The private key is usable as provided in the code, but you can override with your own using environment variables. 

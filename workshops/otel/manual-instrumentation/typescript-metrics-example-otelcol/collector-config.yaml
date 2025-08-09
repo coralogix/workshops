@@ -1,0 +1,44 @@
+# OpenTelemetry Collector Configuration for Local Testing
+# 
+# To use this config:
+# 1. Download the OpenTelemetry Collector
+# 2. Run: otelcol --config-file=collector-config.yaml
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  batch:
+
+exporters:
+  # Log metrics to console for debugging
+  logging:
+    loglevel: debug
+    sampling_initial: 5
+    sampling_thereafter: 200
+  
+  # Uncomment to export to Prometheus (optional)
+  # prometheus:
+  #   endpoint: "0.0.0.0:8889"
+  
+  # Uncomment to export to file (optional)
+  # file:
+  #   path: ./metrics.json
+
+service:
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [logging]
+      # exporters: [logging, prometheus, file]  # Enable multiple exporters if needed
+  
+  # Enable telemetry for the collector itself
+  telemetry:
+    logs:
+      level: info

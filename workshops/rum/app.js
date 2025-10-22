@@ -38,9 +38,14 @@ app.get('/api/data', async (req, res) => {
 // Serve frontend
 app.use(express.static(path.join(process.cwd(), 'dist')));
 
-// Serve `index.html` for SPA support
-app.get('*', (req, res) => {
-    res.sendFile(path.join(process.cwd(), 'dist', 'index.html'));
+// Serve `index.html` for SPA support - catch all unmatched routes
+app.use((req, res, next) => {
+    // Only serve index.html for GET requests that don't match existing routes
+    if (req.method === 'GET') {
+        res.sendFile(path.join(process.cwd(), 'dist', 'index.html'));
+    } else {
+        next();
+    }
 });
 
 // Start the API Gateway

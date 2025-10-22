@@ -1,1 +1,1 @@
-./otel-contrib --config otel-config.yaml
+./otelcol-contrib --config otel-config.yaml

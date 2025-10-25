@@ -44,7 +44,7 @@ Workshops are organized into three categories:
 
 - **OpenTelemetry Collector** – Configuration techniques and examples
 - **Tracing Instrumentation** – Sample apps instrumented in multiple languages
-- **Other** – RUM (Real User Monitoring), eBPF, and more
+- **Other** – Host configs, RUM (Real User Monitoring), eBPF, and more
 
 Each workshop includes a reference app and/or configuration you can study and deploy.  
 Browse the GitHub repo to understand how these examples work.
@@ -66,6 +66,7 @@ Includes:
 
 ### OpenTelemetry Collector Configuration Examples
 
+- [Collector Config For Hosts](otel/host/index.md)
 - [Prometheus Collector Config](otel/prometheus/index.md)
 - [MySQL Metrics + Query Performance](otel/mysql/index.md)
 - [Redis Metrics](otel/redis/index.md)

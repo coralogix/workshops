@@ -94,7 +94,7 @@ service:
   pipelines:
 
     traces:
-      receivers: [otlp, datadog]
+      receivers: [otlp]
       processors: [resourcedetection/env, resourcedetection/ec2, batch]
       exporters: [coralogix]
 

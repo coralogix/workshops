@@ -80,11 +80,11 @@ Includes:
 
 - Microservice with OpenTelemetry Collector
 - Full Fargate Task & ECS configuration
-
+<!-- 
 ### [AWS ECS EC2 (Python/Node.js)](otel/ecs-ec2/index.md)
 
 - OpenTelemetry Collector container setup
-- Sample app container & CloudFormation template
+- Sample app container & CloudFormation template -->
 
 ---
 

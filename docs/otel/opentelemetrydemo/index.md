@@ -4,7 +4,8 @@ Based on the official [Opentelemetry Demo](https://opentelemetry.io/ecosystem/de
 
 ## Instructions
 
-
+Install the [Coralogix Kubernetes Observability Integration](https://coralogix.com/docs/opentelemetry/kubernetes-observability/kubernetes-complete-observability-basic-configuration/)  
+  
 ### Step 1 - Setup
 Clone repo or use existing clone of it:
 ```
@@ -17,15 +18,8 @@ Change to the proper directory for workshop example:
 ```
 cd ./workshops/workshops/otel/opentelemetrydemo
 ```  
+### Step 3 - Install the OpenTelemetry Demo and study the results      
+`source 1-install-demo.sh`  
 
-### Step 3 - Update the OpenTelemetry Agent - make sure to opdate the globals first    
-`source 1-deploy-override.sh` 
-
-### Step 4 - Install the OpenTelemetry Demo and study the results      
-`source 2-install-demo.sh`  
-
-### Step 5 - Cleanup: Delete the OpenTelemetry Demo      
-`source 3-delete-demo.sh`  
-
-### Step 6 - Rollback override  
-`helm rollback otel-coralogix-integration`  
+### Step 4 - Cleanup: Delete the OpenTelemetry Demo      
+`source 2-delete-demo.sh`

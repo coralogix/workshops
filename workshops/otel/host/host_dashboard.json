@@ -1,0 +1,861 @@
+{
+  "id": "lqbWwqtGiKPM1FHf6lz0S",
+  "name": "Host Dashboard",
+  "description": "Host Resource dashboard using Opentelemetry",
+  "layout": {
+    "sections": [
+      {
+        "id": {
+          "value": "8b0d607a-ea5b-57e2-808c-93691b119f0f"
+        },
+        "rows": [
+          {
+            "id": {
+              "value": "e15ecd5d-1706-984c-21a1-05b5a03f435e"
+            },
+            "appearance": {
+              "height": 19
+            },
+            "widgets": [
+              {
+                "id": {
+                  "value": "21340ef3-a185-ef1d-bf74-8ac660c73509"
+                },
+                "title": "Avg CPU Load",
+                "definition": {
+                  "lineChart": {
+                    "legend": {
+                      "isVisible": true,
+                      "columns": [],
+                      "groupByQuery": true,
+                      "placement": "LEGEND_PLACEMENT_AUTO"
+                    },
+                    "tooltip": {
+                      "showLabels": false,
+                      "type": "TOOLTIP_TYPE_ALL"
+                    },
+                    "queryDefinitions": [
+                      {
+                        "id": "b22b5e0c-9b62-74d1-ef1e-46c3062211bf",
+                        "query": {
+                          "metrics": {
+                            "promqlQuery": {
+                              "value": "avg(system_cpu_load_average_1m__thread_{host_name=~\"{{host_name}}\",cx_subsystem_name=~\"{{vcx_subsystem_name}}\",host_type=~\"{{vhost_type}}\"}) by (cx_subsystem_name)"
+                            },
+                            "filters": [],
+                            "editorMode": "METRICS_QUERY_EDITOR_MODE_TEXT",
+                            "seriesLimitType": "METRICS_SERIES_LIMIT_TYPE_BY_SERIES_COUNT"
+                          }
+                        },
+                        "seriesCountLimit": "20",
+                        "unit": "UNIT_UNSPECIFIED",
+                        "scaleType": "SCALE_TYPE_LINEAR",
+                        "name": "Query 1",
+                        "isVisible": true,
+                        "colorScheme": "cold",
+                        "resolution": {
+                          "bucketsPresented": 96
+                        },
+                        "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED",
+                        "hashColors": false
+                      },
+                      {
+                        "id": "28f5e7f0-2bda-4e97-7eb5-a05fea4c8177",
+                        "query": {
+                          "logs": {
+                            "groupBy": [],
+                            "aggregations": [
+                              {
+                                "count": {}
+                              }
+                            ],
+                            "filters": [],
+                            "groupBys": []
+                          }
+                        },
+                        "seriesCountLimit": "20",
+                        "unit": "UNIT_UNSPECIFIED",
+                        "scaleType": "SCALE_TYPE_LINEAR",
+                        "isVisible": true,
+                        "colorScheme": "classic",
+                        "resolution": {
+                          "bucketsPresented": 96
+                        },
+                        "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED",
+                        "hashColors": false
+                      }
+                    ],
+                    "stackedLine": "STACKED_LINE_UNSPECIFIED",
+                    "connectNulls": false
+                  }
+                }
+              },
+              {
+                "id": {
+                  "value": "908ad436-0122-b4ff-867d-99bbfd887df9"
+                },
+                "title": "Load Averages",
+                "definition": {
+                  "lineChart": {
+                    "legend": {
+                      "isVisible": true,
+                      "columns": [],
+                      "groupByQuery": true,
+                      "placement": "LEGEND_PLACEMENT_AUTO"
+                    },
+                    "tooltip": {
+                      "showLabels": false,
+                      "type": "TOOLTIP_TYPE_ALL"
+                    },
+                    "queryDefinitions": [
+                      {
+                        "id": "eb16af10-e6a1-9ed3-b48c-1d8cf0bfd7f6",
+                        "query": {
+                          "metrics": {
+                            "promqlQuery": {
+                              "value": "avg(system_cpu_load_average_1m__thread_{host_name=~\"{{host_name}}\",cx_subsystem_name=~\"{{vcx_subsystem_name}}\",host_type=~\"{{vhost_type}}\"})"
+                            },
+                            "filters": [],
+                            "editorMode": "METRICS_QUERY_EDITOR_MODE_TEXT",
+                            "seriesLimitType": "METRICS_SERIES_LIMIT_TYPE_BY_SERIES_COUNT"
+                          }
+                        },
+                        "seriesNameTemplate": "1m Load Average",
+                        "seriesCountLimit": "20",
+                        "unit": "UNIT_UNSPECIFIED",
+                        "scaleType": "SCALE_TYPE_LINEAR",
+                        "name": "1m load average",
+                        "isVisible": true,
+                        "colorScheme": "negative",
+                        "resolution": {
+                          "bucketsPresented": 96
+                        },
+                        "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED",
+                        "hashColors": false
+                      },
+                      {
+                        "id": "b723e712-b176-3c9c-b0fc-e9069a3e12c3",
+                        "query": {
+                          "metrics": {
+                            "promqlQuery": {
+                              "value": "avg(system_cpu_load_average_5m__thread_{host_name=~\"{{host_name}}\"})"
+                            },
+                            "filters": [],
+                            "editorMode": "METRICS_QUERY_EDITOR_MODE_TEXT",
+                            "seriesLimitType": "METRICS_SERIES_LIMIT_TYPE_BY_SERIES_COUNT"
+                          }
+                        },
+                        "seriesNameTemplate": "5m Load Average",
+                        "seriesCountLimit": "20",
+                        "unit": "UNIT_UNSPECIFIED",
+                        "scaleType": "SCALE_TYPE_LINEAR",
+                        "name": "5m load average",
+                        "isVisible": true,
+                        "colorScheme": "cold",
+                        "resolution": {
+                          "bucketsPresented": 96
+                        },
+                        "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED",
+                        "hashColors": false
+                      },
+                      {
+                        "id": "d849bdfc-8f20-b143-e4dd-d59b422196e8",
+                        "query": {
+                          "metrics": {
+                            "promqlQuery": {
+                              "value": "avg(system_cpu_load_average_15m__thread_{host_name=~\"{{host_name}}\"})"
+                            },
+                            "filters": [],
+                            "editorMode": "METRICS_QUERY_EDITOR_MODE_TEXT",
+                            "seriesLimitType": "METRICS_SERIES_LIMIT_TYPE_BY_SERIES_COUNT"
+                          }
+                        },
+                        "seriesNameTemplate": "15m Load Average",
+                        "seriesCountLimit": "20",
+                        "unit": "UNIT_UNSPECIFIED",
+                        "scaleType": "SCALE_TYPE_LINEAR",
+                        "name": "15m load average",
+                        "isVisible": true,
+                        "colorScheme": "cold",
+                        "resolution": {
+                          "bucketsPresented": 96
+                        },
+                        "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED",
+                        "hashColors": false
+                      }
+                    ],
+                    "stackedLine": "STACKED_LINE_UNSPECIFIED",
+                    "connectNulls": false
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "id": {
+              "value": "3bf21919-2372-3ce1-755f-9661d2cfbe34"
+            },
+            "appearance": {
+              "height": 19
+            },
+            "widgets": [
+              {
+                "id": {
+                  "value": "17bfb1be-b657-3c94-7e04-e2ac1632c3aa"
+                },
+                "title": "Memory Usage",
+                "definition": {
+                  "lineChart": {
+                    "legend": {
+                      "isVisible": true,
+                      "columns": [],
+                      "groupByQuery": true,
+                      "placement": "LEGEND_PLACEMENT_AUTO"
+                    },
+                    "tooltip": {
+                      "showLabels": false,
+                      "type": "TOOLTIP_TYPE_ALL"
+                    },
+                    "queryDefinitions": [
+                      {
+                        "id": "e3844c07-2856-e045-e272-4a22aa8e9197",
+                        "query": {
+                          "metrics": {
+                            "promqlQuery": {
+                              "value": "avg(system_memory_usage_By{host_name=~\"{{host_name}}\",cx_subsystem_name=~\"{{vcx_subsystem_name}}\",host_type=~\"{{vhost_type}}\"})  by (cx_subsystem_name)"
+                            },
+                            "filters": [],
+                            "editorMode": "METRICS_QUERY_EDITOR_MODE_TEXT",
+                            "seriesLimitType": "METRICS_SERIES_LIMIT_TYPE_BY_SERIES_COUNT"
+                          }
+                        },
+                        "seriesCountLimit": "20",
+                        "unit": "UNIT_BYTES",
+                        "scaleType": "SCALE_TYPE_LINEAR",
+                        "name": "Query 1",
+                        "isVisible": true,
+                        "colorScheme": "cold",
+                        "resolution": {
+                          "bucketsPresented": 96
+                        },
+                        "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED",
+                        "hashColors": false
+                      }
+                    ],
+                    "stackedLine": "STACKED_LINE_UNSPECIFIED",
+                    "connectNulls": false
+                  }
+                }
+              },
+              {
+                "id": {
+                  "value": "31e69f8b-d408-58d5-6226-40cbc6c4d0ee"
+                },
+                "title": "Memory Usage by State",
+                "definition": {
+                  "lineChart": {
+                    "legend": {
+                      "isVisible": true,
+                      "columns": [],
+                      "groupByQuery": true,
+                      "placement": "LEGEND_PLACEMENT_AUTO"
+                    },
+                    "tooltip": {
+                      "showLabels": false,
+                      "type": "TOOLTIP_TYPE_ALL"
+                    },
+                    "queryDefinitions": [
+                      {
+                        "id": "067ae684-b371-9fc9-14b5-0960b29ee24b",
+                        "query": {
+                          "metrics": {
+                            "promqlQuery": {
+                              "value": "avg(system_memory_usage_By{host_name=~\"{{host_name}}\",cx_subsystem_name=~\"{{vcx_subsystem_name}}\",host_type=~\"{{vhost_type}}\"}) by (state)"
+                            },
+                            "filters": [],
+                            "editorMode": "METRICS_QUERY_EDITOR_MODE_TEXT",
+                            "seriesLimitType": "METRICS_SERIES_LIMIT_TYPE_BY_SERIES_COUNT"
+                          }
+                        },
+                        "seriesCountLimit": "20",
+                        "unit": "UNIT_BYTES",
+                        "scaleType": "SCALE_TYPE_LINEAR",
+                        "name": "Query 1",
+                        "isVisible": true,
+                        "colorScheme": "cold",
+                        "resolution": {
+                          "bucketsPresented": 96
+                        },
+                        "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED",
+                        "hashColors": false
+                      }
+                    ],
+                    "stackedLine": "STACKED_LINE_UNSPECIFIED",
+                    "connectNulls": false
+                  }
+                }
+              },
+              {
+                "id": {
+                  "value": "ccad2815-4faf-7230-78b8-536dbdf98998"
+                },
+                "title": "Memory Usage",
+                "definition": {
+                  "gauge": {
+                    "query": {
+                      "metrics": {
+                        "promqlQuery": {
+                          "value": "avg(system_memory_usage_By{state=\"used\",host_name=~\"{{host_name}}\",cx_subsystem_name=~\"{{vcx_subsystem_name}}\",host_type=~\"{{vhost_type}}\"})"
+                        },
+                        "aggregation": "AGGREGATION_UNSPECIFIED",
+                        "filters": [],
+                        "editorMode": "METRICS_QUERY_EDITOR_MODE_TEXT",
+                        "promqlQueryType": "PROM_QL_QUERY_TYPE_INSTANT"
+                      }
+                    },
+                    "min": 0,
+                    "max": 100,
+                    "showInnerArc": false,
+                    "showOuterArc": false,
+                    "unit": "UNIT_BYTES_IEC",
+                    "thresholds": [
+                      {
+                        "from": 0,
+                        "color": "var(--c-severity-log-info)"
+                      }
+                    ],
+                    "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED",
+                    "thresholdBy": "THRESHOLD_BY_VALUE",
+                    "customUnit": "",
+                    "thresholdType": "THRESHOLD_TYPE_RELATIVE",
+                    "legend": {
+                      "isVisible": true,
+                      "columns": [
+                        "LEGEND_COLUMN_NAME"
+                      ],
+                      "groupByQuery": false,
+                      "placement": "LEGEND_PLACEMENT_AUTO"
+                    },
+                    "legendBy": "LEGEND_BY_GROUPS",
+                    "displaySeriesName": true
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "id": {
+              "value": "817a57c3-789e-03c7-ac2b-3d012ae52d6f"
+            },
+            "appearance": {
+              "height": 21
+            },
+            "widgets": [
+              {
+                "id": {
+                  "value": "4f5df9f5-d40c-b73b-7bba-5a28802c86fd"
+                },
+                "title": "Disk Space Usage (MB)",
+                "definition": {
+                  "dataTable": {
+                    "query": {
+                      "metrics": {
+                        "promqlQuery": {
+                          "value": "sum(system_filesystem_usage_By{state=\"used\",host_name=~\"{{host_name}}\",cx_subsystem_name=~\"{{vcx_subsystem_name}}\",host_type=~\"{{vhost_type}}\"}) by (cx_subsystem_name, mountpoint, device) / 1024 / 1024"
+                        },
+                        "filters": [],
+                        "editorMode": "METRICS_QUERY_EDITOR_MODE_TEXT",
+                        "promqlQueryType": "PROM_QL_QUERY_TYPE_RANGE"
+                      }
+                    },
+                    "resultsPerPage": 10,
+                    "rowStyle": "ROW_STYLE_UNSPECIFIED",
+                    "columns": [
+                      {
+                        "field": "mountpoint"
+                      },
+                      {
+                        "field": "device"
+                      },
+                      {
+                        "field": "#chart"
+                      },
+                      {
+                        "field": "cx_subsystem_name"
+                      }
+                    ],
+                    "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED"
+                  }
+                }
+              },
+              {
+                "id": {
+                  "value": "4403287c-21e9-7eb9-c324-81e43b8148ed"
+                },
+                "title": "Disk I/O (kB/s)",
+                "definition": {
+                  "lineChart": {
+                    "legend": {
+                      "isVisible": true,
+                      "columns": [],
+                      "groupByQuery": true,
+                      "placement": "LEGEND_PLACEMENT_AUTO"
+                    },
+                    "tooltip": {
+                      "showLabels": false,
+                      "type": "TOOLTIP_TYPE_ALL"
+                    },
+                    "queryDefinitions": [
+                      {
+                        "id": "b96fc737-1854-b8e0-ff40-1cc308d84a70",
+                        "query": {
+                          "metrics": {
+                            "promqlQuery": {
+                              "value": "sum(rate(system_disk_io_By_total{host_name=~\"{{host_name}}\",cx_subsystem_name=~\"{{vcx_subsystem_name}}\",host_type=~\"{{vhost_type}}\"}[5m])) by (device, direction, host_name) / 1024"
+                            },
+                            "filters": [],
+                            "editorMode": "METRICS_QUERY_EDITOR_MODE_TEXT",
+                            "seriesLimitType": "METRICS_SERIES_LIMIT_TYPE_BY_SERIES_COUNT"
+                          }
+                        },
+                        "seriesCountLimit": "20",
+                        "unit": "UNIT_UNSPECIFIED",
+                        "scaleType": "SCALE_TYPE_LINEAR",
+                        "name": "Query 1",
+                        "isVisible": true,
+                        "colorScheme": "cold",
+                        "resolution": {
+                          "bucketsPresented": 96
+                        },
+                        "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED",
+                        "hashColors": false
+                      }
+                    ],
+                    "stackedLine": "STACKED_LINE_UNSPECIFIED",
+                    "connectNulls": false
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "id": {
+              "value": "85db389a-9b57-fa0e-2dd2-cee186cc684c"
+            },
+            "appearance": {
+              "height": 19
+            },
+            "widgets": [
+              {
+                "id": {
+                  "value": "e8c735f9-76b4-113d-2343-fcb03e6ae96f"
+                },
+                "title": "Filesystem Used",
+                "definition": {
+                  "lineChart": {
+                    "legend": {
+                      "isVisible": true,
+                      "columns": [],
+                      "groupByQuery": true,
+                      "placement": "LEGEND_PLACEMENT_AUTO"
+                    },
+                    "tooltip": {
+                      "showLabels": false,
+                      "type": "TOOLTIP_TYPE_ALL"
+                    },
+                    "queryDefinitions": [
+                      {
+                        "id": "d917ea8a-b5a8-29b6-3129-e9dd59a8434f",
+                        "query": {
+                          "metrics": {
+                            "promqlQuery": {
+                              "value": "sum(system_filesystem_usage_By{state=\"used\",cx_subsystem_name=~\"{{vcx_subsystem_name}}\",host_type=~\"{{vhost_type}}\"}[15m])"
+                            },
+                            "filters": [],
+                            "editorMode": "METRICS_QUERY_EDITOR_MODE_TEXT",
+                            "seriesLimitType": "METRICS_SERIES_LIMIT_TYPE_BY_SERIES_COUNT"
+                          }
+                        },
+                        "seriesNameTemplate": "Used",
+                        "seriesCountLimit": "20",
+                        "unit": "UNIT_UNSPECIFIED",
+                        "scaleType": "SCALE_TYPE_LOGARITHMIC",
+                        "name": "Query 1",
+                        "isVisible": true,
+                        "colorScheme": "classic",
+                        "resolution": {
+                          "bucketsPresented": 96
+                        },
+                        "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED",
+                        "hashColors": false
+                      }
+                    ],
+                    "stackedLine": "STACKED_LINE_UNSPECIFIED",
+                    "connectNulls": false
+                  }
+                }
+              },
+              {
+                "id": {
+                  "value": "a0b5f564-eefd-252e-b14f-775762018107"
+                },
+                "title": "Filesystem Free",
+                "definition": {
+                  "lineChart": {
+                    "legend": {
+                      "isVisible": true,
+                      "columns": [],
+                      "groupByQuery": true,
+                      "placement": "LEGEND_PLACEMENT_AUTO"
+                    },
+                    "tooltip": {
+                      "showLabels": false,
+                      "type": "TOOLTIP_TYPE_ALL"
+                    },
+                    "queryDefinitions": [
+                      {
+                        "id": "c0572f7c-0922-3a24-4634-b8a5bc4ab4ba",
+                        "query": {
+                          "metrics": {
+                            "promqlQuery": {
+                              "value": "sum(system_filesystem_usage_By{state=\"free\",cx_subsystem_name=~\"{{vcx_subsystem_name}}\",host_type=~\"{{vhost_type}}\"})"
+                            },
+                            "filters": [],
+                            "editorMode": "METRICS_QUERY_EDITOR_MODE_TEXT",
+                            "seriesLimitType": "METRICS_SERIES_LIMIT_TYPE_BY_SERIES_COUNT"
+                          }
+                        },
+                        "seriesNameTemplate": "Used",
+                        "seriesCountLimit": "20",
+                        "unit": "UNIT_UNSPECIFIED",
+                        "scaleType": "SCALE_TYPE_LOGARITHMIC",
+                        "name": "Query 1",
+                        "isVisible": true,
+                        "colorScheme": "classic",
+                        "resolution": {
+                          "bucketsPresented": 96
+                        },
+                        "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED",
+                        "hashColors": false
+                      }
+                    ],
+                    "stackedLine": "STACKED_LINE_UNSPECIFIED",
+                    "connectNulls": false
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "id": {
+              "value": "17d76190-c4b6-002c-09a7-2a13425a35e4"
+            },
+            "appearance": {
+              "height": 19
+            },
+            "widgets": [
+              {
+                "id": {
+                  "value": "8e428daa-8bf9-fc3f-39f9-2d338701b5e6"
+                },
+                "title": "Network Received (kB/s)",
+                "definition": {
+                  "lineChart": {
+                    "legend": {
+                      "isVisible": true,
+                      "columns": [],
+                      "groupByQuery": true,
+                      "placement": "LEGEND_PLACEMENT_AUTO"
+                    },
+                    "tooltip": {
+                      "showLabels": false,
+                      "type": "TOOLTIP_TYPE_ALL"
+                    },
+                    "queryDefinitions": [
+                      {
+                        "id": "f1da46ae-b39f-9768-a531-5e949aa265f3",
+                        "query": {
+                          "metrics": {
+                            "promqlQuery": {
+                              "value": "sum(rate(system_network_io_By_total{direction=\"receive\",host_name=~\"{{host_name}}\",cx_subsystem_name=~\"{{vcx_subsystem_name}}\",host_type=~\"{{vhost_type}}\"}[5m])) by (cx_subsystem_name) / 1024"
+                            },
+                            "filters": [],
+                            "editorMode": "METRICS_QUERY_EDITOR_MODE_TEXT",
+                            "seriesLimitType": "METRICS_SERIES_LIMIT_TYPE_BY_SERIES_COUNT"
+                          }
+                        },
+                        "seriesCountLimit": "20",
+                        "unit": "UNIT_UNSPECIFIED",
+                        "scaleType": "SCALE_TYPE_LINEAR",
+                        "name": "Query 1",
+                        "isVisible": true,
+                        "colorScheme": "cold",
+                        "resolution": {
+                          "bucketsPresented": 96
+                        },
+                        "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED",
+                        "hashColors": false
+                      }
+                    ],
+                    "stackedLine": "STACKED_LINE_UNSPECIFIED",
+                    "connectNulls": false
+                  }
+                }
+              },
+              {
+                "id": {
+                  "value": "e6e2605a-304a-fcac-6e86-9a364b95e8e4"
+                },
+                "title": "Network Transmitted I/O (kB/s)",
+                "definition": {
+                  "lineChart": {
+                    "legend": {
+                      "isVisible": true,
+                      "columns": [],
+                      "groupByQuery": true,
+                      "placement": "LEGEND_PLACEMENT_AUTO"
+                    },
+                    "tooltip": {
+                      "showLabels": false,
+                      "type": "TOOLTIP_TYPE_ALL"
+                    },
+                    "queryDefinitions": [
+                      {
+                        "id": "841b384b-3372-5cea-c76c-dfe77daaeed0",
+                        "query": {
+                          "metrics": {
+                            "promqlQuery": {
+                              "value": "sum(rate(system_network_io_By_total{direction=\"transmit\",host_name=~\"{{host_name}}\",cx_subsystem_name=~\"{{vcx_subsystem_name}}\",host_type=~\"{{vhost_type}}\"}[5m])) by (cx_subsystem_name) / 1024"
+                            },
+                            "filters": [],
+                            "editorMode": "METRICS_QUERY_EDITOR_MODE_TEXT",
+                            "seriesLimitType": "METRICS_SERIES_LIMIT_TYPE_BY_SERIES_COUNT"
+                          }
+                        },
+                        "seriesCountLimit": "20",
+                        "unit": "UNIT_UNSPECIFIED",
+                        "scaleType": "SCALE_TYPE_LINEAR",
+                        "name": "Query 1",
+                        "isVisible": true,
+                        "colorScheme": "cold",
+                        "resolution": {
+                          "bucketsPresented": 96
+                        },
+                        "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED",
+                        "hashColors": false
+                      }
+                    ],
+                    "stackedLine": "STACKED_LINE_UNSPECIFIED",
+                    "connectNulls": false
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "id": {
+              "value": "f6b07105-3b75-b8ad-8d5f-b2f3c1e0cfa2"
+            },
+            "appearance": {
+              "height": 22
+            },
+            "widgets": [
+              {
+                "id": {
+                  "value": "fb60aab2-15f2-7249-3d21-1334ffab645f"
+                },
+                "title": "Log Volume Arrival",
+                "definition": {
+                  "lineChart": {
+                    "legend": {
+                      "isVisible": true,
+                      "columns": [],
+                      "groupByQuery": true,
+                      "placement": "LEGEND_PLACEMENT_AUTO"
+                    },
+                    "tooltip": {
+                      "showLabels": false,
+                      "type": "TOOLTIP_TYPE_ALL"
+                    },
+                    "queryDefinitions": [
+                      {
+                        "id": "07e2039e-7609-75fd-7f75-20901a7bfc7a",
+                        "query": {
+                          "logs": {
+                            "luceneQuery": {
+                              "value": "resource.attributes.host.name:${host_name}\n"
+                            },
+                            "groupBy": [],
+                            "aggregations": [
+                              {
+                                "count": {}
+                              }
+                            ],
+                            "filters": [],
+                            "groupBys": [
+                              {
+                                "keypath": [
+                                  "resource",
+                                  "attributes",
+                                  "host.name"
+                                ],
+                                "scope": "DATASET_SCOPE_USER_DATA"
+                              }
+                            ]
+                          }
+                        },
+                        "seriesCountLimit": "20",
+                        "unit": "UNIT_UNSPECIFIED",
+                        "scaleType": "SCALE_TYPE_LINEAR",
+                        "name": "Logs by Machine",
+                        "isVisible": true,
+                        "colorScheme": "classic",
+                        "resolution": {
+                          "bucketsPresented": 96
+                        },
+                        "dataModeType": "DATA_MODE_TYPE_HIGH_UNSPECIFIED",
+                        "hashColors": false
+                      }
+                    ],
+                    "stackedLine": "STACKED_LINE_UNSPECIFIED",
+                    "connectNulls": false
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "options": {
+          "internal": {}
+        }
+      }
+    ]
+  },
+  "variables": [],
+  "variablesV2": [
+    {
+      "name": "host_name",
+      "displayName": "Host Name",
+      "displayType": "VARIABLE_DISPLAY_TYPE_V2_LABEL_VALUE",
+      "source": {
+        "query": {
+          "metricsQuery": {
+            "type": {
+              "labelValue": {
+                "metricName": {
+                  "stringValue": "system_cpu_time_total"
+                },
+                "labelName": {
+                  "stringValue": "host_name"
+                },
+                "labelFilters": []
+              }
+            }
+          },
+          "valuesOrderDirection": "ORDER_DIRECTION_ASC",
+          "refreshStrategy": "REFRESH_STRATEGY_UNSPECIFIED",
+          "valueDisplayOptions": {},
+          "allOption": {
+            "includeAll": true
+          }
+        }
+      },
+      "value": {
+        "multiString": {
+          "all": {}
+        }
+      },
+      "displayFullRow": false
+    },
+    {
+      "name": "vcx_subsystem_name",
+      "displayName": "Subsystem",
+      "displayType": "VARIABLE_DISPLAY_TYPE_V2_LABEL_VALUE",
+      "source": {
+        "query": {
+          "metricsQuery": {
+            "type": {
+              "labelValue": {
+                "metricName": {
+                  "stringValue": "system_cpu_load_average_1m__thread_"
+                },
+                "labelName": {
+                  "stringValue": "cx_subsystem_name"
+                },
+                "labelFilters": []
+              }
+            }
+          },
+          "valuesOrderDirection": "ORDER_DIRECTION_ASC",
+          "refreshStrategy": "REFRESH_STRATEGY_UNSPECIFIED",
+          "valueDisplayOptions": {},
+          "allOption": {
+            "includeAll": true
+          }
+        }
+      },
+      "value": {
+        "multiString": {
+          "all": {}
+        }
+      },
+      "displayFullRow": false
+    },
+    {
+      "name": "vhost_type",
+      "displayName": "HostType",
+      "displayType": "VARIABLE_DISPLAY_TYPE_V2_LABEL_VALUE",
+      "source": {
+        "query": {
+          "metricsQuery": {
+            "type": {
+              "labelValue": {
+                "metricName": {
+                  "stringValue": "system_cpu_load_average_1m__thread_"
+                },
+                "labelName": {
+                  "stringValue": "host_type"
+                },
+                "labelFilters": []
+              }
+            }
+          },
+          "valuesOrderDirection": "ORDER_DIRECTION_ASC",
+          "refreshStrategy": "REFRESH_STRATEGY_UNSPECIFIED",
+          "valueDisplayOptions": {},
+          "allOption": {
+            "includeAll": true
+          }
+        }
+      },
+      "value": {
+        "multiString": {
+          "all": {}
+        }
+      },
+      "displayFullRow": false
+    }
+  ],
+  "filters": [
+    {
+      "source": {
+        "metrics": {
+          "label": "host_name",
+          "operator": {
+            "equals": {
+              "selection": {
+                "all": {}
+              }
+            }
+          }
+        }
+      },
+      "enabled": true,
+      "collapsed": false
+    }
+  ],
+  "relativeTimeFrame": "900s",
+  "annotations": [],
+  "off": {},
+  "actions": []
+}

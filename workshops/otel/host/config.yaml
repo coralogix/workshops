@@ -1,0 +1,111 @@
+# To limit exposure to denial of service attacks, change the host in endpoints below from 0.0.0.0 to a specific network interface.
+# See https://github.com/open-telemetry/opentelemetry-collector/blob/main/docs/security-best-practices.md#safeguards-against-denial-of-service-attacks
+
+extensions:
+  health_check:
+  pprof:
+    endpoint: 0.0.0.0:1777
+  zpages:
+    endpoint: 0.0.0.0:55679
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+  datadog:
+    endpoint: 0.0.0.0:8126
+    read_timeout: 60s
+
+  hostmetrics:
+    collection_interval: 10s
+    process:
+      enabled: true
+    scrapers:
+      cpu:
+      disk:
+      load:
+      filesystem:
+      memory:
+      network:
+      paging:
+      processes:
+      process:
+
+  # Collect own metrics
+  prometheus:
+    config:
+      scrape_configs:
+      - job_name: 'otel-collector'
+        scrape_interval: 10s
+        static_configs:
+        - targets: ['0.0.0.0:8888']
+
+processors:
+  batch:
+  resourcedetection/env:
+    detectors: ["system", "env"]
+    system:
+      resource_attributes:
+        host.name:
+          enabled: true
+        host.id:
+          enabled: true
+  resourcedetection/ec2:
+    detectors: ["ec2" ]
+    ec2:
+      resource_attributes:
+        host.name:
+          enabled: true
+        host.id:
+          enabled: true
+
+exporters:
+  debug:
+    verbosity: detailed
+
+  coralogix:
+    # The Coralogix domain
+    domain: "YOURTEAMHERE i.e. cx498.coralogix.com"
+    # Your Coralogix private key is sensitive
+    private_key: "YOURKEYHERE"
+
+    # (Optional) Ordered list of Resource attributes that are used for Coralogix
+    # AppName and SubSystem values. The first non-empty Resource attribute is used.
+    # Example: application_name_attributes: ["k8s.namespace.name", "service.namespace"]
+    # Example: subsystem_name_attributes: ["k8s.deployment.name", "k8s.daemonset.name", "service.name"]
+    application_name_attributes:
+    - "service.namespace"
+    subsystem_name_attributes:
+    - "service.name"
+
+    # Traces, Metrics and Logs emitted by this OpenTelemetry exporter 
+    # are tagged in Coralogix with the default application and subsystem constants.
+    application_name: "demo-server"
+    subsystem_name: "demo-server"
+
+    # (Optional) Timeout is the timeout for every attempt to send data to the backend.
+    timeout: 30s
+
+service:
+
+  pipelines:
+
+    traces:
+      receivers: [otlp, datadog]
+      processors: [resourcedetection/env, resourcedetection/ec2, batch]
+      exporters: [coralogix]
+
+    metrics:
+      receivers: [otlp, prometheus, hostmetrics]
+      processors: [resourcedetection/env, resourcedetection/ec2, batch]
+      exporters: [coralogix]
+
+    logs:
+      receivers: [otlp]
+      processors: [resourcedetection/env, resourcedetection/ec2, batch]
+      exporters: [coralogix]
+
+  extensions: [health_check, pprof, zpages]

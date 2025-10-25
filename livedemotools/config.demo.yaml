@@ -15,15 +15,14 @@ receivers:
         endpoint: 0.0.0.0:4317
       http:
         endpoint: 0.0.0.0:4318
-  filelog:
-    include:
-      - /var/log/*.log
-      - /var/log/syslog
-      - /tmp/cx*
-    start_at: beginning
+  datadog:
+    endpoint: 0.0.0.0:8126
+    read_timeout: 60s
 
   hostmetrics:
     collection_interval: 10s
+    process:
+      enabled: true
     scrapers:
       cpu:
       disk:
@@ -69,9 +68,9 @@ exporters:
 
   coralogix:
     # The Coralogix domain
-    domain: "cx498.coralogix.com"
+    domain: "YOURTEAMHERE i.e. cx498.coralogix.com"
     # Your Coralogix private key is sensitive
-    private_key: ""
+    private_key: "YOURKEYHERE"
 
     # (Optional) Ordered list of Resource attributes that are used for Coralogix
     # AppName and SubSystem values. The first non-empty Resource attribute is used.
@@ -84,8 +83,8 @@ exporters:
 
     # Traces, Metrics and Logs emitted by this OpenTelemetry exporter 
     # are tagged in Coralogix with the default application and subsystem constants.
-    application_name: "workshop"
-    subsystem_name: "workshop"
+    application_name: "demo-server"
+    subsystem_name: "demo-server"
 
     # (Optional) Timeout is the timeout for every attempt to send data to the backend.
     timeout: 30s
@@ -95,7 +94,7 @@ service:
   pipelines:
 
     traces:
-      receivers: [otlp]
+      receivers: [otlp, datadog]
       processors: [resourcedetection/env, resourcedetection/ec2, batch]
       exporters: [coralogix]
 
@@ -105,7 +104,7 @@ service:
       exporters: [coralogix]
 
     logs:
-      receivers: [otlp, filelog]
+      receivers: [otlp]
       processors: [resourcedetection/env, resourcedetection/ec2, batch]
       exporters: [coralogix]
 

@@ -12,7 +12,7 @@
         <meta name="author" content="Coralogix">
       
       
-        <link rel="canonical" href="http://coralogix.github.io/otel/opentelemetrydemo/">
+        <link rel="canonical" href="http://coralogix.github.io/otel/host/">
       
       
       
@@ -22,7 +22,7 @@
     
     
       
-        <title>OpenTelemetry Demo - Coralogix Workshops</title>
+        <title>OpenTelemetry Collector For HOsts - Coralogix Workshops</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#opentelemetry-demo" class="md-skip">
+        <a href="#opentelemetry-collector-for-hosts" class="md-skip">
           Skip to content
         </a>
       
@@ -109,7 +109,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              OpenTelemetry Demo
+              OpenTelemetry Collector For HOsts
             
           </span>
         </div>
@@ -335,22 +335,34 @@
   
 
 
-<h1 id="opentelemetry-demo">OpenTelemetry Demo</h1>
-<p>Based on the official <a href="https://opentelemetry.io/ecosystem/demo/">Opentelemetry Demo</a>  </p>
+<h1 id="opentelemetry-collector-for-hosts">OpenTelemetry Collector For HOsts</h1>
 <h2 id="instructions">Instructions</h2>
-<p>Install the <a href="https://coralogix.com/docs/opentelemetry/kubernetes-observability/kubernetes-complete-observability-basic-configuration/">Coralogix Kubernetes Observability Integration</a>  </p>
-<h3 id="step-1-setup">Step 1 - Setup</h3>
-<p>Clone repo or use existing clone of it:
-<div class="highlight"><pre><span></span><code>git clone https://github.com/coralogix/workshops
-</code></pre></div></p>
+<h3 id="linux">Linux</h3>
+<p>This example is for Ubuntu / Debian. Adjust accordingly for your Linux distro.  </p>
+<h3 id="step-1-download-collector">Step 1 - Download Collector</h3>
+<p>Download the appropriate collector for your Linux OS / Architecture (including Mac) here:</p>
+<p><a href="https://github.com/open-telemetry/opentelemetry-collector-releases/releases">OpenTelemetry Collector Releases</a></p>
 <h3 id="step-2-change-to-workshop-dir">Step 2 - Change to workshop dir</h3>
 <p>Change to the proper directory for workshop example:  </p>
-<div class="highlight"><pre><span></span><code>cd ./workshops/workshops/otel/opentelemetrydemo
+<div class="highlight"><pre><span></span><code>cd ./workshops/workshops/otel/host
 </code></pre></div>
-<h3 id="step-3-install-the-opentelemetry-demo-and-study-the-results">Step 3 - Install the OpenTelemetry Demo and study the results</h3>
-<p><code>source 1-install-demo.sh</code>  </p>
-<h3 id="step-4-cleanup-delete-the-opentelemetry-demo">Step 4 - Cleanup: Delete the OpenTelemetry Demo</h3>
-<p><code>source 2-delete-demo.sh</code></p>
+<h3 id="step-3-update-host-config-with-your-coralogix-team-and-key">Step 3 - Update host config with your Coralogix team and key</h3>
+<p>Update <code>config.yaml</code> accordingly.</p>
+<h3 id="step-4-install-collector">Step 4 - Install Collector</h3>
+<p>Study this script and make it work for you and then execute it.<br />
+This is only an example of installing a collector and copying a premade config.  </p>
+<p>Example install script is here:
+<div class="highlight"><pre><span></span><code>source host-install-otel.sh
+</code></pre></div></p>
+<h3 id="step-5-view-host-in-infrastructure-explorer">Step 5 - View Host in Infrastructure Explorer</h3>
+<p>Your host should now be visible in Coralogix Infrastructure Explorer  </p>
+<p>Optional- upload <code>host_dashboard.json</code> to Custom Dashboards for a customizable view of host metrics.  </p>
+<h3 id="step-6-delete-collector">Step 6 - Delete Collector</h3>
+<p>Study this script and make it work for you and then execute it.<br />
+This is only an example of installing a collector and copying a premade config.  </p>
+<p>Example install script is here:
+<div class="highlight"><pre><span></span><code>source host-delete-otel.sh
+</code></pre></div></p>
 
 
 

@@ -1,0 +1,31 @@
+current directory: /home/ubuntu/workshops/workshops/otel/manual-instrumentation/ruby/ruby-monolith/dice-ruby/vendor/bundle/ruby/3.2.0/gems/ed25519-1.4.0/ext/ed25519_ref10
+/usr/bin/ruby3.2 -I/usr/lib/ruby/vendor_ruby extconf.rb
+checking for whether -Wall is accepted as CFLAGS... yes
+checking for whether -O3 is accepted as CFLAGS... yes
+checking for whether -pedantic is accepted as CFLAGS... no
+checking for whether -std=c99 is accepted as CFLAGS... yes
+creating Makefile
+
+current directory: /home/ubuntu/workshops/workshops/otel/manual-instrumentation/ruby/ruby-monolith/dice-ruby/vendor/bundle/ruby/3.2.0/gems/ed25519-1.4.0/ext/ed25519_ref10
+make DESTDIR\= sitearchdir\=./.gem.20251025-3165121-tq0p4l sitelibdir\=./.gem.20251025-3165121-tq0p4l clean
+
+current directory: /home/ubuntu/workshops/workshops/otel/manual-instrumentation/ruby/ruby-monolith/dice-ruby/vendor/bundle/ruby/3.2.0/gems/ed25519-1.4.0/ext/ed25519_ref10
+make DESTDIR\= sitearchdir\=./.gem.20251025-3165121-tq0p4l sitelibdir\=./.gem.20251025-3165121-tq0p4l
+compiling ed25519_ref10.c
+compiling fe.c
+compiling ge.c
+compiling keypair.c
+compiling open.c
+compiling sc_muladd.c
+compiling sc_reduce.c
+compiling sha512.c
+compiling sign.c
+compiling verify.c
+linking shared-object ed25519_ref10.so
+
+current directory: /home/ubuntu/workshops/workshops/otel/manual-instrumentation/ruby/ruby-monolith/dice-ruby/vendor/bundle/ruby/3.2.0/gems/ed25519-1.4.0/ext/ed25519_ref10
+make DESTDIR\= sitearchdir\=./.gem.20251025-3165121-tq0p4l sitelibdir\=./.gem.20251025-3165121-tq0p4l install
+/usr/bin/install -c -m 0755 ed25519_ref10.so ./.gem.20251025-3165121-tq0p4l
+
+current directory: /home/ubuntu/workshops/workshops/otel/manual-instrumentation/ruby/ruby-monolith/dice-ruby/vendor/bundle/ruby/3.2.0/gems/ed25519-1.4.0/ext/ed25519_ref10
+make DESTDIR\= sitearchdir\=./.gem.20251025-3165121-tq0p4l sitelibdir\=./.gem.20251025-3165121-tq0p4l clean

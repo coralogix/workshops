@@ -8,6 +8,47 @@ extensions:
   zpages:
     endpoint: 0.0.0.0:55679
 
+connectors:
+  spanmetrics:
+    namespace: ""
+    histogram:
+      explicit:
+        buckets:
+          - 1ms
+          - 4ms
+          - 10ms
+          - 20ms
+          - 50ms
+          - 100ms
+          - 200ms
+          - 500ms
+          - 1s
+          - 2s
+          - 5s
+      dimensions:
+        - name: http.method
+        - name: cgx.transaction
+        - name: cgx.transaction.root
+        - name: status_code
+        - name: db.namespace
+        - name: db.operation.name
+        - name: db.collection.name
+        - name: db.system
+        - name: http.response.status_code
+        - name: rpc.grpc.status_code
+        - name: service.version
+    exemplars:
+      enabled: true
+    dimensions_cache_size: 1000
+    aggregation_temporality: "AGGREGATION_TEMPORALITY_CUMULATIVE"    
+    metrics_flush_interval: '30s'
+    # metricsExpiration: 5m
+    events:
+      enabled: true
+      dimensions:
+        - name: exception.type
+        - name: exception.message
+
 receivers:
   otlp:
     protocols:
@@ -15,9 +56,6 @@ receivers:
         endpoint: 0.0.0.0:4317
       http:
         endpoint: 0.0.0.0:4318
-  datadog:
-    endpoint: 0.0.0.0:8126
-    read_timeout: 60s
 
   hostmetrics:
     collection_interval: 10s
@@ -44,6 +82,10 @@ receivers:
         - targets: ['0.0.0.0:8888']
 
 processors:
+  memory_limiter:
+    check_interval: 1s
+    limit_percentage: 85
+    spike_limit_percentage: 25
   batch:
   resourcedetection/env:
     detectors: ["system", "env"]
@@ -68,7 +110,7 @@ exporters:
 
   coralogix:
     # The Coralogix domain
-    domain: "YOURTEAMHERE i.e. cx498.coralogix.com"
+    domain: "YOURDOMAINHERE i.e. cx498.coralogix.com"
     # Your Coralogix private key is sensitive
     private_key: "YOURKEYHERE"
 
@@ -95,17 +137,17 @@ service:
 
     traces:
       receivers: [otlp]
-      processors: [resourcedetection/env, resourcedetection/ec2, batch]
-      exporters: [coralogix]
+      processors: [memory_limiter, resourcedetection/env, resourcedetection/ec2, batch]
+      exporters: [coralogix, spanmetrics]
 
     metrics:
-      receivers: [otlp, prometheus, hostmetrics]
-      processors: [resourcedetection/env, resourcedetection/ec2, batch]
+      receivers: [otlp, prometheus, hostmetrics, spanmetrics]
+      processors: [memory_limiter, resourcedetection/env, resourcedetection/ec2, batch]
       exporters: [coralogix]
 
     logs:
       receivers: [otlp]
-      processors: [resourcedetection/env, resourcedetection/ec2, batch]
+      processors: [memory_limiter, resourcedetection/env, resourcedetection/ec2, batch]
       exporters: [coralogix]
 
   extensions: [health_check, pprof, zpages]
